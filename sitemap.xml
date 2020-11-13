@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://chihyang41.github.io/2020/11/14/react-query-and-swr-cache-strategy/</loc>
+    
+    <lastmod>2020-11-13T19:00:34.079Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://chihyang41.github.io/2020/09/07/React-Query-Tutorial/</loc>
     
     <lastmod>2020-09-07T13:12:00.932Z</lastmod>
