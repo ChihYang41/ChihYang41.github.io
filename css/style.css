@@ -1,6 +1,14 @@
 @charset "UTF-8";
+/* NOTE: 修改 Blog font size */
+body {
+  font-size: 1.1rem;
+  /* NOTE: 修改 code hightlight color */ }
+  body code {
+    color: #E76B74; }
+
+/* NOTE: 修改 Blog font family */
 body, button, input, select, textarea {
-  font-family: "Ovo", "Georgia", "STZhongsong", "Microsoft YaHei", serif; }
+  font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
 
 a.tag.article-tag {
   font-size: 0.9rem;
