@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>The Complete Junior to Senior Web Developer Roadmap - Performance part2 隨意筆記 - Chih Yang&#39;s Blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+<meta name="description" content="Chih Yang 的前端小天地">
+
+
+
+<meta name="keywords" content="前端">
+
+
+
+    <meta name="description" content="&amp;#x524D;&amp;#x8A00;&amp;#x9019;&amp;#x7AE0;&amp;#x7BC0;&amp;#x4E3B;&amp;#x8981;&amp;#x5728;&amp;#x8B1B;&amp;#x8FF0; React Performance &amp;#x7684;&amp;#x512A;&amp;#x5316;&amp;#x3002;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Complete Junior to Senior Web Developer Roadmap - Performance part2 隨意筆記">
+<meta property="og:url" content="https://chihyang41.github.io/2020/03/28/The-Complete-Junior-to-Senior-Web-Developer-Roadmap-Performance-part2-%E9%9A%A8%E6%84%8F%E7%AD%86%E8%A8%98/index.html">
+<meta property="og:site_name" content="Chih Yang&#39;s Blog">
+<meta property="og:description" content="&amp;#x524D;&amp;#x8A00;&amp;#x9019;&amp;#x7AE0;&amp;#x7BC0;&amp;#x4E3B;&amp;#x8981;&amp;#x5728;&amp;#x8B1B;&amp;#x8FF0; React Performance &amp;#x7684;&amp;#x512A;&amp;#x5316;&amp;#x3002;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-03-28T12:55:24.000Z">
+<meta property="article:modified_time" content="2020-03-28T12:56:22.987Z">
+<meta property="article:author" content="Chih Yang">
+<meta property="article:tag" content="React">
+<meta property="article:tag" content="Udemy 課程">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+<link rel="icon" href="https://upload.cc/i1/2020/03/05/MXS6WH.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-146838618-1');
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    Chih Yang&#39;s Blog
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/tags">Tags</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/ChihYang41" target="_blank" rel="noopener">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            The Complete Junior to Senior Web Developer Roadmap - Performance part2 隨意筆記
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2020-03-28T12:55:24.000Z" itemprop="datePublished">Mar 28 2020</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/frontend/">frontend</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            4 minutes read (About 620 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><h2 id="&#x524D;&#x8A00;"><a href="#&#x524D;&#x8A00;" class="headerlink" title="&#x524D;&#x8A00;"></a>&#x524D;&#x8A00;</h2><p>&#x9019;&#x7AE0;&#x7BC0;&#x4E3B;&#x8981;&#x5728;&#x8B1B;&#x8FF0; React Performance &#x7684;&#x512A;&#x5316;&#x3002;</p>
+<a id="more"></a>
+<h2 id="&#x70BA;&#x4F55;&#x8981;-code-splitting"><a href="#&#x70BA;&#x4F55;&#x8981;-code-splitting" class="headerlink" title="&#x70BA;&#x4F55;&#x8981; code splitting"></a>&#x70BA;&#x4F55;&#x8981; code splitting</h2><p>&#x5982;&#x679C;&#x4E0D;&#x505A; code splitting&#xFF0C;&#x5C31;&#x6703;&#x76F4;&#x63A5;&#x8F09;&#x5165; Webpack bundle &#x597D;&#x7684;&#x4E00;&#x5927;&#x5305;&#x6A94;&#x6848;&#xFF0C;&#x9019;&#x7576;&#x7136;&#x4E5F;&#x662F;&#x6C92;&#x554F;&#x984C;&#xFF0C;&#x4F46;&#x4F7F;&#x7528;&#x8005;&#x5C31;&#x6703;&#x56E0;&#x70BA;&#x4E0B;&#x8F09;&#x9019;&#x4E00;&#x5927;&#x5305;&#x6A94;&#x6848;&#x800C;&#x5728;&#x4F7F;&#x7528;&#x6642;&#x5361;&#x4F4F;&#x4E00;&#x9663;&#x5B50;&#xFF0C;&#x5F71;&#x97FF;&#x4F7F;&#x7528;&#x8005;&#x9AD4;&#x9A57;&#x3002;</p>
+<p>code splitting &#x7684;&#x7528;&#x610F;&#x5C31;&#x662F;&#x5728;&#x9032;&#x5165;&#x90A3;&#x500B;&#x9801;&#x9762;&#xFF0C;&#x9700;&#x8981;&#x4F7F;&#x7528;&#x90A3;&#x500B; Component &#x6642;&#x624D;&#x4E0B;&#x8F09;&#x6A94;&#x6848;&#xFF0C;&#x6539;&#x5584;&#x7DB2;&#x9801;&#x8B80;&#x53D6;&#x901F;&#x5EA6;&#xFF0C;&#x589E;&#x9032;&#x4F7F;&#x7528;&#x9AD4;&#x9A57;&#x3002;</p>
+<h2 id="Code-Splitting-React-lazy"><a href="#Code-Splitting-React-lazy" class="headerlink" title="Code Splitting - React lazy"></a>Code Splitting - React lazy</h2><p><a href="https://zh-hant.reactjs.org/docs/code-splitting.html" target="_blank" rel="noopener">React &#x5B98;&#x65B9;&#x6587;&#x4EF6; - Code-Splitting</a></p>
+<p><a href="https://juejin.im/post/5c60e1d2f265da2dd16843f6" target="_blank" rel="noopener">[&#x8BD1;] &#x5EF6;&#x8FDF;&#x52A0;&#x8F7D; React Components (&#x7528; react.lazy &#x548C; suspense)</a></p>
+<p>React &#x5B98;&#x65B9;&#x63D0;&#x4F9B; code splitting &#x7684;&#x65B9;&#x6CD5;&#x662F; <code>React.lazy</code>&#xFF0C;&#x4EE5;&#x4E0B;&#x63D0;&#x4F9B;&#x7C21;&#x55AE;&#x7684;&#x4F7F;&#x7528;&#x7BC4;&#x4F8B;&#xFF0C;&#x53EF;&#x4EE5;&#x5230; <a href="https://github.com/aneagoie/code-splitting-exercise" target="_blank" rel="noopener">&#x9019;&#x88E1;</a> clone &#x5C08;&#x6848;&#x73A9;&#x73A9;&#x770B;</p>
+<p>&#x9019;&#x908A;&#x8AB2;&#x7A0B;&#x63D0;&#x4F9B;&#x7684;&#x662F;&#x4E00;&#x500B;&#x81EA;&#x88FD;&#x7684; router&#xFF0C;&#x5728;&#x9EDE;&#x64CA;&#x6309;&#x9215;&#x7684;&#x540C;&#x6642;&#xFF0C;&#x5C31;&#x6703;&#x5207;&#x63DB;&#x5230;&#x4E0D;&#x540C; route&#xFF0C;return &#x76F8;&#x5C0D;&#x61C9;&#x7684; component&#xFF0C;&#x9054;&#x5230; code splitting &#x7684;&#x6548;&#x679C;&#x3002;</p>
+<p>&#x9996;&#x5148;&#x8981;&#x7528; React.lazy &#x5305;&#x88F9;&#x8457;&#x8981; import &#x9032;&#x4F86;&#x7684;&#x6A94;&#x6848;&#x3002;<br></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> Page2Lazy = React.lazy(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&apos;./Components/Page2&apos;</span>))</span><br><span class="line"><span class="hljs-keyword">const</span> Page3Lazy = React.lazy(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">&apos;./Components/Page3&apos;</span>))</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x518D;&#x4F86;&#x5728;&#x76F8;&#x5C0D;&#x61C9;&#x7684; return Component &#x4E2D;&#xFF0C;&#x52A0;&#x5165; Suspense &#x5305;&#x88F9;&#x4F4F;&#x4F7F;&#x7528; React.lazy &#x7684; Component&#x3002;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">render() {</span><br><span class="line">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.route === <span class="hljs-string">&apos;page1&apos;</span>) {</span><br><span class="line">      <span class="hljs-keyword">return</span> <span class="hljs-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Page1</span> <span class="hljs-attr">onRouteChange</span>=<span class="hljs-string">{this.onRouteChange}</span> /&gt;</span></span></span><br><span class="line">    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.route === <span class="hljs-string">&apos;page2&apos;</span>) {</span><br><span class="line">      <span class="hljs-keyword">return</span> (</span><br><span class="line">        &lt;Suspense fallback={&lt;div&gt;Loading...&lt;<span class="hljs-regexp">/div&gt;}&gt;</span></span><br><span class="line"><span class="hljs-regexp">          &lt;Page2Lazy onRouteChange={this.onRouteChange} /</span>&gt;</span><br><span class="line">        &lt;<span class="hljs-regexp">/Suspense&gt;</span></span><br><span class="line"><span class="hljs-regexp">      )</span></span><br><span class="line"><span class="hljs-regexp">    } else {</span></span><br><span class="line"><span class="hljs-regexp">      return (</span></span><br><span class="line"><span class="hljs-regexp">        &lt;Suspense fallback={&lt;div&gt;Loading...&lt;/</span>div&gt;}&gt;</span><br><span class="line">          &lt;Page3Lazy onRouteChange={<span class="hljs-keyword">this</span>.onRouteChange} /&gt;</span><br><span class="line">        &lt;<span class="hljs-regexp">/Suspense&gt;</span></span><br><span class="line"><span class="hljs-regexp">      )</span></span><br><span class="line"><span class="hljs-regexp">    }</span></span><br><span class="line"><span class="hljs-regexp">  }</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>lazy component &#x90FD;&#x5FC5;&#x9808;&#x5305;&#x88F9;&#x5728; Suspense Component &#x88E1;&#x9762;&#xFF0C;Suspense &#x7684;&#x7528;&#x8655;&#x5728;&#x65BC;&#x53EF;&#x4EE5;&#x5728; fallback &#x9019;&#x500B; props &#x653E;&#x5165; loading &#x6642;&#x8981;&#x7D66;&#x4E88;&#x7684; Component&#xFF0C;&#x4EE5;&#x907F;&#x514D;&#x5728; import &#x6A94;&#x6848;&#x6642;&#x7684;&#x7A7A;&#x6A94;&#x4F7F;&#x7528;&#x8005;&#x6703;&#x5F88;&#x7591;&#x60D1;&#xFF0C;&#x9677;&#x5165;&#x7B49;&#x5F85;&#x7A7A;&#x756B;&#x9762;&#x7684;&#x72C0;&#x614B;&#x3002;</p>
+<p>&#x7576;&#x7136;&#xFF0C;&#x642D;&#x914D; Router &#x4E5F;&#x662F;&#x53EF;&#x4EE5;&#x7684;&#xFF0C;&#x5C31;&#x50CF;&#x4E0B;&#x9762;&#x9019;&#x6A23;&#xFF1A;<br></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">render() {</span><br><span class="line">  <span class="hljs-keyword">return</span>(</span><br><span class="line">    &lt;Suspense fallback={&lt;div&gt;Loading...&lt;<span class="hljs-regexp">/div&gt;}&gt;</span></span><br><span class="line"><span class="hljs-regexp">      &lt;Switch&gt;</span></span><br><span class="line"><span class="hljs-regexp">        &lt;Route exact path=&quot;/</span>page1<span class="hljs-string">&quot; component={Page1}/&gt;</span></span><br><span class="line"><span class="hljs-string">        &lt;Route path=&quot;</span>/page2<span class="hljs-string">&quot; component={Page2Lazy}/&gt;</span></span><br><span class="line"><span class="hljs-string">        &lt;Route path=&quot;</span>/page2<span class="hljs-string">&quot; component={Page3Lazy}/&gt;</span></span><br><span class="line"><span class="hljs-string">      &lt;/Switch&gt;</span></span><br><span class="line"><span class="hljs-string">    &lt;/Suspense&gt;</span></span><br><span class="line"><span class="hljs-string">  )</span></span><br><span class="line"><span class="hljs-string">}</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x53E6;&#x5916;&#xFF0C;&#x95DC;&#x65BC; module &#x8F09;&#x5165;&#x5931;&#x6557;&#x7684; error &#x4E5F;&#x53EF;&#x4EE5;&#x505A;&#x76F8;&#x5C0D;&#x61C9;&#x7684;&#x8655;&#x7406;&#xFF0C;&#x53EF;&#x4EE5;&#x5BEB;&#x4E00;&#x500B; ErrorBoundary &#x7684; Component &#x4F86;&#x8655;&#x7406;&#x932F;&#x8AA4;&#xFF0C;&#x66F4;&#x591A;&#x8A73;&#x60C5;&#x5728; <a href="https://zh-hant.reactjs.org/docs/error-boundaries.html" target="_blank" rel="noopener">React &#x5B98;&#x65B9;&#x6587;&#x4EF6; - &#x932F;&#x8AA4;&#x908A;&#x754C;</a> &#x53EF;&#x4EE5;&#x53C3;&#x8003;&#x3002;</p>
+<p>&#x4F7F;&#x7528;&#x7684;&#x8A71;&#x5C31;&#x50CF;&#x9019;&#x6A23;&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> MyComponent = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> (</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;MyErrorBoundary&gt;</span><br><span class="line">      &lt;Suspense fallback={&lt;div&gt;Loading...&lt;<span class="hljs-regexp">/div&gt;}&gt;</span></span><br><span class="line"><span class="hljs-regexp">        &lt;section&gt;</span></span><br><span class="line"><span class="hljs-regexp">          &lt;OtherComponent /</span>&gt;</span><br><span class="line">          &lt;AnotherComponent /&gt;</span><br><span class="line">        &lt;<span class="hljs-regexp">/section&gt;</span></span><br><span class="line"><span class="hljs-regexp">      &lt;/</span>Suspense&gt;</span><br><span class="line">    &lt;<span class="hljs-regexp">/MyErrorBoundary&gt;</span></span><br><span class="line"><span class="hljs-regexp">  &lt;/</span>div&gt;</span><br><span class="line">);</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h3 id="SSR"><a href="#SSR" class="headerlink" title="SSR"></a>SSR</h3><p>&#x503C;&#x5F97;&#x6CE8;&#x610F;&#x7684;&#x662F;&#xFF0C;React.lazy &#x4E26;&#x4E0D;&#x80FD;&#x7528;&#x5728; Server Side Rendering&#xFF0C;&#x6240;&#x4EE5;&#x5982;&#x679C;&#x8981;&#x505A; SSR &#x7684;&#x8A71;&#xFF0C;&#x53EF;&#x4EE5;&#x6539;&#x7528;&#x53E6;&#x4E00;&#x500B;&#x53EB;&#x505A; <a href="https://loadable-components.com/docs/loadable-vs-react-lazy/" target="_blank" rel="noopener">Loadable Components</a> &#x7684;&#x5957;&#x4EF6;&#xFF01;</p>
+<p>&#x53E6;&#x5916;&#x7576;&#x7136;&#x9084;&#x6709;&#x5176;&#x4ED6;&#x512A;&#x5316;&#x80FD;&#x505A;&#xFF0C;&#x6BD4;&#x5982; class component &#x88E1;&#x7684; shouldComponentUpdate&#xFF0C;React Hooks &#x88E1;&#x9762;&#x7684; useCallback &#x7B49;&#x7B49;&#xFF0C;&#x8AB2;&#x7A0B;&#x88E1;&#x9762;&#x4E5F;&#x6709;&#x63D0;&#x53CA;&#xFF0C;&#x4F46;&#x76EE;&#x524D;&#x6709;&#x9EDE;&#x61F6;&#x60F0;&#xFF0C;&#x5148;&#x7D00;&#x9304;&#x4E0B; React lazy&#xFF5E;</p>
+</body></html>
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/React/">#React</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Udemy-%E8%AA%B2%E7%A8%8B/">#Udemy 課程</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2020/05/03/BFCache-%E7%AD%86%E8%A8%98%E4%B9%8B%E4%BD%A0%E6%80%8E%E9%BA%BC%E9%83%BD%E6%B2%92%E8%AE%8A%E5%95%A6/">BFCache 筆記之你怎麼都沒變啦</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2020/03/07/The-Complete-Junior-to-Senior-Web-Developer-Roadmap-SSH-%E7%AD%86%E8%A8%98/">The Complete Junior to Senior Web Developer Roadmap - SSH 筆記</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+<div class="sharebox">
+    
+<div class="sharethis-inline-share-buttons"></div>
+<script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5e4221ec7a88780012e1744e&amp;product=inline-share-buttons' async='async'></script>
+
+</div>
+
+
+
+<div class="comments">
+    <h3 class="title is-4">Comments</h3>
+    
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://chihyang41.github.io/2020/03/28/The-Complete-Junior-to-Senior-Web-Developer-Roadmap-Performance-part2-%E9%9A%A8%E6%84%8F%E7%AD%86%E8%A8%98/';
+        this.page.identifier = '2020/03/28/The-Complete-Junior-to-Senior-Web-Developer-Roadmap-Performance-part2-隨意筆記/';
+        
+        this.language = 'en';
+        
+    };
+    (function() {
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'ChihYang41-blog' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<div id="disqus_thread">
+    
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+</div>
+</div>
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 Chih Yang&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/ChihYang41" target="_blank" rel="noopener">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/" target="_blank" rel="noopener">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("en-AU");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+    
+
+    
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+    
+</body>
+</html>
