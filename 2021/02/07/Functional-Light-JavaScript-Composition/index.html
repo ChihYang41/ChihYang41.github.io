@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>Functional-Light JavaScript - Composition - Chih Yang&#39;s Blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+<meta name="description" content="Chih Yang 的前端小天地">
+
+
+
+<meta name="keywords" content="前端">
+
+
+
+    <meta name="description" content="&amp;#x524D;&amp;#x8A00;&amp;#x6B64;&amp;#x70BA; frontend master &amp;#x7684; Functional-Light JavaScript, v3 &amp;#x7684;&amp;#x8AB2;&amp;#x7A0B;&amp;#x7B46;&amp;#x8A18;&amp;#xFF0C;&amp;#x9019;&amp;#x7BC7;&amp;#x8B1B;&amp;#x7684;&amp;#x662F; composition&amp;#xFF0C;&amp;#">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Functional-Light JavaScript - Composition">
+<meta property="og:url" content="https://chihyang41.github.io/2021/02/07/Functional-Light-JavaScript-Composition/index.html">
+<meta property="og:site_name" content="Chih Yang&#39;s Blog">
+<meta property="og:description" content="&amp;#x524D;&amp;#x8A00;&amp;#x6B64;&amp;#x70BA; frontend master &amp;#x7684; Functional-Light JavaScript, v3 &amp;#x7684;&amp;#x8AB2;&amp;#x7A0B;&amp;#x7B46;&amp;#x8A18;&amp;#xFF0C;&amp;#x9019;&amp;#x7BC7;&amp;#x8B1B;&amp;#x7684;&amp;#x662F; composition&amp;#xFF0C;&amp;#">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gmj2tjkjudj316m0kmq6e.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gmj30aoytwj30ci0w0q54.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Simingchen/Functional-Light-JS/master/manuscript/images/fig5.png">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gmlafplfc9j30ru0skqde.jpg">
+<meta property="article:published_time" content="2021-02-07T09:40:57.000Z">
+<meta property="article:modified_time" content="2021-02-07T09:56:11.807Z">
+<meta property="article:author" content="Chih Yang">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Functional Programming">
+<meta property="article:tag" content="frontend master">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gmj2tjkjudj316m0kmq6e.jpg">
+
+
+
+
+
+<link rel="icon" href="https://upload.cc/i1/2020/03/05/MXS6WH.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-146838618-1');
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    Chih Yang&#39;s Blog
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/tags">Tags</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/ChihYang41" target="_blank" rel="noopener">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            Functional-Light JavaScript - Composition
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2021-02-07T09:40:57.000Z" itemprop="datePublished">Feb 7 2021</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/%E7%AD%86%E8%A8%98/">筆記</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            14 minutes read (About 2053 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><h2 id="&#x524D;&#x8A00;"><a href="#&#x524D;&#x8A00;" class="headerlink" title="&#x524D;&#x8A00;"></a>&#x524D;&#x8A00;</h2><p>&#x6B64;&#x70BA; frontend master &#x7684; <a href="https://frontendmasters.com/courses/functional-javascript-v3/" target="_blank" rel="noopener">Functional-Light JavaScript, v3</a> &#x7684;&#x8AB2;&#x7A0B;&#x7B46;&#x8A18;&#xFF0C;&#x9019;&#x7BC7;&#x8B1B;&#x7684;&#x662F; composition&#xFF0C;&#x6307;&#x7684;&#x662F;&#x5982;&#x4F55;&#x628A; function &#x7D50;&#x5408;&#xFF0C;&#x5C07;&#x5C0F;&#x7A4D;&#x6728;&#x5806;&#x758A;&#x6210;&#x5927;&#x57CE;&#x5821;&#x7684;&#x6280;&#x5DE7;&#x3002;</p>
+<p>&#x5167;&#x5BB9;&#x4E0D;&#x5B8C;&#x5168;&#x548C;&#x8AB2;&#x7A0B;&#x7DE8;&#x6392;&#x76F8;&#x540C;&#xFF0C;&#x55AE;&#x7D14;&#x662F;&#x500B;&#x4EBA;&#x6D88;&#x5316;&#x904E;&#x5F8C;&#x7684;&#x7DE8;&#x6392;&#x3002;</p>
+<p>&#x56E0;&#x70BA;&#x525B;&#x958B;&#x59CB;&#x5B78; functional programming &#x7684;&#x7DE3;&#x6545;&#xFF0C;&#x5167;&#x5BB9;&#x3001;&#x89C0;&#x5FF5;&#x53EF;&#x80FD;&#x6703;&#x6709;&#x8AF8;&#x591A;&#x932F;&#x8AA4;&#xFF0C;&#x5982;&#x6709;&#x767C;&#x73FE;&#x932F;&#x8AA4;&#x9EBB;&#x7169;&#x4E0D;&#x541D;&#x6307;&#x6559;&#xFF0C;&#x611F;&#x8B1D;&#xFF01;</p>
+<a id="more"></a>
+
+<h2 id="&#x62BD;&#x8C61;&#x5316;-abstraction"><a href="#&#x62BD;&#x8C61;&#x5316;-abstraction" class="headerlink" title="&#x62BD;&#x8C61;&#x5316;(abstraction)"></a>&#x62BD;&#x8C61;&#x5316;(abstraction)</h2><p>&#x4EE5; Kyle Simpson &#x7684;&#x89C0;&#x9EDE;&#x4F86;&#x8AAA;&#xFF0C;&#x6240;&#x8B02; abstraction &#x6307;&#x7684;&#x662F;&#x628A;&#x5169;&#x500B;&#x908F;&#x8F2F;&#x4EA4;&#x7E54;&#x5728;&#x4E00;&#x8D77;&#x7684;&#x7A0B;&#x5F0F;&#x78BC;&#x5206;&#x96E2;&#x958B;&#x4F86;&#xFF0C;&#x8B93;&#x6211;&#x5011;&#x53EF;&#x4EE5;&#x95DC;&#x6CE8;&#x5404;&#x81EA;&#x7684;&#x908F;&#x8F2F;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x770B;&#x4E00;&#x908A;&#xFF0C;&#x9084;&#x8981;&#x9867;&#x53CA;&#x53E6;&#x4E00;&#x908A;&#x7684;&#x908F;&#x8F2F;&#x3002;</p>
+<blockquote>
+<p>We&#x2019;re not abstracting to hide details; we&#x2019;re separating details to improve focus.</p>
+</blockquote>
+<h2 id="&#x5148;&#x5F9E;&#x6539;&#x9020;&#x5DE7;&#x514B;&#x529B;&#x5DE5;&#x5EE0;&#x958B;&#x59CB;"><a href="#&#x5148;&#x5F9E;&#x6539;&#x9020;&#x5DE7;&#x514B;&#x529B;&#x5DE5;&#x5EE0;&#x958B;&#x59CB;" class="headerlink" title="&#x5148;&#x5F9E;&#x6539;&#x9020;&#x5DE7;&#x514B;&#x529B;&#x5DE5;&#x5EE0;&#x958B;&#x59CB;"></a>&#x5148;&#x5F9E;&#x6539;&#x9020;&#x5DE7;&#x514B;&#x529B;&#x5DE5;&#x5EE0;&#x958B;&#x59CB;</h2><h3 id="&#x63D0;&#x5347;&#x7522;&#x91CF;"><a href="#&#x63D0;&#x5347;&#x7522;&#x91CF;" class="headerlink" title="&#x63D0;&#x5347;&#x7522;&#x91CF;"></a>&#x63D0;&#x5347;&#x7522;&#x91CF;</h3><p>&#x6211;&#x5011;&#x4F86;&#x5047;&#x8A2D;&#x4E00;&#x500B;&#x60C5;&#x5883;&#xFF0C;&#x5047;&#x8A2D;&#x4ECA;&#x5929;&#x4F60;&#x662F;&#x500B;&#x5DE7;&#x514B;&#x529B;&#x5DE5;&#x5EE0;&#x7684;&#x9867;&#x554F;&#xFF0C;&#x8CA0;&#x8CAC;&#x6539;&#x9032;&#x6574;&#x500B;&#x5DE7;&#x514B;&#x529B;&#x5DE5;&#x5EE0;&#x7684;&#x751F;&#x7522;&#x6D41;&#x7A0B;&#xFF0C;&#x6216;&#x5927;&#x5927;&#x5C0F;&#x5C0F;&#x7684;&#x554F;&#x984C;&#xFF0C;&#x7E3D;&#x4E4B;&#x8001;&#x95C6;&#x9047;&#x5230;&#x554F;&#x984C;&#x5C31;&#x6703;&#x53BB;&#x627E;&#x4F60;&#x6C42;&#x6551;&#x3002;</p>
+<p>&#x800C;&#x4F60;&#x7684;&#x8208;&#x8DA3;&#x5C31;&#x662F;&#x5BEB;&#x7A0B;&#x5F0F;&#xFF0C;&#x6709;&#x4E8B;&#x6C92;&#x4E8B;&#x5C31;&#x6703;&#x5BEB;&#x7A0B;&#x5F0F;&#xFF0C;&#x9084;&#x6703;&#x5F9E;&#x5BEB;&#x7A0B;&#x5F0F;&#x627E;&#x51FA;&#x89E3;&#x6C7A;&#x5DE5;&#x4F5C;&#x554F;&#x984C;&#x7684;&#x9748;&#x611F;&#x3002;&#x597D;&#xFF0C;&#x6211;&#x77E5;&#x9053;&#x9019;&#x5047;&#x8A2D;&#x6709;&#x9EDE;&#x5FAE;&#x5999;&#xFF0C;&#x53EF;&#x662F;&#x5148;&#x63A5;&#x53D7;&#x9019;&#x500B;&#x5047;&#x8A2D;&#x5427;&#xFF0C;&#x62DC;&#x5077;&#x3002;</p>
+<p>&#x63A5;&#x8457;&#x6211;&#x5011;&#x770B;&#x4E00;&#x6BB5; code&#xFF0C;&#x9019;&#x6BB5; code &#x662F;&#x8981;&#x8A08;&#x7B97;&#x904B;&#x8CBB;&#xFF1A;</p>
+<p>&#x4ECA;&#x5929;&#x6709;&#x6BB5; code &#x662F;&#x8981;&#x8A08;&#x7B97;&#x904B;&#x8CBB;&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> minus2 = <span class="hljs-function">(<span class="hljs-params">x</span>) =&gt;</span> x - <span class="hljs-number">2</span></span><br><span class="line"><span class="hljs-keyword">const</span> triple = <span class="hljs-function">(<span class="hljs-params">x</span>) =&gt;</span> x * <span class="hljs-number">3</span></span><br><span class="line"><span class="hljs-keyword">const</span> increment = <span class="hljs-function">(<span class="hljs-params">x</span>) =&gt;</span> x + <span class="hljs-number">1</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// add shiping rate</span></span><br><span class="line"><span class="hljs-keyword">let</span> temp = increment(<span class="hljs-number">4</span>)</span><br><span class="line">tmp = triple(tmp)</span><br><span class="line"><span class="hljs-keyword">let</span> totalCost = basePrice + minus2(tmp)</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x4F46;&#x6211;&#x5011;&#x770B;&#x770B;&#x5C31;&#x597D;&#xFF0C;&#x66AB;&#x6642;&#x5148;&#x4E0D;&#x8AC7; code&#xFF0C;&#x800C;&#x662F;&#x5148;&#x8AC7;&#x4E00;&#x500B;&#x751F;&#x6D3B;&#x5316;&#x7684;&#x60C5;&#x5883;&#x3002;</p>
+<p><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmj2tjkjudj316m0kmq6e.jpg" alt="&#x622A;&#x5716; 2021-01-11 &#x4E0A;&#x5348;12.13.30"></p>
+<blockquote>
+<p>&#x67D0;&#x5929;&#x8001;&#x95C6;&#x8DDF;&#x4F60;&#x8AAA;&#xFF1A;&#x300C;&#x6211;&#x5011;&#x7684;&#x7AF6;&#x722D;&#x5C0D;&#x624B;&#x7522;&#x91CF;&#x9060;&#x8D85;&#x6211;&#x5011;&#x554A;&#xFF01;&#x5FEB;&#x7528;&#x4F60;&#x7121;&#x6575;&#x7684;&#x767D;&#x91D1;&#x4E4B;&#x661F;&#x60F3;&#x60F3;&#x8FA6;&#x6CD5;&#xFF01;&#x8D95;&#x5FEB;&#x589E;&#x52A0;&#x7522;&#x91CF;&#x8D85;&#x904E;&#x7AF6;&#x722D;&#x5C0D;&#x624B;&#x5427;&#xFF01;&#x300D;</p>
+<p>&#x4F60;&#x958B;&#x59CB;&#x82E6;&#x60F1;&#x600E;&#x9EBC;&#x8655;&#x7406;&#x9019;&#x554F;&#x984C;&#xFF0C;&#x56E0;&#x70BA;&#x8981;&#x589E;&#x52A0;&#x7522;&#x91CF;&#x53C8;&#x9700;&#x8981;&#x66F4;&#x591A;&#x6A5F;&#x5668;&#xFF0C;&#x53EF;&#x662F;&#x5EE0;&#x623F;&#x7A7A;&#x9593;&#x4E0D;&#x5920;&#xFF0C;&#x4EE5;&#x76EE;&#x524D;&#x7684;&#x904B;&#x4F5C;&#x6A5F;&#x5236;&#x53EA;&#x80FD;&#x653E;&#x4E00;&#x53F0;&#x6A5F;&#x5668;&#xFF0C;&#x4F46;&#x4E0D;&#x7BA1;&#x4E86;&#xFF0C;&#x7169;&#x60F1;&#x653E;&#x4E00;&#x65C1;&#xFF0C;&#x6211;&#x5011;&#x5148;&#x56DE;&#x53BB;&#x5BEB;&#x7A0B;&#x5F0F;&#x3002;</p>
+</blockquote>
+<p>&#x63A5;&#x4E0B;&#x4F86;&#x56DE;&#x5230;&#x525B;&#x525B;&#x90A3;&#x6BB5; code&#xFF0C;&#x6211;&#x5011;&#x628A;&#x539F;&#x672C;&#x7684;&#x7A0B;&#x5F0F;&#x6539;&#x826F;&#x6210;&#x9019;&#x6A23;&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> minus2 = <span class="hljs-function">(<span class="hljs-params">x</span>) =&gt;</span> x - <span class="hljs-number">2</span></span><br><span class="line"><span class="hljs-keyword">const</span> triple = <span class="hljs-function">(<span class="hljs-params">x</span>) =&gt;</span> x * <span class="hljs-number">3</span></span><br><span class="line"><span class="hljs-keyword">const</span> increment = <span class="hljs-function">(<span class="hljs-params">x</span>) =&gt;</span> x + <span class="hljs-number">1</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">let</span> totalCost = baseCost + minus2(triple(increment(<span class="hljs-number">4</span>)))</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x6211;&#x5011;&#x7C21;&#x5316;&#x4E86;&#x539F;&#x672C;&#x8F03;&#x5197;&#x9577;&#x7684;&#x65B9;&#x5F0F;&#xFF0C; <code>increment(4)</code> &#x57F7;&#x884C;&#x5B8C;&#x5F8C;&#x7684; output&#xFF0C; &#x6703;&#x88AB;&#x653E;&#x9032; <code>triple</code> &#x7576;&#x4F5C; input&#xFF0C;<code>triple</code> &#x57F7;&#x884C;&#x5B8C;&#x7684; output&#xFF0C;&#x53C8;&#x6703;&#x88AB;&#x653E;&#x9032; <code>minus2</code> &#x7576;&#x4F5C; input&#xFF0C;&#x6700;&#x7D42;&#x5F97;&#x5230;&#x6211;&#x5011;&#x7684;&#x7D50;&#x679C;&#x3002;</p>
+<p>&#x60F3;&#x8457;&#x60F3;&#x8457;&#xFF0C;&#x6709;&#x767C;&#x73FE;&#x63D0;&#x9AD8;&#x5DE7;&#x514B;&#x529B;&#x5DE5;&#x5EE0;&#x751F;&#x7522;&#x91CF;&#x7684;&#x65B9;&#x6CD5;&#x4E86;&#x55CE;&#xFF1F;</p>
+<img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmj30aoytwj30ci0w0q54.jpg" width="200px" height="auto">
+
+<p>&#x6C92;&#x932F;&#xFF0C;&#x5982;&#x540C;&#x6211;&#x5011;&#x7684; function &#x751F;&#x7522;&#x5B8C;&#x5F8C;&#x7684; output &#x6703;&#x88AB;&#x7576;&#x4F5C;&#x4E0B;&#x500B; function &#x7684; input &#x4E00;&#x6A23;&#xFF0C;&#x6211;&#x5011;&#x751F;&#x7522;&#x6A5F;&#x5668;&#x7684; output &#x4E5F;&#x53EF;&#x4EE5;&#x7576;&#x6210;&#x4E0B;&#x4E00;&#x500B;&#x6A5F;&#x5668;&#x7684; input &#x5C0D;&#x5427;&#xFF0C;&#x9019;&#x6A23;&#x5C31;&#x53EF;&#x4EE5;&#x7701;&#x53BB;&#x8F38;&#x9001;&#x5E36;&#x4F54;&#x7684;&#x7A7A;&#x9593;&#x4E86;&#xFF01;</p>
+<h3 id="&#x66F4;&#x52A0;&#x62BD;&#x8C61;&#x5316;"><a href="#&#x66F4;&#x52A0;&#x62BD;&#x8C61;&#x5316;" class="headerlink" title="&#x66F4;&#x52A0;&#x62BD;&#x8C61;&#x5316;"></a>&#x66F4;&#x52A0;&#x62BD;&#x8C61;&#x5316;</h3><blockquote>
+<p>&#x8001;&#x95C6;&#x67D0;&#x5929;&#x8AAA;&#xFF1A;</p>
+<p>&#x300C;&#x73FE;&#x5728;&#x7684;&#x751F;&#x7522;&#x6D41;&#x7A0B;&#x6709;&#x9EDE;&#x8907;&#x96DC;&#x6B38;&#xFF0C;&#x6A5F;&#x5668;&#x9593;&#x7684;&#x9806;&#x5E8F;&#x90FD;&#x8981;&#x5B89;&#x6392;&#x597D;&#xFF0C;&#x5982;&#x679C;&#x60F3;&#x8ABF;&#x6574;&#x5C31;&#x883B;&#x9EBB;&#x7169;&#x7684;&#xFF0C;&#x6240;&#x4EE5;&#x6211;&#x5728;&#x60F3;&#x554A;&#x2026;&#x300D;</p>
+<p>&#x300C;&#x80FD;&#x4E0D;&#x80FD;&#x9020;&#x51FA;&#x4E00;&#x53F0;&#x61F6;&#x4EBA;&#x5C08;&#x7528;&#x7684;&#x7684;&#x6A5F;&#x5668;&#xFF0C;&#x6211;&#x76F4;&#x63A5;&#x653E;&#x5DE7;&#x514B;&#x529B;&#x9032;&#x53BB;&#xFF0C;&#x963F;&#x51FA;&#x4F86;&#x5C31;&#x662F;&#x5305;&#x88DD;&#x5B8C;&#x6574;&#x7684;&#x5DE7;&#x514B;&#x529B;&#xFF0C;&#x807D;&#x8D77;&#x4F86;&#x5F88;&#x8B9A;&#x5C0D;&#x5427;&#xFF01;&#x300D;</p>
+</blockquote>
+<p>&#x7121;&#x5948;&#x4E4B;&#x4E0B;&#x6211;&#x5011;&#x4F9D;&#x820A;&#x8981;&#x56DE;&#x53BB;&#x5BEB; code &#x5C0B;&#x627E;&#x9748;&#x611F;&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> minus2 = <span class="hljs-function">(<span class="hljs-params">x</span>) =&gt;</span> x - <span class="hljs-number">2</span></span><br><span class="line"><span class="hljs-keyword">const</span> triple = <span class="hljs-function">(<span class="hljs-params">x</span>) =&gt;</span> x * <span class="hljs-number">3</span></span><br><span class="line"><span class="hljs-keyword">const</span> increment = <span class="hljs-function">(<span class="hljs-params">x</span>) =&gt;</span> x + <span class="hljs-number">1</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">shippingRate</span>(<span class="hljs-params">x</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> minus2(triple(increment(x))) <span class="hljs-comment">// how to do</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">let</span> totalCost = baseCost + shippingRate(<span class="hljs-number">4</span>) <span class="hljs-comment">// what to do</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x9019;&#x6BB5;&#x7A0B;&#x5F0F;&#x78BC;&#x6211;&#x5011;&#x505A;&#x4E86;&#x4EC0;&#x9EBC;&#xFF1F;&#x4E5F;&#x6C92;&#x4EC0;&#x9EBC;&#xFF0C;&#x5C31;&#x662F;&#x628A;&#x539F;&#x672C;&#x7684;&#x8A08;&#x7B97;&#x8B8A;&#x6210; <code>shippingRate</code> &#x7684; function&#xFF0C;&#x4F46;&#x908F;&#x8F2F;&#x4F86;&#x8AAA;&#x8B8A;&#x5F97;&#x66F4;&#x6709;&#x610F;&#x7FA9;&#x3002;&#x5728; line 6 &#x7684;&#x5730;&#x65B9;&#xFF0C;&#x6211;&#x5011;&#x4E3B;&#x8981;&#x505A;&#x7684;&#x662F;&#x300C;how to do&#x300D;&#xFF0C;&#x6307;&#x7684;&#x662F;&#x5982;&#x4F55;&#x8A08;&#x7B97; shippingRate&#xFF1B;&#x800C;&#x5728; line9&#xFF0C;&#x6211;&#x5011;&#x505A;&#x7684;&#x5247;&#x662F;&#x300C;what to do&#x300D;&#xFF0C;&#x6307;&#x7684;&#x662F;&#x7528; shippingRate &#x4F86;&#x505A;&#x4EC0;&#x9EBC;&#x3002;</p>
+<p>&#x9019;&#x5C31;&#x662F; Kyle &#x6240;&#x6307;&#x7684; abstraction&#xFF0C;&#x6211;&#x5011;&#x5206;&#x96E2;&#x51FA;&#x4E86;&#x300C;how to compute the shippingRate&#x300D;&#x4EE5;&#x53CA;&#x300C;what to do with the shippingRate&#x300D;</p>
+<h3 id="Declarative-Data-Flow"><a href="#Declarative-Data-Flow" class="headerlink" title="Declarative Data Flow"></a>Declarative Data Flow</h3><blockquote>
+<p>&#x6642;&#x5149;&#x98DB;&#x901D;&#xFF0C;&#x5DE7;&#x514B;&#x529B;&#x5DE5;&#x5EE0;&#x7684;&#x751F;&#x7522;&#x6D41;&#x7A0B;&#x7D93;&#x904E;&#x4F60;&#x7684;&#x6539;&#x9020;&#x5F8C;&#x7D93;&#x71DF;&#x5F97;&#x4E0D;&#x932F;&#xFF0C;&#x53EA;&#x662F;&#x53C8;&#x9762;&#x81E8;&#x4E86;&#x53E6;&#x4E00;&#x500B;&#x554F;&#x984C;&#xFF0C;&#x8001;&#x95C6;&#x67D0;&#x5929;&#x53C8;&#x8DD1;&#x4F86;&#x8AAA;&#xFF1A;</p>
+<p>&#x300C;&#x4E0A;&#x6B21;&#x7684;&#x6539;&#x9020;&#x7684;&#x78BA;&#x662F;&#x4E0D;&#x932F;&#x5566;&#xFF0C;&#x5DE5;&#x4EBA;&#x53EA;&#x8981;&#x6309;&#x4E00;&#x500B;&#x6309;&#x9215;&#x5C31;&#x53EF;&#x4EE5;&#x751F;&#x7522;&#x51FA;&#x7CD6;&#x679C;&#xFF0C;&#x4ED6;&#x4E5F;&#x4E0D;&#x7528;&#x7BA1;&#x7406;&#x9762;&#x5728;&#x5E79;&#x561B;&#xFF0C;&#x6BCF;&#x6B21;&#x751F;&#x7522;&#x53EA;&#x8981;&#x5F88;&#x7C21;&#x55AE;&#x7684;&#x6309;&#x4E0B;&#x6309;&#x9215;&#x5C31;&#x6C92;&#x554F;&#x984C;&#x60F9;&#xFF0C;&#x53EA;&#x662F;&#x8ABF;&#x6574;&#x6A5F;&#x5668;&#x7D30;&#x90E8;&#x9084;&#x662F;&#x7A0D;&#x5ACC;&#x4E0D;&#x65B9;&#x4FBF;&#x3002;</p>
+<p>&#x800C;&#x4E14;&#x6700;&#x8FD1;&#x6211;&#x767C;&#x73FE;&#x554A;&#xFF0C;&#x6211;&#x5011;&#x7684;&#x7AF6;&#x722D;&#x5C0D;&#x624B;&#x5C45;&#x7136;&#x6BCF;&#x5929;&#x90FD;&#x53EF;&#x4EE5;&#x66F4;&#x65B0;&#x4ED6;&#x5011;&#x751F;&#x7522;&#x7684;&#x5DE7;&#x514B;&#x529B;&#x54C1;&#x9805;&#x6B38;&#xFF1F;&#xFF1F;&#x6BD4;&#x5982;&#x4ECA;&#x5929;&#x751F;&#x7522; A &#x5DE7;&#x514B;&#x529B;&#xFF0C;&#x9694;&#x5929;&#x4ED6;&#x5C31;&#x80FD;&#x5920;&#x751F;&#x7522; B &#x5DE7;&#x514B;&#x529B;&#xFF01;</p>
+<p>&#x6240;&#x4EE5;&#xFF0C;&#x6211;&#x66F4;&#x76F4;&#x63A5;&#x7684;&#x8AAA;&#x6211;&#x7684;&#x9700;&#x6C42;&#x597D;&#x4E86;&#xFF0C;&#x4F60;&#x6709;&#x6C92;&#x6709;&#x8FA6;&#x6CD5;&#x2026;&#x88FD;&#x9020;&#x51FA;&#x4E00;&#x500B;&#x80FD;&#x5920;&#x88FD;&#x9020;&#x6A5F;&#x5668;&#x7684;&#x2026;&#x6A5F;&#x5668;&#xFF1F;&#x9019;&#x6A23;&#x6211;&#x5011;&#x5C31;&#x53EF;&#x4EE5;&#x8FA6;&#x5230;&#x540C;&#x6A23;&#x4E8B;&#x60C5;&#x60F9;&#xFF01;&#x300D;</p>
+</blockquote>
+<p>&#x9019;&#x662F;&#x8001;&#x95C6;&#x7406;&#x60F3;&#x7684;&#x8A2D;&#x8A08;&#x5716;&#xFF1A;</p>
+<p><img src="https://raw.githubusercontent.com/Simingchen/Functional-Light-JS/master/manuscript/images/fig5.png" alt></p>
+<p>&#x53EA;&#x8981;&#x628A;&#x5C0F;&#x6A5F;&#x5668;&#x4E1F;&#x9032;&#x8D85;&#x5DE8;&#x5927;&#x6A5F;&#x5668;&#x88E1;&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x5E6B;&#x6211;&#x5011;&#x628A;&#x9019;&#x4E9B;&#x96F6;&#x4EF6;&#x7D50;&#x5408;&#xFF0C;&#x8B8A;&#x6210;&#x65B0;&#x7684;&#x6A5F;&#x5668;&#xFF0C;&#x8B9A;&#x62C9;&#x3002;</p>
+<p>&#x96D6;&#x7136;&#x807D;&#x8D77;&#x4F86;&#x5F88;&#x8352;&#x8B2C;&#xFF0C;&#x4F46;&#x4F60;&#x4F9D;&#x7136;&#x6C7A;&#x5B9A;&#x8D70;&#x8001;&#x6A23;&#x5B50;&#x7684;&#x8DEF;&#x7DDA;&#xFF0C;&#x5BEB;&#x7A0B;&#x5F0F;&#x627E;&#x6539;&#x9020;&#x6A5F;&#x5668;&#x7684;&#x9748;&#x611F;&#x3002;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">composeThree</span>(<span class="hljs-params">fn3, fn2, fn1</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">composed</span>(<span class="hljs-params">x</span>) </span>{</span><br><span class="line">    <span class="hljs-keyword">return</span> fn3(fn2(fn1(x)))</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> shippingRate = composeThree(minus2, triple, increment)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">let</span> totalCost = baseCost + shippingRate(<span class="hljs-number">4</span>)</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x5F9E;&#x9019;&#x6BB5; code &#x4F60;&#x53EF;&#x4EE5;&#x5F88;&#x6E05;&#x695A;&#x7684;&#x660E;&#x767D;&#xFF0C;data flow &#x5C31;&#x662F;&#x5F9E;&#x53F3;&#x5230;&#x5DE6;&#xFF0C;&#x5F9E; <code>increment</code>&#x3001;<code>triple</code> &#x518D;&#x5230; <code>minus2</code> &#x4E0D;&#x65B7;&#x5730;&#x7D93;&#x904E;&#x52A0;&#x5DE5;&#xFF0C;&#x6700;&#x5F8C;&#x5F97;&#x5230;&#x6211;&#x5011;&#x60F3;&#x8981;&#x7684; shippingRate&#x3002;</p>
+<blockquote>
+<p>Your programs don&#x2019;t mean anything if they don&#x2019;t mean data flow. </p>
+<p>The whole point of your program is to have data coming in, doing stuff, and then going back out.</p>
+</blockquote>
+<p>&#x6574;&#x500B; data flow &#x8B8A;&#x5F97; declarative&#xFF0C;imperative data flow &#x7684;&#x554F;&#x984C;&#x5728;&#x65BC; data flow &#x7684;&#x8B8A;&#x5316;&#x8B8A;&#x5F97;&#x96E3;&#x4EE5;&#x8FFD;&#x8E64;&#xFF0C;declarative &#x5247;&#x6E05;&#x695A;&#x8A31;&#x591A;&#x3002;<code>compose</code> &#x5728; utility library &#x90FD;&#x6703;&#x63D0;&#x4F9B;&#x6B64; API&#xFF0C;&#x5982; <a href="https://ramdajs.com/docs/#compose" target="_blank" rel="noopener">Ramda compose</a>&#x3002;</p>
+<h2 id="Associativity"><a href="#Associativity" class="headerlink" title="Associativity"></a>Associativity</h2><p></p><figure class="highlight js hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// &#x7D50;&#x5408;&#x5F8B;&#xFF08;associativity&#xFF09;</span></span><br><span class="line"><span class="hljs-keyword">var</span> associative = compose(f, compose(g, h)) == compose(compose(f, g), h);</span><br><span class="line"><span class="hljs-comment">// true</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>Compose &#x6709;&#x7D50;&#x5408;&#x5F8B;&#x7684;&#x7279;&#x6027;&#xFF0C;&#x610F;&#x6307;&#x4E0D;&#x7BA1;&#x4F60;&#x5C07;&#x54EA;&#x5169;&#x500B;&#x5206;&#x70BA;&#x4E00;&#x7D44;&#x90FD;&#x4E0D;&#x91CD;&#x8981;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x8AAA;&#x4F60;&#x7684; code &#x53EF;&#x4EE5;&#x50CF;&#x662F;&#x4E0B;&#x9762;&#x9019;&#x6A23;&#x96A8;&#x4FBF;&#x7D44;&#x5408;&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">compose(toUpperCase, compose(head, reverse));</span><br><span class="line"><span class="hljs-comment">// &#x6216;</span></span><br><span class="line">compose(compose(toUpperCase, head), reverse);</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x53C8;&#x6216;&#x8005;&#x50CF;&#x662F;&#x4E0B;&#x5716;&#xFF1A;</p>
+<p><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmlafplfc9j30ru0skqde.jpg" alt="&#x622A;&#x5716; 2021-01-12 &#x4E0B;&#x5348;10.37.44"></p>
+<p><code>f</code> &#x548C; <code>p</code> &#x770B;&#x4F3C;&#x4E0D;&#x540C;&#x7684; function&#xFF0C;&#x4F46;&#x5176;&#x5BE6;&#x90FD;&#x662F;&#x4E00;&#x6A23;&#x7684;&#xFF0C;&#x53EA;&#x662F; compose &#x7D50;&#x5408; function &#x7684;&#x65B9;&#x5F0F;&#x4E0D;&#x4E00;&#x6A23;&#x800C;&#x5DF2;&#xFF0C;&#x53EA;&#x8981;&#x4F60;&#x7684; function &#x9806;&#x5E8F;&#x4E00;&#x6A23;&#xFF0C;&#x56E0;&#x70BA; compose &#x7B26;&#x5408;&#x7D50;&#x5408;&#x5F8B;&#xFF0C;&#x6240;&#x4EE5;&#x4F60;&#x8981;&#x600E;&#x9EBC; compose &#x90FD;&#x53EF;&#x4EE5;&#x3002;</p>
+<p>&#x7D50;&#x5408;&#x5F8B;&#x7684;&#x7279;&#x6027;&#x70BA;&#x6211;&#x5011;&#x63D0;&#x4F9B;&#x4E86;&#x5F88;&#x5927;&#x7684;&#x9748;&#x6D3B;&#x6027;&#xFF0C;&#x66F4;&#x80FD;&#x5920;&#x6709;&#x6548;&#x7684;&#x904B;&#x7528; function&#xFF0C;&#x5F9E;&#x5C0F;&#x5C0F;&#x5C0F;&#x584A;&#x7684;&#x6A02;&#x9AD8;&#x7A4D;&#x6728;&#xFF0C;&#x9010;&#x6F38;&#x84CB;&#x51FA;&#x4E00;&#x5EA7;&#x5927;&#x57CE;&#x5821;&#x3002;</p>
+<h2 id="Composition-with-Currying"><a href="#Composition-with-Currying" class="headerlink" title="Composition with Currying"></a>Composition with Currying</h2><p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sum</span>(<span class="hljs-params">x, y</span>) </span>{ <span class="hljs-keyword">return</span> x + y }</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">triple</span>(<span class="hljs-params">x</span>) </span>{ <span class="hljs-keyword">return</span> x * <span class="hljs-number">3</span> }</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">divBy</span>(<span class="hljs-params">y, x</span>) </span>{ <span class="hljs-keyword">return</span> x / y }</span><br><span class="line"></span><br><span class="line">divBy(<span class="hljs-number">2</span>, triple(sum(<span class="hljs-number">3</span>, <span class="hljs-number">5</span>))) <span class="hljs-comment">// 12</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x5047;&#x8A2D;&#x6211;&#x5011;&#x4ECA;&#x5929;&#x60F3;&#x8981;&#x628A;&#x9019;&#x6BB5; code &#x7528; <code>compose</code>&#x7D50;&#x5408;&#xFF0C;&#x6703;&#x9047;&#x5230;&#x4EC0;&#x9EBC;&#x554F;&#x984C;&#x5462;&#xFF1F;&#x5C31;&#x662F; shape &#x4E0D;&#x4E00;&#x6A23;&#x7684;&#x554F;&#x984C;&#x3002;&#x4E0A;&#x9762;&#x5E7E;&#x500B;&#x4F7F;&#x7528; <code>compose</code> &#x4F8B;&#x5B50;&#xFF0C;&#x50B3;&#x5165;&#x7684;&#x6BCF;&#x500B; function &#x90FD;&#x662F; unary &#x7684;&#xFF0C;&#x4F46;&#x6709;&#x6642;&#x5019;&#x6211;&#x5011;&#x6703;&#x9047;&#x5230; shape &#x662F; binary &#x7684; function&#x3002;</p>
+<p>&#x6240;&#x4EE5;&#x8981;&#x662F;&#x6211;&#x5011;&#x628A; <code>triple</code> &#x7684; output &#x653E;&#x9032; <code>sum</code>&#x7576;&#x4F5C; input &#x5C31;&#x6703;&#x51FA;&#x554F;&#x984C;&#xFF0C;&#x56E0;&#x70BA; <code>sum</code>. &#x662F; binary &#x7684;&#xFF0C;&#x5169;&#x8005;&#x7684; shape &#x5C0D;&#x4E0D;&#x4E0A;&#xFF0C;&#x800C;&#x9019;&#x6642;&#x5019;&#x5C31;&#x662F; curry &#x8981;&#x6D3E;&#x4E0A;&#x7528;&#x5834;&#x7684;&#x6642;&#x5019;&#x60F9;&#xFF01;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sum</span>(<span class="hljs-params">x, y</span>) </span>{ <span class="hljs-keyword">return</span> x + y }</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">triple</span>(<span class="hljs-params">x</span>) </span>{ <span class="hljs-keyword">return</span> x * <span class="hljs-number">3</span> }</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">divBy</span>(<span class="hljs-params">y, x</span>) </span>{ <span class="hljs-keyword">return</span> x / y }</span><br><span class="line"></span><br><span class="line">divBy(<span class="hljs-number">2</span>, triple(sum(<span class="hljs-number">3</span>, <span class="hljs-number">5</span>))) <span class="hljs-comment">// 12</span></span><br><span class="line"></span><br><span class="line">sum = curry(sum)</span><br><span class="line">divBy = curry(divBy)</span><br><span class="line"></span><br><span class="line">compose(</span><br><span class="line">  divBy(<span class="hljs-number">2</span>),</span><br><span class="line">  triple,</span><br><span class="line">  sum(<span class="hljs-number">3</span>)</span><br><span class="line">)(<span class="hljs-number">5</span>)</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p><code>5</code> &#x6703;&#x88AB;&#x7576;&#x4F5C; input &#x50B3;&#x5165;&#xFF0C;&#x4E4B;&#x5F8C;&#x5C31;&#x6703;&#x9806;&#x8457; <code>sum(3)</code> &#x3001;<code>triple</code>&#x3001;<code>divBy(2)</code> &#x7684;&#x9806;&#x5E8F;&#x57F7;&#x884C;&#xFF0C;&#x9019;&#x5C31;&#x662F; curry &#x5728; composition &#x7684;&#x5999;&#x7528;&#xFF0C;&#x6211;&#x5011;&#x6539;&#x8B8A;&#x4E86; function &#x7684; shape&#xFF01;&#x8B93;&#x5B83;&#x5011;&#x8B8A;&#x6210; unary&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x548C;&#x5176;&#x4ED6;&#x6A02;&#x9AD8;&#x7A4D;&#x6728;&#x63A5;&#x4E0A;&#x4E86;&#x3002;</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="https://frontendmasters.com/courses/functional-javascript-v3/" target="_blank" rel="noopener">Functional-Light JavaScript, v3</a></li>
+<li><a href="https://github.com/getify/Functional-Light-JS" target="_blank" rel="noopener">Functional-Light-JS</a></li>
+</ul>
+</body></html>
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/JavaScript/">#JavaScript</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Functional-Programming/">#Functional Programming</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/frontend-master/">#frontend master</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop is-hidden-mobile article-nav-prev">
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2021/02/07/Functional-Light-JavaScript-Closure/">Functional-Light JavaScript - Closure</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+<div class="sharebox">
+    
+<div class="sharethis-inline-share-buttons"></div>
+<script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5e4221ec7a88780012e1744e&amp;product=inline-share-buttons' async='async'></script>
+
+</div>
+
+
+
+<div class="comments">
+    <h3 class="title is-4">Comments</h3>
+    
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://chihyang41.github.io/2021/02/07/Functional-Light-JavaScript-Composition/';
+        this.page.identifier = '2021/02/07/Functional-Light-JavaScript-Composition/';
+        
+        this.language = 'en';
+        
+    };
+    (function() {
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'ChihYang41-blog' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<div id="disqus_thread">
+    
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+</div>
+</div>
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 Chih Yang&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/ChihYang41" target="_blank" rel="noopener">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/" target="_blank" rel="noopener">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("en-AU");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+    
+
+    
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+    
+</body>
+</html>
