@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://chihyang41.github.io/2021/02/07/Functional-Programming-Closure/</loc>
+    
+    <lastmod>2021-02-07T08:58:09.489Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://chihyang41.github.io/2021/02/07/Functional-Programming-Point-Free/</loc>
     
     <lastmod>2021-02-07T07:57:48.097Z</lastmod>
