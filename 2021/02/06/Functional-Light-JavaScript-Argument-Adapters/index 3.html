@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>Functional-Light JavaScript - Argument Adapters - Chih Yang&#39;s Blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+<meta name="description" content="Chih Yang 的前端小天地">
+
+
+
+<meta name="keywords" content="前端">
+
+
+
+    <meta name="description" content="&amp;#x524D;&amp;#x8A00;&amp;#x6B64;&amp;#x70BA; frontend master &amp;#x7684; Functional-Light JavaScript, v3 &amp;#x7684;&amp;#x8AB2;&amp;#x7A0B;&amp;#x7B46;&amp;#x8A18;&amp;#xFF0C;&amp;#x9019;&amp;#x7BC7;&amp;#x4E3B;&amp;#x8981;&amp;#x8B1B;&amp;#x7684;&amp;#x662F; argum">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Functional-Light JavaScript - Argument Adapters">
+<meta property="og:url" content="https://chihyang41.github.io/2021/02/06/Functional-Light-JavaScript-Argument-Adapters/index.html">
+<meta property="og:site_name" content="Chih Yang&#39;s Blog">
+<meta property="og:description" content="&amp;#x524D;&amp;#x8A00;&amp;#x6B64;&amp;#x70BA; frontend master &amp;#x7684; Functional-Light JavaScript, v3 &amp;#x7684;&amp;#x8AB2;&amp;#x7A0B;&amp;#x7B46;&amp;#x8A18;&amp;#xFF0C;&amp;#x9019;&amp;#x7BC7;&amp;#x4E3B;&amp;#x8981;&amp;#x8B1B;&amp;#x7684;&amp;#x662F; argum">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-02-06T09:34:10.000Z">
+<meta property="article:modified_time" content="2021-02-07T09:22:27.370Z">
+<meta property="article:author" content="Chih Yang">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Functional Programming">
+<meta property="article:tag" content="frontend master">
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+<link rel="icon" href="https://upload.cc/i1/2020/03/05/MXS6WH.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-146838618-1');
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    Chih Yang&#39;s Blog
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/tags">Tags</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/ChihYang41" target="_blank" rel="noopener">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            Functional-Light JavaScript - Argument Adapters
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2021-02-06T09:34:10.000Z" itemprop="datePublished">Feb 6 2021</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/%E7%AD%86%E8%A8%98/">筆記</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            13 minutes read (About 1998 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><h2 id="&#x524D;&#x8A00;"><a href="#&#x524D;&#x8A00;" class="headerlink" title="&#x524D;&#x8A00;"></a>&#x524D;&#x8A00;</h2><p>&#x6B64;&#x70BA; frontend master &#x7684; <a href="https://frontendmasters.com/courses/functional-javascript-v3/" target="_blank" rel="noopener">Functional-Light JavaScript, v3</a> &#x7684;&#x8AB2;&#x7A0B;&#x7B46;&#x8A18;&#xFF0C;&#x9019;&#x7BC7;&#x4E3B;&#x8981;&#x8B1B;&#x7684;&#x662F; argument adapters&#xFF0C;&#x5728;&#x4F7F;&#x7528; function &#x6642;&#xFF0C;&#x4E0D;&#x4E00;&#x5B9A;&#x6BCF;&#x500B; function parameters &#x7684;&#x9806;&#x5E8F;&#x3001;&#x6578;&#x91CF;&#x7B26;&#x5408;&#x6211;&#x5011;&#x7684;&#x9700;&#x6C42;&#xFF0C;&#x56E0;&#x6B64;&#x5C31;&#x9700;&#x8981;&#x900F;&#x904E; adapter &#x53BB;&#x8ABF;&#x6574;&#xFF0C;&#x628A; function &#x4FEE;&#x6539;&#x6210;&#x7B26;&#x5408;&#x6211;&#x5011;&#x9700;&#x6C42;&#x7684;&#x5F62;&#x72C0;&#x3002;</p>
+<p>&#x5167;&#x5BB9;&#x4E0D;&#x5B8C;&#x5168;&#x548C;&#x8AB2;&#x7A0B;&#x7DE8;&#x6392;&#x76F8;&#x540C;&#xFF0C;&#x55AE;&#x7D14;&#x662F;&#x500B;&#x4EBA;&#x6D88;&#x5316;&#x904E;&#x5F8C;&#x7684;&#x7DE8;&#x6392;&#x3002;</p>
+<p>&#x56E0;&#x70BA;&#x525B;&#x958B;&#x59CB;&#x5B78; functional programming &#x7684;&#x7DE3;&#x6545;&#xFF0C;&#x5167;&#x5BB9;&#x3001;&#x89C0;&#x5FF5;&#x53EF;&#x80FD;&#x6703;&#x6709;&#x8AF8;&#x591A;&#x932F;&#x8AA4;&#xFF0C;&#x5982;&#x6709;&#x767C;&#x73FE;&#x932F;&#x8AA4;&#x9EBB;&#x7169;&#x4E0D;&#x541D;&#x6307;&#x6559;&#xFF0C;&#x611F;&#x8B1D;&#xFF01;</p>
+<a id="more"></a>
+
+<h2 id="Function-Arguments"><a href="#Function-Arguments" class="headerlink" title="Function Arguments"></a>Function Arguments</h2><p>&#x5148;&#x4F86;&#x8AC7;&#x8AC7; parameter &#x548C; argument &#x7684;&#x5DEE;&#x5225;&#xFF0C;parameter &#x6307;&#x7684;&#x662F; function &#x7684;&#x53C3;&#x6578;&#xFF0C;argument &#x6307;&#x7684;&#x662F;&#x50B3;&#x9032;&#x53BB;&#x7684;&#x6578;&#xFF0C;&#x8209;&#x4F8B;&#x4F86;&#x8AAA;&#xFF1A;<br></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">add</span>(<span class="hljs-params">x, y</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> x + y</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">add(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>)</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p><code>x</code> &#x548C; <code>y</code> &#x5C31;&#x662F; parameter&#xFF0C;<code>3</code>&#x3001;<code>4</code> &#x5C31;&#x662F; arguments&#x3002;</p>
+<h2 id="Ths-shape-of-function"><a href="#Ths-shape-of-function" class="headerlink" title="Ths shape of function"></a>Ths shape of function</h2><p>&#x518D;&#x4F86;&#x8981;&#x8B1B;&#x4E00;&#x4EF6;&#x5F88;&#x91CD;&#x8981;&#x7684;&#x4E8B;&#x60C5;&#xFF0C;&#x5C31;&#x662F; function &#x7684; shape&#x3002;</p>
+<p>function &#x7684; shape &#x6307;&#x7684;&#x662F;&#x63A5;&#x6536;&#x591A;&#x5C11;&#x500B; input &#x4EE5;&#x53CA;&#x56DE;&#x50B3;&#x591A;&#x5C11; output&#xFF0C;&#x8209;&#x4F8B;&#x4F86;&#x8AAA;&#xFF1A;<br></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// unary</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">increment</span>(<span class="hljs-params">x</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> sum(x, <span class="hljs-number">1</span>)</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// binary</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sum</span>(<span class="hljs-params">x, y</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> x + y</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x53EA;&#x9700;&#x8981;&#x50B3;&#x9032;&#x53BB;&#x4E00;&#x500B; input&#xFF0C;&#x56DE;&#x50B3;&#x4E00;&#x500B; output &#x7684;&#x53EB;&#x505A; <strong>unary</strong>&#xFF1B;&#x9700;&#x8981;&#x50B3;&#x5169;&#x500B; input&#xFF0C;&#x56DE;&#x50B3;&#x4E00;&#x500B; output &#x7684;&#x53EB;&#x505A; <strong>binary</strong>&#xFF0C;&#x800C;&#x4E09;&#x500B;&#x4EE5;&#x4E0A;&#x7684; input &#x5C31;&#x53EB;&#x505A; ternary&#x3002;&#x6240;&#x4EE5;<code>increment</code> &#x5C31;&#x662F; unary&#xFF0C;<code>sum</code> &#x5C31;&#x662F; binary&#x3002;</p>
+<p>Function &#x7684;&#x5F62;&#x72C0;&#x662F;&#x5F88;&#x91CD;&#x8981;&#x7684;&#xFF0C;&#x56E0;&#x70BA;&#x9019;&#x4EE3;&#x8868;&#x4E86;&#x548C;&#x5176;&#x4ED6; function &#x7684;&#x5951;&#x5408;&#x7A0B;&#x5EA6;&#x3001;&#x597D;&#x4E0D;&#x597D;&#x5171;&#x540C;&#x4F7F;&#x7528;&#xFF0C;&#x5C31;&#x50CF;&#x662F;&#x5C0F;&#x670B;&#x53CB;&#x5728;&#x5806;&#x6A02;&#x9AD8;&#x7A4D;&#x6728;&#x4E00;&#x6A23;&#xFF0C;&#x4E0B;&#x9762;&#x7684;&#x7A4D;&#x6728;&#x5FC5;&#x9808;&#x8981;&#x548C;&#x4E0A;&#x9762;&#x7684;&#x7A4D;&#x6728;&#x5F62;&#x72C0;&#x662F;&#x5951;&#x5408;&#x7684;&#xFF0C;&#x624D;&#x80FD;&#x5920;&#x7D44;&#x6210;&#x4E00;&#x5EA7;&#x9AD8;&#x5854;&#xFF0C;&#x5982;&#x679C;&#x7A4D;&#x6728;&#x4E0D;&#x5408;&#x5C31;&#x6C92;&#x8FA6;&#x6CD5;&#x5408;&#x5728;&#x4E00;&#x8D77;&#x4F7F;&#x7528;&#x4E86;&#xFF0C;function &#x4E5F;&#x662F;&#x5982;&#x6B64;&#xFF0C;shape &#x6C7A;&#x5B9A;&#x4E86; function &#x4E00;&#x8D77;&#x4F7F;&#x7528;&#x7684;&#x65B9;&#x4FBF;&#x6027;&#x3002;</p>
+<p>&#x7576;&#x6211;&#x5011;&#x5728;&#x8A2D;&#x8A08; function &#x7684;&#x6642;&#x5019;&#x5C31;&#x5FC5;&#x9808;&#x8003;&#x91CF;&#x5230; shape&#xFF0C;&#x800C;&#x4E00;&#x822C;&#x4F86;&#x8AAA;&#xFF0C;&#x597D;&#x7684; FP program &#x901A;&#x5E38;&#x5927;&#x90E8;&#x5206;&#x7684; function &#x90FD;&#x6703;&#x662F; unary &#x7684;&#xFF0C;&#x5C11;&#x90E8;&#x5206;&#x662F; binary&#xFF0C;ternary &#x5C31;&#x7279;&#x5225;&#x5C11;&#x3002;</p>
+<p>&#x5F80;&#x5F8C;&#x5176;&#x4ED6;&#x7AE0;&#x7BC0;&#x63D0;&#x5230;&#x7684;&#x4F8B;&#x5B50;&#xFF0C;&#x5C31;&#x6703;&#x770B;&#x5230;&#x5982;&#x679C; function &#x7684; shape &#x4E0D;&#x5408;&#xFF0C;&#x6703;&#x906D;&#x9047;&#x4EC0;&#x9EBC;&#x4E0D;&#x65B9;&#x4FBF;&#xFF0C;&#x4EE5;&#x53CA;&#x6211;&#x5011;&#x5982;&#x4F55;&#x7528;&#x5176;&#x4ED6;&#x6280;&#x5DE7;&#x514B;&#x670D;&#x9019;&#x554F;&#x984C;&#x5594;&#x3002;</p>
+<h2 id="Arguments-Shape-Adapters"><a href="#Arguments-Shape-Adapters" class="headerlink" title="Arguments Shape Adapters"></a>Arguments Shape Adapters</h2><p>&#x6709;&#x6642;&#x5019;&#x6211;&#x5011;&#x60F3;&#x8981;&#x4F7F;&#x7528;&#x7684; function &#x4E0D;&#x4E00;&#x5B9A;&#x662F;&#x6211;&#x5011;&#x671F;&#x671B;&#x7684; shape&#xFF0C;&#x6BD4;&#x5982;&#x6211;&#x5011;&#x60F3;&#x8981; unary &#x7684;&#xFF0C;function &#x537B;&#x662F; binary &#x7684;&#xFF0C;&#x9019;&#x6642;&#x5019;&#x5C31;&#x8981;&#x900F;&#x904E;&#x4E00;&#x500B;&#x53EB; adapter &#x7684;&#x65B9;&#x6CD5;&#x4F86;&#x53BB;&#x8655;&#x7406;&#x9019;&#x4EF6;&#x4E8B;&#x60C5;&#x3002;</p>
+<p>&#x4EC0;&#x9EBC;&#x662F; adapter &#x5462;&#xFF1F;&#x4EE5;&#x8A2D;&#x8A08;&#x6A21;&#x5F0F;&#x4F86;&#x8AAA;&#xFF0C;&#x6709;&#x4E00;&#x500B;&#x53EB;&#x505A; Adapter Pattern&#xFF08;&#x9069;&#x914D;&#x5668;&#x6A21;&#x5F0F;&#xFF09;&#x7684;&#x6771;&#x897F;&#xFF0C;&#x6982;&#x5FF5;&#x4E0A;&#x5C31;&#x662F;&#x628A;&#x5169;&#x500B;&#x5F62;&#x72C0;&#x4E0D;&#x5408;&#x7684;&#x6771;&#x897F;&#xFF0C;&#x900F;&#x904E;&#x4E00;&#x500B; Adapter &#x6A4B;&#x63A5;&#x5169;&#x8005;&#xFF0C;&#x8B93;&#x5169;&#x500B;&#x5F62;&#x72C0;&#x4E0D;&#x540C;&#x7684;&#x6771;&#x897F;&#x53EF;&#x4EE5;&#x5408;&#x5728;&#x4E00;&#x8D77;&#x4F7F;&#x7528;&#xFF0C;&#x662F;&#x500B;&#x985E;&#x4F3C;&#x65BC;&#x8F49;&#x63A5;&#x982D;&#x7684;&#x6982;&#x5FF5;&#xFF0C;&#x6240;&#x4EE5;&#x6211;&#x5011;&#x6703;&#x7528; adapter &#x7576;&#x4F5C;&#x8F49;&#x63A5;&#x982D;&#x6A4B;&#x63A5;&#x5169;&#x500B; shape &#x4E0D;&#x5408;&#x7684; function &#x3002;</p>
+<p>adapter &#x57FA;&#x672C;&#x4E0A;&#x6703;&#x662F; HOF&#xFF08;Higher Order Function&#xFF09;&#xFF0C;&#x90A3;&#x751A;&#x9EBC;&#x53EB; HOF&#xFF08;Higher Order Function&#xFF09;&#x5462;&#xFF1F;</p>
+<p>Higher Order Function &#x662F;&#x81F3;&#x5C11;&#x6EFF;&#x8DB3;&#x4E0B;&#x5217;&#x4E00;&#x500B;&#x689D;&#x4EF6;&#x7684;&#x51FD;&#x6578;&#xFF1A;</p>
+<ul>
+<li>&#x63A5;&#x53D7;&#x4E00;&#x500B;&#x6216;&#x591A;&#x500B;&#x51FD;&#x6578;&#x4F5C;&#x70BA;&#x8F38;&#x5165;</li>
+<li>&#x8F38;&#x51FA;&#x4E00;&#x500B;&#x51FD;&#x6578;</li>
+</ul>
+<p>&#x5149;&#x7528;&#x8B1B;&#x7684;&#x5F88;&#x62BD;&#x8C61;&#xFF0C;&#x6240;&#x4EE5;&#x6211;&#x5011;&#x90FD;&#x4F86;&#x770B;&#x770B;&#x4F8B;&#x5B50;&#x5427;&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">unary</span>(<span class="hljs-params">fn</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">one</span>(<span class="hljs-params">args</span>) </span>{</span><br><span class="line">    fn(args)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">binary</span>(<span class="hljs-params">fn</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">two</span>(<span class="hljs-params">arg1, arg2</span>) </span>{</span><br><span class="line">    fn(arg1, arg2)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">...args</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> args</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">let</span> foo = unary(f)</span><br><span class="line"><span class="hljs-keyword">let</span> boo = binary(f)</span><br><span class="line"></span><br><span class="line">foo(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>) <span class="hljs-comment">// [1]</span></span><br><span class="line">boo(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span> ,<span class="hljs-number">4</span>) <span class="hljs-comment">// [1, 2]</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<p><code>unary</code> &#x548C; <code>binary</code> &#x5169;&#x500B; function &#x5C31;&#x662F; higher order function&#xFF0C;&#x4ED6;&#x5011;&#x63A5;&#x6536;&#x4E86; function &#x7576;&#x4F5C; input&#xFF0C;&#x4E5F;&#x628A; function &#x7576;&#x4F5C; output &#x4F86; return&#x3002;</p>
+<p>&#x6240;&#x4EE5;&#x7576;&#x6211;&#x5011;&#x628A; <code>f</code> &#x4E1F;&#x9032; <code>unary</code> &#x7684;&#x6642;&#x5019;&#xFF0C;<code>unary</code> &#x7684; return &#x7684; output &#x6703;&#x662F;&#x53EA;&#x63A5;&#x53D7;&#x4E00;&#x500B; argument &#x7684; function&#xFF0C;&#x6240;&#x4EE5; line18 &#x7684; <code>foo</code> &#x5176;&#x5BE6;&#x7B49;&#x540C;&#x65BC; line2 &#x7684; <code>one</code> &#x9019;&#x500B; function&#xFF0C;&#x56E0;&#x6B64; <code>foo</code> &#x53EA;&#x6703;&#x63A5;&#x53D7;&#x4E00;&#x500B; argument&#x3002;</p>
+<p>&#x900F;&#x904E;&#x4E86;&#x89E3; <code>unary</code> &#x548C; <code>binary</code> &#x5169;&#x500B; function &#x80FD;&#x5920;&#x6CE8;&#x610F;&#x5230;&#x4E00;&#x4EF6;&#x4E8B;&#x60C5;&#xFF0C;&#x90A3;&#x5C31;&#x662F;&#x4ED6;&#x5011;&#x53EF;&#x4EE5;&#x6539;&#x8B8A; function &#x7684; shape&#xFF0C;&#x6BD4;&#x5982; <code>unary</code> &#x6703;&#x628A;&#x50B3;&#x9032;&#x4F86;&#x7684; function &#x8B8A;&#x6210;&#x53EA;&#x63A5;&#x53D7;&#x4E00;&#x500B;&#x53C3;&#x6578;&#xFF0C;&#x7576;&#x6211;&#x5011;&#x9700;&#x8981;&#x6539;&#x8B8A; function &#x63A5;&#x53D7;&#x53C3;&#x6578;&#x7684;&#x6578;&#x91CF;&#x6642;&#xFF0C;&#x5C31;&#x80FD;&#x5920;&#x900F;&#x904E;&#x5B83;&#x5011;&#x4F86;&#x9032;&#x884C;&#x8ABF;&#x6574;&#xFF0C;&#x56E0;&#x6B64;&#x6211;&#x5011;&#x53EF;&#x4EE5;&#x628A;&#x5B83;&#x5011;&#x7A31;&#x70BA; adapter&#xFF0C;&#x539F;&#x56E0;&#x5C31;&#x662F;&#x9019;&#x985E;&#x7684; adapter function &#x80FD;&#x5920;&#x8B93; function &#x7684; shape &#x6539;&#x8B8A;&#xFF0C;&#x9032;&#x800C;&#x63A5;&#x6536;&#x4E0D;&#x540C;&#x6578;&#x91CF;&#x7684; input&#x3002;</p>
+<p>&#x7C21;&#x800C;&#x8A00;&#x4E4B;&#xFF0C;&#x5982;&#x679C;&#x6A02;&#x9AD8;&#x7A4D;&#x6728;&#x5F62;&#x72C0;&#x4E0D;&#x540C;&#x7684;&#x8A71;&#xFF0C;&#x53EF;&#x4EE5;&#x900F;&#x904E; adapter &#x4F86;&#x8ABF;&#x6574;&#x7A4D;&#x6728;&#x7684;&#x5F62;&#x72C0;&#xFF0C;&#x8B93;&#x9019;&#x5169;&#x584A;&#x7A4D;&#x6728;&#x80FD;&#x5920;&#x7D44;&#x88DD;&#x5728;&#x4E00;&#x8D77;&#xFF0C;&#x5982;&#x679C;&#x8981;&#x4F7F;&#x7528; FP&#xFF0C;&#x9700;&#x8981;&#x8A66;&#x8457;&#x719F;&#x6089;&#x9019;&#x6A23;&#x7684;&#x6A21;&#x5F0F;&#xFF0C;&#x4E0D;&#x53EA;&#x662F;&#x4F7F;&#x7528;&#x73FE;&#x6210;&#x7684; function &#x5F97;&#x5230;&#x60F3;&#x8981;&#x7684;&#x8F38;&#x51FA;&#xFF0C;&#x7576; function &#x7684; shape &#x4E0D;&#x5408;&#x7684;&#x7684;&#x6642;&#x5019;&#xFF0C;&#x61C2;&#x7684;&#x4F7F;&#x7528; HOF &#x4F86;&#x8ABF;&#x6574; shape &#x4E5F;&#x662F;&#x5F88;&#x91CD;&#x8981;&#x7684;&#x3002;</p>
+<h2 id="Adapter-Examples"><a href="#Adapter-Examples" class="headerlink" title="Adapter Examples"></a>Adapter Examples</h2><p>&#x63A5;&#x4E0B;&#x4F86;&#x518D;&#x793A;&#x7BC4;&#x5E7E;&#x500B; adapter&#xFF0C;&#x770B;&#x770B;&#x6211;&#x5011;&#x80FD;&#x600E;&#x9EBC;&#x8ABF;&#x6574; function &#x7684; shape&#x3002;</p>
+<h3 id="rest-parameters"><a href="#rest-parameters" class="headerlink" title="rest parameters"></a>rest parameters</h3><p>&#x56E0;&#x70BA;&#x5F9E;&#x9019;&#x7AE0;&#x7BC0;&#x958B;&#x59CB; rest parameter &#x9019;&#x500B;&#x8A9E;&#x6CD5;&#x4F7F;&#x7528;&#x983B;&#x7387;&#x8B8A;&#x5F97;&#x975E;&#x5E38;&#x9AD8;&#xFF0C;&#x800C;&#x6211;&#x5728;&#x9019;&#x4E4B;&#x524D;&#x5176;&#x5BE6;&#x5C0D;&#x9019;&#x8A9E;&#x6CD5;&#x6C92;&#x6709;&#x5230;&#x5F88;&#x719F;&#xFF0C;&#x5927;&#x90E8;&#x5206;&#x90FD;&#x53EA;&#x7528;&#x5230; spread operater &#x800C;&#x5DF2;&#xFF0C;&#x6240;&#x4EE5;&#x7A0D;&#x5FAE;&#x7B46;&#x8A18; rest parameter &#x7684;&#x7528;&#x6CD5;&#x3002;</p>
+<p>&#x4F86;&#x770B;&#x770B;&#x9019;&#x6BB5;&#x7A0B;&#x5F0F;&#x78BC;&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params">a, b, ...args</span>) </span>{</span><br><span class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;a:&apos;</span>, a)</span><br><span class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;b:&apos;</span>, b)</span><br><span class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&apos;args:&apos;</span>, args)</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">foo(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span> ,<span class="hljs-number">5</span>) </span><br><span class="line"><span class="hljs-comment">// a: 1</span></span><br><span class="line"><span class="hljs-comment">// b: 2</span></span><br><span class="line"><span class="hljs-comment">// args: [3, 4, 5]</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>a &#x548C; b &#x5206;&#x5225;&#x70BA; 1 &#x548C; 2 &#x5F88;&#x5BB9;&#x6613;&#x7406;&#x89E3;&#xFF0C;&#x503C;&#x5F97;&#x6CE8;&#x610F;&#x7684;&#x662F; args &#x7684;&#x503C;&#xFF0C;rest parameter &#x7684;&#x7279;&#x6027;&#x5728;&#x65BC;&#x53EF;&#x4EE5;&#x628A;&#x5269;&#x4E0B;&#x50B3;&#x9032;&#x4F86;&#x7684; arguments &#x6536;&#x9032;&#x53BB;&#x4E00;&#x500B;&#x9663;&#x5217;&#x88E1;&#x9762;&#xFF0C;&#x56E0;&#x6B64; args &#x7684;&#x503C;&#x6703;&#x662F; <code>[3, 4, 5]</code>&#xFF0C;&#x56E0;&#x70BA;&#x5269;&#x4E0B;&#x50B3;&#x9032;&#x4F86;&#x7684; argument &#x90FD;&#x653E;&#x5728;&#x9019;&#x500B;&#x9663;&#x5217;&#x88E1;&#x9762;&#x4E86;&#x3002;</p>
+<p>&#x53E6;&#x5916; rest parameter &#x4E5F;&#x5F88;&#x5E38;&#x548C; spread operator &#x4E00;&#x8D77;&#x4F7F;&#x7528;&#xFF0C;&#x66F4;&#x8A73;&#x7D30;&#x7684;&#x5167;&#x5BB9;&#x53EF;&#x4EE5;&#x53C3;&#x8003; <a href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Functions/rest_parameters" target="_blank" rel="noopener">MDN - &#x5176;&#x9918;&#x53C3;&#x6578;(rest parameter)</a></p>
+<h3 id="&#x7BC4;&#x4F8B;-1-reverseArgs"><a href="#&#x7BC4;&#x4F8B;-1-reverseArgs" class="headerlink" title="&#x7BC4;&#x4F8B; 1 - reverseArgs"></a>&#x7BC4;&#x4F8B; 1 - reverseArgs</h3><p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">reverseArgs</span>(<span class="hljs-params">fn</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">reversed</span>(<span class="hljs-params">...args</span>) </span>{ <span class="hljs-comment">// [1, 2, 3, 4]</span></span><br><span class="line">    fn(...args.reverse()) <span class="hljs-comment">// [1, 2, 3, 4] -&gt; ...[4, 3, 2, 1] -&gt; 4, 3, 2, 1</span></span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">...args</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> args</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> g = reverseArgs(f)</span><br><span class="line"></span><br><span class="line">g(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>) <span class="hljs-comment">// [4, 3, 2, 1]</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<p><code>reverseArgs</code> &#x5728;&#x9019;&#x88E1;&#x505A;&#x7684;&#x4E8B;&#x60C5;&#x5C31;&#x662F;&#x5728; line2 &#x5C07; paramter &#x96C6;&#x5408;&#x8D77;&#x4F86;&#xFF0C;&#x8B8A;&#x6210;&#x4E00;&#x500B; array&#xFF1B;&#x63A5;&#x8457;&#x518D;&#x900F;&#x904E; <code>reverse()</code> &#x628A; args &#x53CD;&#x8F49;&#xFF0C;&#x53CD;&#x8F49;&#x5F8C;&#x7684; args &#x518D;&#x63A5;&#x8457;&#x88AB; spread operator &#x5C55;&#x958B;&#xFF0C;&#x8B8A;&#x6210;&#x88AB;&#x5C55;&#x958B;&#x7684; arguments&#x3002;</p>
+<p>&#x88AB;&#x5C55;&#x958B;&#x7684; arguments &#x5230;&#x4E86; <code>f</code> &#x9019;&#x500B; function &#x5F8C;&#x518D;&#x6B21;&#x900F;&#x904E; rest parameter &#x8A9E;&#x6CD5;&#x96C6;&#x5408;&#x8D77;&#x4F86;&#x8B8A;&#x6210;&#x4E00;&#x500B; array&#xFF0C;&#x7136;&#x5F8C;&#x88AB; return&#xFF0C;&#x4E5F;&#x5C31;&#x5F97;&#x5230;&#x4E86; <code>[4, 3, 2, 1]</code> &#x9019;&#x500B;&#x7D50;&#x679C;&#x4E86;&#x3002;</p>
+<p>&#x900F;&#x904E; <code>reverseArgs</code> &#xFF0C;&#x6211;&#x5011;&#x53EF;&#x4EE5;&#x628A;&#x50B3;&#x9032;&#x4F86;&#x7684;&#x53C3;&#x6578;&#x9806;&#x5E8F;&#x985B;&#x5012;&#x3002;</p>
+<h3 id="&#x7BC4;&#x4F8B;-2-spreadArgs"><a href="#&#x7BC4;&#x4F8B;-2-spreadArgs" class="headerlink" title="&#x7BC4;&#x4F8B; 2 - spreadArgs"></a>&#x7BC4;&#x4F8B; 2 - spreadArgs</h3><p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">spreadArgs</span>(<span class="hljs-params">fn</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">spread</span>(<span class="hljs-params">args</span>) </span>{</span><br><span class="line">    fn(...args)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">x, y, z</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> x + y + z</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> g = spreadArgs(f)</span><br><span class="line"></span><br><span class="line">g([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]) <span class="hljs-comment">// 6</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<p><code>spreadArgs</code> &#x7528;&#x8655;&#x5728;&#x65BC;&#x628A;&#x50B3;&#x9032;&#x4F86;&#x7684;&#x9663;&#x5217;&#x5C55;&#x958B;&#xFF0C;&#x8B8A;&#x6210;&#x4E00;&#x500B;&#x4E00;&#x500B;&#x5206;&#x958B;&#x7684; argument&#x3002;</p>
+<p>&#x5728; Function Programming &#x88E1;&#xFF0C;&#x901A;&#x5E38;&#x5C31;&#x88AB;&#x7A31;&#x70BA; <code>apply</code> &#x3002;&#xFF08;&#x8A73;&#x60C5;&#x53EF;&#x53C3;&#x8003; <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply" target="_blank" rel="noopener">Function.prototype.apply()</a>)</p>
+<h3 id="&#x7BC4;&#x4F8B;-3-unspreadArgs"><a href="#&#x7BC4;&#x4F8B;-3-unspreadArgs" class="headerlink" title="&#x7BC4;&#x4F8B; 3 - unspreadArgs"></a>&#x7BC4;&#x4F8B; 3 - unspreadArgs</h3><p>&#x81E8;&#x6642;&#x8003;&#x4F86;&#x4E86;&#xFF01;&#x5982;&#x679C; <code>spreadArgs</code> &#x53EF;&#x4EE5;&#x628A;&#x9663;&#x5217;&#x5C55;&#x958B;&#xFF0C;&#x90A3;&#x600E;&#x9EBC;&#x6A23;&#x628A;&#x5206;&#x6563;&#x7684; arguments &#x6536;&#x96C6;&#x6210;&#x4E00;&#x500B;&#x9663;&#x5217;&#x5462;&#xFF1F;&#x4E5F;&#x5C31;&#x662F; <code>unapply</code>&#xFF0C;&#x9019;&#x8981;&#x600E;&#x9EBC;&#x505A;&#x5462;&#xFF1F;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">unspreadArgs</span>(<span class="hljs-params">fn</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">unspread</span>(<span class="hljs-params">...args</span>) </span>{</span><br><span class="line">    fn(args)</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x5176;&#x5BE6;&#x5C31;&#x53EA;&#x662F;&#x628A; <code>spreadArgs</code> &#x505A;&#x7684;&#x4E8B;&#x60C5;&#x53CD;&#x904E;&#x4F86;&#x505A;&#x800C;&#x5DF2;&#xFF5E;</p>
+<h2 id="Adapter-&#x7684;&#x61C9;&#x7528;&#x5834;&#x666F;"><a href="#Adapter-&#x7684;&#x61C9;&#x7528;&#x5834;&#x666F;" class="headerlink" title="Adapter &#x7684;&#x61C9;&#x7528;&#x5834;&#x666F;"></a>Adapter &#x7684;&#x61C9;&#x7528;&#x5834;&#x666F;</h2><p>&#x53EF;&#x4EE5;&#x900F;&#x904E;&#x601D;&#x8003;&#x4EE5;&#x4E0B;&#x5169;&#x9EDE;&#xFF0C;&#x4F86;&#x60F3;&#x60F3;&#x81EA;&#x5DF1;&#x662F;&#x5426;&#x9700;&#x8981;&#x5275;&#x9020; adapter&#xFF1A;</p>
+<ol>
+<li>Can I change the shape of my function at definition so that it fits better&#xFF1F;</li>
+<li>If not, can I make an adapter that changes the shape&#xFF1F;</li>
+</ol>
+<p>&#x53EF;&#x4EE5;&#x7684;&#x8A71;&#xFF0C;FPer &#x6703;&#x6BD4;&#x8F03;&#x50BE;&#x5411;&#x5F9E;&#x820A;&#x6709;&#x7684; utilities &#x88E1;&#x9762;&#x627E;&#x5C0B;&#x3001;&#x5806;&#x758A;&#x51FA;&#x60F3;&#x8981;&#x7684;&#x7D50;&#x679C;&#xFF0C;&#x70BA;&#x4EC0;&#x9EBC;&#x5462;&#xFF1F;&#x5275;&#x9020;&#x81EA;&#x5DF1;&#x7684; utilities &#x4E0D;&#x4E5F;&#x633A;&#x597D;&#x73A9;&#x7684;&#x55CE;&#xFF1F;&#x7684;&#x78BA;&#xFF0C;&#x4F46;&#x9019;&#x540C;&#x6642;&#x4E5F;&#x6703;&#x8B93; code &#x8B8A;&#x5F97;&#x6C92;&#x90A3;&#x9EBC;&#x4EE4;&#x4EBA;&#x719F;&#x6089;&#x3002;</p>
+<p>Function Programming &#x6709;&#x500B;&#x7279;&#x9EDE;&#x662F;&#xFF0C;&#x5047;&#x8A2D;&#x4F60;&#x719F;&#x6089;&#x4E86; Ramda &#x6216;&#x5176;&#x4ED6;&#x73FE;&#x6210;&#x7684; Library &#x5F8C;&#xFF0C;&#x901A;&#x5E38;&#x5C31;&#x6703;&#x4E86;&#x89E3;&#x90A3;&#x4E9B; utilities &#x7684;&#x547D;&#x540D;&#x6163;&#x4F8B;&#x548C;&#x4F5C;&#x7528;&#x4E86;&#xFF0C;&#x56E0;&#x70BA;&#x5B83;&#x5011;&#x7684;&#x4F7F;&#x7528;&#x65B9;&#x5F0F;&#x548C;&#x547D;&#x540D;&#x5E7E;&#x4E4E;&#x90FD;&#x5DEE;&#x4E0D;&#x591A;&#xFF0C;&#x6240;&#x4EE5;&#x91CD;&#x65B0;&#x5275;&#x9020;&#x65B0; utilites &#x7684;&#x7F3A;&#x9EDE;&#x5C31;&#x5728;&#x65BC;&#x7834;&#x58DE;&#x4E86;&#x9019;&#x500B;&#x719F;&#x6089;&#x5EA6;&#xFF0C;FP &#x559C;&#x6B61;&#x7528;&#x820A;&#x6709;&#x7684;&#x6A02;&#x9AD8;&#x7A4D;&#x6728;&#xFF0C;&#x7576;&#x771F;&#x7684;&#x6C92;&#x8FA6;&#x6CD5;&#x7684;&#x6642;&#x5019;&#xFF0C;&#x624D;&#x6703;&#x9444;&#x9020;&#x81EA;&#x5DF1;&#x9069;&#x7528;&#x7684;&#x7A4D;&#x6728;&#x3002;</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="https://frontendmasters.com/courses/functional-javascript-v3/" target="_blank" rel="noopener">Functional-Light JavaScript, v3</a> </li>
+</ul>
+</body></html>
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/JavaScript/">#JavaScript</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Functional-Programming/">#Functional Programming</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/frontend-master/">#frontend master</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2021/02/07/Functional-Light-JavaScript-Point-Free/">Functional-Light JavaScript - Point Free</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2021/02/06/Functional-Light-JavaScript-Pure-Function/">Functional-Light JavaScript - Pure Function</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+<div class="sharebox">
+    
+<div class="sharethis-inline-share-buttons"></div>
+<script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5e4221ec7a88780012e1744e&amp;product=inline-share-buttons' async='async'></script>
+
+</div>
+
+
+
+<div class="comments">
+    <h3 class="title is-4">Comments</h3>
+    
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://chihyang41.github.io/2021/02/06/Functional-Light-JavaScript-Argument-Adapters/';
+        this.page.identifier = '2021/02/06/Functional-Light-JavaScript-Argument-Adapters/';
+        
+        this.language = 'en';
+        
+    };
+    (function() {
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'ChihYang41-blog' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<div id="disqus_thread">
+    
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+</div>
+</div>
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 Chih Yang&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/ChihYang41" target="_blank" rel="noopener">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/" target="_blank" rel="noopener">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("en-AU");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+    
+
+    
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+    
+</body>
+</html>

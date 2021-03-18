@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+<head>
+    <meta charset="utf-8">
+<title>Functional-Light JavaScript - Closure - Chih Yang&#39;s Blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
+
+
+
+
+<meta name="description" content="Chih Yang 的前端小天地">
+
+
+
+<meta name="keywords" content="前端">
+
+
+
+    <meta name="description" content="&amp;#x524D;&amp;#x8A00;&amp;#x6B64;&amp;#x70BA; frontend master &amp;#x7684; Functional-Light JavaScript, v3 &amp;#x7684;&amp;#x8AB2;&amp;#x7A0B;&amp;#x7B46;&amp;#x8A18;&amp;#xFF0C;&amp;#x9019;&amp;#x7BC7;&amp;#x8B1B;&amp;#x7684;&amp;#x662F; functional programmin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Functional-Light JavaScript - Closure">
+<meta property="og:url" content="https://chihyang41.github.io/2021/02/07/Functional-Light-JavaScript-Closure/index.html">
+<meta property="og:site_name" content="Chih Yang&#39;s Blog">
+<meta property="og:description" content="&amp;#x524D;&amp;#x8A00;&amp;#x6B64;&amp;#x70BA; frontend master &amp;#x7684; Functional-Light JavaScript, v3 &amp;#x7684;&amp;#x8AB2;&amp;#x7A0B;&amp;#x7B46;&amp;#x8A18;&amp;#xFF0C;&amp;#x9019;&amp;#x7BC7;&amp;#x8B1B;&amp;#x7684;&amp;#x662F; functional programmin">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gmff9kgil7j316o0g4aen.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gmffbh4fzzj316i0ecjum.jpg">
+<meta property="article:published_time" content="2021-02-07T08:20:30.000Z">
+<meta property="article:modified_time" content="2021-02-07T09:22:43.732Z">
+<meta property="article:author" content="Chih Yang">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Functional Programming">
+<meta property="article:tag" content="frontend master">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gmff9kgil7j316o0g4aen.jpg">
+
+
+
+
+
+<link rel="icon" href="https://upload.cc/i1/2020/03/05/MXS6WH.png">
+
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-146838618-1');
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body>
+    
+<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                
+                    
+                    Chih Yang&#39;s Blog
+                    
+                
+            </a>
+            <div class="navbar-burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="navbar-menu navbar-start">
+            
+            <a class="navbar-item "
+               href="/archives">Archives</a>
+            
+            <a class="navbar-item "
+               href="/tags">Tags</a>
+            
+            <a class="navbar-item "
+               href="/categories">Categories</a>
+            
+        </div>
+        
+        <div class="navbar-menu navbar-end">
+            
+            <a class="navbar-item search" title="Search" href="javascript:;">
+                <i class="fas fa-search"></i>
+            </a>
+            
+            
+            
+            <a class="navbar-item" title="GitHub" href="https://github.com/ChihYang41" target="_blank" rel="noopener">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+               
+            
+        </div>
+    </div>
+</nav>
+
+    <section class="section">
+    <div class="container">
+    <article class="article content gallery" itemscope itemprop="blogPost">
+    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
+        
+            Functional-Light JavaScript - Closure
+        
+    </h1>
+    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
+        <span class="column is-narrow">
+            <time datetime="2021-02-07T08:20:30.000Z" itemprop="datePublished">Feb 7 2021</time>
+        </span>
+        
+        <span class="column is-narrow article-category">
+            <i class="far fa-folder"></i>
+            <a class="article-category-link" href="/categories/%E7%AD%86%E8%A8%98/">筆記</a>
+        </span>
+        
+        
+        <span class="column is-narrow">
+            
+            
+            26 minutes read (About 3849 words)
+        </span>
+        
+    </div>
+    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+    
+        <html><head></head><body><h2 id="&#x524D;&#x8A00;"><a href="#&#x524D;&#x8A00;" class="headerlink" title="&#x524D;&#x8A00;"></a>&#x524D;&#x8A00;</h2><p>&#x6B64;&#x70BA; frontend master &#x7684; <a href="https://frontendmasters.com/courses/functional-javascript-v3/" target="_blank" rel="noopener">Functional-Light JavaScript, v3</a> &#x7684;&#x8AB2;&#x7A0B;&#x7B46;&#x8A18;&#xFF0C;&#x9019;&#x7BC7;&#x8B1B;&#x7684;&#x662F; functional programming &#x4E2D; closure &#x7684;&#x61C9;&#x7528;&#xFF0C;&#x50CF;&#x662F; memoization&#x3001;partial application&#x3001;curry&#xFF0C;&#x4EE5;&#x53CA;&#x5728; functional programming &#x4E2D;&#x4F7F;&#x7528; closure &#x8981;&#x7279;&#x5225;&#x6CE8;&#x610F;&#x7684;&#x5730;&#x65B9;&#x3002;</p>
+<p>&#x5167;&#x5BB9;&#x4E0D;&#x5B8C;&#x5168;&#x548C;&#x8AB2;&#x7A0B;&#x7DE8;&#x6392;&#x76F8;&#x540C;&#xFF0C;&#x55AE;&#x7D14;&#x662F;&#x500B;&#x4EBA;&#x6D88;&#x5316;&#x904E;&#x5F8C;&#x7684;&#x7DE8;&#x6392;&#x3002;</p>
+<p>&#x56E0;&#x70BA;&#x525B;&#x958B;&#x59CB;&#x5B78; functional programming &#x7684;&#x7DE3;&#x6545;&#xFF0C;&#x5167;&#x5BB9;&#x3001;&#x89C0;&#x5FF5;&#x53EF;&#x80FD;&#x6703;&#x6709;&#x8AF8;&#x591A;&#x932F;&#x8AA4;&#xFF0C;&#x5982;&#x6709;&#x767C;&#x73FE;&#x932F;&#x8AA4;&#x9EBB;&#x7169;&#x4E0D;&#x541D;&#x6307;&#x6559;&#xFF0C;&#x611F;&#x8B1D;&#xFF01;</p>
+<a id="more"></a>
+
+<h2 id="Closure"><a href="#Closure" class="headerlink" title="Closure"></a>Closure</h2><p>Closure &#x5728; Functional Programming &#x662F;&#x5F88;&#x91CD;&#x8981;&#x7684;&#xFF0C;&#x56E0;&#x70BA;&#x5728; FP &#x7576;&#x4E2D;&#x6703;&#x5F88;&#x5E38;&#x4F7F;&#x7528;&#x5230; Closure&#xFF0C;&#x5FC5;&#x9808;&#x5C0D; Closure &#x6709;&#x8DB3;&#x5920;&#x7684;&#x4E86;&#x89E3;&#x624D;&#x80FD;&#x9032;&#x884C;&#x4E0B;&#x53BB;&#xFF0C;Kyle &#x5C0D; Closure &#x7684;&#x5B9A;&#x7FA9;&#x53EA;&#x6709;&#x9019;&#x53E5;&#x8A71;&#xFF1A;</p>
+<blockquote>
+<p>Closure is when a function &#x201C;remembers&#x201D; the variables around it even when that function is executed elsewhere</p>
+</blockquote>
+<p>&#x4F86;&#x770B;&#x4E00;&#x6BB5; Closure &#x7684;&#x7A0B;&#x5F0F;&#x78BC;&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeCounter</span>(<span class="hljs-params"></span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">var</span> counter = <span class="hljs-number">0</span></span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">increment</span>(<span class="hljs-params"></span>) </span>{</span><br><span class="line">    <span class="hljs-keyword">return</span> ++counter</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> c = makeCounter()</span><br><span class="line"></span><br><span class="line">c() <span class="hljs-comment">// 1</span></span><br><span class="line">c() <span class="hljs-comment">// 2</span></span><br><span class="line">c() <span class="hljs-comment">// 3</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x76F8;&#x4FE1;&#x6709;&#x5BEB;&#x904E; JavaScript &#x4E26;&#x4E14;&#x6709;&#x807D;&#x904E; Closure &#x7684;&#x4EBA;&#x61C9;&#x8A72;&#x90FD;&#x5C0D;&#x9019;&#x7A2E;&#x4F8B;&#x5B50;&#x9817;&#x70BA;&#x719F;&#x6089;&#x7684;&#xFF0C;&#x5728; <code>makeCounter</code> &#x57F7;&#x884C;&#x5B8C;&#x5F8C;&#xFF0C;&#x7406;&#x8AD6;&#x4E0A; <code>counter</code> &#x61C9;&#x8A72;&#x8981;&#x88AB; GC &#x56DE;&#x6536;&#x624D;&#x5C0D;&#xFF0C;&#x4F46;&#x56E0;&#x70BA; Closure &#x7684;&#x7DE3;&#x6545; &#xFF0C;<code>counter</code> &#x7684;&#x503C;&#x4ECD;&#x7136;&#x88AB;&#x8A18;&#x8457;&#xFF0C;&#x6BCF;&#x7576;&#x57F7;&#x884C; <code>c</code> &#x7684;&#x6642;&#x5019;&#xFF0C;&#x5C31;&#x6703;&#x589E;&#x52A0; <code>counter</code> &#x7684;&#x503C;&#x3002;</p>
+<p>&#x9019;&#x500B;&#x6642;&#x5019;&#x6709;&#x500B;&#x554F;&#x984C;&#xFF1A;&#x300C;<code>c</code> <strong>&#x662F;&#x4E00;&#x500B; pure function &#x55CE;&#xFF1F;</strong>&#x300D;</p>
+<p>&#x7B54;&#x6848;&#x4E0D;&#x662F;&#xFF0C;&#x56E0;&#x70BA;<code>c</code> &#x6BCF;&#x6B21;&#x57F7;&#x884C;&#x7684; output &#x90FD;&#x4E0D;&#x4E00;&#x6A23;&#xFF1B;&#x4F46; closure &#x5728; Functional Programming &#x662F;&#x53EF;&#x4EE5;&#x88AB;&#x63A5;&#x53D7;&#x7684;&#xFF0C;&#x53EA;&#x662F;&#x8981;&#x6CE8;&#x610F;&#x5FC5;&#x9808;&#x4F7F;&#x7528;&#x5230; non-mutating value&#x3002;</p>
+<p>&#x63A5;&#x8457;&#x4F86;&#x770B;&#x53E6;&#x4E00;&#x500B;&#x4F8B;&#x5B50;&#xFF1A;</p>
+<p><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmff9kgil7j316o0g4aen.jpg" alt="&#x622A;&#x5716; 2021-01-07 &#x4E0B;&#x5348;8.51.24"></p>
+<p>&#x70BA;&#x4EC0;&#x9EBC;<code>one</code> &#x88E1;&#x9762;&#x7684; <code>fn</code>&#x5728;<code>unary</code> &#x57F7;&#x884C;&#x5B8C;&#x4E4B;&#x5F8C;&#x4ECD;&#x7136;&#x9084;&#x5B58;&#x5728;&#x5462;&#xFF1F;&#x539F;&#x56E0;&#x4E5F;&#x662F;&#x56E0;&#x70BA; Closure&#x3002;</p>
+<p>&#x518D;&#x4F86;&#x770B;&#x53E6;&#x4E00;&#x500B;&#x4F8B;&#x5B50;&#xFF1A;</p>
+<p><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmffbh4fzzj316i0ecjum.jpg" alt="&#x622A;&#x5716; 2021-01-07 &#x4E0B;&#x5348;8.53.13"></p>
+<p>&#x9019;&#x4E5F;&#x662F;&#x56E0;&#x70BA; Closure&#xFF0C;&#x800C;&#x5C0E;&#x81F4; <code>addAnother</code> &#x5728;&#x57F7;&#x884C;&#x7D50;&#x675F;&#x5F8C;&#x4ECD;&#x7136;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x5230; <code>z</code> &#x3002;</p>
+<p>&#x6240;&#x4EE5;&#x56B4;&#x683C;&#x4F86;&#x8AAA;&#xFF0C;&#x6211;&#x5011;&#x9019;&#x5169;&#x500B;&#x4F8B;&#x5B50;&#x7684; function&#xFF0C;&#x4E5F;&#x662F;&#x7528;&#x5230;&#x5916;&#x90E8;&#x7684; variable &#x4E86;&#x5C0D;&#x5427;&#xFF1F;&#x7684;&#x78BA;&#x662F;&#xFF0C;&#x770B;&#x4F3C;&#x662F;&#x4E00;&#x500B; NoNoNo &#x7684;&#x8209;&#x52D5;&#xFF0C;&#x4F46;&#x56E0;&#x70BA;&#x4F7F;&#x7528;&#x5230;&#x4E86;&#x4E0D;&#x6703;&#x88AB;&#x6539;&#x8B8A;&#x7684; variable&#xFF0C;&#x5F62;&#x6210;&#x4E86;&#x5B89;&#x5168;&#x3001;&#x53EF;&#x4EE5;&#x88AB;&#x4FE1;&#x8CF4;&#x7684; pure function&#x3002;</p>
+<h2 id="Closure-Exercise"><a href="#Closure-Exercise" class="headerlink" title="Closure Exercise"></a>Closure Exercise</h2><p>&#x63A5;&#x4E0B;&#x4F86;&#x770B;&#x770B;&#x7DF4;&#x7FD2;&#x984C;&#xFF0C;&#x8981;&#x6C42;&#x662F;&#x5BEB;&#x51FA;&#x4E00;&#x500B; <code>strBuilder</code> &#x7684; function&#xFF0C;&#x901A;&#x95DC;&#x689D;&#x4EF6;&#x662F;&#x53EF;&#x4EE5;&#x8B93;&#x4E0B;&#x9762;&#x7684; console.log &#x90FD;&#x56DE;&#x50B3; true&#x3002;</p>
+<p>&#x6CE8;&#x610F; <code>strBuilder</code> &#x9019;&#x500B; function &#x5728; input &#x70BA; string &#x7684;&#x6642;&#x5019;&#xFF0C;&#x6703;&#x7D2F;&#x52A0;&#x5B57;&#x4E32;&#xFF1B;&#x7B49;&#x5230;&#x6C92;&#x6709; input &#x76F4;&#x63A5;&#x57F7;&#x884C;&#x7684;&#x6642;&#x5019;&#xFF0C;&#x6703;&#x56DE;&#x50B3;&#x525B;&#x525B;&#x7D2F;&#x52A0;&#x7684;&#x7D50;&#x679C;&#x3002;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">strBuilder</span>(<span class="hljs-params">str</span>) </span>{</span><br><span class="line">  </span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> hello = strBuilder(<span class="hljs-string">&apos;Hello, &apos;</span>)</span><br><span class="line"><span class="hljs-keyword">var</span> kyle = hello(<span class="hljs-string">&apos;Kyle&apos;</span>)</span><br><span class="line"><span class="hljs-keyword">var</span> susan = hello(<span class="hljs-string">&apos;Susan&apos;</span>)</span><br><span class="line"><span class="hljs-keyword">var</span> question = kyle(<span class="hljs-string">&apos;?&apos;</span>)()</span><br><span class="line"><span class="hljs-keyword">var</span> greeting = susan(<span class="hljs-string">&apos;!&apos;</span>)()</span><br><span class="line"></span><br><span class="line"><span class="hljs-built_in">console</span>.log(strBuilder(<span class="hljs-string">&apos;Hello, &apos;</span>)(<span class="hljs-string">&apos;&apos;</span>)(<span class="hljs-string">&apos;Kyle&apos;</span>)(<span class="hljs-string">&apos;.&apos;</span>)(<span class="hljs-string">&apos;&apos;</span>)() === <span class="hljs-string">&apos;Hello, Kyle.&apos;</span>)</span><br><span class="line"><span class="hljs-built_in">console</span>.log(hello() === <span class="hljs-string">&apos;Hello, &apos;</span>)</span><br><span class="line"><span class="hljs-built_in">console</span>.log(kyle() === <span class="hljs-string">&apos;Hello, Kyle&apos;</span>)</span><br><span class="line"><span class="hljs-built_in">console</span>.log(susan() === <span class="hljs-string">&apos;Hello, Susan&apos;</span>)</span><br><span class="line"><span class="hljs-built_in">console</span>.log(question === <span class="hljs-string">&apos;Hello, Kyle?&apos;</span>)</span><br><span class="line"><span class="hljs-built_in">console</span>.log(greeting === <span class="hljs-string">&apos;Hello, Susan!&apos;</span>)</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h3 id="&#x932F;&#x8AA4;&#x7BC4;&#x4F8B;"><a href="#&#x932F;&#x8AA4;&#x7BC4;&#x4F8B;" class="headerlink" title="&#x932F;&#x8AA4;&#x7BC4;&#x4F8B;"></a>&#x932F;&#x8AA4;&#x7BC4;&#x4F8B;</h3><p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">strBuilder</span>(<span class="hljs-params">str</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">next</span>(<span class="hljs-params">v</span>) </span>{</span><br><span class="line">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> v === <span class="hljs-string">&apos;string&apos;</span>) {</span><br><span class="line">      str += v</span><br><span class="line">      <span class="hljs-keyword">return</span> next</span><br><span class="line">    }</span><br><span class="line">    <span class="hljs-keyword">return</span> str</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> hello = strBuilder(<span class="hljs-string">&apos;Hello, &apos;</span>)</span><br><span class="line"><span class="hljs-keyword">var</span> kyle = hello(<span class="hljs-string">&apos;Kyle&apos;</span>)</span><br><span class="line"><span class="hljs-keyword">var</span> susan = hello(<span class="hljs-string">&apos;Susan&apos;</span>)</span><br><span class="line"><span class="hljs-keyword">var</span> question = kyle(<span class="hljs-string">&apos;?&apos;</span>)()</span><br><span class="line"><span class="hljs-keyword">var</span> greeting = susan(<span class="hljs-string">&apos;!&apos;</span>)()</span><br><span class="line"></span><br><span class="line"><span class="hljs-built_in">console</span>.log(hello()) <span class="hljs-comment">// Hello, KyleSusan?!</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x9019;&#x500B;&#x7248;&#x672C;&#x7684;&#x932F;&#x8AA4;&#x662F;&#x4EC0;&#x9EBC;&#xFF1F;&#x932F;&#x8AA4;&#x6E90;&#x81EA;&#x65BC;&#x6211;&#x5011; mutate &#x4E86; <code>str</code>&#xFF0C;&#x6240;&#x4EE5;&#x7576; <code>hello</code> &#x88AB;&#x57F7;&#x884C;&#xFF0C;&#x53C8;&#x6216;&#x8005;&#x5F8C;&#x7E8C;&#x7684; <code>susan</code> &#x3001;<code>kyle</code>&#x88AB;&#x57F7;&#x884C;&#x7684;&#x6642;&#x5019;&#xFF0C;&#x90FD;&#x6703;&#x628A; str &#x7684;&#x503C;&#x7E7C;&#x7E8C;&#x7D2F;&#x52A0;&#x9032;&#x53BB;&#xFF0C;&#x7B49;&#x65BC;&#x662F;&#x6211;&#x5011;&#x4E00;&#x76F4;&#x5728; mutate <code>strBuilder</code> &#x9019;&#x500B; scope &#x7684; <code>str</code> &#xFF0C;&#x7121;&#x8AD6;&#x662F;&#x5728; <code>hello</code>&#x3001; <code>kyle</code> &#x3001;<code>question</code> &#x6216;&#x5176;&#x4ED6;&#x90FD;&#x662F;&#x3002;</p>
+<h3 id="&#x6B63;&#x78BA;&#x7BC4;&#x4F8B;"><a href="#&#x6B63;&#x78BA;&#x7BC4;&#x4F8B;" class="headerlink" title="&#x6B63;&#x78BA;&#x7BC4;&#x4F8B;"></a>&#x6B63;&#x78BA;&#x7BC4;&#x4F8B;</h3><p>&#x90A3;&#x4FEE;&#x6539;&#x5F8C;&#x7684;&#x7248;&#x672C;&#x61C9;&#x8A72;&#x8981;&#x9577;&#x600E;&#x6A23;&#xFF1F;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">strBuilder</span>(<span class="hljs-params">str</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">next</span>(<span class="hljs-params">v</span>) </span>{</span><br><span class="line">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> v === <span class="hljs-string">&apos;string&apos;</span>) {</span><br><span class="line">      <span class="hljs-keyword">return</span> strBuilder(str + v) </span><br><span class="line">    }</span><br><span class="line">    <span class="hljs-keyword">return</span> str</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x9019;&#x500B;&#x7BC4;&#x4F8B;&#x548C;&#x4E0A;&#x4E00;&#x500B;&#x4E0D;&#x540C;&#x5728;&#x54EA;&#xFF1F;&#x5728;&#x65BC;&#x6BCF;&#x6B21; return &#x7684;&#x662F; <code>setBuilder</code> &#x57F7;&#x884C;&#x5F8C;&#x7684;&#x7D50;&#x679C;&#xFF01;&#x800C; <code>setBuilder</code> &#x88AB;&#x50B3;&#x5165;&#x7684;&#x662F;&#x4EC0;&#x9EBC;&#x503C;&#x5462;&#xFF1F;&#x662F;&#x4E0A;&#x4E00;&#x6B21;&#x57F7;&#x884C; <code>setBuilder</code> &#x7684; <code>str</code> &#x548C;&#x4E0A;&#x4E00;&#x6B21; <code>next</code> &#x88AB;&#x50B3;&#x5165;&#x7684; <code>v</code>&#xFF01;</p>
+<p>&#x8209;&#x4F8B;&#x4F86;&#x8AAA;&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">strBuilder</span>(<span class="hljs-params">str</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">next</span>(<span class="hljs-params">v</span>) </span>{</span><br><span class="line">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> v === <span class="hljs-string">&apos;string&apos;</span>) {</span><br><span class="line">      <span class="hljs-keyword">return</span> strBuilder(str + v)</span><br><span class="line">    }</span><br><span class="line">    <span class="hljs-keyword">return</span> str</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">strBuilder(<span class="hljs-string">&apos;Hello, &apos;</span>)(<span class="hljs-string">&apos;test&apos;</span>)() <span class="hljs-comment">// &apos;Hello, test&apos;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">/*</span></span><br><span class="line"><span class="hljs-comment">  1. &#x7B2C;&#x4E00;&#x6B21; setBuilder &#x88AB;&#x50B3;&#x5165; &apos;Hello, &apos;, &#x4E26;&#x56DE;&#x50B3;&#x4E86; next function</span></span><br><span class="line"><span class="hljs-comment">  2. &#x7B2C;&#x4E8C;&#x6B21; next &#x88AB;&#x50B3;&#x5165; &apos;test&apos;&#xFF0C;next &#x8A18;&#x5F97; str &#x662F; &apos;Hello, &apos;&#xFF0C;</span></span><br><span class="line"><span class="hljs-comment">     &apos;Hello, &apos; &#x548C; &apos;test&apos; &#x76F8;&#x52A0;&#x5F8C;&#x8B8A;&#x6210; &apos;Hello, test&apos; </span></span><br><span class="line"><span class="hljs-comment">  3. &apos;Hello, test&apos; &#x50B3;&#x5165; setBuilder&#xFF0C;&#x57F7;&#x884C;&#x5F8C;&#x56DE;&#x50B3; next function</span></span><br><span class="line"><span class="hljs-comment">  4. &#x6700;&#x5F8C;&#x4E00;&#x6B21;&#x6C92;&#x6709;&#x50B3;&#x5165; string&#xFF0C;next &#x76F4;&#x63A5;&#x56DE;&#x50B3; str&#xFF0C;&#x4E5F;&#x5C31;&#x662F; &apos;Hello, test&apos;</span></span><br><span class="line"><span class="hljs-comment">*/</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x4E5F;&#x5C31;&#x662F;&#x8AAA;&#xFF0C;&#x56E0;&#x70BA;&#x6BCF;&#x6B21; <code>strBuilder</code> &#x90FD;&#x5F62;&#x6210;&#x4E86;&#x4E00;&#x500B;&#x65B0;&#x7684;&#x9589;&#x5305;&#xFF0C;&#x9019;&#x6B21;&#x7684; str &#x548C;&#x4E0A;&#x4E00;&#x6B21;&#x7684; str &#x662F;&#x4E0D;&#x540C;&#x7684;&#xFF0C;&#x6211;&#x5011;&#x6839;&#x672C;&#x6C92;&#x6709; mutate <code>str</code>&#xFF0C;&#x6211;&#x5011;&#x53EA;&#x662F;&#x53D6;&#x5F97; <code>str</code> &#x7684;&#x503C;&#xFF0C;&#x548C; <code>v</code> &#x76F8;&#x52A0;&#x4E4B;&#x5F8C;&#xFF0C;&#x7576;&#x4F5C; argument &#x50B3;&#x9032;&#x53BB;&#x800C;&#x5DF2;&#xFF0C;&#x4E5F;&#x56E0;&#x70BA;&#x9019;&#x6A23;&#x9054;&#x5230;&#x4E86; pure function &#x7684;&#x7D50;&#x679C;&#x3002;</p>
+<p>&#x548C; recursion &#x5176;&#x5BE6;&#x6709;&#x9EDE;&#x50CF;&#xFF0C;&#x4F46;&#x53C8;&#x4E0D;&#x7B97;&#x662F; recursion&#x3002;</p>
+<h3 id="&#x91CD;&#x9EDE;&#x5728;&#x54EA;&#xFF1F;"><a href="#&#x91CD;&#x9EDE;&#x5728;&#x54EA;&#xFF1F;" class="headerlink" title="&#x91CD;&#x9EDE;&#x5728;&#x54EA;&#xFF1F;"></a>&#x91CD;&#x9EDE;&#x5728;&#x54EA;&#xFF1F;</h3><p>&#x8B1B;&#x9019;&#x9EBC;&#x591A;&#xFF0C;&#x9019;&#x6BB5; Closure &#x7684;&#x91CD;&#x9EDE;&#x5C31;&#x5728;&#x65BC; Kyle Simpson &#x8AAA;&#x7684;&#x9019;&#x6BB5;&#x8A71;&#xFF1A;</p>
+<blockquote>
+<p>The key takeaway here is that if you&#x2019;re going to use closure in functional programming, you have to make sure you&#x2019;re closing over non-changing, non mutating value.</p>
+</blockquote>
+<p>&#x7576;&#x4F60;&#x4F7F;&#x7528;&#x5230; Closure &#x7684;&#x6642;&#x5019;&#xFF0C;&#x5C31;&#x8981;&#x7279;&#x5225;&#x53BB;&#x6CE8;&#x610F;&#x4F7F;&#x7528;&#x5230;&#x7684; value &#x662F;&#x4E0D;&#x662F; non mutating value&#xFF0C;&#x5982;&#x679C;&#x5728; Closure &#x7684;&#x904E;&#x7A0B;&#x4E2D;&#x6709; mutate variable&#xFF0C;&#x90A3;&#x5C31;&#x4E0D;&#x662F;&#x5F88; ok&#xFF0C;&#x56E0;&#x70BA;&#x6703;&#x5931;&#x53BB; pure function &#x7684;&#x512A;&#x52E2;&#xFF0C;&#x9032;&#x800C;&#x66F4;&#x5BB9;&#x6613;&#x7522;&#x751F;&#x975E;&#x9810;&#x671F;&#x7684; bug&#x3002;</p>
+<h2 id="Lazy&#x3001;Eager&#x3001;Memoization"><a href="#Lazy&#x3001;Eager&#x3001;Memoization" class="headerlink" title="Lazy&#x3001;Eager&#x3001;Memoization"></a>Lazy&#x3001;Eager&#x3001;Memoization</h2><h3 id="Lazy"><a href="#Lazy" class="headerlink" title="Lazy"></a>Lazy</h3><p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">repeater</span>(<span class="hljs-params">count</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">allTheAs</span>(<span class="hljs-params"></span>) </span>{</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>.padStart(count, <span class="hljs-string">&quot;A&quot;</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> A = repeater(<span class="hljs-number">10</span>)</span><br><span class="line"></span><br><span class="line">A() <span class="hljs-comment">// AAAAAAAAAA</span></span><br><span class="line">A() <span class="hljs-comment">// AAAAAAAAAA</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x9019;&#x6BB5; code &#x88E1;&#x9762;&#xFF0C;&#x771F;&#x6B63;&#x8A08;&#x7B97;&#x51FA; 10 &#x500B; A &#x7684;&#x5730;&#x65B9;&#xFF0C;&#x662F;&#x5728; line7 &#x9084;&#x662F; line 9 &#x5462;&#xFF1F;&#x7B54;&#x6848;&#x662F; line9&#xFF0C;&#x800C;&#x9019;&#x500B;&#x6642;&#x6A5F;&#x9EDE;&#x5F71;&#x97FF;&#x5230;&#x4E86;&#x4E00;&#x4E9B;&#x4E8B;&#x60C5;&#x3002;</p>
+<p>lazy(defer) &#x5F88;&#x6709;&#x8DA3;&#x7684;&#x5730;&#x65B9;&#x5728;&#x65BC;&#x5B83;&#x5EF6;&#x5F8C;&#x4E86;&#x771F;&#x6B63;&#x57F7;&#x884C;&#x7684;&#x6642;&#x9593;&#xFF0C;&#x4EE5;&#x5C31;&#x662F;&#x771F;&#x6B63;&#x88FD;&#x9020;&#x51FA; 10 &#x500B; A &#x7684;&#x6642;&#x6A5F;&#xFF0C;&#x6BD4;&#x8D77;&#x5728; line7 &#x5C31;&#x5F97;&#x5230;&#x7D50;&#x679C;&#xFF0C;&#x4ED6;&#x628A;&#x7D50;&#x679C;&#x5EF6;&#x5F8C;&#x5230;&#x4E86; line9&#x3002;</p>
+<p>&#x53EF;&#x4EE5;&#x6CE8;&#x610F;&#x7684;&#x662F;&#xFF0C;&#x6211;&#x5011;&#x9019;&#x6642;&#x5019; closure &#x7684;&#x5C0D;&#x8C61;&#x662F; <code>count</code>&#x3002;</p>
+<table>
+<thead>
+<tr>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&#x5982;&#x679C;&#x6211;&#x5011;&#x4E0D;&#x78BA;&#x5B9A;&#x57F7;&#x884C;&#x7684;&#x6642;&#x6A5F;&#x9EDE;&#xFF0C;&#x5047;&#x8A2D;&#x53EA;&#x6709;&#x771F;&#x6B63; 10% &#x6703;&#x9700;&#x8981;&#x9019;&#x500B; function&#xFF0C;&#x90A3;&#x5982;&#x679C;&#x6C92;&#x6709; defer &#x7684;&#x8A71;&#xFF0C;90% &#x7684;&#x57F7;&#x884C;&#x90FD;&#x662F;&#x6D6A;&#x8CBB;&#x7684;&#xFF0C;&#x6240;&#x4EE5; defer &#x53EF;&#x4EE5;&#x8B93;&#x6211;&#x5011;&#x66F4;&#x7CBE;&#x6E96;&#x7684;&#x5728;&#x9019; 10% &#x624D;&#x57F7;&#x884C;&#x3002;</td>
+<td>&#x58DE;&#x8655;&#x5C31;&#x662F;&#x6BCF;&#x6B21; function call &#x7684;&#x6642;&#x5019;&#xFF0C;&#x6211;&#x5011;&#x90FD;&#x6703;&#x91CD;&#x8907;&#x8A08;&#x7B97;&#x4E00;&#x6B21;&#xFF0C;&#x5982;&#x679C;&#x4ED6;&#x662F;&#x8981;&#x88AB; call &#x5F88;&#x591A;&#x6B21;&#x7684; function&#xFF0C;&#x90A3;&#x986F;&#x7136;&#x7528; lazy &#x662F;&#x5F88;&#x4E0D;&#x5212;&#x7B97;&#x7684;&#x3002;</td>
+</tr>
+</tbody></table>
+<h3 id="Eager"><a href="#Eager" class="headerlink" title="Eager"></a>Eager</h3><p>&#x90A3;&#x6709;&#x6C92;&#x6709;&#x8FA6;&#x6CD5;&#x8A08;&#x7B97;&#x4E00;&#x6B21;&#xFF0C;&#x4E4B;&#x5F8C;&#x90FD;&#x7528;&#x8A08;&#x7B97;&#x904E;&#x5F8C;&#x7684;&#x503C;&#x5C31;&#x597D;&#x5462;&#xFF1F;&#x6709;&#xFF0C;&#x5C31;&#x662F; Eager&#x3002;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">repeater</span>(<span class="hljs-params">count</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">var</span> str = <span class="hljs-string">&quot;&quot;</span>.padStart(count, <span class="hljs-string">&quot;A&quot;</span>)</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">allTheAs</span>(<span class="hljs-params"></span>) </span>{</span><br><span class="line">    <span class="hljs-keyword">return</span> str</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> A = repeater(<span class="hljs-number">10</span>)</span><br><span class="line"></span><br><span class="line">A() <span class="hljs-comment">// AAAAAAAAAA</span></span><br><span class="line">A() <span class="hljs-comment">// AAAAAAAAAA</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x548C;&#x5148;&#x524D;&#x4E0D;&#x540C;&#xFF0C;&#x6211;&#x5011;&#x5728; line8 &#xFF0C;<code>const A = repeater(10)</code> &#x7684;&#x6642;&#x5019;&#x5C31;&#x628A; 10 &#x500B; A &#x7D66;&#x88FD;&#x9020;&#x51FA;&#x4F86;&#x4E86;&#xFF0C;&#x9019;&#x500B;&#x505A;&#x6CD5;&#x53EB;&#x505A; eager&#xFF0C;&#x7576; function call &#x7684;&#x6642;&#x5019;&#x5C31;&#x88FD;&#x9020; A&#xFF0C;&#x6C92;&#x6709;&#x63A8;&#x9072;&#x9019;&#x500B;&#x4EFB;&#x52D9;&#x3002;</p>
+<p>&#x6211;&#x5011;&#x9019;&#x6642;&#x5019; closure &#x7684;&#x662F;&#x54EA;&#x500B;&#x6771;&#x897F;&#x5462;&#xFF1F;&#x662F; <code>str</code> &#x3002;</p>
+<table>
+<thead>
+<tr>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&#x597D;&#x8655;&#x662F;&#x6211;&#x5011;&#x505A;&#x4E86; cache&#xFF0C;&#x6574;&#x500B; function &#x53EA;&#x9700;&#x8981;&#x8A08;&#x7B97;&#x4E00;&#x6B21;&#x800C;&#x5DF2;&#xFF0C;&#x7576;&#x4E4B;&#x5F8C; function &#x4E0D;&#x65B7;&#x88AB; call &#x7684;&#x6642;&#x5019;&#xFF0C;&#x62FF;&#x7684;&#x90FD;&#x53EA;&#x662F;&#x8A08;&#x7B97;&#x5B8C;&#x5F8C;&#x7684;&#x7D50;&#x679C;&#xFF01;</td>
+<td>&#x58DE;&#x8655;&#x662F;&#x5982;&#x679C;&#x9019;&#x500B; function &#x5F9E;&#x4F86;&#x6C92;&#x88AB; call &#x5462;&#xFF1F;&#x90A3;&#x6211;&#x5011;&#x5C31;&#x767D;&#x505A;&#x5DE5;&#x4E86;&#x3002;</td>
+</tr>
+</tbody></table>
+<h3 id="Memoization"><a href="#Memoization" class="headerlink" title="Memoization"></a>Memoization</h3><p>&#x53EF;&#x4EE5;&#x767C;&#x73FE;&#x4E0A;&#x8FF0;&#x7684; <code>Lazy</code> &#x3001;<code>Eager</code> &#x767C;&#x73FE;&#x5230;&#x4E00;&#x4EF6;&#x4E8B;&#xFF0C;&#x90A3;&#x5C31;&#x662F;&#x5169;&#x8005;&#x90FD;&#x6709; trade off&#x3002;</p>
+<p>&#x90A3;&#x6709;&#x6C92;&#x6709;&#x8FA6;&#x6CD5;&#x53EF;&#x4EE5;&#x540C;&#x6642;&#x517C;&#x9867;&#x5169;&#x8005;&#x7684;&#x512A;&#x9EDE;&#x5462;&#xFF1F;&#x5728;&#x771F;&#x6B63; call function &#x4E4B;&#x524D;&#x6211;&#x4E0D;&#x6703;&#x9032;&#x884C;&#x8A08;&#x7B97;&#xFF0C;&#x800C;&#x5982;&#x679C;&#x4E4B;&#x5F8C;&#x60F3;&#x8981;&#x53D6;&#x5F97;&#x76F8;&#x540C;&#x7684; output&#xFF0C;&#x9019;&#x500B; function &#x4E5F;&#x53EA;&#x6703;&#x8A08;&#x7B97;&#x4E00;&#x6B21;&#xFF0C;&#x5176;&#x4ED6;&#x6B21;&#x90FD;&#x662F;&#x62FF;&#x5230;&#x8A08;&#x7B97;&#x904E;&#x7684;&#x820A;&#x503C;&#xFF0C;&#x50CF;&#x662F; cache &#x62FF;&#x53D6;&#x503C;&#x90A3;&#x6A23;&#xFF0C;&#x6709;&#x8FA6;&#x6CD5;&#x55CE;&#xFF1F;</p>
+<p>&#x6709;&#x7684;&#xFF0C;&#x90A3;&#x5C31;&#x662F; <code>Memoization</code>&#xFF0C;&#x770B;&#x770B;&#x4E0B;&#x9762;&#x9019;&#x6BB5; code&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">repeater</span>(<span class="hljs-params">count</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">var</span> str;</span><br><span class="line">  <span class="hljs-keyword">return</span> allTheAs() {</span><br><span class="line">    <span class="hljs-keyword">if</span>(str === <span class="hljs-literal">undefined</span>) {</span><br><span class="line">      str = <span class="hljs-string">&quot;&quot;</span>.padStart(count, <span class="hljs-string">&quot;A&quot;</span>)</span><br><span class="line">    } </span><br><span class="line">    <span class="hljs-keyword">return</span> str</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> A = repeater(<span class="hljs-number">10</span>)</span><br><span class="line"></span><br><span class="line">A() <span class="hljs-comment">// AAAAAAAAAA - &#x7B2C;&#x4E00;&#x6B21; function call &#x9032;&#x884C;&#x8A08;&#x7B97;</span></span><br><span class="line">A() <span class="hljs-comment">// AAAAAAAAAA - &#x4E4B;&#x5F8C;&#x90FD;&#x4F7F;&#x7528; cache</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x9019;&#x6280;&#x5DE7;&#x5C31;&#x53EB; <code>memoization</code> &#xFF0C;&#x6211;&#x5011;&#x53EA;&#x6709;&#x5728; <code>str</code> &#x662F; undefined &#x7684;&#x6642;&#x5019;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x7B2C;&#x4E00;&#x6B21; call &#x7684;&#x6642;&#x5019;&#x8A08;&#x7B97;&#xFF0C;&#x4E4B;&#x5F8C; call &#x9019;&#x500B; function &#x5C31;&#x662F;&#x5F9E;&#x820A;&#x7684;&#x503C;&#x88E1;&#x9762;&#x53D6;&#x5F97;&#xFF0C;&#x662F;&#x500B;&#x96D9;&#x8D0F;&#xFF01;&#x8B9A;&#x62C9;&#xFF01;</p>
+<p>&#x90A3;&#x9019;&#x6BB5; code &#x6709;&#x6C92;&#x6709;&#x4EC0;&#x9EBC;&#x7591;&#x616E;&#x5462;&#xFF1F;&#x6709;&#x7684;&#xFF0C;&#x90A3;&#x5C31;&#x662F; &#x2014;&#x2014;  <strong>&#x9019;&#x6BB5; code &#x7B97;&#x4E0D;&#x7B97; pure &#x5462;&#xFF1F;</strong></p>
+<p>&#x6211;&#x5011;&#x6539;&#x4E86; <code>str</code>&#xFF0C;<code>str</code> &#x5F9E; undefined &#x88AB; mutate &#x6210;&#x4E86; 10 &#x500B; A&#xFF0C;&#x6240;&#x4EE5;&#x7B97; impure &#x5C0D;&#x55CE;&#xFF1F;</p>
+<p>&#x4F46;&#x56DE;&#x60F3;&#x904E;&#x53BB; pure function &#x7684;&#x4E00;&#x6BB5;&#x8A71;&#xFF1A;</p>
+<blockquote>
+<p>A pure function call is characterized by given the same input, it always produce the same output.</p>
+</blockquote>
+<p>pure function &#x7121;&#x8AD6; call &#x5E7E;&#x6B21;&#xFF0C;&#x7D66;&#x5B83;&#x76F8;&#x540C;&#x7684; input&#xFF0C;&#x5C31;&#x6703;&#x5F97;&#x5230;&#x76F8;&#x540C;&#x7684; output&#xFF0C;<code>A</code> &#x9019;&#x500B; function &#x6709;&#x9054;&#x5230;&#x9019;&#x500B;&#x8981;&#x6C42;&#xFF0C;&#x6240;&#x4EE5;&#x5B83;&#x662F; pure function &#x56C9;&#xFF1F;</p>
+<p>Kyle &#x9019;&#x908A;&#x7D66;&#x7684;&#x8AAA;&#x6CD5;&#x985E;&#x4F3C;&#x65BC;&#x300C;&#x6280;&#x8853;&#x4E0A;&#x4F86;&#x8AAA;&#x5B83;&#x7B97; pure&#xFF0C;&#x4F46; reader &#x6703;&#x8A8D;&#x70BA;&#x6709; impure &#x7684;&#x610F;&#x5473;&#x300D;&#xFF08;&#x9019;&#x662F;&#x6211;&#x7684;&#x89E3;&#x8B80;&#xFF09;Kyle &#x5728;&#x9019;&#x908A;&#x7D66;&#x7684;&#x89E3;&#x6CD5;&#x5982;&#x4E0B;&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">repeater</span>(<span class="hljs-params">count</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> memoization(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">allTheAs</span>(<span class="hljs-params"></span>) </span>{ <span class="hljs-comment">// memoization &#x4F86;&#x81EA; utility library</span></span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>.padStart(count, <span class="hljs-string">&quot;A&quot;</span>)</span><br><span class="line">  })</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> A = repeater(<span class="hljs-number">10</span>)</span><br><span class="line"></span><br><span class="line">A() <span class="hljs-comment">// AAAAAAAAAA</span></span><br><span class="line">A() <span class="hljs-comment">// AAAAAAAAAA</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x900F;&#x904E;&#x5927;&#x90E8;&#x5206; functional utility library &#x90FD;&#x6709;&#x7684; <code>memoization</code> &#x4F86;&#x5E6B;&#x52A9;&#x81EA;&#x5DF1;&#x7684; function &#x9054;&#x5230; pure &#x7684;&#x6548;&#x679C;&#xFF0C;&#x4FEE;&#x6539;&#x904E;&#x5F8C;&#x7684; function &#x76F8;&#x6BD4;&#x525B;&#x525B;&#x7684;&#x78BA;&#x662F;&#x66F4; pure &#x4E86;&#x5C0D;&#x5427;&#xFF5E;&#x96D6;&#x7136;&#x6211;&#x81EA;&#x5DF1;&#x770B;&#x5B8C;&#x662F;&#x6709;&#x9EDE;&#x300C;&#x55EF;&#xFF1F;&#x55EF;&#x2026;&#x300D;&#x7684;&#x9ED1;&#x4EBA;&#x554F;&#x865F;&#x3002;</p>
+<p>&#x8AAA;&#x5230;&#x9019;&#x88E1;&#xFF0C;&#x65E2;&#x7136; <code>memoization</code> &#x9019;&#x9EBC;&#x597D;&#x7528;&#xFF0C;&#x90A3;&#x6211;&#x4E7E;&#x8106;&#x628A;&#x5168;&#x90E8;&#x7684; function &#x90FD;&#x5305;&#x4E0A;&#x5C31;&#x597D;&#x5566;&#xFF01;&#x8A08;&#x7B97;&#x7684;&#x503C;&#x5C31;&#x90FD;&#x53EF;&#x4EE5;&#x88AB;&#x8A18;&#x4E0B;&#x4F86;&#x4E86;&#xFF0C;&#x597D;&#x50CF;&#x5F88;&#x8B9A;&#x5594;&#xFF1F;</p>
+<p>NoNoNo&#xFF0C;<code>memoization</code> &#x80CC;&#x5F8C;&#x7684;&#x4EE3;&#x50F9;&#x5728;&#x65BC;&#x6703;&#x4F54;&#x7528; memory&#xFF0C;&#x5047;&#x8A2D;&#x4F60;&#x6BCF;&#x6B21; call &#x9019;&#x500B; function&#xFF0C;&#x90FD;&#x6703;&#x7D66;&#x4E88;&#x4E0D;&#x540C;&#x7684; input&#xFF0C;&#x7136;&#x5F8C;&#x9084;&#x6703; call &#x597D;&#x5E7E;&#x6B21;&#xFF0C;&#x9019;&#x80CC;&#x5F8C;&#x7684;&#x4EE3;&#x50F9;&#x662F;&#x6703;&#x4F54;&#x7528;&#x66F4;&#x591A;&#x7684; memory&#xFF1B;&#x6240;&#x4EE5; <code>memoization</code> &#x6700;&#x9069;&#x5408;&#x7684;&#x61C9;&#x7528;&#x5834;&#x666F;&#x5728;&#x65BC;&#x300C;<strong>&#x6703; call &#x597D;&#x5E7E;&#x6B21;&#x540C;&#x6A23; function&#xFF0C;&#x800C;&#x6BCF;&#x6B21;&#x90FD;&#x6703;&#x7D66;&#x4E88;&#x76F8;&#x540C;&#x7684; input</strong>&#x300D;</p>
+<h3 id="Memoization-&#x5BE6;&#x4F5C;"><a href="#Memoization-&#x5BE6;&#x4F5C;" class="headerlink" title="Memoization &#x5BE6;&#x4F5C;"></a>Memoization &#x5BE6;&#x4F5C;</h3><p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">memoize</span>(<span class="hljs-params">fn</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">let</span> cache = {}</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">memo</span>(<span class="hljs-params">...args</span>) </span>{</span><br><span class="line">    <span class="hljs-keyword">const</span> key = <span class="hljs-built_in">JSON</span>.stringify(args) <span class="hljs-comment">// serialize</span></span><br><span class="line">    <span class="hljs-keyword">if</span>(!cache[key]) {</span><br><span class="line">      cache[key] = fn(...args)</span><br><span class="line">    }</span><br><span class="line">    <span class="hljs-keyword">return</span> cache[key]</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x6982;&#x5FF5;&#x4E0A;&#x5F88;&#x55AE;&#x7D14;&#xFF0C;&#x5148;&#x50B3;&#x5165;&#x4E00;&#x500B; function&#xFF0C;&#x63A5;&#x8457;&#x6703;&#x56DE;&#x50B3;&#x4E00;&#x500B; <code>memo</code> function &#x63A5;&#x53D7;&#x53C3;&#x6578;&#x3002;line4 &#x505A;&#x7684;&#x4E8B;&#x60C5;&#x662F; serialize&#xFF0C;&#x7576; cache &#x88E1;&#x9762;&#x6C92;&#x6709;&#x503C;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x6C92;&#x6709;&#x8A08;&#x7B97;&#x904E;&#x7684;&#x8A71;&#xFF0C;&#x90A3;&#x5C31;&#x9032;&#x884C;&#x8A08;&#x7B97;&#xFF0C;&#x4E26;&#x4E14;&#x8CE6;&#x4E88; <code>cache[key]</code> &#x8A08;&#x7B97;&#x904E;&#x5F8C;&#x7684;&#x503C;&#xFF1B;&#x554A;&#x5982;&#x679C;&#x6709;&#x8A08;&#x7B97;&#x904E;&#x7684;&#x8A71;&#xFF0C;&#x90A3;&#x5C31;&#x76F4;&#x63A5; return cache &#x7684; value&#x3002;</p>
+<p>&#x95DC;&#x65BC; Ramda &#x7684;&#x5BE6;&#x4F5C;&#x53EF;&#x4EE5;&#x770B; <a href="https://github.com/ramda/ramda/blob/master/source/memoizeWith.js" target="_blank" rel="noopener">Ramda - memoizeWith</a>&#xFF0C;&#x6703;&#x767C;&#x73FE;&#x5BE6;&#x4F5C;&#x6982;&#x5FF5;&#x4E0A;&#x5E7E;&#x4E4E;&#x662F;&#x4E00;&#x6A23;&#x7684;&#x3002;</p>
+<p>&#x53E6;&#x5916;&#x8981;&#x7279;&#x5225;&#x6CE8;&#x610F;&#x7684;&#x662F;&#xFF0C;memoize &#x7684;&#x512A;&#x9EDE;&#x5EFA;&#x7ACB;&#x5728;&#x65BC; function &#x662F; pure &#x7684;&#xFF0C;&#x56E0;&#x70BA;&#x4F60;&#x80FD;&#x5920;&#x78BA;&#x4FDD;&#x540C;&#x6A23;&#x7684; input &#x6703;&#x5F97;&#x5230;&#x540C;&#x6A23;&#x7684; output&#xFF0C;&#x624D;&#x80FD;&#x5920;&#x900F;&#x904E;&#x50B3;&#x5165;&#x7684; input &#x6C7A;&#x5B9A;&#x8981;&#x4E0D;&#x8981;&#x9032;&#x884C;&#x8A08;&#x7B97;&#x3002;</p>
+<h2 id="Partial-Application-amp-Curry"><a href="#Partial-Application-amp-Curry" class="headerlink" title="Partial Application &amp; Curry"></a>Partial Application &amp; Curry</h2><p>&#x5047;&#x8A2D;&#x4ECA;&#x5929;&#x6709;&#x4E00;&#x500B; <code>ajax</code> &#x7684; function&#xFF0C;&#x53EF;&#x4EE5; call API &#x53D6;&#x5F97;&#x8CC7;&#x6599;&#xFF0C;&#x7A0B;&#x5F0F;&#x78BC;&#x9577;&#x5F97;&#x50CF;&#x9019;&#x6A23;&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ajax</span>(<span class="hljs-params">url, data, cb</span>) </span>{ <span class="hljs-comment">/*....*/</span> }</span><br><span class="line"></span><br><span class="line">ajax(CUSTOMER_API, { <span class="hljs-attr">id</span>: <span class="hljs-number">1</span> }, renderCustomer)</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x770B;&#x8D77;&#x4F86; ok&#xFF0C;&#x4F46;&#x9084;&#x6709;&#x6539;&#x9032;&#x7684;&#x7A7A;&#x9593;&#xFF0C;&#x6BD4;&#x5982; <code>CUSTOMER_API</code> &#x662F; hard code&#xFF0C;&#x597D;&#x50CF;&#x53EF;&#x4EE5;&#x96B1;&#x85CF;&#x8D77;&#x4F86;&#xFF0C;&#x53E6;&#x5916;&#x76F4;&#x63A5; call <code>ajax</code> &#x4E5F;&#x4E0D;&#x662F;&#x90A3;&#x9EBC;&#x8A9E;&#x610F;&#x5316;&#xFF0C;&#x6240;&#x4EE5;&#x53EF;&#x4EE5;&#x6539;&#x6210;&#x9019;&#x6A23;&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ajax</span>(<span class="hljs-params">url, data, cb</span>) </span>{ <span class="hljs-comment">/*....*/</span> }</span><br><span class="line"></span><br><span class="line">ajax(CUSTOMER_API, { <span class="hljs-attr">id</span>: <span class="hljs-number">1</span> }, renderCustomer)</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getCustomer</span>(<span class="hljs-params">data, cb</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> ajax(CUSTOMER_API, data, cb)</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">getCustomer({ <span class="hljs-attr">id</span>: <span class="hljs-number">1</span> }, renderCustomer)</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x5BE6;&#x969B;&#x4E0A;&#x5C31;&#x662F;&#x5BA3;&#x544A;&#x4E00;&#x500B; <code>getCustomer</code> function&#xFF0C;&#x8B93;&#x5B83;&#x66F4;&#x8A9E;&#x610F;&#x5316;&#xFF0C;&#x518D;&#x7701;&#x7565;&#x6389; <code>CUSTOMER_API</code> &#x9019;&#x500B;&#x6BD4;&#x8F03;&#x591A;&#x9918;&#x7684;&#x7D30;&#x7BC0;&#xFF0C;&#x589E;&#x52A0;&#x53EF;&#x8B80;&#x6027;&#x3002;</p>
+<p>&#x8981;&#x518D;&#x66F4;&#x7D30;&#x7BC0;&#x3001;&#x66F4;&#x8A9E;&#x610F;&#x5316;&#x9084;&#x80FD;&#x6539;&#x6210;&#x9019;&#x6A23;&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ajax</span>(<span class="hljs-params">url, data, cb</span>) </span>{ <span class="hljs-comment">/*....*/</span> }</span><br><span class="line"></span><br><span class="line">ajax(CUSTOMER_API, { <span class="hljs-attr">id</span>: <span class="hljs-number">1</span> }, renderCustomer)</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getCustomer</span>(<span class="hljs-params">data, cb</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> ajax(CUSTOMER_API, data, cb)</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">getCustomer({ <span class="hljs-attr">id</span>: <span class="hljs-number">1</span> }, renderCustomer)</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getCurrentUser</span>(<span class="hljs-params">cb</span>) </span>{</span><br><span class="line">  <span class="hljs-comment">// ajax(CUSTOMER_API, { id: 1 }, renderCustomer)</span></span><br><span class="line">  <span class="hljs-keyword">return</span> getCustomer({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}, cb)</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">getCurrentUser(renderCustomer)</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x770B;&#x8D77;&#x4F86;&#x66F4;&#x8A9E;&#x610F;&#x5316;&#x4E86;&#xFF0C;&#x4F46;&#x53EF;&#x4EE5;&#x6CE8;&#x610F;&#x5230; line12 &#x6709;&#x4E00;&#x884C;&#x8A3B;&#x89E3;&#xFF0C;&#x9019;&#x884C;&#x57F7;&#x884C;&#x7684;&#x7D50;&#x679C;&#x5176;&#x5BE6;&#x548C; line13 &#x4E00;&#x6A21;&#x4E00;&#x6A23;&#xFF0C;&#x4F46;&#x70BA;&#x4EC0;&#x9EBC;&#x9078;&#x64C7;&#x7528; line13 &#x5462;&#xFF1F;&#x539F;&#x56E0;&#x662F;&#x9019;&#x6A23; <code>getCurrentUser</code> &#x548C; <code>getCustomer</code> &#x7684;&#x9023;&#x7D50;&#x4E0A;&#x5C31;&#x66F4;&#x660E;&#x986F;&#x4E86;&#xFF0C;&#x5982;&#x679C;&#x55AE;&#x7D14;&#x662F; line12 &#x548C; line13 &#x76F8;&#x6BD4;&#xFF0C;line13 &#x770B;&#x8D77;&#x4F86;&#x7684;&#x78BA;&#x662F;&#x66F4;&#x8A9E;&#x610F;&#x5316;&#x7684;&#x5C0D;&#x5427;&#x3002;</p>
+<p>&#x4F46;&#x5982;&#x679C;&#x6BCF;&#x6B21;&#x90FD;&#x8981;&#x9019;&#x9EBC;&#x9EBB;&#x7169;&#x597D;&#x50CF;&#x4E5F;&#x662F;&#x5F88;&#x641E;&#x525B;&#xFF0C;&#x56E0;&#x6B64;&#x4E4B;&#x5F8C;&#x7684;&#x7AE0;&#x7BC0;&#x6703;&#x66F4;&#x7C21;&#x5316;&#x9019;&#x6BB5;&#x6D41;&#x7A0B;&#xFF0C;&#x7528;&#x4E0A; partial application&#x3001;curry &#x7684;&#x6280;&#x5DE7;&#x3002;</p>
+<h3 id="Partial-Application"><a href="#Partial-Application" class="headerlink" title="Partial Application"></a>Partial Application</h3><p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ajax</span>(<span class="hljs-params">url, data, cb</span>) </span>{ <span class="hljs-comment">/*....*/</span> }</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> getCustomer = partial(ajax, CUSTOMER_API)</span><br><span class="line"><span class="hljs-keyword">var</span> getCurrentUser = partial(getCustomer, { <span class="hljs-attr">id</span>: <span class="hljs-number">1</span> })</span><br><span class="line"></span><br><span class="line">getCustomer({ <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}, renderCustomer)</span><br><span class="line">getCurrentUser(renderCustomer)</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x9019;&#x662F; <code>partial</code> &#x7684;&#x57FA;&#x790E;&#x7528;&#x6CD5;&#xFF0C;&#x900F;&#x904E; <code>partial</code> &#x50B3;&#x5165;&#x8981;&#x57F7;&#x884C;&#x7684; function&#xFF0C;&#x4EE5;&#x53CA;&#x60F3;&#x8981;&#x5148;&#x4F7F;&#x7528;&#x5230;&#x7684;&#x54EA;&#x5E7E;&#x500B; inputs&#xFF0C;&#x5269;&#x4E0B;&#x7684; parameter &#x50B3;&#x5165;&#x7684;&#x6642;&#x6A5F;&#x88AB;&#x5EF6;&#x5F8C;&#x4E86;&#xFF0C;&#x7B49;&#x5230;&#x9700;&#x8981;&#x547C;&#x53EB;&#x7684;&#x6642;&#x5019;&#x518D;&#x50B3;&#x5165;&#x3002;</p>
+<p>&#x5728;&#x300C;Functional-Light JS&#x300D;&#x7684;&#x66F8;&#x88E1;&#x9762;&#x6709;&#x95DC;&#x65BC; <code>partial</code> &#x7684;&#x5BE6;&#x4F5C;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">partial</span>(<span class="hljs-params">fn,...presetArgs</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">partiallyApplied</span>(<span class="hljs-params">...laterArgs</span>)</span>{</span><br><span class="line">    <span class="hljs-keyword">return</span> fn( ...presetArgs, ...laterArgs );</span><br><span class="line">  };</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h3 id="Curry"><a href="#Curry" class="headerlink" title="Curry"></a>Curry</h3><p>&#x518D;&#x4F86;&#x5C31;&#x662F; Curry &#x4E86;&#xFF0C;&#x9019;&#x61C9;&#x8A72;&#x5C31;&#x662F;&#x5927;&#x591A;&#x6578;&#x4EBA;&#x90FD;&#x807D;&#x904E;&#x7684;&#x6280;&#x5DE7;&#xFF0C;&#x540D;&#x5B57;&#x8D85;&#x6709;&#x8A18;&#x61B6;&#x9EDE;&#xFF0C;&#x4F86;&#x7531;&#x4E5F;&#x633A;&#x6709;&#x8DA3;&#x7684;&#xFF0C;&#x539F;&#x56E0;&#x662F; Curry &#x7684;&#x767C;&#x660E;&#x8005;&#x53EB;&#x505A; Haskell Curry&#x3002;</p>
+<p>Curry &#x76F8;&#x8F03; Partial Application &#x66F4;&#x666E;&#x904D;&#xFF0C;&#x4F46;&#x5176;&#x5BE6;&#x4ED6;&#x5011;&#x633A;&#x50CF;&#x7684;&#xFF0C;&#x505A;&#x7684;&#x4E8B;&#x60C5;&#x90FD;&#x662F; specialized function&#xFF0C;&#x6240;&#x4EE5;&#x5DEE;&#x4E0D;&#x591A;&#x5C31;&#x662F;&#x8868;&#x89AA;&#x95DC;&#x4FC2;&#x5566;&#x3002;</p>
+<p>&#x5982;&#x679C;&#x8981;&#x628A; <code>ajax</code> &#x9019;&#x500B; function &#x5BEB;&#x6210; curry &#x7684;&#x6A21;&#x5F0F;&#xFF0C;&#x6703;&#x8B8A;&#x6210;&#x9019;&#x6A23;&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ajax</span>(<span class="hljs-params">url</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getData</span>(<span class="hljs-params">data</span>) </span>{</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getCb</span>(<span class="hljs-params">cb</span>) </span>{ <span class="hljs-comment">/*...*/</span> }</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">ajax(CUSTOMER_API)({ <span class="hljs-attr">id</span>: <span class="hljs-number">1</span> })(renderCustomer)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> getCustomer = ajax(CUSTOMER_API)</span><br><span class="line"><span class="hljs-keyword">var</span> getCurrentUser = getCustomer({ <span class="hljs-attr">id</span>: <span class="hljs-number">1</span> })</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x4F46;&#x9019;&#x6A23;&#x5176;&#x5BE6;&#x6709;&#x9EDE;&#x9EBB;&#x7169;&#xFF0C;&#x6709;&#x6C92;&#x6709;&#x66F4;&#x65B9;&#x4FBF;&#x7684;&#x8FA6;&#x6CD5;&#x5462;&#xFF1F;&#x6709;&#xFF0C;&#x901A;&#x5E38; functional utility library &#x4E5F;&#x6703;&#x63D0;&#x4F9B;&#x53EB;&#x505A;  <code>curry</code> &#x7684; function&#xFF0C;&#x6BD4;&#x5982;&#x8981;&#x662F;&#x4F7F;&#x7528; Ramda &#x2C7;&#x7684;&#x8A71;&#xFF0C;&#x4F7F;&#x7528;&#x8D77;&#x4F86;&#x5C31;&#x6703;&#x8B8A;&#x6210;&#x9019;&#x6A23;&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">var</span> curriedAjax = R.curry(</span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ajax</span>(<span class="hljs-params">url, data, cb</span>) </span>{ <span class="hljs-comment">/*...*/</span> }</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> getCustomer = curriedAjax(CUSTOMER_API)</span><br><span class="line"><span class="hljs-keyword">var</span> getCurrentUser = getCustomer({ <span class="hljs-attr">id</span>: <span class="hljs-number">1</span> })</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x95DC;&#x65BC; curry &#x7684;&#x5BE6;&#x4F5C;&#xFF0C;Functional-Light JS &#x7684;&#x66F8;&#x88E1;&#x4E5F;&#x6709;&#xFF0C;&#x5BE6;&#x4F5C;&#x7A0B;&#x5F0F;&#x78BC;&#x5927;&#x6982;&#x6703;&#x9577;&#x9019;&#x6A23;&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">curry</span>(<span class="hljs-params">fn,arity = fn.length</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> (<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">nextCurried</span>(<span class="hljs-params">prevArgs</span>)</span>{</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">curried</span>(<span class="hljs-params">nextArg</span>)</span>{</span><br><span class="line">      <span class="hljs-keyword">var</span> args = [ ...prevArgs, nextArg ];</span><br><span class="line"></span><br><span class="line">      <span class="hljs-keyword">if</span> (args.length &gt;= arity) {</span><br><span class="line">        <span class="hljs-keyword">return</span> fn( ...args );</span><br><span class="line">      }</span><br><span class="line">      <span class="hljs-keyword">else</span> {</span><br><span class="line">        <span class="hljs-keyword">return</span> nextCurried( args );</span><br><span class="line">      }</span><br><span class="line">    };</span><br><span class="line">  })( [] );</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
+<h3 id="strict-currying-amp-loose-currying"><a href="#strict-currying-amp-loose-currying" class="headerlink" title="strict currying &amp; loose currying"></a>strict currying &amp; loose currying</h3><p>&#x53E6;&#x5916;&#x8981;&#x63D0;&#x5230;&#x7684;&#x53E6;&#x4E00;&#x4EF6;&#x4E8B;&#x60C5;&#x662F;&#xFF0C;curry &#x5176;&#x5BE6;&#x6709;&#x5206; <code>strict currying</code> &#x548C; <code>loose currying</code>&#xFF0C;&#x4F7F;&#x7528;&#x8D77;&#x4F86;&#x7684;&#x5DEE;&#x5225;&#x53EF;&#x4EE5;&#x770B;&#x9019;&#x6BB5;&#x7A0B;&#x5F0F;&#x78BC;&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">var</span> curriedAjax = R.curry(</span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ajax</span>(<span class="hljs-params">url, data, cb</span>) </span>{ <span class="hljs-comment">/*...*/</span> }</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// strict currying</span></span><br><span class="line">curriedAjax(CUSTOMER_API)({ <span class="hljs-attr">id</span>: <span class="hljs-number">1</span> })(renderCustomer)</span><br><span class="line"><span class="hljs-comment">// loose currying</span></span><br><span class="line">curriedAjax(CUSTOMER_API, { <span class="hljs-attr">id</span>: <span class="hljs-number">1</span> })(renderCustomer)</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x770B;&#x5230;&#x7576;&#x4E2D;&#x7684;&#x5DEE;&#x5225;&#x4E86;&#x55CE;&#xFF1F;<code>strict currying</code> &#x4E00;&#x6B21; function call &#x53EA;&#x80FD;&#x50B3;&#x4E00;&#x500B; input&#xFF0C;&#x5982;&#x679C;&#x4F60;&#x8981;&#x50B3;&#x66F4;&#x591A; input&#xFF0C;&#x90A3;&#x5C31;&#x8981;&#x591A;&#x4E00;&#x6B21; function call&#xFF1B;<code>loose currying</code> &#x5247;&#x662F;&#x80FD;&#x5920;&#x5728; function call &#x4E2D;&#x81EA;&#x7531;&#x7684;&#x50B3;&#x591A;&#x500B; input&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x8AAA;&#x4E00;&#x6B21;&#x50B3;&#x4E00;&#x500B;&#x6216;&#x591A;&#x500B; arguments &#x90FD;&#x53EF;&#x4EE5;&#x3002;</p>
+<p>&#x5728; Haskell &#x4E2D;&#x6BCF;&#x500B; function &#x90FD;&#x662F; curry &#x7684;&#xFF0C;&#x800C;&#x4E14;&#x90FD;&#x9075;&#x7167; <code>strict curring</code> &#x7684;&#x898F;&#x5247;&#x8D70;&#xFF0C;&#x4E0D;&#x80FD;&#x4E00;&#x6B21;&#x50B3;&#x591A;&#x500B; arguments&#xFF1B;&#x4F46;&#x4EE5;&#x76EE;&#x524D;&#x591A;&#x6578; JavaScript functional utility library &#x4F86;&#x8AAA;&#xFF0C;&#x90FD;&#x662F; <code>loose currying</code> &#xFF0C;&#x539F;&#x56E0;&#x61C9;&#x8A72;&#x55AE;&#x7D14;&#x5C31;&#x662F;&#x65B9;&#x4FBF;&#xFF0C;&#x7562;&#x7ADF;&#x5982;&#x679C;&#x6BCF;&#x591A;&#x4E00;&#x500B; argument &#x5C31;&#x8981;&#x591A;&#x4E00;&#x6B21; function call &#x4E5F;&#x662F;&#x6709;&#x9EDE;&#x60F1;&#x4EBA;&#x7684;&#x3002;</p>
+<h2 id="Changing-Function-Shape-with-Curry"><a href="#Changing-Function-Shape-with-Curry" class="headerlink" title="Changing Function Shape with Curry"></a>Changing Function Shape with Curry</h2><p>&#x63A5;&#x4E0B;&#x4F86;&#x8981;&#x63D0;&#x5230; Curry &#x7684;&#x4E00;&#x5927;&#x5999;&#x7528;&#x4E86;&#xFF0C;&#x9996;&#x5148;&#x770B;&#x770B;&#x9019;&#x6BB5;&#x7A0B;&#x5F0F;&#x78BC;&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">add</span>(<span class="hljs-params">x, y</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> x + y</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>].map(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addOne</span>(<span class="hljs-params">v</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> add(<span class="hljs-number">1</span>, v)</span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x6211;&#x5011;&#x7D66; map &#x7684; function &#x9700;&#x8981;&#x518D;&#x5BA3;&#x544A;&#x4E00;&#x500B; <code>addOne</code> &#x7684; function&#xFF0C;&#x90A3;&#x70BA;&#x4EC0;&#x9EBC;&#x6211;&#x5011;&#x9700;&#x8981;&#x9019;&#x6A23;&#x505A;&#xFF0C;&#x800C;&#x800C;&#x4E0D;&#x662F;&#x76F4;&#x63A5;&#x628A; <code>add</code> &#x7D66; map &#x5C31;&#x597D;&#x4E86;&#x5462;&#xFF1F;&#x6BD4;&#x5982;&#x50CF;&#x662F;&#x9019;&#x6A23;&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">add</span>(<span class="hljs-params">x, y</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> x + y</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>].map(add(<span class="hljs-number">1</span>)) <span class="hljs-comment">// &#x76EE;&#x524D;&#x6C92;&#x8FA6;&#x6CD5;&#x9019;&#x6A23;&#x505A;</span></span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x539F;&#x56E0;&#x662F; <strong>function &#x7684; shape &#x4E0D;&#x4E00;&#x6A23;</strong>&#xFF08;&#x9019;&#x4E5F;&#x662F;&#x70BA;&#x4EC0;&#x9EBC; function shape matters&#xFF09;&#xFF0C;map &#x671F;&#x5F85;&#x7684; function &#x662F; unary &#x7684;&#xFF0C;&#x800C;&#x6211;&#x5011;&#x7684;&#x7684; <code>add</code> &#x662F; binary &#x7684;&#xFF0C;&#x6240;&#x4EE5;&#x624D;&#x9020;&#x6210;&#x6211;&#x5011;&#x5FC5;&#x9808;&#x8981;&#x5BA3;&#x544A; <code>addOne</code> &#x7684;&#x539F;&#x56E0;&#x3002;</p>
+<p>&#x90A3;&#x6709;&#x6C92;&#x6709;&#x4EC0;&#x9EBC;&#x8FA6;&#x6CD5;&#x53EF;&#x4EE5;&#x7C21;&#x5316;&#x9019;&#x6BB5; code&#xFF0C;&#x89E3;&#x6C7A;&#x9019;&#x500B;&#x554F;&#x984C;&#x5462;&#xFF1F;&#x6709;&#xFF01;&#x5C31;&#x662F; <code>curry</code>&#xFF1A;</p>
+<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">add</span>(<span class="hljs-params">x, y</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> x + y</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>].map(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addOne</span>(<span class="hljs-params">v</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> add(<span class="hljs-number">1</span>, v)</span><br><span class="line">})</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> add = curry(add)</span><br><span class="line"></span><br><span class="line">[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>].map(add(<span class="hljs-number">1</span>))</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>&#x770B;&#x5230;&#x5999;&#x7528;&#x4E86;&#x55CE;&#xFF1F;&#x6211;&#x5011;&#x5229;&#x7528; <code>curry</code> &#x6539;&#x8B8A;&#x4E86; function &#x7684; shape&#xFF0C;&#x539F;&#x672C;&#x662F; binary &#x7684; <code>add</code> &#xFF0C;&#x73FE;&#x5728;&#x88AB;&#x6539;&#x9020;&#x6210;&#x4E86; unary &#x4E86;&#xFF0C;&#x4E5F;&#x56E0;&#x6B64;&#x88AB;&#x6539;&#x6210; point free &#x7684; style&#x3002;</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="https://frontendmasters.com/courses/functional-javascript-v3/" target="_blank" rel="noopener">Functional-Light JavaScript, v3</a></li>
+<li><a href="https://ramdajs.com/docs/#curry" target="_blank" rel="noopener">Ramda - curry</a></li>
+<li><a href="https://github.com/ramda/ramda/blob/master/source/memoizeWith.js" target="_blank" rel="noopener">Ramda - memoizeWith</a></li>
+</ul>
+</body></html>
+    
+    </div>
+    
+    <div class="columns is-variable is-1 is-multiline is-mobile">
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/JavaScript/">#JavaScript</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Functional-Programming/">#Functional Programming</a></span>
+    
+        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/frontend-master/">#frontend master</a></span>
+    
+    </div>
+    
+    
+    <div class="columns is-mobile is-multiline article-nav">
+        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
+            
+            <a href="/2021/02/07/Functional-Light-JavaScript-Composition/">Functional-Light JavaScript - Composition</a>
+            
+        </span>
+        <span class="column is-12-mobile is-half-desktop  article-nav-next">
+            
+            <a href="/2021/02/07/Functional-Light-JavaScript-Point-Free/">Functional-Light JavaScript - Point Free</a>
+            
+        </span>
+    </div>
+    
+</article>
+
+
+<div class="sharebox">
+    
+<div class="sharethis-inline-share-buttons"></div>
+<script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5e4221ec7a88780012e1744e&amp;product=inline-share-buttons' async='async'></script>
+
+</div>
+
+
+
+<div class="comments">
+    <h3 class="title is-4">Comments</h3>
+    
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://chihyang41.github.io/2021/02/07/Functional-Light-JavaScript-Closure/';
+        this.page.identifier = '2021/02/07/Functional-Light-JavaScript-Closure/';
+        
+        this.language = 'en';
+        
+    };
+    (function() {
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'ChihYang41-blog' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<div id="disqus_thread">
+    
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+</div>
+</div>
+
+    </div>
+</section>
+    <footer class="footer">
+    <div class="container">
+        <div class="columns content">
+            <div class="column is-narrow has-text-centered">
+                &copy; 2021 Chih Yang&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
+            </div>
+            <div class="column is-hidden-mobile"></div>
+
+            
+            <div class="column is-narrow">
+                <div class="columns is-mobile is-multiline is-centered">
+                
+                    
+                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/ChihYang41" target="_blank" rel="noopener">
+                    
+                    GitHub
+                    
+                </a>
+                
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</footer>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+
+<!-- test if the browser is outdated -->
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/" target="_blank" rel="noopener">Update my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // plugin function, place inside DOM ready function
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        })
+    });
+</script>
+
+<script>
+    window.FontAwesomeConfig = {
+        searchPseudoElements: true
+    }
+    moment.locale("en-AU");
+</script>
+
+
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script>
+    MathJax.Hub.Config({
+        "HTML-CSS": {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+</script>
+
+    
+    
+    
+    
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(function () {
+            if (typeof($.fn.lightGallery) === 'function') {
+                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof($.fn.justifiedGallery) === 'function') {
+                $('.justified-gallery').justifiedGallery();
+            }
+        });
+    })(jQuery);
+</script>
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .hljs {
+            position: relative;
+        }
+
+        .hljs .clipboard-btn {
+            float: right;
+            color: #9a9a9a;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hljs .clipboard-btn:hover {
+          color: #8a8a8a;
+        }
+
+        .hljs > .clipboard-btn {
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+        }
+
+        .hljs:hover > .clipboard-btn {
+            display: inline;
+        }
+
+        .hljs > figcaption > .clipboard-btn {
+            margin-right: 4px;
+        }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $('figure.hljs').each(function(i, figure) {
+          var codeId = 'code-' + i;
+          var code = figure.querySelector('.code');
+          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
+          code.id = codeId;
+          copyButton.addClass('clipboard-btn');
+          copyButton.attr('data-clipboard-target-id', codeId);
+
+          var figcaption = figure.querySelector('figcaption');
+
+          if (figcaption) {
+            figcaption.append(copyButton[0]);
+          } else {
+            figure.prepend(copyButton[0]);
+          }
+        })
+
+        var clipboard = new ClipboardJS('.clipboard-btn', {
+          target: function(trigger) {
+            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
+          }
+        });
+        clipboard.on('success', function(e) {
+          e.clearSelection();
+        })
+      })
+    </script>
+
+    
+    
+
+    
+
+
+
+<script src="/js/script.js"></script>
+
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-mask"></div>
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+    
+</body>
+</html>
