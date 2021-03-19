@@ -1,542 +1,550 @@
 <!DOCTYPE html>
-<html class="has-navbar-fixed-top">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-<title>複習趴萬 - Git、Command line - Chih Yang&#39;s Blog</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
-
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
 
 
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="pdI9OcgtLe0I27rizFD2U3s553wFM8nsth5viFyCbOk">
 
-<meta name="description" content="Chih Yang 的前端小天地">
+<link rel="stylesheet" href="/css/main.css">
 
 
 
-<meta name="keywords" content="前端">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
 
-
-
-    <meta name="description" content="&amp;#x653E;&amp;#x4E00;&amp;#x4E9B;&amp;#x4E4B;&amp;#x524D;&amp;#x7684;&amp;#x7B46;&amp;#x8A18;&amp;#x9084;&amp;#x6709;&amp;#x9019;&amp;#x9663;&amp;#x5B50;&amp;#x7684;&amp;#x8907;&amp;#x7FD2;&amp;#xFF0C;&amp;#x5167;&amp;#x5BB9;&amp;#x6BD4;&amp;#x8F03;&amp;#x96A8;&amp;#x610F;&amp;#x3002;">
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="放一些之前的筆記還有這陣子的複習，內容比較隨意。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="複習趴萬 - Git、Command line">
 <meta property="og:url" content="https://chihyang41.github.io/2019/10/20/%E8%A4%87%E7%BF%92%E8%B6%B4%E8%90%AC-Git%E3%80%81Command-line/index.html">
 <meta property="og:site_name" content="Chih Yang&#39;s Blog">
-<meta property="og:description" content="&amp;#x653E;&amp;#x4E00;&amp;#x4E9B;&amp;#x4E4B;&amp;#x524D;&amp;#x7684;&amp;#x7B46;&amp;#x8A18;&amp;#x9084;&amp;#x6709;&amp;#x9019;&amp;#x9663;&amp;#x5B50;&amp;#x7684;&amp;#x8907;&amp;#x7FD2;&amp;#xFF0C;&amp;#x5167;&amp;#x5BB9;&amp;#x6BD4;&amp;#x8F03;&amp;#x96A8;&amp;#x610F;&amp;#x3002;">
+<meta property="og:description" content="放一些之前的筆記還有這陣子的複習，內容比較隨意。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://i1.wp.com/kopu.chat/wp-content/uploads/2017/01/git4.jpg?w=1841&amp;ssl=1">
+<meta property="og:image" content="https://i1.wp.com/kopu.chat/wp-content/uploads/2017/01/git4.jpg?w=1841&ssl=1">
 <meta property="article:published_time" content="2019-10-20T06:56:59.000Z">
-<meta property="article:modified_time" content="2020-02-11T03:34:20.000Z">
+<meta property="article:modified_time" content="2019-10-20T06:56:59.000Z">
 <meta property="article:author" content="Chih Yang">
 <meta property="article:tag" content="Commnad line">
 <meta property="article:tag" content="Git">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i1.wp.com/kopu.chat/wp-content/uploads/2017/01/git4.jpg?w=1841&amp;ssl=1">
+<meta name="twitter:image" content="https://i1.wp.com/kopu.chat/wp-content/uploads/2017/01/git4.jpg?w=1841&ssl=1">
 
 
+<link rel="canonical" href="https://chihyang41.github.io/2019/10/20/%E8%A4%87%E7%BF%92%E8%B6%B4%E8%90%AC-Git%E3%80%81Command-line/">
 
 
-
-<link rel="icon" href="https://upload.cc/i1/2020/03/05/MXS6WH.png">
-
-
-<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
-
-
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
-
-
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
-
-
-<link rel="stylesheet" href="/css/style.css">
-
-
-<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-146838618-1');
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
 </script>
+<title>複習趴萬 - Git、Command line | Chih Yang's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-146838618-1');
+      }
+    </script>
 
 
-    
 
 
-<meta name="generator" content="Hexo 4.2.0"></head>
-<body>
-    
-<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
-    <div class="container">
-        <div class="navbar-brand">
-            <a class="navbar-item navbar-logo" href="/">
-                
-                    
-                    Chih Yang&#39;s Blog
-                    
-                
-            </a>
-            <div class="navbar-burger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-        
-        <div class="navbar-menu navbar-start">
-            
-            <a class="navbar-item "
-               href="/archives">Archives</a>
-            
-            <a class="navbar-item "
-               href="/tags">Tags</a>
-            
-            <a class="navbar-item "
-               href="/categories">Categories</a>
-            
-        </div>
-        
-        <div class="navbar-menu navbar-end">
-            
-            <a class="navbar-item search" title="Search" href="javascript:;">
-                <i class="fas fa-search"></i>
-            </a>
-            
-            
-            
-            <a class="navbar-item" title="GitHub" href="https://github.com/ChihYang41" target="_blank" rel="noopener">
-                
-                <i class="fab fa-github"></i>
-                
-            </a>
-               
-            
-        </div>
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
+  </div>
+
+  <div class="site-meta">
+      <img class="custom-logo-image" src="/images/logo.png" alt="Chih Yang's Blog">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Chih Yang's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
 </nav>
 
-    <section class="section">
-    <div class="container">
-    <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            複習趴萬 - Git、Command line
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            <time datetime="2019-10-20T06:56:59.000Z" itemprop="datePublished">Oct 20 2019</time>
-        </span>
-        
-        <span class="column is-narrow article-category">
-            <i class="far fa-folder"></i>
-            <a class="article-category-link" href="/categories/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/">版本控制</a>
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            11 minutes read (About 1619 words)
-        </span>
-        
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
     </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A4%E4%BD%9C%E6%A5%AD%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">交作業流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%9B%9E%E5%88%B0%E4%B8%8A%E4%B8%80%E5%80%8B-commit"><span class="nav-number">2.</span> <span class="nav-text">如何回到上一個 commit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%8B%E5%89%8D%E7%9A%84%E7%AD%86%E8%A8%98-command-line"><span class="nav-number">3.</span> <span class="nav-text">之前的筆記 - command line</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC-Command-line-%E6%8C%87%E4%BB%A4"><span class="nav-number">4.</span> <span class="nav-text">基本 Command line 指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-Vim%EF%BC%9F"><span class="nav-number">5.</span> <span class="nav-text">如何使用 Vim？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%87%E6%8F%9B%E6%A8%A1%E5%BC%8F"><span class="nav-number">5.0.1.</span> <span class="nav-text">切換模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E9%99%A4-Insert-%E6%A8%A1%E5%BC%8F%E4%BB%A5%E5%8F%8A%E5%84%B2%E5%AD%98%E4%B8%A6%E9%9B%A2%E9%96%8B-Vim"><span class="nav-number">5.0.2.</span> <span class="nav-text">解除 Insert 模式以及儲存並離開 Vim</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%B2%E9%9A%8E-Command-line-%E6%8C%87%E4%BB%A4"><span class="nav-number">6.</span> <span class="nav-text">進階 Command line 指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%8B%E5%89%8D%E7%9A%84%E7%AD%86%E8%A8%98-Git"><span class="nav-number">7.</span> <span class="nav-text">之前的筆記 - Git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">8.</span> <span class="nav-text">Git 基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B%EF%BC%8D%E5%93%BC%E6%AA%94%E6%A1%88%E9%83%BD%E6%8E%A5%E5%8F%97%E6%88%91%E7%9A%84%E6%8E%A7%E5%88%B6%E5%90%A7"><span class="nav-number">9.</span> <span class="nav-text">Git 基本流程－哼檔案都接受我的控制吧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E9%BA%BC%E7%9F%A5%E9%81%93%E6%AF%8F%E5%80%8B%E6%AA%94%E6%A1%88%E7%8F%BE%E5%9C%A8%E7%9A%84%E7%8B%80%E6%85%8B%EF%BC%9F%E6%AF%94%E5%A6%82%E6%9C%89%E6%B2%92%E6%9C%89%E8%A2%AB-add"><span class="nav-number">9.1.</span> <span class="nav-text">怎麼知道每個檔案現在的狀態？比如有沒有被 add</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E9%BA%BC%E7%9F%A5%E9%81%93%E6%AF%8F%E6%AC%A1-commit-%E7%9A%84%E5%85%A7%E5%AE%B9%EF%BC%9F"><span class="nav-number">9.2.</span> <span class="nav-text">怎麼知道每次 commit 的內容？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E6%83%B3%E5%9B%9E%E5%8E%BB%E4%B9%8B%E5%89%8D%E7%9A%84-commit-%E6%80%8E%E8%BE%A6%EF%BC%9F"><span class="nav-number">9.3.</span> <span class="nav-text">如果想回去之前的 commit 怎辦？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Branch%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E8%88%87%E6%93%8D%E4%BD%9C"><span class="nav-number">10.</span> <span class="nav-text">Branch基本概念與操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%BA%E7%94%9A%E9%BA%BC%E8%A6%81%E6%9C%89-Branch-%EF%BC%9F"><span class="nav-number">10.1.</span> <span class="nav-text">為甚麼要有 Branch ？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%89%B5%E9%80%A0Branch%EF%BC%9F"><span class="nav-number">10.2.</span> <span class="nav-text">如何創造Branch？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%88%87%E6%8F%9Bbranch%EF%BC%9F"><span class="nav-number">10.3.</span> <span class="nav-text">如何切換branch？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%90%88%E4%BD%B5Branch%EF%BC%9F"><span class="nav-number">10.4.</span> <span class="nav-text">如何合併Branch？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-%E7%9B%B8%E9%97%9C%E7%8B%80%E6%B3%81%E5%8A%87"><span class="nav-number">11.</span> <span class="nav-text">Git 相關狀況劇</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%8B%E6%AE%98%EF%BC%8Ccommit-message-%E8%B6%85%E5%B8%B8%E6%89%93%E9%8C%AF%E6%80%8E%E8%BE%A6%EF%BC%9F"><span class="nav-number">11.1.</span> <span class="nav-text">手殘，commit message 超常打錯怎辦？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%8C%E6%82%94%E4%B9%8B%E5%89%8D%E6%95%B4%E5%80%8BCommit-%E4%BA%86%EF%BC%8C%E5%8F%AF%E4%BB%A5%E5%9B%9E%E5%88%B0%E4%B8%8A%E4%B8%80%E5%8B%95%E5%97%8E%EF%BC%9F"><span class="nav-number">11.2.</span> <span class="nav-text">後悔之前整個Commit 了，可以回到上一動嗎？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%96%E9%8C%AFBranch%E7%9A%84%E5%90%8D%E5%AD%97%E4%BA%86%EF%BC%8C%E5%8F%AF%E4%BB%A5%E6%94%B9%E5%90%8D%E5%97%8E%EF%BC%9F"><span class="nav-number">11.3.</span> <span class="nav-text">取錯Branch的名字了，可以改名嗎？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E9%BA%BC%E5%8F%96%E5%BE%97%E9%81%A0%E7%AB%AF%E7%9A%84branch%EF%BC%9F"><span class="nav-number">11.4.</span> <span class="nav-text">怎麼取得遠端的branch？</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Chih Yang</p>
+  <div class="site-description" itemprop="description">Chih Yang 的前端小天地</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ChihYang41" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ChihYang41" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/chihyang41" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;chihyang41" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
     
-        <html><head></head><body><p>&#x653E;&#x4E00;&#x4E9B;&#x4E4B;&#x524D;&#x7684;&#x7B46;&#x8A18;&#x9084;&#x6709;&#x9019;&#x9663;&#x5B50;&#x7684;&#x8907;&#x7FD2;&#xFF0C;&#x5167;&#x5BB9;&#x6BD4;&#x8F03;&#x96A8;&#x610F;&#x3002;</p>
-<a id="more"></a>
-<h2 id="&#x4EA4;&#x4F5C;&#x696D;&#x6D41;&#x7A0B;"><a href="#&#x4EA4;&#x4F5C;&#x696D;&#x6D41;&#x7A0B;" class="headerlink" title="&#x4EA4;&#x4F5C;&#x696D;&#x6D41;&#x7A0B;"></a>&#x4EA4;&#x4F5C;&#x696D;&#x6D41;&#x7A0B;</h2><p>&#x8ACB;&#x7528;&#x6587;&#x5B57;&#x4E00;&#x6B65;&#x6B65;&#x6558;&#x8FF0;&#x61C9;&#x8A72;&#x5982;&#x4F55;&#x4EA4;&#x4F5C;&#x696D;&#x3002;</p>
-<p><strong>Ans</strong>&#xFF1A;</p>
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chihyang41.github.io/2019/10/20/%E8%A4%87%E7%BF%92%E8%B6%B4%E8%90%AC-Git%E3%80%81Command-line/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Chih Yang">
+      <meta itemprop="description" content="Chih Yang 的前端小天地">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chih Yang's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          複習趴萬 - Git、Command line
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-10-20 14:56:59" itemprop="dateCreated datePublished" datetime="2019-10-20T14:56:59+08:00">2019-10-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" itemprop="url" rel="index"><span itemprop="name">版本控制</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>放一些之前的筆記還有這陣子的複習，內容比較隨意。</p>
+<span id="more"></span>
+<h2 id="交作業流程"><a href="#交作業流程" class="headerlink" title="交作業流程"></a>交作業流程</h2><p>請用文字一步步敘述應該如何交作業。</p>
+<p><strong>Ans</strong>：</p>
 <ol>
-<li><code>git branch newBranchName</code> &#x65B0;&#x958B;&#x4E00;&#x500B; branch</li>
-<li><code>git chekcout newBranchName</code> &#x5207;&#x63DB;&#x5230; branch</li>
-<li>&#x5BEB;&#x4F5C;&#x696D;&#xFF0C;&#x544A;&#x4E00;&#x500B;&#x6BB5;&#x843D;&#x5F8C;&#x7528;<code>git commit -am &apos;&#x8981;&#x8A18;&#x9304;&#x7684;&#x5167;&#x5BB9;&apos;</code>&#xFF0C;&#x9019;&#x908A; am &#x540C;&#x6642;&#x6709; add &#xFF0C;&#x6240;&#x4EE5;&#x6703;&#x628A;&#x65B0;&#x589E;&#x3001;&#x522A;&#x9664;&#x7684;&#x6A94;&#x6848;&#x90FD;&#x52A0;&#x5165; git &#x505A;&#x7248;&#x672C;&#x63A7;&#x5236;&#x3002;</li>
-<li>&#x4F5C;&#x696D;&#x5168;&#x5BEB;&#x5B8C;&#x5C31;&#x7528; <code>git push origin branchName</code> &#x628A;&#x672C;&#x5730;&#x7684; branch push &#x5230;&#x9060;&#x7AEF;&#x7684; repo &#x4E0A;&#x3002;</li>
-<li>&#x9EDE;&#x64CA; pull request &#x8981;&#x6C42; merge</li>
+<li><code>git branch newBranchName</code> 新開一個 branch</li>
+<li><code>git chekcout newBranchName</code> 切換到 branch</li>
+<li>寫作業，告一個段落後用<code>git commit -am &#39;要記錄的內容&#39;</code>，這邊 am 同時有 add ，所以會把新增、刪除的檔案都加入 git 做版本控制。</li>
+<li>作業全寫完就用 <code>git push origin branchName</code> 把本地的 branch push 到遠端的 repo 上。</li>
+<li>點擊 pull request 要求 merge</li>
 </ol>
-<h2 id="&#x5982;&#x4F55;&#x56DE;&#x5230;&#x4E0A;&#x4E00;&#x500B;-commit"><a href="#&#x5982;&#x4F55;&#x56DE;&#x5230;&#x4E0A;&#x4E00;&#x500B;-commit" class="headerlink" title="&#x5982;&#x4F55;&#x56DE;&#x5230;&#x4E0A;&#x4E00;&#x500B; commit"></a>&#x5982;&#x4F55;&#x56DE;&#x5230;&#x4E0A;&#x4E00;&#x500B; commit</h2><p>&#x6703;&#x63D0;&#x5230;&#x9019;&#x500B;&#x662F;&#x56E0;&#x70BA;&#x4E0A;&#x6B21; deploy &#x524D;&#x767C;&#x73FE;&#x5927;&#x4E8B;&#x4E0D;&#x5999;&#xFF0C;&#x5C45;&#x7136;&#x6539;&#x932F;&#x6771;&#x897F;&#x4E86;&#xFF0C;&#x6240;&#x4EE5;&#x5C31;&#x5148;&#x9000;&#x56DE;&#x4E0A;&#x4E00;&#x500B; commit &#x7248;&#x672C;&#x3002;</p>
-<p>&#x9019;&#x6642;&#x5019;&#x6253;&#xFF1A;<code>git reset HEAD^</code> &#x5C31;&#x53EF;&#x4EE5;&#x56DE;&#x5230;&#x4E0A;&#x4E00;&#x500B;&#x7248;&#x672C;</p>
-<h2 id="&#x4E4B;&#x524D;&#x7684;&#x7B46;&#x8A18;-command-line"><a href="#&#x4E4B;&#x524D;&#x7684;&#x7B46;&#x8A18;-command-line" class="headerlink" title="&#x4E4B;&#x524D;&#x7684;&#x7B46;&#x8A18; - command line"></a>&#x4E4B;&#x524D;&#x7684;&#x7B46;&#x8A18; - command line</h2><h2 id="&#x57FA;&#x672C;-Command-line-&#x6307;&#x4EE4;"><a href="#&#x57FA;&#x672C;-Command-line-&#x6307;&#x4EE4;" class="headerlink" title="&#x57FA;&#x672C; Command line &#x6307;&#x4EE4;"></a>&#x57FA;&#x672C; Command line &#x6307;&#x4EE4;</h2><table>
+<h2 id="如何回到上一個-commit"><a href="#如何回到上一個-commit" class="headerlink" title="如何回到上一個 commit"></a>如何回到上一個 commit</h2><p>會提到這個是因為上次 deploy 前發現大事不妙，居然改錯東西了，所以就先退回上一個 commit 版本。</p>
+<p>這時候打：<code>git reset HEAD^</code> 就可以回到上一個版本</p>
+<h2 id="之前的筆記-command-line"><a href="#之前的筆記-command-line" class="headerlink" title="之前的筆記 - command line"></a>之前的筆記 - command line</h2><h2 id="基本-Command-line-指令"><a href="#基本-Command-line-指令" class="headerlink" title="基本 Command line 指令"></a>基本 Command line 指令</h2><table>
 <thead>
 <tr>
-<th align="center">&#x6307;&#x4EE4;&#x540D;&#x7A31;</th>
+<th align="center">指令名稱</th>
 <th align="center">Description</th>
 </tr>
 </thead>
 <tbody><tr>
 <td align="center">pwd</td>
-<td align="center">&#x986F;&#x793A;&#x76EE;&#x524D;&#x81EA;&#x5DF1;&#x7684;&#x4F4D;&#x7F6E;</td>
+<td align="center">顯示目前自己的位置</td>
 </tr>
 <tr>
 <td align="center">ls</td>
-<td align="center">&#x5217;&#x51FA;&#x6240;&#x5728;&#x5730;&#x65B9;&#x7684;&#x6240;&#x6709;&#x6A94;&#x6848;</td>
+<td align="center">列出所在地方的所有檔案</td>
 </tr>
 <tr>
 <td align="center">cd</td>
-<td align="center">&#x52A0;&#x7A7A;&#x683C;&#x9375;&#x5F8C;&#xFF0C;&#x6253;&#x51FA;&#x540D;&#x7A31;&#x5C31;&#x53EF;&#x79FB;&#x52D5;&#x81F3;&#x60F3;&#x8981;&#x524D;&#x5F80;&#x7684;&#x76EE;&#x7684;&#x5730;&#x3002;&#xFF08;&#x53EF;&#x7528;&#x7D55;&#x5C0D;&#x3001;&#x76F8;&#x5C0D;&#x8DEF;&#x5F91;&#x4F86;&#x79FB;&#x52D5;&#xFF09;</td>
+<td align="center">加空格鍵後，打出名稱就可移動至想要前往的目的地。（可用絕對、相對路徑來移動）</td>
 </tr>
 <tr>
 <td align="center">man</td>
-<td align="center">&#x7A7A;&#x683C;&#x52A0;&#x4E0A;&#x6307;&#x4EE4;&#x5F8C;&#xFF0C;&#x6703;&#x6709;&#x8A73;&#x7D30;&#x7684;&#x6307;&#x4EE4;&#x8B1B;&#x89E3;</td>
+<td align="center">空格加上指令後，會有詳細的指令講解</td>
 </tr>
 <tr>
 <td align="center">touch</td>
-<td align="center">&#x89F8;&#x78B0;&#x4E00;&#x500B;&#x6A94;&#x6848;&#x8B93;&#x5B83;&#x66F4;&#x65B0;&#x6700;&#x5F8C;&#x4FEE;&#x6539;&#x6642;&#x9593;&#xFF0C;&#x6216;&#x8005;&#x662F;&#x5EFA;&#x7ACB;&#x6A94;&#x6848;&#xFF08;&#x81EA;&#x5DF1;&#x5BE6;&#x6E2C; Windows &#x662F;&#x6C92;&#x6709;&#x9019;&#x6307;&#x4EE4;&#xFF09;</td>
+<td align="center">觸碰一個檔案讓它更新最後修改時間，或者是建立檔案（自己實測 Windows 是沒有這指令）</td>
 </tr>
 <tr>
 <td align="center">rm(ReMove)</td>
-<td align="center">&#x522A;&#x9664;&#x6A94;&#x6848;&#xFF0C;&#x5982;&#x679C;&#x8981;&#x522A;&#x9664;&#x6574;&#x500B;&#x8CC7;&#x6599;&#x593E;&#x7684;&#x5167;&#x5BB9;&#xFF0C;&#x53EF;&#x4EE5;&#x52A0; rm -r &#x8CC7;&#x6599;&#x593E;&#x540D;&#x7A31; &#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x628A;&#x6574;&#x500B;&#x8CC7;&#x6599;&#x593E;&#x5167;&#x5BB9;&#x522A;&#x5149;&#x3002;</td>
+<td align="center">刪除檔案，如果要刪除整個資料夾的內容，可以加 rm -r 資料夾名稱 ，就可以把整個資料夾內容刪光。</td>
 </tr>
 <tr>
-<td align="center">mkdir(MaKe DIRectory&#xFF09;</td>
-<td align="center">&#x5EFA;&#x7ACB;&#x8CC7;&#x6599;&#x593E;&#x3002;</td>
+<td align="center">mkdir(MaKe DIRectory）</td>
+<td align="center">建立資料夾。</td>
 </tr>
 <tr>
 <td align="center">rmdir</td>
-<td align="center">&#x522A;&#x9664;&#x8CC7;&#x6599;&#x593E;&#x3002;</td>
+<td align="center">刪除資料夾。</td>
 </tr>
 <tr>
 <td align="center">mv(MoVe)</td>
-<td align="center">&#x79FB;&#x52D5;&#x6A94;&#x6848;&#x6216;&#x8005;&#x662F;&#x5E6B;&#x6A94;&#x6848;&#x6539;&#x540D;</td>
+<td align="center">移動檔案或者是幫檔案改名</td>
 </tr>
 <tr>
-<td align="center">cp&#xFF08;CoPy&#xFF09;</td>
-<td align="center">&#x8907;&#x88FD;&#x6A94;&#x6848;&#x6216;&#x8CC7;&#x6599;&#x593E;&#xFF0C;&#x5982;&#x679C;&#x8981;&#x8907;&#x88FD;&#x8CC7;&#x6599;&#x593E;&#x5247;&#x662F; cp -r&#xFF0C;&#x9019;&#x908A;&#x6B78;&#x7D0D;&#x51FA;&#x4E00;&#x500B;&#x908F;&#x8F2F;&#x662F;&#xFF1A;&#x5982;&#x679C;&#x662F;&#x95DC;&#x65BC;&#x8CC7;&#x6599;&#x593E;&#x5167;&#x5BB9;&#x7684;&#x6307;&#x4EE4;&#xFF0C;&#x7121;&#x8AD6;&#x522A;&#x9664;&#x3001;&#x8907;&#x88FD;&#x7B49;&#x7B49;&#xFF0C;&#x52A0;&#x4E0A; -r &#x5C31;&#x53EF;&#x4EE5;&#x4E86;&#x3002;</td>
+<td align="center">cp（CoPy）</td>
+<td align="center">複製檔案或資料夾，如果要複製資料夾則是 cp -r，這邊歸納出一個邏輯是：如果是關於資料夾內容的指令，無論刪除、複製等等，加上 -r 就可以了。</td>
 </tr>
 </tbody></table>
-<h2 id="&#x5982;&#x4F55;&#x4F7F;&#x7528;-Vim&#xFF1F;"><a href="#&#x5982;&#x4F55;&#x4F7F;&#x7528;-Vim&#xFF1F;" class="headerlink" title="&#x5982;&#x4F55;&#x4F7F;&#x7528; Vim&#xFF1F;"></a>&#x5982;&#x4F55;&#x4F7F;&#x7528; Vim&#xFF1F;</h2><h4 id="&#x5207;&#x63DB;&#x6A21;&#x5F0F;"><a href="#&#x5207;&#x63DB;&#x6A21;&#x5F0F;" class="headerlink" title="&#x5207;&#x63DB;&#x6A21;&#x5F0F;"></a>&#x5207;&#x63DB;&#x6A21;&#x5F0F;</h4><p>Vim &#x662F;&#x85C9;&#x7531;&#x5207;&#x63DB;&#x6A21;&#x5F0F;&#x4F86;&#x8F38;&#x5165;&#x7684;&#xFF0C;&#x6309;&#x4E0B; I &#x53EF;&#x4EE5;&#x9032;&#x5165; Insert &#x6A21;&#x5F0F;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x8F38;&#x5165;&#xFF0C;&#x5982;&#x679C;&#x6C92;&#x6309;&#x5C31;&#x6703;&#x662F; Normal &#x6A21;&#x5F0F;&#xFF0C;&#x5728; Normal &#x6A21;&#x5F0F;&#x4F60;&#x505A;&#x751A;&#x9EBC;&#x5B83;&#x90FD;&#x4E0D;&#x6703;&#x5C4C;&#x4F60;&#xFF0C;&#x4F46;&#x662F;&#x53EA;&#x8981;&#x6309;&#x4E0B; I &#x4F60;&#x8981;&#x5B83;&#x5E79;&#x561B;&#x5B83;&#x90FD;&#x670D;&#x5F9E;&#xFF0C;Vim &#x771F;&#x7684;&#x5F88;&#x96E3;&#x641E;&#x3002;</p>
-<h4 id="&#x89E3;&#x9664;-Insert-&#x6A21;&#x5F0F;&#x4EE5;&#x53CA;&#x5132;&#x5B58;&#x4E26;&#x96E2;&#x958B;-Vim"><a href="#&#x89E3;&#x9664;-Insert-&#x6A21;&#x5F0F;&#x4EE5;&#x53CA;&#x5132;&#x5B58;&#x4E26;&#x96E2;&#x958B;-Vim" class="headerlink" title="&#x89E3;&#x9664; Insert &#x6A21;&#x5F0F;&#x4EE5;&#x53CA;&#x5132;&#x5B58;&#x4E26;&#x96E2;&#x958B; Vim"></a>&#x89E3;&#x9664; Insert &#x6A21;&#x5F0F;&#x4EE5;&#x53CA;&#x5132;&#x5B58;&#x4E26;&#x96E2;&#x958B; Vim</h4><p>&#x96E2;&#x958B;&#x8F38;&#x5165;&#x6A21;&#x5F0F;&#x7684;&#x65B9;&#x6CD5;&#x662F;&#x6309;&#x4E0B; esc&#xFF0C;&#x5728; Normal &#x6A21;&#x5F0F;&#x4E0B;&#x6309;&#x5192;&#x865F; &#xFF08;&#xFF1A;&#xFF09;&#x7136;&#x5F8C;&#x8F38;&#x5165; w &#x548C; q &#xFF0C;&#x5C31;&#x6703;&#x5132;&#x5B58;&#x4E26;&#x96E2;&#x958B;&#x4E86;&#x3002;</p>
-<h2 id="&#x9032;&#x968E;-Command-line-&#x6307;&#x4EE4;"><a href="#&#x9032;&#x968E;-Command-line-&#x6307;&#x4EE4;" class="headerlink" title="&#x9032;&#x968E; Command line &#x6307;&#x4EE4;"></a>&#x9032;&#x968E; Command line &#x6307;&#x4EE4;</h2><table>
+<h2 id="如何使用-Vim？"><a href="#如何使用-Vim？" class="headerlink" title="如何使用 Vim？"></a>如何使用 Vim？</h2><h4 id="切換模式"><a href="#切換模式" class="headerlink" title="切換模式"></a>切換模式</h4><p>Vim 是藉由切換模式來輸入的，按下 I 可以進入 Insert 模式，也就是輸入，如果沒按就會是 Normal 模式，在 Normal 模式你做甚麼它都不會屌你，但是只要按下 I 你要它幹嘛它都服從，Vim 真的很難搞。</p>
+<h4 id="解除-Insert-模式以及儲存並離開-Vim"><a href="#解除-Insert-模式以及儲存並離開-Vim" class="headerlink" title="解除 Insert 模式以及儲存並離開 Vim"></a>解除 Insert 模式以及儲存並離開 Vim</h4><p>離開輸入模式的方法是按下 esc，在 Normal 模式下按冒號 （：）然後輸入 w 和 q ，就會儲存並離開了。</p>
+<h2 id="進階-Command-line-指令"><a href="#進階-Command-line-指令" class="headerlink" title="進階 Command line 指令"></a>進階 Command line 指令</h2><table>
 <thead>
 <tr>
-<th align="center">&#x6307;&#x4EE4;&#x540D;&#x7A31;</th>
+<th align="center">指令名稱</th>
 <th align="center">Description</th>
 </tr>
 </thead>
 <tbody><tr>
 <td align="center">grep</td>
-<td align="center">&#x6293;&#x53D6;&#x6587;&#x4EF6;&#x5167;&#x7684;&#x95DC;&#x9375;&#x5B57;</td>
+<td align="center">抓取文件內的關鍵字</td>
 </tr>
 <tr>
 <td align="center">wget</td>
-<td align="center">&#x76EE;&#x524D;&#x4E86;&#x89E3;&#x662F;&#x53EF;&#x4EE5;&#x4E0B;&#x8F09;&#x7DB2;&#x9801;&#x7684;&#x6A23;&#x5B50;</td>
+<td align="center">目前了解是可以下載網頁的樣子</td>
 </tr>
 <tr>
 <td align="center">curl</td>
-<td align="center">&#x767C;&#x9001;&#x4E00;&#x500B; GET &#x7684; Request &#x5230;&#x76EE;&#x6A19; URL &#x4E26;&#x8FD4;&#x56DE; reponse</td>
+<td align="center">發送一個 GET 的 Request 到目標 URL 並返回 reponse</td>
 </tr>
 </tbody></table>
-<h2 id="&#x4E4B;&#x524D;&#x7684;&#x7B46;&#x8A18;-Git"><a href="#&#x4E4B;&#x524D;&#x7684;&#x7B46;&#x8A18;-Git" class="headerlink" title="&#x4E4B;&#x524D;&#x7684;&#x7B46;&#x8A18; - Git"></a>&#x4E4B;&#x524D;&#x7684;&#x7B46;&#x8A18; - Git</h2><h2 id="Git-&#x57FA;&#x672C;&#x6982;&#x5FF5;"><a href="#Git-&#x57FA;&#x672C;&#x6982;&#x5FF5;" class="headerlink" title="Git &#x57FA;&#x672C;&#x6982;&#x5FF5;"></a>Git &#x57FA;&#x672C;&#x6982;&#x5FF5;</h2><p><img src="https://i1.wp.com/kopu.chat/wp-content/uploads/2017/01/git4.jpg?w=1841&amp;ssl=1" alt="image"></p>
-<p>&#x7C21;&#x55AE;&#x4F86;&#x8AAA;&#xFF0C;<code>git add</code> &#x5C31;&#x662F;&#x5148;&#x66AB;&#x5B58;&#x5728;&#x67D0;&#x500B;&#x5730;&#x65B9;&#xFF0C;<code>git commit</code> &#x5C31;&#x50CF;&#x662F;&#x904A;&#x6232;&#x5B58;&#x6A94;&#xFF0C;&#x4E26;&#x4E14;&#x6703;&#x9644;&#x8A3B;&#x4F60;&#x9019;&#x6B21;&#x5B58;&#x6A94;&#x5E79;&#x4E86;&#x751A;&#x9EBC;&#x3002;</p>
-<p>Git &#x7248;&#x672C;&#x63A7;&#x5236;&#x6E05;&#x695A;&#x8A18;&#x9304;&#x6BCF;&#x500B;&#x6A94;&#x6848;&#x751A;&#x9EBC;&#x6642;&#x5019;&#x66F4;&#x6539;&#x6216;&#x522A;&#x9664;&#xFF0C;&#x6709; Git &#x5E6B;&#x6211;&#x5011;&#x505A;&#x9019;&#x4E9B;&#x6B77;&#x53F2;&#x7D00;&#x9304;&#xFF0C;&#x5230;&#x6642;&#x5019;&#x5C31;&#x53EF;&#x4EE5;&#x77E5;&#x9053;&#x9ED1;&#x934B;&#x8AB0;&#x8A72;&#x80CC;&#x4E86;&#xFF08;&#xFF1F;&#xFF09;&#x7576;&#x7136;&#x6211;&#x8B1B;&#x7684;&#x5167;&#x5BB9;&#x5F88;&#x96A8;&#x4FBF;&#x7C97;&#x6DFA;&#xFF0C;&#x8A73;&#x7D30;&#x5167;&#x5BB9;&#x8ACB;&#x53C3;&#x7167; <a href="https://kopu.chat/2017/01/18/git%E6%96%B0%E6%89%8B%E5%85%A5%E9%96%80%E6%95%99%E5%AD%B8-part-1/" target="_blank" rel="noopener">Git&#x65B0;&#x624B;&#x5165;&#x9580;&#x6559;&#x5B78;</a> &#x4EE5;&#x53CA; <a href="https://gitbook.tw/" target="_blank" rel="noopener">&#x70BA;&#x4F60;&#x81EA;&#x5DF1;&#x5B78; Git</a>&#x3002;</p>
-<h2 id="Git-&#x57FA;&#x672C;&#x6D41;&#x7A0B;&#xFF0D;&#x54FC;&#x6A94;&#x6848;&#x90FD;&#x63A5;&#x53D7;&#x6211;&#x7684;&#x63A7;&#x5236;&#x5427;"><a href="#Git-&#x57FA;&#x672C;&#x6D41;&#x7A0B;&#xFF0D;&#x54FC;&#x6A94;&#x6848;&#x90FD;&#x63A5;&#x53D7;&#x6211;&#x7684;&#x63A7;&#x5236;&#x5427;" class="headerlink" title="Git &#x57FA;&#x672C;&#x6D41;&#x7A0B;&#xFF0D;&#x54FC;&#x6A94;&#x6848;&#x90FD;&#x63A5;&#x53D7;&#x6211;&#x7684;&#x63A7;&#x5236;&#x5427;"></a>Git &#x57FA;&#x672C;&#x6D41;&#x7A0B;&#xFF0D;&#x54FC;&#x6A94;&#x6848;&#x90FD;&#x63A5;&#x53D7;&#x6211;&#x7684;&#x63A7;&#x5236;&#x5427;</h2><ol>
-<li><code>git init</code>&#xFF1A;&#x8B93;&#x8CC7;&#x6599;&#x593E;&#x9032;&#x5165;&#x7248;&#x672C;&#x63A7;&#x5236;&#x7684;&#x72C0;&#x614B;</li>
-<li>&#x5EFA;&#x7ACB; <code>.gitignore</code>&#xFF0C;&#x628A;&#x4E0D;&#x8981;&#x9032;&#x884C;&#x7248;&#x672C;&#x63A7;&#x5236;&#x7684;&#x6A94;&#x6848;&#x8F38;&#x5165;&#x9032;&#x53BB;</li>
-<li><code>git add .</code>&#xFF1A;&#x628A;&#x6240;&#x6709;&#x60F3;&#x52A0;&#x5165;&#x7248;&#x672C;&#x63A7;&#x5236;&#x7684;&#x6A94;&#x6848;&#x5148;&#x66AB;&#x5B58;&#xFF0C;&#x4E1F;&#x9032; Staging Area</li>
-<li><code>git commit -m &quot;&#x60F3;&#x8F38;&#x5165;&#x7684;&#x5167;&#x5BB9;&quot;</code>&#xFF1A;&#x628A;&#x6240;&#x6709;&#x66AB;&#x5B58;&#x7684;&#x6A94;&#x6848;&#x63D0;&#x4EA4;&#x51FA;&#x53BB;&#xFF0C;-m &#x5F8C;&#x8F38;&#x5165;&#x7684;&#x5167;&#x5BB9;&#x6703;&#x50CF;&#x662F;&#x9644;&#x8A3B;&#x4E00;&#x6A23;&#xFF0C;&#x901A;&#x5E38;&#x6703;&#x5BEB;&#x66F4;&#x6539;&#x4E86;&#x4EC0;&#x9EBC;&#x6771;&#x897F;&#x3002;</li>
+<h2 id="之前的筆記-Git"><a href="#之前的筆記-Git" class="headerlink" title="之前的筆記 - Git"></a>之前的筆記 - Git</h2><h2 id="Git-基本概念"><a href="#Git-基本概念" class="headerlink" title="Git 基本概念"></a>Git 基本概念</h2><p><img src="https://i1.wp.com/kopu.chat/wp-content/uploads/2017/01/git4.jpg?w=1841&ssl=1" alt="image"></p>
+<p>簡單來說，<code>git add</code> 就是先暫存在某個地方，<code>git commit</code> 就像是遊戲存檔，並且會附註你這次存檔幹了甚麼。</p>
+<p>Git 版本控制清楚記錄每個檔案甚麼時候更改或刪除，有 Git 幫我們做這些歷史紀錄，到時候就可以知道黑鍋誰該背了（？）當然我講的內容很隨便粗淺，詳細內容請參照 <a target="_blank" rel="noopener" href="https://kopu.chat/2017/01/18/git%E6%96%B0%E6%89%8B%E5%85%A5%E9%96%80%E6%95%99%E5%AD%B8-part-1/">Git新手入門教學</a> 以及 <a target="_blank" rel="noopener" href="https://gitbook.tw/">為你自己學 Git</a>。</p>
+<h2 id="Git-基本流程－哼檔案都接受我的控制吧"><a href="#Git-基本流程－哼檔案都接受我的控制吧" class="headerlink" title="Git 基本流程－哼檔案都接受我的控制吧"></a>Git 基本流程－哼檔案都接受我的控制吧</h2><ol>
+<li><code>git init</code>：讓資料夾進入版本控制的狀態</li>
+<li>建立 <code>.gitignore</code>，把不要進行版本控制的檔案輸入進去</li>
+<li><code>git add .</code>：把所有想加入版本控制的檔案先暫存，丟進 Staging Area</li>
+<li><code>git commit -m &quot;想輸入的內容&quot;</code>：把所有暫存的檔案提交出去，-m 後輸入的內容會像是附註一樣，通常會寫更改了什麼東西。</li>
 </ol>
-<h3 id="&#x600E;&#x9EBC;&#x77E5;&#x9053;&#x6BCF;&#x500B;&#x6A94;&#x6848;&#x73FE;&#x5728;&#x7684;&#x72C0;&#x614B;&#xFF1F;&#x6BD4;&#x5982;&#x6709;&#x6C92;&#x6709;&#x88AB;-add"><a href="#&#x600E;&#x9EBC;&#x77E5;&#x9053;&#x6BCF;&#x500B;&#x6A94;&#x6848;&#x73FE;&#x5728;&#x7684;&#x72C0;&#x614B;&#xFF1F;&#x6BD4;&#x5982;&#x6709;&#x6C92;&#x6709;&#x88AB;-add" class="headerlink" title="&#x600E;&#x9EBC;&#x77E5;&#x9053;&#x6BCF;&#x500B;&#x6A94;&#x6848;&#x73FE;&#x5728;&#x7684;&#x72C0;&#x614B;&#xFF1F;&#x6BD4;&#x5982;&#x6709;&#x6C92;&#x6709;&#x88AB; add"></a>&#x600E;&#x9EBC;&#x77E5;&#x9053;&#x6BCF;&#x500B;&#x6A94;&#x6848;&#x73FE;&#x5728;&#x7684;&#x72C0;&#x614B;&#xFF1F;&#x6BD4;&#x5982;&#x6709;&#x6C92;&#x6709;&#x88AB; add</h3><p>&#x96A8;&#x6642;&#x4F7F;&#x7528; <code>git status</code> &#x4F86;&#x67E5;&#x8A62;&#x73FE;&#x5728;&#x72C0;&#x614B;&#x3002;</p>
-<h3 id="&#x600E;&#x9EBC;&#x77E5;&#x9053;&#x6BCF;&#x6B21;-commit-&#x7684;&#x5167;&#x5BB9;&#xFF1F;"><a href="#&#x600E;&#x9EBC;&#x77E5;&#x9053;&#x6BCF;&#x6B21;-commit-&#x7684;&#x5167;&#x5BB9;&#xFF1F;" class="headerlink" title="&#x600E;&#x9EBC;&#x77E5;&#x9053;&#x6BCF;&#x6B21; commit &#x7684;&#x5167;&#x5BB9;&#xFF1F;"></a>&#x600E;&#x9EBC;&#x77E5;&#x9053;&#x6BCF;&#x6B21; commit &#x7684;&#x5167;&#x5BB9;&#xFF1F;</h3><p>&#x4F7F;&#x7528; <code>git log</code> &#x4F86;&#x770B;&#x6BCF;&#x6B21; commit &#x8A73;&#x7D30;&#x8CC7;&#x8A0A;&#x3002;</p>
-<h3 id="&#x5982;&#x679C;&#x60F3;&#x56DE;&#x53BB;&#x4E4B;&#x524D;&#x7684;-commit-&#x600E;&#x8FA6;&#xFF1F;"><a href="#&#x5982;&#x679C;&#x60F3;&#x56DE;&#x53BB;&#x4E4B;&#x524D;&#x7684;-commit-&#x600E;&#x8FA6;&#xFF1F;" class="headerlink" title="&#x5982;&#x679C;&#x60F3;&#x56DE;&#x53BB;&#x4E4B;&#x524D;&#x7684; commit &#x600E;&#x8FA6;&#xFF1F;"></a>&#x5982;&#x679C;&#x60F3;&#x56DE;&#x53BB;&#x4E4B;&#x524D;&#x7684; commit &#x600E;&#x8FA6;&#xFF1F;</h3><p>&#x4F7F;&#x7528; <code>git checkout [SHA-1](https://gitbook.tw/chapters/using-git/how-to-calculate-the-sha1-value.html)</code>&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x524D;&#x5F80;&#x5230;&#x4F60;&#x60F3;&#x53BB;&#x7684; commit&#x3002;</p>
-<h2 id="Branch&#x57FA;&#x672C;&#x6982;&#x5FF5;&#x8207;&#x64CD;&#x4F5C;"><a href="#Branch&#x57FA;&#x672C;&#x6982;&#x5FF5;&#x8207;&#x64CD;&#x4F5C;" class="headerlink" title="Branch&#x57FA;&#x672C;&#x6982;&#x5FF5;&#x8207;&#x64CD;&#x4F5C;"></a>Branch&#x57FA;&#x672C;&#x6982;&#x5FF5;&#x8207;&#x64CD;&#x4F5C;</h2><h3 id="&#x70BA;&#x751A;&#x9EBC;&#x8981;&#x6709;-Branch-&#xFF1F;"><a href="#&#x70BA;&#x751A;&#x9EBC;&#x8981;&#x6709;-Branch-&#xFF1F;" class="headerlink" title="&#x70BA;&#x751A;&#x9EBC;&#x8981;&#x6709; Branch &#xFF1F;"></a>&#x70BA;&#x751A;&#x9EBC;&#x8981;&#x6709; Branch &#xFF1F;</h3><p>Branch &#x7684;&#x6982;&#x5FF5;&#x5927;&#x6982;&#x5C31;&#x662F;&#x50CF;&#x65BD;&#x653E;&#x5F71;&#x5206;&#x8EAB;&#x4E4B;&#x8853;&#x4E00;&#x6A23;&#xFF0C;&#x53EF;&#x80FD;&#x540C;&#x6642;&#x6709;&#x9084;&#x6C92;&#x5B8C;&#x6210;&#x7684;&#x65B0;&#x529F;&#x80FD;&#x3001;&#x6025;&#x8457;&#x8981;&#x4FEE;&#x6539;&#x7684; Bug&#xFF0C;&#x4F46;&#x522A;&#x9664;&#x6216;&#x662F;&#x9694;&#x96E2;&#x51FA;&#x9084;&#x6C92;&#x5B8C;&#x6210;&#x7684;&#x65B0;&#x529F;&#x80FD;&#x7136;&#x5F8C;&#x4FEE;&#x6539; Bug &#x9019;&#x65B9;&#x6CD5;&#x6709;&#x9EDE;&#x7B28;&#xFF0C;&#x4E0D;&#x5982;&#x628A;&#x9084;&#x5728;&#x958B;&#x767C;&#x65B0;&#x529F;&#x80FD;&#x7684;&#x5C08;&#x6848;&#x5F71;&#x5206;&#x8EAB;&#x51FA;&#x4F86;&#xFF0C;&#x7B49;&#x5230;&#x5B8C;&#x6210;&#x5F8C;&#x518D;&#x5408;&#x4F75;&#x5C31;&#x597D;&#x4E86;&#xFF01;</p>
-<h3 id="&#x5982;&#x4F55;&#x5275;&#x9020;Branch&#xFF1F;"><a href="#&#x5982;&#x4F55;&#x5275;&#x9020;Branch&#xFF1F;" class="headerlink" title="&#x5982;&#x4F55;&#x5275;&#x9020;Branch&#xFF1F;"></a>&#x5982;&#x4F55;&#x5275;&#x9020;Branch&#xFF1F;</h3><p>&#x5229;&#x7528; <code>git branch + &#x8981;&#x5275;&#x9020;&#x7684;branch&#x540D;</code> &#x4F86;&#x5EFA;&#x7ACB;&#x65B0; branch&#x3002;</p>
-<h3 id="&#x5982;&#x4F55;&#x5207;&#x63DB;branch&#xFF1F;"><a href="#&#x5982;&#x4F55;&#x5207;&#x63DB;branch&#xFF1F;" class="headerlink" title="&#x5982;&#x4F55;&#x5207;&#x63DB;branch&#xFF1F;"></a>&#x5982;&#x4F55;&#x5207;&#x63DB;branch&#xFF1F;</h3><p>&#x8DDF;&#x5148;&#x524D;&#x5207;&#x63DB; commit &#x4E00;&#x6A23;&#xFF0C;&#x5229;&#x7528; <code>git checkout + branch&#x540D;</code>&#x3002;</p>
-<h3 id="&#x5982;&#x4F55;&#x5408;&#x4F75;Branch&#xFF1F;"><a href="#&#x5982;&#x4F55;&#x5408;&#x4F75;Branch&#xFF1F;" class="headerlink" title="&#x5982;&#x4F55;&#x5408;&#x4F75;Branch&#xFF1F;"></a>&#x5982;&#x4F55;&#x5408;&#x4F75;Branch&#xFF1F;</h3><p>&#x5FC5;&#x9808;&#x5148;&#x8EAB;&#x8655;&#x5728;&#x4E3B;&#x8981; branch &#x4E0A;&#xFF0C;&#x7136;&#x5F8C;&#x7528; <code>git merge + &#x4F60;&#x8981;&#x5408;&#x4F75;&#x7684; branch &#x540D;</code>&#x3002;</p>
-<p>&#x51FA;&#x73FE;&#x885D;&#x7A81;&#x600E;&#x8FA6;&#xFF1F;&#x6BD4;&#x5982;&#x5169;&#x500B;branch&#x90FD;&#x4FEE;&#x6539;&#x540C;&#x6A23;&#x7684;&#x6A94;&#x6848;</p>
-<p>Git &#x6703;&#x767C;&#x73FE;&#x9019;&#x9EDE;&#xFF0C;&#x7136;&#x5F8C;&#x4E0D;&#x8B93;&#x4F60;&#x5408;&#x4F75;&#xFF0C;&#x5FC5;&#x9808;&#x624B;&#x52D5;&#x4FEE;&#x6539;&#x767C;&#x751F;&#x885D;&#x7A81;&#x7684;&#x6A94;&#x6848;&#x5167;&#x5BB9;&#xFF0C;&#x800C;&#x5167;&#x5BB9;&#x5982;&#x4F55;&#x4FEE;&#x6539;&#x5C31;&#x770B;&#x500B;&#x4EBA;&#x6C7A;&#x5B9A;&#x3002;</p>
-<h2 id="Git-&#x76F8;&#x95DC;&#x72C0;&#x6CC1;&#x5287;"><a href="#Git-&#x76F8;&#x95DC;&#x72C0;&#x6CC1;&#x5287;" class="headerlink" title="Git &#x76F8;&#x95DC;&#x72C0;&#x6CC1;&#x5287;"></a>Git &#x76F8;&#x95DC;&#x72C0;&#x6CC1;&#x5287;</h2><h3 id="&#x624B;&#x6B98;&#xFF0C;commit-message-&#x8D85;&#x5E38;&#x6253;&#x932F;&#x600E;&#x8FA6;&#xFF1F;"><a href="#&#x624B;&#x6B98;&#xFF0C;commit-message-&#x8D85;&#x5E38;&#x6253;&#x932F;&#x600E;&#x8FA6;&#xFF1F;" class="headerlink" title="&#x624B;&#x6B98;&#xFF0C;commit message &#x8D85;&#x5E38;&#x6253;&#x932F;&#x600E;&#x8FA6;&#xFF1F;"></a>&#x624B;&#x6B98;&#xFF0C;commit message &#x8D85;&#x5E38;&#x6253;&#x932F;&#x600E;&#x8FA6;&#xFF1F;</h3><p>&#x7528; <code>git commit &#x2014;amend</code> &#x5C31;&#x53EF;&#x4EE5;&#x66F4;&#x6539;&#x4E86;&#x3002;</p>
-<h3 id="&#x5F8C;&#x6094;&#x4E4B;&#x524D;&#x6574;&#x500B;Commit-&#x4E86;&#xFF0C;&#x53EF;&#x4EE5;&#x56DE;&#x5230;&#x4E0A;&#x4E00;&#x52D5;&#x55CE;&#xFF1F;"><a href="#&#x5F8C;&#x6094;&#x4E4B;&#x524D;&#x6574;&#x500B;Commit-&#x4E86;&#xFF0C;&#x53EF;&#x4EE5;&#x56DE;&#x5230;&#x4E0A;&#x4E00;&#x52D5;&#x55CE;&#xFF1F;" class="headerlink" title="&#x5F8C;&#x6094;&#x4E4B;&#x524D;&#x6574;&#x500B;Commit &#x4E86;&#xFF0C;&#x53EF;&#x4EE5;&#x56DE;&#x5230;&#x4E0A;&#x4E00;&#x52D5;&#x55CE;&#xFF1F;"></a>&#x5F8C;&#x6094;&#x4E4B;&#x524D;&#x6574;&#x500B;Commit &#x4E86;&#xFF0C;&#x53EF;&#x4EE5;&#x56DE;&#x5230;&#x4E0A;&#x4E00;&#x52D5;&#x55CE;&#xFF1F;</h3><p>&#x4F7F;&#x7528; <code>git reset HEAD^</code> &#x5C31;&#x53EF;&#x4EE5;&#x4E86;&#x3002;&#x4E0D;&#x904E;&#x5728;&#x9019;&#x88E1;&#x8981;&#x88DC;&#x5145;&#xFF0C;git reset &#x5206;&#x70BA;&#x4E09;&#x7A2E;&#x6A21;&#x5F0F;&#xFF0C;&#x5DEE;&#x7570;&#x5728;&#x65BC;&#x628A;&#x539F;&#x672C; commit &#x653E;&#x7F6E;&#x5728;&#x54EA;&#x4E00;&#x5340;&#xFF0C;&#x8A73;&#x7D30;&#x4ECB;&#x7D39;&#x5728;&#x9019; <a href="https://gitbook.tw/chapters/using-git/reset-commit.html" target="_blank" rel="noopener">&#x525B;&#x624D;&#x7684; Commit &#x5F8C;&#x6094;&#x4E86;&#xFF0C;&#x60F3;&#x8981;&#x62C6;&#x6389;&#x91CD;&#x505A;&#x2026;</a></p>
-<p><code>git reset:</code><br>&#x9019;&#x500B;&#x6307;&#x4EE4;&#x5BB9;&#x6613;&#x56E0;&#x70BA;&#x5B57;&#x7FA9;&#x6709;&#x6240;&#x8AA4;&#x6703;&#x9700;&#x8981;&#x7279;&#x5225;&#x8A3B;&#x91CB;&#xFF0C;&#x6240;&#x8B02; reset &#x4E0D;&#x662F;&#x628A;&#x539F;&#x672C;&#x6240;&#x6709;&#x7684; commit &#x90FD;&#x4E1F;&#x6389;&#x7684;&#x610F;&#x601D;&#xFF0C;&#x800C;&#x662F;&#x66AB;&#x6642;&#x96B1;&#x85CF;&#x8D77;&#x4F86;&#xFF0C;&#x4E5F;&#x56E0;&#x6B64;&#x610F;&#x601D;&#x61C9;&#x8A72;&#x662F;&#x300C;&#x79FB;&#x52D5;&#x300D;&#x5230;&#x67D0;&#x67D0; commit&#xFF0C;&#x4E26;&#x4E14;&#x5C07;&#x5148;&#x524D; commit &#x96B1;&#x85CF;&#x3002;</p>
-<h3 id="&#x53D6;&#x932F;Branch&#x7684;&#x540D;&#x5B57;&#x4E86;&#xFF0C;&#x53EF;&#x4EE5;&#x6539;&#x540D;&#x55CE;&#xFF1F;"><a href="#&#x53D6;&#x932F;Branch&#x7684;&#x540D;&#x5B57;&#x4E86;&#xFF0C;&#x53EF;&#x4EE5;&#x6539;&#x540D;&#x55CE;&#xFF1F;" class="headerlink" title="&#x53D6;&#x932F;Branch&#x7684;&#x540D;&#x5B57;&#x4E86;&#xFF0C;&#x53EF;&#x4EE5;&#x6539;&#x540D;&#x55CE;&#xFF1F;"></a>&#x53D6;&#x932F;Branch&#x7684;&#x540D;&#x5B57;&#x4E86;&#xFF0C;&#x53EF;&#x4EE5;&#x6539;&#x540D;&#x55CE;&#xFF1F;</h3><p>&#x7528; checkout &#x9032;&#x5230;&#x90A3;&#x500B; Branch&#xFF0C;&#x7136;&#x5F8C; <code>git branch -m &#x65B0;&#x540D;&#x5B57;</code></p>
-<h3 id="&#x600E;&#x9EBC;&#x53D6;&#x5F97;&#x9060;&#x7AEF;&#x7684;branch&#xFF1F;"><a href="#&#x600E;&#x9EBC;&#x53D6;&#x5F97;&#x9060;&#x7AEF;&#x7684;branch&#xFF1F;" class="headerlink" title="&#x600E;&#x9EBC;&#x53D6;&#x5F97;&#x9060;&#x7AEF;&#x7684;branch&#xFF1F;"></a>&#x600E;&#x9EBC;&#x53D6;&#x5F97;&#x9060;&#x7AEF;&#x7684;branch&#xFF1F;</h3><p>&#x9019;&#x500B;&#x529F;&#x80FD;&#x8B93;&#x6211;&#x8D85;&#x9A5A;&#x8C54;&#x7684;&#xFF0C;&#x600E;&#x9EBC;&#x80FD;&#x9019;&#x9EBC;&#x65B9;&#x4FBF;&#x5462;&#xFF1F;&#x76F4;&#x63A5;&#x7528; <code>git checkout branch&#x540D;</code> &#x5C31;&#x53EF;&#x4EE5;&#x4E86;&#x3002;</p>
-</body></html>
-    
+<h3 id="怎麼知道每個檔案現在的狀態？比如有沒有被-add"><a href="#怎麼知道每個檔案現在的狀態？比如有沒有被-add" class="headerlink" title="怎麼知道每個檔案現在的狀態？比如有沒有被 add"></a>怎麼知道每個檔案現在的狀態？比如有沒有被 add</h3><p>隨時使用 <code>git status</code> 來查詢現在狀態。</p>
+<h3 id="怎麼知道每次-commit-的內容？"><a href="#怎麼知道每次-commit-的內容？" class="headerlink" title="怎麼知道每次 commit 的內容？"></a>怎麼知道每次 commit 的內容？</h3><p>使用 <code>git log</code> 來看每次 commit 詳細資訊。</p>
+<h3 id="如果想回去之前的-commit-怎辦？"><a href="#如果想回去之前的-commit-怎辦？" class="headerlink" title="如果想回去之前的 commit 怎辦？"></a>如果想回去之前的 commit 怎辦？</h3><p>使用 <code>git checkout [SHA-1](https://gitbook.tw/chapters/using-git/how-to-calculate-the-sha1-value.html)</code>，就可以前往到你想去的 commit。</p>
+<h2 id="Branch基本概念與操作"><a href="#Branch基本概念與操作" class="headerlink" title="Branch基本概念與操作"></a>Branch基本概念與操作</h2><h3 id="為甚麼要有-Branch-？"><a href="#為甚麼要有-Branch-？" class="headerlink" title="為甚麼要有 Branch ？"></a>為甚麼要有 Branch ？</h3><p>Branch 的概念大概就是像施放影分身之術一樣，可能同時有還沒完成的新功能、急著要修改的 Bug，但刪除或是隔離出還沒完成的新功能然後修改 Bug 這方法有點笨，不如把還在開發新功能的專案影分身出來，等到完成後再合併就好了！</p>
+<h3 id="如何創造Branch？"><a href="#如何創造Branch？" class="headerlink" title="如何創造Branch？"></a>如何創造Branch？</h3><p>利用 <code>git branch + 要創造的branch名</code> 來建立新 branch。</p>
+<h3 id="如何切換branch？"><a href="#如何切換branch？" class="headerlink" title="如何切換branch？"></a>如何切換branch？</h3><p>跟先前切換 commit 一樣，利用 <code>git checkout + branch名</code>。</p>
+<h3 id="如何合併Branch？"><a href="#如何合併Branch？" class="headerlink" title="如何合併Branch？"></a>如何合併Branch？</h3><p>必須先身處在主要 branch 上，然後用 <code>git merge + 你要合併的 branch 名</code>。</p>
+<p>出現衝突怎辦？比如兩個branch都修改同樣的檔案</p>
+<p>Git 會發現這點，然後不讓你合併，必須手動修改發生衝突的檔案內容，而內容如何修改就看個人決定。</p>
+<h2 id="Git-相關狀況劇"><a href="#Git-相關狀況劇" class="headerlink" title="Git 相關狀況劇"></a>Git 相關狀況劇</h2><h3 id="手殘，commit-message-超常打錯怎辦？"><a href="#手殘，commit-message-超常打錯怎辦？" class="headerlink" title="手殘，commit message 超常打錯怎辦？"></a>手殘，commit message 超常打錯怎辦？</h3><p>用 <code>git commit —amend</code> 就可以更改了。</p>
+<h3 id="後悔之前整個Commit-了，可以回到上一動嗎？"><a href="#後悔之前整個Commit-了，可以回到上一動嗎？" class="headerlink" title="後悔之前整個Commit 了，可以回到上一動嗎？"></a>後悔之前整個Commit 了，可以回到上一動嗎？</h3><p>使用 <code>git reset HEAD^</code> 就可以了。不過在這裡要補充，git reset 分為三種模式，差異在於把原本 commit 放置在哪一區，詳細介紹在這 <a target="_blank" rel="noopener" href="https://gitbook.tw/chapters/using-git/reset-commit.html">剛才的 Commit 後悔了，想要拆掉重做…</a></p>
+<p><code>git reset:</code><br>這個指令容易因為字義有所誤會需要特別註釋，所謂 reset 不是把原本所有的 commit 都丟掉的意思，而是暫時隱藏起來，也因此意思應該是「移動」到某某 commit，並且將先前 commit 隱藏。</p>
+<h3 id="取錯Branch的名字了，可以改名嗎？"><a href="#取錯Branch的名字了，可以改名嗎？" class="headerlink" title="取錯Branch的名字了，可以改名嗎？"></a>取錯Branch的名字了，可以改名嗎？</h3><p>用 checkout 進到那個 Branch，然後 <code>git branch -m 新名字</code></p>
+<h3 id="怎麼取得遠端的branch？"><a href="#怎麼取得遠端的branch？" class="headerlink" title="怎麼取得遠端的branch？"></a>怎麼取得遠端的branch？</h3><p>這個功能讓我超驚豔的，怎麼能這麼方便呢？直接用 <code>git checkout branch名</code> 就可以了。</p>
+
     </div>
-    
-    <div class="columns is-variable is-1 is-multiline is-mobile">
-    
-        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Commnad-line/">#Commnad line</a></span>
-    
-        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Git/">#Git</a></span>
-    
-    </div>
-    
-    
-    <div class="columns is-mobile is-multiline article-nav">
-        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
-            
-            <a href="/2019/12/15/%E7%A8%8B%E5%BC%8F%E5%B0%8E%E5%B8%AB%E5%AF%A6%E9%A9%97%E8%A8%88%E7%95%AB-%E6%95%85%E4%BA%8B%E8%B5%B7%E9%BB%9E%E8%88%87%E4%B8%AD%E9%80%94%E7%AB%99/">程式導師實驗計畫 - 故事起點與中途站</a>
-            
-        </span>
-        <span class="column is-12-mobile is-half-desktop  article-nav-next">
-            
-            <a href="/2019/09/01/React-%E5%AD%B8%E7%BF%92%E8%B3%87%E6%BA%90%E6%8E%A8%E8%96%A6/">React 學習資源推薦</a>
-            
-        </span>
-    </div>
-    
-</article>
 
-
-<div class="sharebox">
     
-<div class="sharethis-inline-share-buttons"></div>
-<script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5e4221ec7a88780012e1744e&amp;product=inline-share-buttons' async='async'></script>
-
-</div>
-
-
-
-<div class="comments">
-    <h3 class="title is-4">Comments</h3>
     
-<script>
-    var disqus_config = function () {
-        this.page.url = 'https://chihyang41.github.io/2019/10/20/%E8%A4%87%E7%BF%92%E8%B6%B4%E8%90%AC-Git%E3%80%81Command-line/';
-        this.page.identifier = '2019/10/20/複習趴萬-Git、Command-line/';
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Commnad-line/" rel="tag"># Commnad line</a>
+              <a href="/tags/Git/" rel="tag"># Git</a>
+          </div>
+
         
-        this.language = 'en';
-        
-    };
-    (function() {
-        var d = document, s = d.createElement('script');  
-        s.src = '//' + 'ChihYang41-blog' + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
 
-<div id="disqus_thread">
-    
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
-</div>
-</div>
-
-    </div>
-</section>
-    <footer class="footer">
-    <div class="container">
-        <div class="columns content">
-            <div class="column is-narrow has-text-centered">
-                &copy; 2021 Chih Yang&nbsp;
-                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
-                        href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
-            </div>
-            <div class="column is-hidden-mobile"></div>
-
-            
-            <div class="column is-narrow">
-                <div class="columns is-mobile is-multiline is-centered">
-                
-                    
-                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/ChihYang41" target="_blank" rel="noopener">
-                    
-                    GitHub
-                    
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/09/01/React-%E5%AD%B8%E7%BF%92%E8%B3%87%E6%BA%90%E6%8E%A8%E8%96%A6/" rel="prev" title="React 學習資源推薦">
+                  <i class="fa fa-chevron-left"></i> React 學習資源推薦
                 </a>
-                
-                </div>
             </div>
-            
-            
-        </div>
-    </div>
-</footer>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
-
-<!-- test if the browser is outdated -->
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/" target="_blank" rel="noopener">Update my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+            <div class="post-nav-item">
+                <a href="/2019/12/15/%E7%A8%8B%E5%BC%8F%E5%B0%8E%E5%B8%AB%E5%AF%A6%E9%A9%97%E8%A8%88%E7%95%AB-%E6%95%85%E4%BA%8B%E8%B5%B7%E9%BB%9E%E8%88%87%E4%B8%AD%E9%80%94%E7%AB%99/" rel="next" title="程式導師實驗計畫 - 故事起點與中途站">
+                  程式導師實驗計畫 - 故事起點與中途站 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
 </div>
-<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
-<script>
-    $(document).ready(function () {
-        // plugin function, place inside DOM ready function
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        })
-    });
-</script>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
 
 <script>
-    window.FontAwesomeConfig = {
-        searchPseudoElements: true
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
     }
-    moment.locale("en-AU");
-</script>
-
-
-    
-    
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<script>
-    MathJax.Hub.Config({
-        "HTML-CSS": {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
     });
+  }
 </script>
-
-    
-    
-    
-    
-<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
-<script>
-    (function ($) {
-        $(document).ready(function () {
-            if (typeof($.fn.lightGallery) === 'function') {
-                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
-            }
-            if (typeof($.fn.justifiedGallery) === 'function') {
-                $('.justified-gallery').justifiedGallery();
-            }
-        });
-    })(jQuery);
-</script>
-
-    
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-    <style>
-        .hljs {
-            position: relative;
-        }
-
-        .hljs .clipboard-btn {
-            float: right;
-            color: #9a9a9a;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .hljs .clipboard-btn:hover {
-          color: #8a8a8a;
-        }
-
-        .hljs > .clipboard-btn {
-            display: none;
-            position: absolute;
-            right: 4px;
-            top: 4px;
-        }
-
-        .hljs:hover > .clipboard-btn {
-            display: inline;
-        }
-
-        .hljs > figcaption > .clipboard-btn {
-            margin-right: 4px;
-        }
-    </style>
-    <script>
-      $(document).ready(function () {
-        $('figure.hljs').each(function(i, figure) {
-          var codeId = 'code-' + i;
-          var code = figure.querySelector('.code');
-          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
-          code.id = codeId;
-          copyButton.addClass('clipboard-btn');
-          copyButton.attr('data-clipboard-target-id', codeId);
-
-          var figcaption = figure.querySelector('figcaption');
-
-          if (figcaption) {
-            figcaption.append(copyButton[0]);
-          } else {
-            figure.prepend(copyButton[0]);
-          }
-        })
-
-        var clipboard = new ClipboardJS('.clipboard-btn', {
-          target: function(trigger) {
-            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
-          }
-        });
-        clipboard.on('success', function(e) {
-          e.clearSelection();
-        })
-      })
-    </script>
-
-    
-    
-
-    
-
-
-
-<script src="/js/script.js"></script>
-
-
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-mask"></div>
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
 </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chih Yang</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
 <script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
+  var disqus_config = function() {
+    this.page.url = "https://chihyang41.github.io/2019/10/20/%E8%A4%87%E7%BF%92%E8%B6%B4%E8%90%AC-Git%E3%80%81Command-line/";
+    this.page.identifier = "2019/10/20/複習趴萬-Git、Command-line/";
+    this.page.title = "複習趴萬 - Git、Command line";
+    };
+  NexT.utils.loadComments('#disqus_thread', () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ChihYang41-blog.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
 </script>
 
-<script src="/js/insight.js"></script>
-
-    
 </body>
 </html>

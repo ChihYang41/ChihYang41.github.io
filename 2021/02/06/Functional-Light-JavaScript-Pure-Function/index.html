@@ -1,29 +1,34 @@
 <!DOCTYPE html>
-<html class="has-navbar-fixed-top">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-<title>Functional-Light JavaScript - Pure Function - Chih Yang&#39;s Blog</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
-
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
 
 
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="pdI9OcgtLe0I27rizFD2U3s553wFM8nsth5viFyCbOk">
 
-<meta name="description" content="Chih Yang 的前端小天地">
+<link rel="stylesheet" href="/css/main.css">
 
 
 
-<meta name="keywords" content="前端">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
 
-
-
-    <meta name="description" content="&amp;#x524D;&amp;#x8A00;&amp;#x6B64;&amp;#x70BA; frontend master &amp;#x7684; Functional-Light JavaScript, v3 &amp;#x2C7;&amp;#x7684;&amp;#x8AB2;&amp;#x7A0B;&amp;#x7B46;&amp;#x8A18;&amp;#xFF0C;&amp;#x9019;&amp;#x7BC7;&amp;#x4E3B;&amp;#x8981;&amp;#x8B1B;&amp;#x7684;&amp;#x662F">
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="前言此為 frontend master 的 Functional-Light JavaScript, v3 ˇ的課程筆記，這篇主要講的是 pure function，內容不完全和課程編排相同，單純是個人消化過後的編排。 因為剛開始學 functional programming 的緣故，內容、觀念可能會有諸多錯誤，如有發現錯誤麻煩不吝指教，感謝！">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Functional-Light JavaScript - Pure Function">
 <meta property="og:url" content="https://chihyang41.github.io/2021/02/06/Functional-Light-JavaScript-Pure-Function/index.html">
 <meta property="og:site_name" content="Chih Yang&#39;s Blog">
-<meta property="og:description" content="&amp;#x524D;&amp;#x8A00;&amp;#x6B64;&amp;#x70BA; frontend master &amp;#x7684; Functional-Light JavaScript, v3 &amp;#x2C7;&amp;#x7684;&amp;#x8AB2;&amp;#x7A0B;&amp;#x7B46;&amp;#x8A18;&amp;#xFF0C;&amp;#x9019;&amp;#x7BC7;&amp;#x4E3B;&amp;#x8981;&amp;#x8B1B;&amp;#x7684;&amp;#x662F">
+<meta property="og:description" content="前言此為 frontend master 的 Functional-Light JavaScript, v3 ˇ的課程筆記，這篇主要講的是 pure function，內容不完全和課程編排相同，單純是個人消化過後的編排。 因為剛開始學 functional programming 的緣故，內容、觀念可能會有諸多錯誤，如有發現錯誤麻煩不吝指教，感謝！">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://cdn-media-1.freecodecamp.org/images/0*a_yub2gTwY-1eK8j.png">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gm2xtv1rpuj30vg0kwtbj.jpg">
@@ -37,7 +42,7 @@
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gm9u7r4rgqj30y80u07nc.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gm9u9gnillj310d0u0dpn.jpg">
 <meta property="article:published_time" content="2021-02-06T07:10:15.000Z">
-<meta property="article:modified_time" content="2021-02-07T09:22:00.662Z">
+<meta property="article:modified_time" content="2021-02-06T07:10:15.000Z">
 <meta property="article:author" content="Chih Yang">
 <meta property="article:tag" content="JavaScript">
 <meta property="article:tag" content="Functional Programming">
@@ -46,543 +51,599 @@
 <meta name="twitter:image" content="https://cdn-media-1.freecodecamp.org/images/0*a_yub2gTwY-1eK8j.png">
 
 
+<link rel="canonical" href="https://chihyang41.github.io/2021/02/06/Functional-Light-JavaScript-Pure-Function/">
 
 
-
-<link rel="icon" href="https://upload.cc/i1/2020/03/05/MXS6WH.png">
-
-
-<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
-
-
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
-
-
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
-
-
-<link rel="stylesheet" href="/css/style.css">
-
-
-<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-146838618-1');
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
 </script>
+<title>Functional-Light JavaScript - Pure Function | Chih Yang's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-146838618-1');
+      }
+    </script>
 
 
-    
 
 
-<meta name="generator" content="Hexo 4.2.0"></head>
-<body>
-    
-<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
-    <div class="container">
-        <div class="navbar-brand">
-            <a class="navbar-item navbar-logo" href="/">
-                
-                    
-                    Chih Yang&#39;s Blog
-                    
-                
-            </a>
-            <div class="navbar-burger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-        
-        <div class="navbar-menu navbar-start">
-            
-            <a class="navbar-item "
-               href="/archives">Archives</a>
-            
-            <a class="navbar-item "
-               href="/tags">Tags</a>
-            
-            <a class="navbar-item "
-               href="/categories">Categories</a>
-            
-        </div>
-        
-        <div class="navbar-menu navbar-end">
-            
-            <a class="navbar-item search" title="Search" href="javascript:;">
-                <i class="fas fa-search"></i>
-            </a>
-            
-            
-            
-            <a class="navbar-item" title="GitHub" href="https://github.com/ChihYang41" target="_blank" rel="noopener">
-                
-                <i class="fab fa-github"></i>
-                
-            </a>
-               
-            
-        </div>
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
+  </div>
+
+  <div class="site-meta">
+      <img class="custom-logo-image" src="/images/logo.png" alt="Chih Yang's Blog">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Chih Yang's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
 </nav>
 
-    <section class="section">
-    <div class="container">
-    <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            Functional-Light JavaScript - Pure Function
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            <time datetime="2021-02-06T07:10:15.000Z" itemprop="datePublished">Feb 6 2021</time>
-        </span>
-        
-        <span class="column is-narrow article-category">
-            <i class="far fa-folder"></i>
-            <a class="article-category-link" href="/categories/%E7%AD%86%E8%A8%98/">筆記</a>
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            27 minutes read (About 3984 words)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <html><head></head><body><h2 id="&#x524D;&#x8A00;"><a href="#&#x524D;&#x8A00;" class="headerlink" title="&#x524D;&#x8A00;"></a>&#x524D;&#x8A00;</h2><p>&#x6B64;&#x70BA; frontend master &#x7684; <a href="https://frontendmasters.com/courses/functional-javascript-v3/" target="_blank" rel="noopener">Functional-Light JavaScript, v3</a> &#x2C7;&#x7684;&#x8AB2;&#x7A0B;&#x7B46;&#x8A18;&#xFF0C;&#x9019;&#x7BC7;&#x4E3B;&#x8981;&#x8B1B;&#x7684;&#x662F; pure function&#xFF0C;&#x5167;&#x5BB9;&#x4E0D;&#x5B8C;&#x5168;&#x548C;&#x8AB2;&#x7A0B;&#x7DE8;&#x6392;&#x76F8;&#x540C;&#xFF0C;&#x55AE;&#x7D14;&#x662F;&#x500B;&#x4EBA;&#x6D88;&#x5316;&#x904E;&#x5F8C;&#x7684;&#x7DE8;&#x6392;&#x3002;</p>
-<p>&#x56E0;&#x70BA;&#x525B;&#x958B;&#x59CB;&#x5B78; functional programming &#x7684;&#x7DE3;&#x6545;&#xFF0C;&#x5167;&#x5BB9;&#x3001;&#x89C0;&#x5FF5;&#x53EF;&#x80FD;&#x6703;&#x6709;&#x8AF8;&#x591A;&#x932F;&#x8AA4;&#xFF0C;&#x5982;&#x6709;&#x767C;&#x73FE;&#x932F;&#x8AA4;&#x9EBB;&#x7169;&#x4E0D;&#x541D;&#x6307;&#x6559;&#xFF0C;&#x611F;&#x8B1D;&#xFF01;</p>
-<a id="more"></a>
 
-<h2 id="Function-Purity"><a href="#Function-Purity" class="headerlink" title="Function Purity"></a>Function Purity</h2><p>&#x6700;&#x4E00;&#x958B;&#x59CB;&#x8981;&#x5148;&#x8AC7; pure function &#x662F;&#x56E0;&#x70BA; pure function &#x662F; functional programming &#x7684;&#x57FA;&#x77F3;&#xFF0C;&#x5982;&#x679C;&#x7F3A;&#x5C11;&#x4E86; pure function&#xFF0C;&#x90A3;&#x4F7F;&#x7528; functional programming &#x7684;&#x597D;&#x8655;&#x53EF;&#x4EE5;&#x8AAA;&#x662F;&#x5C11;&#x4E86;&#x5F88;&#x591A;&#x3002;</p>
-<p>&#x4E00;&#x822C;&#x4F86;&#x8AAA;&#xFF0C;&#x5982;&#x679C;&#x6211;&#x5011;&#x4E0B;&#x4E86; pure function &#x9019;&#x500B;&#x95DC;&#x9375;&#x5B57;&#x53BB; google&#xFF0C;&#x6703;&#x5728;&#x5927;&#x591A;&#x6578;&#x7684;&#x6587;&#x7AE0;&#x770B;&#x5230; pure function &#x6703;&#x7B26;&#x5408;&#x4EE5;&#x4E0B;&#x7684;&#x5B9A;&#x7FA9;&#xFF1A;</p>
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Function-Purity"><span class="nav-number">2.</span> <span class="nav-text">Function Purity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Function-vs-Procedure"><span class="nav-number">3.</span> <span class="nav-text">Function vs Procedure</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Function-Naming-Semantics"><span class="nav-number">4.</span> <span class="nav-text">Function Naming Semantics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Side-Effects"><span class="nav-number">5.</span> <span class="nav-text">Side Effects</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#side-effects-%E7%9A%84%E5%AE%9A%E7%BE%A9"><span class="nav-number">5.1.</span> <span class="nav-text">side effects 的定義</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%A4%96-Closure"><span class="nav-number">5.2.</span> <span class="nav-text">例外 - Closure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#no-side-effect-%E7%9A%84%E5%A5%BD%E8%99%95%E3%80%81%E5%85%B6%E4%BB%96-side-effects"><span class="nav-number">5.3.</span> <span class="nav-text">no side effect 的好處、其他 side effects</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Same-input-Same-output"><span class="nav-number">6.</span> <span class="nav-text">Same input, Same output</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Referential-Transparency"><span class="nav-number">7.</span> <span class="nav-text">Referential Transparency</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Exercise-Extracting-Impurity%E3%80%81Containing-Impurity"><span class="nav-number">8.</span> <span class="nav-text">Exercise - Extracting Impurity、Containing Impurity</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Extracting-Impurity"><span class="nav-number">8.1.</span> <span class="nav-text">Extracting Impurity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Containing-Impurity"><span class="nav-number">8.2.</span> <span class="nav-text">Containing Impurity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adapters"><span class="nav-number">8.3.</span> <span class="nav-text">Adapters</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%B5%90"><span class="nav-number">9.</span> <span class="nav-text">小結</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">10.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Chih Yang</p>
+  <div class="site-description" itemprop="description">Chih Yang 的前端小天地</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ChihYang41" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ChihYang41" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/chihyang41" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;chihyang41" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chihyang41.github.io/2021/02/06/Functional-Light-JavaScript-Pure-Function/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Chih Yang">
+      <meta itemprop="description" content="Chih Yang 的前端小天地">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chih Yang's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Functional-Light JavaScript - Pure Function
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-02-06 15:10:15" itemprop="dateCreated datePublished" datetime="2021-02-06T15:10:15+08:00">2021-02-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>此為 frontend master 的 <a target="_blank" rel="noopener" href="https://frontendmasters.com/courses/functional-javascript-v3/">Functional-Light JavaScript, v3</a> ˇ的課程筆記，這篇主要講的是 pure function，內容不完全和課程編排相同，單純是個人消化過後的編排。</p>
+<p>因為剛開始學 functional programming 的緣故，內容、觀念可能會有諸多錯誤，如有發現錯誤麻煩不吝指教，感謝！</p>
+<span id="more"></span>
+
+<h2 id="Function-Purity"><a href="#Function-Purity" class="headerlink" title="Function Purity"></a>Function Purity</h2><p>最一開始要先談 pure function 是因為 pure function 是 functional programming 的基石，如果缺少了 pure function，那使用 functional programming 的好處可以說是少了很多。</p>
+<p>一般來說，如果我們下了 pure function 這個關鍵字去 google，會在大多數的文章看到 pure function 會符合以下的定義：</p>
 <ol>
 <li>same input, same output</li>
 <li>no side-effects</li>
 </ol>
 <p><img src="https://cdn-media-1.freecodecamp.org/images/0*a_yub2gTwY-1eK8j.png" alt="pure function"></p>
-<p>(&#x5716;&#x7247;&#x53D6;&#x81EA; <a href="https://www.freecodecamp.org/news/what-is-a-pure-function-in-javascript-acb887375dfe/" target="_blank" rel="noopener">What Is a Pure Function in JavaScript?</a>)</p>
-<p>&#x6240;&#x4EE5;&#x6211;&#x5011;&#x5C31;&#x8981;&#x9010;&#x689D;&#x4F86;&#x8A0E;&#x8AD6;&#x9019;&#x5169;&#x500B;&#x5B9A;&#x7FA9;&#x662F;&#x4EC0;&#x9EBC;&#x610F;&#x601D;&#xFF0C;&#x4EE5;&#x53CA;&#x9664;&#x4E86;&#x9019;&#x5169;&#x500B;&#x5B9A;&#x7FA9;&#x4EE5;&#x5916;&#xFF0C;&#x6709;&#x6C92;&#x6709;&#x4EC0;&#x9EBC;&#x53EF;&#x4EE5;&#x88DC;&#x5145;&#x7684;&#x5167;&#x5BB9;&#x3002;</p>
-<h2 id="Function-vs-Procedure"><a href="#Function-vs-Procedure" class="headerlink" title="Function vs Procedure"></a>Function vs Procedure</h2><p>&#x5728;&#x8AC7; pure function  &#x7684;&#x4E0A;&#x8FF0;&#x5169;&#x500B;&#x5B9A;&#x7FA9;&#x4EE5;&#x524D;&#xFF0C;&#x4E0D;&#x5982;&#x5148;&#x4F86;&#x804A;&#x804A;&#x5728; FP &#x4E2D;&#xFF0C;&#x4EC0;&#x9EBC;&#x53EB;&#x505A;&#x4E00;&#x500B; function&#x3002;</p>
-<p>function &#x5728; FP &#x7684;&#x5B9A;&#x7FA9;&#x4E0A;&#x4F86;&#x8AAA;&#xFF0C;&#x5C31;&#x662F;<strong>&#x5B83;&#x5FC5;&#x9808;&#x8981;&#x6709; input&#xFF0C;&#x4E5F;&#x5FC5;&#x9808;&#x8981;&#x6709; output</strong>&#xFF0C;&#x6240;&#x4EE5;&#x5982;&#x679C;&#x4F60;&#x5BEB;&#x7684; function &#x9577;&#x5F97;&#x50CF;&#x9019;&#x6A23;&#xFF1A;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addNumbers</span>(<span class="hljs-params">x = <span class="hljs-number">0</span>, y = <span class="hljs-number">0</span>, z = <span class="hljs-number">0</span></span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">const</span> total = x + y + z</span><br><span class="line">  <span class="hljs-built_in">console</span>.log(total)</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">extra</span>(<span class="hljs-params">x = <span class="hljs-number">10</span>, ...args</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> addNumbers(x, <span class="hljs-number">40</span>, ...args)</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p><code>addNumbers</code> &#x5C31;&#x4E0D;&#x662F;&#x4E00;&#x500B; function&#xFF0C;&#x56E0;&#x70BA;&#x5B83;&#x53EA;&#x6709; input&#xFF0C;&#x6C92;&#x6709; output&#xFF0C;&#x9019;&#x500B;&#x6703;&#x88AB;&#x53EB;&#x505A; procedure&#xFF0C;&#x6307;&#x7684;&#x662F;&#x4E00;&#x6BB5;&#x908F;&#x8F2F;&#x7684;&#x96C6;&#x5408;&#x3002;</p>
-<p>&#x90A3;&#x53E6;&#x4E00;&#x500B;&#x6709;&#x8DA3;&#x7684;&#x554F;&#x984C;&#x662F; <code>extra</code> &#x7B97;&#x662F; function &#x55CE;&#xFF1F;&#x4E5F;&#x4E0D;&#x7B97;&#xFF0C;&#x56E0;&#x70BA; function &#x53EA;&#x6703; call &#x5176;&#x4ED6; function&#xFF0C;&#x5982;&#x679C;&#x7528;&#x5230; procedure &#x5C31;&#x4E0D;&#x7B97; function &#x4E86;&#x3002;</p>
-<p>&#x6240;&#x4EE5;&#x5728;&#x6700;&#x521D;&#x59CB;&#x7684; function &#x5B9A;&#x7FA9;&#x4F86;&#x8AAA;&#xFF0C;&#x6211;&#x5011;&#x300C;&#x5FC5;&#x9808;&#x8981;&#x6709; input&#xFF0C;&#x4E5F;&#x5FC5;&#x9808;&#x8981;&#x6709; output&#x300D;&#xFF0C;&#x4E0D;&#x904E;&#x9019;&#x4ECD;&#x7136;&#x4E0D;&#x5920;&#x5B8C;&#x6574;&#xFF0C;&#x56E0;&#x6B64;&#x6211;&#x5011;&#x7E7C;&#x7E8C;&#x5F80;&#x4E0B;&#x63A2;&#x8A0E;&#x3002;</p>
-<h2 id="Function-Naming-Semantics"><a href="#Function-Naming-Semantics" class="headerlink" title="Function Naming Semantics"></a>Function Naming Semantics</h2><p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gm2xtv1rpuj30vg0kwtbj.jpg" alt="&#x622A;&#x5716; 2020-12-28 &#x4E0A;&#x5348;1.41.22"></p>
-<p>&#x770B;&#x5230;&#x4E0A;&#x9762;&#x9019;&#x500B;&#x5716;&#x5F62;&#x5F88;&#x61F7;&#x5FF5;&#x5C0D;&#x5427;&#xFF01;&#x9019;&#x662F;&#x6211;&#x5011;&#x570B;&#x4E2D;&#x6642;&#x671F;&#x7684;&#x6578;&#x5B78;&#xFF0C;&#x5728;&#x8AC7;&#x8AD6;&#x9019;&#x500B;&#x51FD;&#x6578;&#x7684;&#x6642;&#x5019;&#xFF0C;&#x6211;&#x5011;&#x6703;&#x5C07; <code>x</code> &#x4EE3;&#x5165; 0&#xFF0C;&#x5F97;&#x5230; 3&#xFF1B;&#x4EE3;&#x5165; 1&#xFF0C;&#x5F97;&#x5230; 5 &#x4E4B;&#x985E;&#x7684;&#xFF0C;&#x9019;&#x6A23;&#x4F9D;&#x6B64;&#x985E;&#x63A8;&#x4EE3;&#x5165;&#x5404;&#x7A2E;&#x6578;&#x5B57;&#xFF0C;&#x5C07;&#x7D50;&#x679C;&#x9EDE;&#x5728;&#x5716;&#x5F62;&#x4E0A;&#xFF0C;&#x6700;&#x5F8C;&#x628A;&#x6240;&#x6709;&#x9EDE;&#x9EDE;&#x9023;&#x8D77;&#x4F86;&#x5C31;&#x5F97;&#x5230;&#x4E0A;&#x9762;&#x7684;&#x5716;&#x5F62;&#x3002;</p>
-<p>&#x9019;&#x6BB5;&#x6578;&#x5B78;&#x51FD;&#x6578;&#x8DDF;&#x7A0B;&#x5F0F;&#x78BC;&#x7684;&#x8868;&#x9054;&#x65B9;&#x5F0F;&#x5F88;&#x50CF;&#xFF1A;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// f(x) = 2X ^ 2 + 3</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">x</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-number">2</span> * <span class="hljs-built_in">Math</span>.pow(x, <span class="hljs-number">2</span>) + <span class="hljs-number">3</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x5F9E;&#x4E0A;&#x9762;&#x9019;&#x6BB5;&#x7A0B;&#x5F0F;&#x78BC;&#x4F86;&#x601D;&#x8003;&#xFF0C;x &#x548C; y &#x662F;&#x6709;&#x4E00;&#x5B9A;&#x7684;&#x95DC;&#x806F;&#x6027;&#x7684;&#xFF0C;&#x6BD4;&#x5982;&#x6211; x &#x653E;&#x9032; 2&#xFF0C;&#x90A3; y &#xFF0C;&#x4E5F;&#x5C31;&#x662F; <code>f(x)</code> &#x5C31;&#x6703;&#x662F; 11&#xFF1B;&#x5982;&#x679C; x &#x653E;&#x9032; 3&#xFF0C;&#x90A3; y &#x5C31;&#x6703;&#x662F; 21&#xFF0C;&#x7576; x &#x662F;&#x67D0;&#x500B;&#x6578;&#x5B57;&#x7684;&#x6642;&#x5019;&#x5C31;&#x6703;&#x900F;&#x904E;&#x5B83;&#x4F86;&#x8A08;&#x7B97;&#xFF0C;&#x5F97;&#x5230;&#x76F8;&#x5C0D;&#x61C9;&#x7684; y&#x3002;</p>
-<p>Kyle Simpson &#x662F;&#x5982;&#x6B64;&#x8AAA;&#x7684;&#xFF1A;</p>
+<p>(圖片取自 <a target="_blank" rel="noopener" href="https://www.freecodecamp.org/news/what-is-a-pure-function-in-javascript-acb887375dfe/">What Is a Pure Function in JavaScript?</a>)</p>
+<p>所以我們就要逐條來討論這兩個定義是什麼意思，以及除了這兩個定義以外，有沒有什麼可以補充的內容。</p>
+<h2 id="Function-vs-Procedure"><a href="#Function-vs-Procedure" class="headerlink" title="Function vs Procedure"></a>Function vs Procedure</h2><p>在談 pure function  的上述兩個定義以前，不如先來聊聊在 FP 中，什麼叫做一個 function。</p>
+<p>function 在 FP 的定義上來說，就是<strong>它必須要有 input，也必須要有 output</strong>，所以如果你寫的 function 長得像這樣：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">addNumbers</span><span class="token punctuation">(</span><span class="token parameter">x <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> y <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> z <span class="token operator">=</span> <span class="token number">0</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> total <span class="token operator">=</span> x <span class="token operator">+</span> y <span class="token operator">+</span> z
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>total<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">extra</span><span class="token punctuation">(</span><span class="token parameter">x <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">,</span> <span class="token operator">...</span>args</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">addNumbers</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> <span class="token number">40</span><span class="token punctuation">,</span> <span class="token operator">...</span>args<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>addNumbers</code> 就不是一個 function，因為它只有 input，沒有 output，這個會被叫做 procedure，指的是一段邏輯的集合。</p>
+<p>那另一個有趣的問題是 <code>extra</code> 算是 function 嗎？也不算，因為 function 只會 call 其他 function，如果用到 procedure 就不算 function 了。</p>
+<p>所以在最初始的 function 定義來說，我們「必須要有 input，也必須要有 output」，不過這仍然不夠完整，因此我們繼續往下探討。</p>
+<h2 id="Function-Naming-Semantics"><a href="#Function-Naming-Semantics" class="headerlink" title="Function Naming Semantics"></a>Function Naming Semantics</h2><p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gm2xtv1rpuj30vg0kwtbj.jpg" alt="截圖 2020-12-28 上午1.41.22"></p>
+<p>看到上面這個圖形很懷念對吧！這是我們國中時期的數學，在談論這個函數的時候，我們會將 <code>x</code> 代入 0，得到 3；代入 1，得到 5 之類的，這樣依此類推代入各種數字，將結果點在圖形上，最後把所有點點連起來就得到上面的圖形。</p>
+<p>這段數學函數跟程式碼的表達方式很像：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// f(x) = 2X ^ 2 + 3</span>
+<span class="token keyword">function</span> <span class="token function">f</span><span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token number">2</span> <span class="token operator">*</span> Math<span class="token punctuation">.</span><span class="token function">pow</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">3</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>從上面這段程式碼來思考，x 和 y 是有一定的關聯性的，比如我 x 放進 2，那 y ，也就是 <code>f(x)</code> 就會是 11；如果 x 放進 3，那 y 就會是 21，當 x 是某個數字的時候就會透過它來計算，得到相對應的 y。</p>
+<p>Kyle Simpson 是如此說的：</p>
 <blockquote>
 <p>Function: the semantic relationship between input and computed output</p>
 </blockquote>
-<p>&#x4E5F;&#x5C31;&#x662F; function &#x7684; input &#x548C; output &#x662F;&#x6703;&#x6709;&#x4E00;&#x5B9A;&#x7684;&#x8A9E;&#x610F;&#x95DC;&#x806F;&#x6027;&#x7684;&#x3002;</p>
-<p>&#x4E0D;&#x904E;&#x9019;&#x6BB5;&#x5B9A;&#x7FA9;&#x4E5F;&#x9084;&#x4E0D;&#x5920;&#x5B8C;&#x6574;&#xFF0C;&#x8B93;&#x6211;&#x5011;&#x7E7C;&#x7E8C;&#x770B;&#x4E0B;&#x53BB;&#x3002;</p>
-<h2 id="Side-Effects"><a href="#Side-Effects" class="headerlink" title="Side Effects"></a>Side Effects</h2><h3 id="side-effects-&#x7684;&#x5B9A;&#x7FA9;"><a href="#side-effects-&#x7684;&#x5B9A;&#x7FA9;" class="headerlink" title="side effects &#x7684;&#x5B9A;&#x7FA9;"></a>side effects &#x7684;&#x5B9A;&#x7FA9;</h3><p>&#x8B1B;&#x5230;&#x526F;&#x4F5C;&#x7528;&#xFF0C;&#x8B93;&#x6211;&#x5011;&#x5148;&#x67E5;&#x67E5;&#x7DAD;&#x57FA;&#x767E;&#x79D1;&#xFF0C;&#x7DAD;&#x57FA;&#x767E;&#x79D1;&#x5C0D;&#x65BC; <a href="https://zh.wikipedia.org/wiki/%E5%89%AF%E4%BD%9C%E7%94%A8_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6)" target="_blank" rel="noopener">&#x526F;&#x4F5C;&#x7528;</a> &#x7684;&#x5B9A;&#x7FA9;&#x662F;&#x9019;&#x6A23;&#x7684;&#xFF1A;</p>
+<p>也就是 function 的 input 和 output 是會有一定的語意關聯性的。</p>
+<p>不過這段定義也還不夠完整，讓我們繼續看下去。</p>
+<h2 id="Side-Effects"><a href="#Side-Effects" class="headerlink" title="Side Effects"></a>Side Effects</h2><h3 id="side-effects-的定義"><a href="#side-effects-的定義" class="headerlink" title="side effects 的定義"></a>side effects 的定義</h3><p>講到副作用，讓我們先查查維基百科，維基百科對於 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%89%AF%E4%BD%9C%E7%94%A8_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6)">副作用</a> 的定義是這樣的：</p>
 <blockquote>
-<p>&#x5728;&#x96FB;&#x8166;&#x79D1;&#x5B78;&#x4E2D;&#xFF0C;<strong>&#x51FD;&#x6578;&#x526F;&#x4F5C;&#x7528;</strong>&#x6307;&#x7576;&#x8ABF;&#x7528;<a href="https://zh.wikipedia.org/wiki/&#x51FD;&#x6570;" target="_blank" rel="noopener">&#x51FD;&#x6578;</a>&#x6642;&#xFF0C;&#x9664;&#x4E86;<strong>&#x56DE;&#x50B3;&#x51FD;&#x6578;&#x503C;</strong>&#x4E4B;&#x5916;&#xFF0C;&#x9084;<strong>&#x5C0D;&#x4E3B;&#x8ABF;&#x7528;&#x51FD;&#x6578;&#x7522;&#x751F;&#x9644;&#x52A0;&#x7684;&#x5F71;&#x97FF;</strong>&#x3002;&#x4F8B;&#x5982;&#x4FEE;&#x6539;&#x5168;&#x57DF;&#x8B8A;&#x6578;&#xFF08;&#x51FD;&#x6578;&#x5916;&#x7684;&#x8B8A;&#x6578;&#xFF09;&#xFF0C;&#x4FEE;&#x6539;&#x53C3;&#x6578;&#x6216;&#x6539;&#x8B8A;&#x5916;&#x90E8;&#x5B58;&#x5132;&#x3002;</p>
+<p>在電腦科學中，<strong>函數副作用</strong>指當調用<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%87%BD%E6%95%B0">函數</a>時，除了<strong>回傳函數值</strong>之外，還<strong>對主調用函數產生附加的影響</strong>。例如修改全域變數（函數外的變數），修改參數或改變外部存儲。</p>
 </blockquote>
 <blockquote>
-<p>&#x5982;&#x679C;&#x4E00;&#x500B;&#x51FD;&#x6578;&#x901A;&#x904E;<strong>&#x96B1;&#x5F0F;</strong>&#xFF08;&#x82F1;&#x8A9E;&#xFF1A;Implicit&#xFF09;&#x65B9;&#x5F0F;&#xFF0C;&#x5F9E;&#x5916;&#x754C;&#x7372;&#x53D6;&#x8CC7;&#x6599;&#xFF0C;&#x6216;&#x8005;&#x5411;&#x5916;&#x90E8;&#x8F38;&#x51FA;&#x8CC7;&#x6599;&#xFF0C;&#x90A3;&#x9EBC;&#xFF0C;&#x8A72;&#x51FD;&#x6578;&#x5C31;&#x4E0D;&#x662F;&#x7D14;&#x51FD;&#x6578;&#xFF0C;&#x53EB;&#x4F5C;&#x975E;&#x7D14;&#x51FD;&#x6578;&#xFF08;&#x82F1;&#x8A9E;&#xFF1A;Impure Function&#xFF09;&#x3002;</p>
-<p>&#x96B1;&#x5F0F;&#x7684;&#x610F;&#x601D;&#x662F;&#xFF0C;&#x51FD;&#x6578;&#x901A;&#x904E;&#x53C3;&#x6578;&#x548C;&#x56DE;&#x50B3;&#x503C;&#x4EE5;&#x5916;&#x7684;&#x6E20;&#x9053;&#xFF0C;&#x548C;&#x5916;&#x754C;&#x9032;&#x884C;&#x8CC7;&#x6599;&#x4EA4;&#x63DB;&#x3002;&#x6BD4;&#x5982;&#xFF0C;&#x8B80;&#x53D6;&#x5168;&#x57DF;&#x8B8A;&#x6578;&#xFF0C;&#x4FEE;&#x6539;&#x5168;&#x57DF;&#x8B8A;&#x6578;&#xFF0C;&#x90FD;&#x53EB;&#x4F5C;&#x4EE5;&#x96B1;&#x5F0F;&#x7684;&#x65B9;&#x5F0F;&#x548C;&#x5916;&#x754C;&#x9032;&#x884C;&#x8CC7;&#x6599;&#x4EA4;&#x63DB;&#xFF1B;&#x6BD4;&#x5982;&#xFF0C;&#x5229;&#x7528; I/O API&#xFF08;&#x8F38;&#x5165;&#x8F38;&#x51FA;&#x7CFB;&#x7D71;&#x51FD;&#x5F0F;&#x5EAB;&#xFF09;&#x8B80;&#x53D6;&#x8A2D;&#x5B9A;&#x6587;&#x4EF6;&#xFF0C;&#x6216;&#x8005;&#x8F38;&#x51FA;&#x5230;&#x6587;&#x4EF6;&#xFF0C;&#x5217;&#x5370;&#x5230;&#x87A2;&#x5E55;&#xFF0C;&#x90FD;&#x53EB;&#x505A;&#x96B1;&#x5F0F;&#x7684;&#x65B9;&#x5F0F;&#x548C;&#x5916;&#x754C;&#x9032;&#x884C;&#x8CC7;&#x6599;&#x4EA4;&#x63DB;&#x3002;</p>
+<p>如果一個函數通過<strong>隱式</strong>（英語：Implicit）方式，從外界獲取資料，或者向外部輸出資料，那麼，該函數就不是純函數，叫作非純函數（英語：Impure Function）。</p>
+<p>隱式的意思是，函數通過參數和回傳值以外的渠道，和外界進行資料交換。比如，讀取全域變數，修改全域變數，都叫作以隱式的方式和外界進行資料交換；比如，利用 I/O API（輸入輸出系統函式庫）讀取設定文件，或者輸出到文件，列印到螢幕，都叫做隱式的方式和外界進行資料交換。</p>
 </blockquote>
-<p>&#x7C21;&#x800C;&#x8A00;&#x4E4B;&#xFF0C;&#x5C31;&#x662F; function &#x672C;&#x8EAB;&#x4E0D;&#x662F;&#x7368;&#x7ACB;&#x7684;&#xFF0C;&#x5B83;&#x548C;&#x5916;&#x754C;&#x7522;&#x751F;&#x4E86;&#x806F;&#x7E6B;&#xFF0C;&#x50CF;&#x662F;&#x8B80;&#x53D6;&#x5230;&#x5916;&#x90E8;&#x7684; variables&#x3001;&#x4FEE;&#x6539;&#x5916;&#x90E8;&#x7684; variables&#xFF0C;&#x90FD;&#x6703;&#x7522;&#x751F; side effect&#xFF0C;&#x8209;&#x4F8B;&#x4F86;&#x8AAA;&#xFF1A;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">shippingRate</span>(<span class="hljs-params"></span>) </span>{</span><br><span class="line">  rate = ((size + <span class="hljs-number">1</span>) * weight) + speed </span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">let</span> rate;</span><br><span class="line"><span class="hljs-keyword">let</span> size = <span class="hljs-number">12</span></span><br><span class="line"><span class="hljs-keyword">let</span> weight = <span class="hljs-number">4</span>;</span><br><span class="line"><span class="hljs-keyword">let</span> speed = <span class="hljs-number">5</span>;</span><br><span class="line">shippingRate();</span><br><span class="line"><span class="hljs-built_in">console</span>.log(rate) <span class="hljs-comment">// 57</span></span><br><span class="line"></span><br><span class="line">size = <span class="hljs-number">8</span></span><br><span class="line">speed = <span class="hljs-number">6</span></span><br><span class="line">shippingRate();</span><br><span class="line"><span class="hljs-built_in">console</span>.log(rate) <span class="hljs-comment">// 42</span></span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x5F88;&#x660E;&#x986F;&#x7684;&#xFF0C;<code>shippingRate</code> &#x5C31;&#x548C;&#x5916;&#x90E8;&#x7684; variables &#x7522;&#x751F;&#x95DC;&#x806F;&#x4E86;&#xFF0C;&#x56E0;&#x70BA;&#x5B83;&#x7528;&#x5230;&#x4E86;&#x5916;&#x90E8;&#x7684; variables &#x9032;&#x884C;&#x67D0;&#x4E9B;&#x8A08;&#x7B97;&#x4E86;&#x5C0D;&#x5427;&#x3002;</p>
-<p>&#x90A3;&#x5982;&#x679C;&#x6211;&#x5011;&#x628A;&#x7A0B;&#x5F0F;&#x78BC;&#x6539;&#x6210;&#x9019;&#x6A23;&#xFF1A;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">shippingRate</span>(<span class="hljs-params">size, weight, speed</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> ((size + <span class="hljs-number">1</span>) * weight) + speed </span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">let</span> rate;</span><br><span class="line">rate = shippingRate(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>) <span class="hljs-comment">// 7</span></span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x5C31;&#x6C92;&#x6709; side effect &#x4E86;&#xFF0C;&#x6211;&#x5011;&#x55AE;&#x7D14;&#x4F9D;&#x8CF4; function &#x81EA;&#x8EAB;&#x7684; input &#x9032;&#x884C;&#x8A08;&#x7B97;&#xFF0C;&#x5F97;&#x5230; output &#x4E26; return&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x8AAA; function &#x662F;&#x4E00;&#x500B;&#x7368;&#x7ACB;&#x7684;&#x5B58;&#x5728;&#x3002;</p>
+<p>簡而言之，就是 function 本身不是獨立的，它和外界產生了聯繫，像是讀取到外部的 variables、修改外部的 variables，都會產生 side effect，舉例來說：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">shippingRate</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  rate <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>size <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">*</span> weight<span class="token punctuation">)</span> <span class="token operator">+</span> speed 
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">let</span> rate<span class="token punctuation">;</span>
+<span class="token keyword">let</span> size <span class="token operator">=</span> <span class="token number">12</span>
+<span class="token keyword">let</span> weight <span class="token operator">=</span> <span class="token number">4</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> speed <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+<span class="token function">shippingRate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>rate<span class="token punctuation">)</span> <span class="token comment">// 57</span>
+
+size <span class="token operator">=</span> <span class="token number">8</span>
+speed <span class="token operator">=</span> <span class="token number">6</span>
+<span class="token function">shippingRate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>rate<span class="token punctuation">)</span> <span class="token comment">// 42</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>很明顯的，<code>shippingRate</code> 就和外部的 variables 產生關聯了，因為它用到了外部的 variables 進行某些計算了對吧。</p>
+<p>那如果我們把程式碼改成這樣：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">shippingRate</span><span class="token punctuation">(</span><span class="token parameter">size<span class="token punctuation">,</span> weight<span class="token punctuation">,</span> speed</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>size <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">*</span> weight<span class="token punctuation">)</span> <span class="token operator">+</span> speed 
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">let</span> rate<span class="token punctuation">;</span>
+rate <span class="token operator">=</span> <span class="token function">shippingRate</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token comment">// 7</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>就沒有 side effect 了，我們單純依賴 function 自身的 input 進行計算，得到 output 並 return，也就是說 function 是一個獨立的存在。</p>
 <blockquote>
-<p>&#x26A0;&#xFE0F; &#x5728;&#x8AB2;&#x7A0B;&#x88E1; Kyle Simpson &#x8AAA;&#x9019;&#x4E0D;&#x53EA;&#x662F;&#x6709;&#x6C92;&#x6709;&#x4F7F;&#x7528;&#x5230;&#x5916;&#x9762;&#x7684; variable &#x9019;&#x6A23;&#x800C;&#x5DF2;&#xFF0C;&#x800C;&#x662F;&#x300C;pure function need direct inputs and direct outputs&#x300D;</p>
-<p>&#x6211;&#x5C0D;&#x9019;&#x6BB5;&#x8A71;&#x7684;&#x7406;&#x89E3;&#x662F;&#x6307; function &#x6703;&#x76F4;&#x63A5;&#x5730;&#x4F7F;&#x7528; input &#x9032;&#x884C;&#x8A08;&#x7B97;&#x5F97;&#x5230; output&#xFF0C;&#x6BD4;&#x5982;&#x4E0A;&#x9762;&#x7684; <code>shippingRate</code> &#x76F4;&#x63A5;&#x62FF; size, weight, speed &#x4E09;&#x500B; input &#x8A08;&#x7B97;&#x51FA;&#x4E86; output&#x3002;</p>
-<p>&#x56E0;&#x70BA;&#x6211;&#x5C0D;&#x65BC;&#x4ED6;&#x63D0;&#x51FA;&#x7684;&#x300C;direct&#x300D;&#x7406;&#x89E3;&#x9084;&#x4E0D;&#x5920;&#x6DF1;&#x5165;&#xFF0C;&#x6015;&#x9020;&#x6210;&#x8AA4;&#x6703;&#x5C31;&#x5148;&#x7701;&#x7565;&#x4E86;&#x9019;&#x500B;&#x5B9A;&#x7FA9;&#x3002;</p>
+<p>⚠️ 在課程裡 Kyle Simpson 說這不只是有沒有使用到外面的 variable 這樣而已，而是「pure function need direct inputs and direct outputs」</p>
+<p>我對這段話的理解是指 function 會直接地使用 input 進行計算得到 output，比如上面的 <code>shippingRate</code> 直接拿 size, weight, speed 三個 input 計算出了 output。</p>
+<p>因為我對於他提出的「direct」理解還不夠深入，怕造成誤會就先省略了這個定義。</p>
 </blockquote>
-<h3 id="&#x4F8B;&#x5916;-Closure"><a href="#&#x4F8B;&#x5916;-Closure" class="headerlink" title="&#x4F8B;&#x5916; - Closure"></a>&#x4F8B;&#x5916; - Closure</h3><p>&#x95DC;&#x65BC;&#x300C;&#x4E0D;&#x4F9D;&#x8CF4;&#x5230;&#x5916;&#x90E8;&#x7684;&#x8B8A;&#x6578;&#x300D;&#x9019;&#x500B;&#x5B9A;&#x7FA9;&#x6709;&#x500B;&#x4F8B;&#x5916;&#xFF0C;&#x90A3;&#x5C31;&#x662F; Closure &#x7684;&#x72C0;&#x6CC1;&#xFF1A;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addAnother</span>(<span class="hljs-params">z</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> addTwo(x, y) {</span><br><span class="line">    <span class="hljs-keyword">return</span> x + y + z</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x4EE5;&#x4E0A;&#x9762;&#x7A0B;&#x5F0F;&#x78BC;&#x4F86;&#x8AAA;&#xFF0C; <code>addTwo</code> &#x4F7F;&#x7528;&#x5230;&#x4E86; <code>z</code> &#x9019;&#x500B;&#x5916;&#x90E8;&#x7684;&#x8B8A;&#x6578;&#xFF0C;&#x4E5F;&#x5C31;&#x662F; <code>addAnother</code>  scope &#x7684;&#x8B8A;&#x6578;&#xFF0C; &#x90A3;&#x9019;&#x6A23; <code>addTwo</code> &#x7B97; pure function &#x55CE;&#xFF1F;&#x56E0;&#x70BA;&#x5B83;&#x4F9D;&#x8CF4;&#x5230;&#x81EA;&#x5DF1; scope &#x4EE5;&#x5916;&#x7684;&#x8B8A;&#x6578;&#x4E86;&#x5C0D;&#x5427;&#xFF1F;</p>
-<p>&#x5176;&#x5BE6;&#x9084;&#x662F;&#x7B97;&#xFF0C;&#x6240;&#x4EE5; input &#x4E5F;&#x53EF;&#x4EE5;&#x662F;&#x81EA;&#x8EAB; scope &#x4EE5;&#x5916;&#x7684;&#xFF0C;&#x53EA;&#x662F;&#x4F60;&#x8981;&#x78BA;&#x4FDD;&#x5B83;&#x300C;&#x4E0D;&#x6703;&#x8B8A;&#x52D5;&#x300D;&#xFF0C;&#x5728;&#x5F8C;&#x7E8C;&#x63D0;&#x5230; Closure &#x7684;&#x7AE0;&#x7BC0;&#x6703;&#x518D;&#x91DD;&#x5C0D;&#x9019;&#x500B;&#x4F8B;&#x5916;&#x9032;&#x884C;&#x8A73;&#x7D30;&#x7684;&#x89E3;&#x91CB;&#x3002;</p>
-<h3 id="no-side-effect-&#x7684;&#x597D;&#x8655;&#x3001;&#x5176;&#x4ED6;-side-effects"><a href="#no-side-effect-&#x7684;&#x597D;&#x8655;&#x3001;&#x5176;&#x4ED6;-side-effects" class="headerlink" title="no side effect &#x7684;&#x597D;&#x8655;&#x3001;&#x5176;&#x4ED6; side effects"></a>no side effect &#x7684;&#x597D;&#x8655;&#x3001;&#x5176;&#x4ED6; side effects</h3><p>no side-effects &#x7684;&#x597D;&#x8655;&#x5728;&#x54EA;&#x88E1;&#x5462;&#xFF1F;&#x5728;&#x65BC;&#x95B1;&#x8B80; code &#x7684;&#x4EBA;&#x8166;&#x888B;&#x904B;&#x4F5C;&#x7684;&#x58D3;&#x529B;&#x8B8A;&#x5C0F;&#x4E86;&#xFF0C;&#x5982;&#x679C;&#x6709;&#x6BB5;&#x7A0B;&#x5F0F;&#x78BC;&#x76F4;&#x63A5;&#x4F9D;&#x8CF4;&#x5916;&#x90E8;&#x8B8A;&#x6578;&#x3001;mutate &#x5916;&#x90E8;&#x72C0;&#x614B;&#x7684; function&#xFF0C;&#x6216;&#x6709;&#x5176;&#x4ED6; side effect &#x6642;&#xFF0C;&#x95B1;&#x8B80;&#x6642;&#x6211;&#x5011;&#x5C31;&#x5FC5;&#x9808;&#x6642;&#x6642;&#x8FFD;&#x8E64;&#x8B8A;&#x6578;&#x503C;&#x7684;&#x8B8A;&#x5316;&#xFF0C;&#x9664;&#x4E86;&#x53EF;&#x8B80;&#x6027;&#x8F03;&#x4E0D;&#x597D;&#x4EE5;&#x5916;&#xFF0C;&#x7A0B;&#x5F0F;&#x4E5F;&#x5F88;&#x53EF;&#x80FD;&#x7522;&#x751F;&#x975E;&#x9810;&#x671F;&#x7684;&#x932F;&#x8AA4;&#xFF0C;&#x96E3;&#x4EE5;&#x8FFD;&#x8E64;&#x76EE;&#x524D;&#x72C0;&#x614B;&#x7684;&#x8B8A;&#x5316;&#x3002;</p>
-<p>&#x4F46;&#x9664;&#x4E86;&#x4E0A;&#x8FF0;&#x7A0B;&#x5F0F;&#x78BC;&#x7684;&#x7BC4;&#x4F8B;&#x4EE5;&#x5916;&#xFF0C;&#x9084;&#x6709;&#x4EC0;&#x9EBC;&#x6703;&#x9020;&#x6210; side effect &#x5462;&#xFF1F;&#x6211;&#x5011;&#x53EF;&#x4EE5;&#x770B;&#x770B;&#x4E0B;&#x5716;&#xFF1A;</p>
+<h3 id="例外-Closure"><a href="#例外-Closure" class="headerlink" title="例外 - Closure"></a>例外 - Closure</h3><p>關於「不依賴到外部的變數」這個定義有個例外，那就是 Closure 的狀況：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">addAnother</span><span class="token punctuation">(</span><span class="token parameter">z</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">addTwo</span><span class="token punctuation">(</span><span class="token parameter">x<span class="token punctuation">,</span> y</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> x <span class="token operator">+</span> y <span class="token operator">+</span> z
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>以上面程式碼來說， <code>addTwo</code> 使用到了 <code>z</code> 這個外部的變數，也就是 <code>addAnother</code>  scope 的變數， 那這樣 <code>addTwo</code> 算 pure function 嗎？因為它依賴到自己 scope 以外的變數了對吧？</p>
+<p>其實還是算，所以 input 也可以是自身 scope 以外的，只是你要確保它「不會變動」，在後續提到 Closure 的章節會再針對這個例外進行詳細的解釋。</p>
+<h3 id="no-side-effect-的好處、其他-side-effects"><a href="#no-side-effect-的好處、其他-side-effects" class="headerlink" title="no side effect 的好處、其他 side effects"></a>no side effect 的好處、其他 side effects</h3><p>no side-effects 的好處在哪裡呢？在於閱讀 code 的人腦袋運作的壓力變小了，如果有段程式碼直接依賴外部變數、mutate 外部狀態的 function，或有其他 side effect 時，閱讀時我們就必須時時追蹤變數值的變化，除了可讀性較不好以外，程式也很可能產生非預期的錯誤，難以追蹤目前狀態的變化。</p>
+<p>但除了上述程式碼的範例以外，還有什麼會造成 side effect 呢？我們可以看看下圖：</p>
 <p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gm554tbj5kj313y0u0dj7.jpg" alt="side effects"></p>
-<p>&#x770B;&#x4E86;&#x4E0A;&#x5716;&#x6703;&#x767C;&#x73FE;&#xFF0C;&#x9760;&#x5317;&#xFF0C;&#x9019;&#x4E0D;&#x5C31;&#x662F;&#x6211;&#x5011;&#x5E73;&#x5E38;&#x6703;&#x505A;&#x7684;&#x4E8B;&#x60C5;&#x55CE;&#xFF1F;&#x5982;&#x679C;&#x4E0D;&#x8981; side effect &#x7684;&#x8A71;&#x662F;&#x8981;&#x6211;&#x600E;&#x9EBC;&#x6D3B;&#xFF1F;</p>
-<p>side effect &#x7121;&#x6240;&#x4E0D;&#x5728;&#xFF0C;&#x4E0D;&#x5982;&#x8AAA;&#x7A0B;&#x5F0F;&#x78BC;&#x6709; side effect &#x624D;&#x662F;&#x5F88;&#x6B63;&#x5E38;&#x7684;&#x4E8B;&#x60C5;&#xFF0C;&#x6240;&#x4EE5; functional programming &#x4E26;&#x6C92;&#x6709;&#x5728;&#x8FFD;&#x6C42;&#x300C;no side effects&#x300D;&#xFF0C;&#x800C;&#x662F;&#x300C;&#x5177;&#x6709; side effect&#x300D;&#xFF08;impure&#xFF09;&#x548C;&#x300C;&#x6C92;&#x6709; side effect&#x300D;(pure) &#x7684;&#x7A0B;&#x5F0F;&#x78BC;&#x8981;&#x6709;&#x660E;&#x986F;&#x7684;&#x5206;&#x9694;&#x3002;</p>
-<p>&#x5982;&#x540C; Kyle Simpson &#x5728;&#x8AB2;&#x7A0B;&#x88E1;&#x8AAA;&#x5230;&#x7684;&#xFF1A;</p>
+<p>看了上圖會發現，靠北，這不就是我們平常會做的事情嗎？如果不要 side effect 的話是要我怎麼活？</p>
+<p>side effect 無所不在，不如說程式碼有 side effect 才是很正常的事情，所以 functional programming 並沒有在追求「no side effects」，而是「具有 side effect」（impure）和「沒有 side effect」(pure) 的程式碼要有明顯的分隔。</p>
+<p>如同 Kyle Simpson 在課程裡說到的：</p>
 <blockquote>
-<p>No such thing as &#x201C;no side effects&#x201D;, Avoid them where possible, make them obvious otherwise.</p>
+<p>No such thing as “no side effects”, Avoid them where possible, make them obvious otherwise.</p>
 </blockquote>
-<p>&#x53C8;&#x6216;&#x8005;&#x662F;&#x524D;&#x8F29;&#x826F;&#x845B;&#x683C;&#x5728; <a href="https://ithelp.ithome.com.tw/articles/10234206" target="_blank" rel="noopener">&#x9019;&#x7BC7;&#x6587;</a> &#x6240;&#x8AAA;&#x7684;&#xFF1A;</p>
+<p>又或者是前輩良葛格在 <a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10234206">這篇文</a> 所說的：</p>
 <blockquote>
-<p>FP &#x8981;&#x8FFD;&#x6C42;&#x7684;&#xFF0C;&#x5176;&#x5BE6;&#x4E0D;&#x662F;&#x6574;&#x500B;&#x7A0B;&#x5F0F;&#x90FD;&#x662F; Pure&#xFF0C;&#x800C;&#x662F; Pure &#x8207; Impure &#x6709;&#x660E;&#x986F;&#x7684;&#x754C;&#x7DDA;&#x3002;</p>
+<p>FP 要追求的，其實不是整個程式都是 Pure，而是 Pure 與 Impure 有明顯的界線。</p>
 </blockquote>
-<p>no side effect &#x4E0D;&#x662F;&#x6700;&#x7D42;&#x8981;&#x8FFD;&#x6C42;&#x7684;&#x76EE;&#x6A19;&#xFF0C;&#x800C;&#x662F;&#x5C07; pure function &#x7576;&#x6210;&#x7A0B;&#x5F0F;&#x4E2D;&#x7684;&#x6838;&#x5FC3;&#xFF0C;side effect &#x5247;&#x662F;&#x50CF;&#x5305;&#x88F9;&#x5728;&#x6838;&#x5FC3;&#x4E4B;&#x5916;&#x7684;&#x6BBC;&#xFF0C;&#x7576;&#x767C;&#x751F;&#x9810;&#x671F;&#x5916;&#x7684;&#x4E8B;&#x60C5;&#x6642;&#xFF0C;&#x6211;&#x5011;&#x5C31;&#x80FD;&#x66F4;&#x5FEB;&#x901F;&#x3001;&#x6709;&#x6548;&#x7684;&#x5B9A;&#x4F4D;&#x554F;&#x984C;&#x5728;&#x54EA;&#x3002;</p>
-<h2 id="Same-input-Same-output"><a href="#Same-input-Same-output" class="headerlink" title="Same input, Same output"></a>Same input, Same output</h2><p>&#x300C;Same input, Same output&#x300D;&#x7684;&#x6982;&#x5FF5;&#x5F88;&#x55AE;&#x7D14;&#xFF0C;&#x5C31;&#x662F;&#x4F60;&#x7D66; function &#x76F8;&#x540C;&#x7684; input&#xFF0C;&#x5B83;&#x90FD;&#x6703;&#x7D66;&#x4F60;&#x76F8;&#x5C0D;&#x61C9;&#x540C;&#x6A23;&#x7684; output&#x3002;</p>
+<p>no side effect 不是最終要追求的目標，而是將 pure function 當成程式中的核心，side effect 則是像包裹在核心之外的殼，當發生預期外的事情時，我們就能更快速、有效的定位問題在哪。</p>
+<h2 id="Same-input-Same-output"><a href="#Same-input-Same-output" class="headerlink" title="Same input, Same output"></a>Same input, Same output</h2><p>「Same input, Same output」的概念很單純，就是你給 function 相同的 input，它都會給你相對應同樣的 output。</p>
 <blockquote>
 <p>A function is a special relationship between values: Each of its input values gives back exactly one output value.</p>
 </blockquote>
-<p>&#x63DB;&#x53E5;&#x8A71;&#x8AAA;&#xFF0C;&#x9019;&#x53EA;&#x662F;&#x5169;&#x500B;&#x6578;&#x503C;&#x4E4B;&#x9593;&#x7684;&#x95DC;&#x4FC2;&#xFF1A;&#x8F38;&#x5165;&#x53CA;&#x8F38;&#x51FA;&#x3002;&#x6240;&#x4EE5;&#x4E0B;&#x5716;&#x5C31;&#x662F;&#x500B;&#x5408;&#x6CD5;&#x7684; function&#xFF1A;</p>
-<p><img src="https://jigsawye.gitbooks.io/mostly-adequate-guide/content/images/function-sets.gif" alt></p>
-<p>(&#x6B64;&#x5716;&#x53D6;&#x81EA; <a href="https://mostly-adequate.gitbooks.io/mostly-adequate-guide/content/" target="_blank" rel="noopener">mostly-adequate-guide</a>)</p>
-<p>&#x5F9E;&#x5716;&#x4E2D;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;&#x7576;&#x4F60;&#x7D66;&#x4ED6;&#x76F8;&#x540C;&#x7684; x &#x6642;&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x5F97;&#x5230;&#x76F8;&#x5C0D;&#x61C9;&#x7684; y&#xFF0C;&#x7B26;&#x5408;&#x525B;&#x525B;&#x63D0;&#x53CA;&#x7684; same input, same output &#x7684;&#x6982;&#x5FF5;&#x3002;</p>
-<p>&#x5982;&#x679C;&#x662F;&#x4E0B;&#x5716;&#x5C31;&#x4E0D;&#x662F;&#x500B;&#x5408;&#x6CD5;&#x7684; function&#xFF1A;</p>
+<p>換句話說，這只是兩個數值之間的關係：輸入及輸出。所以下圖就是個合法的 function：</p>
+<p><img src="https://jigsawye.gitbooks.io/mostly-adequate-guide/content/images/function-sets.gif"></p>
+<p>(此圖取自 <a target="_blank" rel="noopener" href="https://mostly-adequate.gitbooks.io/mostly-adequate-guide/content/">mostly-adequate-guide</a>)</p>
+<p>從圖中可以看到，當你給他相同的 x 時，就可以得到相對應的 y，符合剛剛提及的 same input, same output 的概念。</p>
+<p>如果是下圖就不是個合法的 function：</p>
 <p><img src="https://jigsawye.gitbooks.io/mostly-adequate-guide/content/images/relation-not-function.gif" alt="impure function"></p>
-<p>&#x7576;&#x4F60; x &#x7D66;&#x76F8;&#x540C;&#x7684; 5 &#x6642;&#xFF0C;&#x537B;&#x53EF;&#x80FD;&#x5F97;&#x5230; 4 &#x6216; 5 &#x6216; 7 &#x4E09;&#x7A2E;&#x4E0D;&#x540C;&#x7684; y&#xFF0C;&#x4EE3;&#x8868;&#x9019;&#x500B;&#x7D50;&#x679C;&#x662F;&#x7121;&#x6CD5;&#x9810;&#x671F;&#x7684;&#xFF0C;&#x4F60;&#x6BCF;&#x6B21;&#x7D66;&#x76F8;&#x540C;&#x7684;&#x503C;&#x6C92;&#x8FA6;&#x6CD5;&#x4FDD;&#x8B49;&#x5B83;&#x6703;&#x5F97;&#x5230;&#x4E00;&#x6A23;&#x7684;&#x7D50;&#x679C;&#xFF0C;&#x9019;&#x5C31;&#x4E0D;&#x662F;&#x500B; pure function&#x3002;</p>
-<p>&#x4EE5; Pure function &#x7684;&#x7279;&#x6027;&#x4F86;&#x8AAA;&#xFF0C;&#x6211;&#x5011;&#x53EF;&#x4EE5;&#x7528;&#x4E0D;&#x540C;&#x7684;&#x89D2;&#x5EA6;&#x4F86;&#x770B;&#x5F85; same input, same output &#x9019;&#x4EF6;&#x4E8B;&#xFF0C;&#x6BD4;&#x5982;&#x6211;&#x5011;&#x53EF;&#x4EE5;&#x628A;&#x5B83;&#x770B;&#x6210;&#x4E00;&#x5F35;&#x8868;&#xFF1A;</p>
-<p><img src="https://i.imgur.com/sl0NO7X.png" alt></p>
-<p>&#x53C8;&#x6216;&#x8005;&#x662F;&#x770B;&#x6210; mapping &#xFF1A;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">var</span> isPrime = {</span><br><span class="line">  <span class="hljs-number">1</span>: <span class="hljs-literal">false</span>,</span><br><span class="line">  <span class="hljs-number">2</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">  <span class="hljs-number">3</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">  <span class="hljs-number">4</span>: <span class="hljs-literal">false</span>,</span><br><span class="line">  <span class="hljs-number">5</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">  <span class="hljs-number">6</span>: <span class="hljs-literal">false</span>,</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line">isPrime[<span class="hljs-number">3</span>];</span><br><span class="line"><span class="hljs-comment">//=&gt; true</span></span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x6211;&#x5011;&#x6709;&#x500B; <code>isPrime</code> &#x7684; mapping&#xFF0C;key &#x4EE3;&#x8868; input&#xFF0C;value &#x4EE3;&#x8868; output&#xFF0C;&#x7576;&#x7D66;&#x5165;&#x76F8;&#x5C0D;&#x61C9;&#x7684; key &#x6642;&#xFF0C;&#x5C31;&#x6703;&#x5F97;&#x5230;&#x76F8;&#x5C0D;&#x61C9;&#x7684; value&#xFF0C;&#x6240;&#x4EE5;&#x7D66;&#x5165; <code>3</code> &#x7684;&#x6642;&#x5019;&#xFF0C;&#x56E0;&#x70BA; 3 &#x662F;&#x8CEA;&#x6578;&#xFF0C;&#x5C31;&#x6703;&#x5F97;&#x5230; true&#xFF1B;&#x5982;&#x679C;&#x7D66;&#x5165; <code>4</code> &#xFF0C;&#x56E0;&#x70BA; 4 &#x4E0D;&#x662F;&#x8CEA;&#x6578;&#xFF0C;&#x5C31;&#x6703;&#x5F97;&#x5230; false&#x3002;</p>
-<p>&#x984C;&#x5916;&#x8A71;&#xFF0C;&#x5982;&#x679C;&#x7D66;&#x5165;&#x300C;&#x6C5F;&#x300D;&#x5462;&#xFF1F;&#x6703;&#x5F97;&#x5230;&#x4EC0;&#x9EBC;&#xFF1F;true&#xFF0C;&#x56E0;&#x70BA;&#x6C5F;&#x662F;&#x8CEA;&#x6578;&#xFF0C;&#x6C5F;&#x76F4;&#x6A39;&#x3002;</p>
-<p>mapping &#x9019;&#x500B;&#x8209;&#x4F8B;&#xFF0C;&#x5C31;&#x662F;&#x8981;&#x8AAA;&#x660E;&#x7576;&#x6211;&#x5011;&#x7D66; pure function. &#x76F8;&#x540C;&#x7684; input &#x6642;&#xFF0C;&#x5C31;&#x4E00;&#x5B9A;&#x6703;&#x5F97;&#x5230;&#x76F8;&#x5C0D;&#x61C9;&#x7684; output&#x3002;</p>
-<h2 id="Referential-Transparency"><a href="#Referential-Transparency" class="headerlink" title="Referential Transparency"></a>Referential Transparency</h2><p>&#x524D;&#x9762;&#x63D0;&#x4E86;&#x300C;same input, same output&#x300D;&#x3001;&#x300C;no side effects&#x300D;&#xFF0C;&#x9019;&#x5169;&#x500B;&#x5B9A;&#x7FA9;&#x4E5F;&#x662F;&#x5927;&#x591A;&#x6578; FP &#x6587;&#x7AE0;&#x8B1B;&#x89E3; pure function &#x6642;&#x6703;&#x63D0;&#x5230;&#x7684;&#x5169;&#x500B;&#x5B9A;&#x7FA9;&#x3002;</p>
-<p>&#x4F46;&#x9084;&#x6709;&#x6BD4;&#x8F03;&#x5C11;&#x6578;&#x7684;&#x6587;&#x7AE0;&#xFF0C;&#x6703;&#x63D0;&#x5230;&#x53E6;&#x4E00;&#x500B;&#x91CD;&#x9EDE;&#xFF0C;&#x5C31;&#x662F; pure function &#x662F;&#x300C;<strong>Referential Transparency</strong>&#x300D;&#x7684;&#xFF0C;&#x9019;&#x4E5F;&#x662F; Functional Light JS &#x7684;&#x8B1B;&#x8005; Kyle Simpson &#x7279;&#x5225;&#x5F37;&#x8ABF;&#x7684;&#x4E00;&#x9EDE;&#xFF0C;&#x4ED6;&#x8A8D;&#x70BA;&#x6700;&#x300C;full, cononical, complete&#x300D;&#x7684; pure function &#x7684;&#x5B9A;&#x7FA9;&#xFF0C;&#x5C31;&#x662F;&#x9019;&#x500B; function &#x662F; referential transparency &#x7684;&#x3002;</p>
-<p>&#x6240;&#x4EE5;&#x4EC0;&#x9EBC;&#x53EB; referential transparency&#xFF1F;&#x300C;<strong>&#x53EF;&#x4EE5;&#x7528; return value &#x53D6;&#x4EE3; function call&#xFF0C;&#x800C;&#x6574;&#x9AD4;&#x7684;&#x7A0B;&#x5F0F;&#x884C;&#x70BA;&#x4E0D;&#x6703;&#x6539;&#x8B8A;</strong>&#x300D;&#xFF0C;&#x9019;&#x500B;&#x5B9A;&#x7FA9;&#x5C31;&#x53EB;&#x505A;&#x300C;Referencial Transparency&#x300D;&#x3002;</p>
+<p>當你 x 給相同的 5 時，卻可能得到 4 或 5 或 7 三種不同的 y，代表這個結果是無法預期的，你每次給相同的值沒辦法保證它會得到一樣的結果，這就不是個 pure function。</p>
+<p>以 Pure function 的特性來說，我們可以用不同的角度來看待 same input, same output 這件事，比如我們可以把它看成一張表：</p>
+<p><img src="https://i.imgur.com/sl0NO7X.png"></p>
+<p>又或者是看成 mapping ：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> isPrime <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  <span class="token number">1</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+  <span class="token number">2</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  <span class="token number">3</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  <span class="token number">4</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+  <span class="token number">5</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  <span class="token number">6</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+isPrime<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token comment">//=> true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>我們有個 <code>isPrime</code> 的 mapping，key 代表 input，value 代表 output，當給入相對應的 key 時，就會得到相對應的 value，所以給入 <code>3</code> 的時候，因為 3 是質數，就會得到 true；如果給入 <code>4</code> ，因為 4 不是質數，就會得到 false。</p>
+<p>題外話，如果給入「江」呢？會得到什麼？true，因為江是質數，江直樹。</p>
+<p>mapping 這個舉例，就是要說明當我們給 pure function. 相同的 input 時，就一定會得到相對應的 output。</p>
+<h2 id="Referential-Transparency"><a href="#Referential-Transparency" class="headerlink" title="Referential Transparency"></a>Referential Transparency</h2><p>前面提了「same input, same output」、「no side effects」，這兩個定義也是大多數 FP 文章講解 pure function 時會提到的兩個定義。</p>
+<p>但還有比較少數的文章，會提到另一個重點，就是 pure function 是「<strong>Referential Transparency</strong>」的，這也是 Functional Light JS 的講者 Kyle Simpson 特別強調的一點，他認為最「full, cononical, complete」的 pure function 的定義，就是這個 function 是 referential transparency 的。</p>
+<p>所以什麼叫 referential transparency？「<strong>可以用 return value 取代 function call，而整體的程式行為不會改變</strong>」，這個定義就叫做「Referencial Transparency」。</p>
 <blockquote>
-<p>Referencial transparency means a function call can be replaced with it&#x2019;s return value and not affect any of rest of the program.</p>
+<p>Referencial transparency means a function call can be replaced with it’s return value and not affect any of rest of the program.</p>
 </blockquote>
-<p>&#x6240;&#x4EE5;&#x8209;&#x4F8B;&#x4F86;&#x8AAA;&#xFF1A;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">add</span>(<span class="hljs-params">x, y, z</span>) </span>{</span><br><span class="line">    <span class="hljs-keyword">return</span> x + y + z</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">add(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>) <span class="hljs-comment">// 6</span></span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x5982;&#x679C;&#x5728;&#x7A0B;&#x5F0F;&#x7684;&#x67D0;&#x8655;&#xFF0C;&#x6211;&#x7528; <code>6</code> &#x53D6;&#x4EE3; <code>add(1, 2, 3)</code> &#xFF0C;&#x7A0B;&#x5F0F;&#x884C;&#x70BA;&#x4F9D;&#x820A;&#x4E0D;&#x8B8A;&#xFF0C;&#x5929;&#x4E0B;&#x592A;&#x5E73;&#x7684;&#x8A71;&#xFF0C;&#x9019;&#x5C31;&#x53EB; referencial transparency&#xFF0C;&#x4E5F;&#x4EE3;&#x8868; <code>add</code> &#x662F;&#x500B; pure function&#x3002;</p>
-<p>&#x90A3; referencial transparency &#x7684;&#x597D;&#x8655;&#x662F;&#x4EC0;&#x9EBC;&#x5462;&#xFF1F;</p>
-<p>&#x5728; Haskell &#x88E1;&#x9762;&#xFF0C;function &#x6C38;&#x9060;&#x662F; pure&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x6C38;&#x9060;&#x90FD;&#x6703;&#x6709; referencial transparency&#xFF0C;compiler &#x53EF;&#x4EE5;&#x57FA;&#x65BC;&#x9019;&#x500B;&#x7279;&#x6027;&#xFF0C;&#x9054;&#x5230; memoize &#x6BCF;&#x500B;&#x6771;&#x897F;&#x7684;&#x512A;&#x9EDE;&#xFF0C;&#x56E0;&#x70BA;&#x4ED6;&#x5011;&#x53EF;&#x4EE5;&#x628A; return value &#x53D6;&#x4EE3; function call &#x3002;</p>
-<p>&#x4F46; JavaScript &#x6C92;&#x6709;&#xFF0C;JavaScript &#x88E1;&#x4E0D;&#x6703;&#x6BCF;&#x500B; function &#x90FD;&#x662F; pure function&#xFF0C;compiler &#x4E5F;&#x4E0D;&#x6703;&#x5E6B;&#x4F60;&#x8655;&#x7406;&#x9019;&#x4E9B;&#x4E8B;&#x60C5;&#xFF0C;&#x90A3;&#x9019;&#x6A23;&#x4F86;&#x8AAA;&#xFF0C;referencial transparency &#x5728; JavaScript &#x7684;&#x597D;&#x8655;&#x662F;&#x4EC0;&#x9EBC;&#x5462;&#xFF1F;&#x7B54;&#x6848;&#x662F;&#x5C0D; reader &#x7684;&#x53CB;&#x5584;&#x5EA6;&#xFF0C;&#x7576; reader &#x91CD;&#x8907;&#x95B1;&#x8B80;&#x5230;&#x4E00;&#x6A23;&#x7684; function call &#x7684;&#x6642;&#x5019;&#xFF0C;&#x5176;&#x5BE6;&#x4ED6;&#x4E0D;&#x9700;&#x8981;&#x900F;&#x904E;&#x8166;&#x888B;&#x518D;&#x601D;&#x8003;&#x4E00;&#x6B21;&#xFF0C;&#x5C31;&#x80FD;&#x9810;&#x6E2C;&#x9019;&#x6BB5;&#x7A0B;&#x5F0F;&#x78BC;&#x7684;&#x7D50;&#x679C;&#xFF0C;&#x7B49;&#x540C;&#x5728;&#x8166;&#x888B;&#x9032;&#x884C; memoize &#x7684;&#x4E8B;&#x60C5;&#xFF0C;&#x9032;&#x800C;&#x91CB;&#x653E;&#x90E8;&#x5206;&#x8166;&#x888B;&#x7684;&#x58D3;&#x529B;&#xFF0C;&#x628A;&#x5C08;&#x6CE8;&#x529B;&#x653E;&#x5728;&#x7A0B;&#x5F0F;&#x78BC;&#x4E2D;&#x5176;&#x4ED6;&#x66F4;&#x91CD;&#x8981;&#x7684;&#x4E8B;&#x60C5;&#x3002;</p>
-<h2 id="Exercise-Extracting-Impurity&#x3001;Containing-Impurity"><a href="#Exercise-Extracting-Impurity&#x3001;Containing-Impurity" class="headerlink" title="Exercise - Extracting Impurity&#x3001;Containing Impurity"></a>Exercise - Extracting Impurity&#x3001;Containing Impurity</h2><h3 id="Extracting-Impurity"><a href="#Extracting-Impurity" class="headerlink" title="Extracting Impurity"></a>Extracting Impurity</h3><p>&#x9019;&#x908A;&#x6307;&#x7684;&#x662F;&#x62BD;&#x53D6;&#x51FA; impure &#x7A0B;&#x5F0F;&#x78BC;&#x7684;&#x6280;&#x5DE7;&#x3002;</p>
+<p>所以舉例來說：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">add</span><span class="token punctuation">(</span><span class="token parameter">x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> z</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> x <span class="token operator">+</span> y <span class="token operator">+</span> z
+<span class="token punctuation">&#125;</span>
+
+<span class="token function">add</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token comment">// 6</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>如果在程式的某處，我用 <code>6</code> 取代 <code>add(1, 2, 3)</code> ，程式行為依舊不變，天下太平的話，這就叫 referencial transparency，也代表 <code>add</code> 是個 pure function。</p>
+<p>那 referencial transparency 的好處是什麼呢？</p>
+<p>在 Haskell 裡面，function 永遠是 pure，也就是永遠都會有 referencial transparency，compiler 可以基於這個特性，達到 memoize 每個東西的優點，因為他們可以把 return value 取代 function call 。</p>
+<p>但 JavaScript 沒有，JavaScript 裡不會每個 function 都是 pure function，compiler 也不會幫你處理這些事情，那這樣來說，referencial transparency 在 JavaScript 的好處是什麼呢？答案是對 reader 的友善度，當 reader 重複閱讀到一樣的 function call 的時候，其實他不需要透過腦袋再思考一次，就能預測這段程式碼的結果，等同在腦袋進行 memoize 的事情，進而釋放部分腦袋的壓力，把專注力放在程式碼中其他更重要的事情。</p>
+<h2 id="Exercise-Extracting-Impurity、Containing-Impurity"><a href="#Exercise-Extracting-Impurity、Containing-Impurity" class="headerlink" title="Exercise - Extracting Impurity、Containing Impurity"></a>Exercise - Extracting Impurity、Containing Impurity</h2><h3 id="Extracting-Impurity"><a href="#Extracting-Impurity" class="headerlink" title="Extracting Impurity"></a>Extracting Impurity</h3><p>這邊指的是抽取出 impure 程式碼的技巧。</p>
 <p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gm9k78df22j316e0mqdm9.jpg" alt="Extracting Impurity - image01"></p>
-<p><code>addComment</code> &#x9019;&#x500B; function &#x662F; impure function&#xFF0C;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x5B83;&#x547C;&#x53EB;&#x4E86; <code>uniqueID</code> &#x9019;&#x500B; function&#xFF0C;&#x4EE5;&#x53CA; <code>appendChild</code> &#x64CD;&#x4F5C;&#x4E86; DOM&#xFF0C;&#x986F;&#x800C;&#x6613;&#x898B;&#x7684;&#x90FD;&#x662F;&#x5C6C;&#x65BC; side effect&#x3002;</p>
-<p>FP &#x8B1B;&#x6C42;&#x7684;&#x4E0D;&#x662F;&#x6C92;&#x6709; side effect&#xFF0C;&#x800C;&#x662F;&#x628A; pure &#x548C; impure &#x5206;&#x51FA;&#x660E;&#x986F;&#x7684;&#x754C;&#x7DDA;&#xFF0C;&#x56E0;&#x6B64;&#x6211;&#x5011;&#x53EF;&#x4EE5;&#x6539;&#x6210;&#x9019;&#x6A23;&#xFF1A;</p>
+<p><code>addComment</code> 這個 function 是 impure function，可以看到它呼叫了 <code>uniqueID</code> 這個 function，以及 <code>appendChild</code> 操作了 DOM，顯而易見的都是屬於 side effect。</p>
+<p>FP 講求的不是沒有 side effect，而是把 pure 和 impure 分出明顯的界線，因此我們可以改成這樣：</p>
 <p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gm9k9gy74mj31500sk7bi.jpg" alt="Extracting Impurity - image02"></p>
-<p>&#x6B64;&#x6642;&#x7684; <code>addComment</code> &#x8B8A;&#x5F97; pure&#xFF0C;&#x55AE;&#x7D14;&#x53EA;&#x662F;&#x7522;&#x751F;&#x7269;&#x4EF6;&#x4EE5;&#x53CA; DOM element &#x7684; function&#xFF0C;&#x800C; impure &#x7684;&#x64CD;&#x4F5C;&#x88AB;&#x653E;&#x5230;&#x4E86; function &#x5916;&#x9762;&#xFF0C;&#x907F;&#x514D;&#x6C61;&#x67D3; pure function&#xFF0C;&#x56E0;&#x6B64;&#x5206;&#x51FA;&#x4E86;&#x660E;&#x986F;&#x7684;&#x754C;&#x7DDA;&#xFF0C;&#x62BD;&#x53D6;&#x51FA;&#x4E86;&#x4E0D;&#x7D14;&#x7684;&#x5730;&#x65B9;&#x3002;</p>
-<p>&#x4F46;&#x9019;&#x65B9;&#x6CD5;&#x4E0D;&#x662F;&#x6BCF;&#x6B21;&#x90FD;&#x884C;&#x5F97;&#x901A;&#xFF0C;&#x53EA;&#x662F;&#x5176;&#x4E2D;&#x4E00;&#x500B;&#x53EF;&#x884C;&#x7684;&#x8FA6;&#x6CD5;&#x3002;</p>
-<h3 id="Containing-Impurity"><a href="#Containing-Impurity" class="headerlink" title="Containing Impurity"></a>Containing Impurity</h3><p>&#x6709;&#x6642;&#x5019;&#x6C92;&#x8FA6;&#x6CD5;&#x5C07; impure &#x7684;&#x7A0B;&#x5F0F;&#x78BC;&#x62BD;&#x53D6;&#x51FA;&#x4F86;&#xFF0C;&#x9019;&#x6642;&#x6211;&#x5011;&#x7684;&#x8FA6;&#x6CD5;&#x5C31;&#x662F;&#x6E1B;&#x5C11; impure &#x7A0B;&#x5F0F;&#x78BC;&#x7522;&#x751F;&#x7684;&#x7BC4;&#x570D;&#x3002;</p>
-<p>&#x8209;&#x4F8B;&#x4F86;&#x8AAA;&#xFF0C;&#x5047;&#x8A2D;&#x4ECA;&#x5929;&#x6709;&#x4E00;&#x500B;&#x4F86;&#x81EA;&#x7B2C;&#x4E09;&#x65B9;&#x5957;&#x4EF6;&#x7684; API&#xFF1A;</p>
+<p>此時的 <code>addComment</code> 變得 pure，單純只是產生物件以及 DOM element 的 function，而 impure 的操作被放到了 function 外面，避免污染 pure function，因此分出了明顯的界線，抽取出了不純的地方。</p>
+<p>但這方法不是每次都行得通，只是其中一個可行的辦法。</p>
+<h3 id="Containing-Impurity"><a href="#Containing-Impurity" class="headerlink" title="Containing Impurity"></a>Containing Impurity</h3><p>有時候沒辦法將 impure 的程式碼抽取出來，這時我們的辦法就是減少 impure 程式碼產生的範圍。</p>
+<p>舉例來說，假設今天有一個來自第三方套件的 API：</p>
 <p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gm9u76iicyj311t0u0167.jpg" alt="Containing Impurity - image01"></p>
-<p>&#x6211;&#x5011;&#x53EF;&#x4EE5;&#x78BA;&#x5B9A;&#x7B2C;&#x4E09;&#x65B9; API &#x6703;&#x7522;&#x751F; side effect&#xFF0C;&#x56E0;&#x6B64;&#x505A;&#x6CD5;&#x662F;&#x6E1B;&#x5C11; side effect &#x7684; surface&#xFF0C;&#x8FA6;&#x6CD5;&#x662F;&#x8907;&#x88FD;&#x4E00;&#x4EFD; numbers &#x7684; array&#xFF1A;</p>
+<p>我們可以確定第三方 API 會產生 side effect，因此做法是減少 side effect 的 surface，辦法是複製一份 numbers 的 array：</p>
 <p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gm9u7r4rgqj30y80u07nc.jpg" alt="Containing Impurity - image02"></p>
-<p>&#x9019;&#x6A23;&#x7121;&#x8AD6;&#x600E;&#x9EBC;&#x64CD;&#x4F5C;&#xFF0C;&#x81F3;&#x5C11;&#x6211;&#x5011;&#x767C;&#x751F;&#x7684; side effect &#x90FD;&#x662F;&#x9650;&#x7E2E;&#x5728; line 9 - line 22 &#xFF0C;&#x6E1B;&#x5C11;&#x4E86; side effect &#x767C;&#x751F;&#x7684;&#x7BC4;&#x570D;&#x3002;</p>
-<h3 id="Adapters"><a href="#Adapters" class="headerlink" title="Adapters"></a>Adapters</h3><p>&#x4F46;&#x5982;&#x679C;&#x6C92;&#x6709;&#x8FA6;&#x6CD5;&#x628A; <code>insertSortedDesc</code> &#x5305;&#x88F9;&#x5728; <code>getSortedNums</code> &#x88E1;&#x5462;&#xFF1F;&#x6211;&#x5011;&#x9084;&#x53EF;&#x4EE5;&#x600E;&#x9EBC;&#x505A;&#xFF0C;Kyle Simpson &#x63D0;&#x4F9B;&#x4E86;&#x7B2C;&#x4E09;&#x7A2E;&#x89E3;&#x6CD5;&#xFF1A;</p>
+<p>這樣無論怎麼操作，至少我們發生的 side effect 都是限縮在 line 9 - line 22 ，減少了 side effect 發生的範圍。</p>
+<h3 id="Adapters"><a href="#Adapters" class="headerlink" title="Adapters"></a>Adapters</h3><p>但如果沒有辦法把 <code>insertSortedDesc</code> 包裹在 <code>getSortedNums</code> 裡呢？我們還可以怎麼做，Kyle Simpson 提供了第三種解法：</p>
 <p><img src="https://tva1.sinaimg.cn/large/0081Kckwgy1gm9u9gnillj310d0u0dpn.jpg" alt="Adapters - image01"></p>
-<p>&#x9019;&#x908A;&#x900F;&#x904E;&#x516D;&#x500B;&#x6B65;&#x9A5F;&#x4F86;&#x8655;&#x7406; side effect&#xFF1A;</p>
+<p>這邊透過六個步驟來處理 side effect：</p>
 <ol>
-<li>&#x53D6;&#x5F97;&#x521D;&#x59CB;&#x7684; global value</li>
-<li>&#x8A2D;&#x5B9A; numbers &#x7684; initial value</li>
-<li>side effect &#x7684;&#x64CD;&#x4F5C;&#xFF0C;&#x5C31;&#x662F;&#x64CD;&#x4F5C; global state</li>
+<li>取得初始的 global value</li>
+<li>設定 numbers 的 initial value</li>
+<li>side effect 的操作，就是操作 global state</li>
 <li>capture the new value</li>
 <li>restore the previous state</li>
 <li>return the new value</li>
 </ol>
-<p>&#x96D6;&#x7136;&#x904B;&#x4F5C;&#x4F86;&#x8AAA;&#x6211;&#x61C2;&#x5728;&#x5E79;&#x561B;&#xFF0C;&#x4F46;&#x6982;&#x5FF5;&#x4E0A;&#x6211;&#x53EF;&#x80FD;&#x9084;&#x6C92;&#x6293;&#x5230;&#x771F;&#x6B63;&#x7684;&#x7CBE;&#x9AD3;&#xFF0C;&#x5C31;&#x5148;&#x7576;&#x4F5C;&#x7B46;&#x8A18;&#x653E;&#x8457; QQ</p>
-<h2 id="&#x5C0F;&#x7D50;"><a href="#&#x5C0F;&#x7D50;" class="headerlink" title="&#x5C0F;&#x7D50;"></a>&#x5C0F;&#x7D50;</h2><p>pure function &#x5728; FP &#x88E1;&#x9762;&#x81F3;&#x95DC;&#x91CD;&#x8981;&#xFF0C;&#x6B63;&#x56E0;&#x70BA; function &#x662F; pure &#x7684;&#xFF0C;&#x6211;&#x5011;&#x624D;&#x80FD;&#x4EAB;&#x53D7;&#x5230;&#x4F7F;&#x7528; FP &#x7684;&#x597D;&#x8655;&#xFF0C;&#x624D;&#x53EF;&#x4EE5;&#x904B;&#x7528;&#x5230;&#x6578;&#x5B78;&#x4E0A;&#x7684;&#x7279;&#x6027;&#x3002;</p>
-<p>Kyle Simpson &#x5728;&#x8AB2;&#x7A0B;&#x4E2D;&#x63D0;&#x5230;&#xFF0C;&#x4ED6;&#x8A8D;&#x70BA;&#x300C;pure function&#x300D;&#x4E0D;&#x662F;&#x4E00;&#x500B;&#x4E8C;&#x5143;&#x7684;&#x6982;&#x5FF5;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x8AAA;&#x4E0D;&#x662F; 0 &#x548C; 1&#xFF0C;&#x53EA;&#x80FD;&#x5206;&#x6210;&#x300C;pure&#x300D;&#x548C;&#x300C;impure&#x300D;&#xFF0C;&#x800C;&#x662F;&#x985E;&#x4F3C;&#x65BC;&#x4E00;&#x500B;&#x5149;&#x8B5C;&#xFF0C;&#x6307;&#x7684;&#x662F;&#x300C;&#x4E00;&#x500B; function pure &#x7684;&#x7A0B;&#x5EA6;&#x662F;&#x591A;&#x5C11;&#x300D;&#xFF0C;function pure &#x7684;&#x7A0B;&#x5EA6;&#x4EE3;&#x8868;&#x4E86; &#x300C;level of confidence&#x300D;&#xFF0C;&#x7576;&#x4F60;&#x7684; function &#x8D8A; pure&#xFF0C;&#x4F60;&#x5C0D;&#x9019;&#x6BB5;&#x7A0B;&#x5F0F;&#x78BC;&#x7684;&#x4FE1;&#x5FC3;&#x5C31;&#x8D8A;&#x9AD8;&#xFF0C;&#x56E0;&#x70BA;&#x4F60;&#x66F4;&#x78BA;&#x5B9A;&#x5B83;&#x7684;&#x7D50;&#x679C;&#x80FD;&#x5920;&#x9810;&#x6E2C;&#xFF0C;&#x4E0D;&#x6703;&#x767C;&#x751F;&#x975E;&#x9810;&#x671F;&#x7684;&#x72C0;&#x6CC1;&#x641E;&#x4F60;&#x3002;</p>
-<p>&#x300C;pure function &#x4E0D;&#x662F;&#x4E8C;&#x5206;&#x6CD5;&#xFF0C;pure &#x6307;&#x7684;&#x662F;&#x7A0B;&#x5EA6;&#x4E0A;&#x7684;&#x5DEE;&#x5225;&#x300D;&#x9019;&#x8AAA;&#x6CD5;&#xFF0C;&#x6211;&#x4E5F;&#x53EA;&#x6709;&#x5F9E; Kyle Simpson &#x7684;&#x8AB2;&#x7A0B;&#x88E1;&#x807D;&#x5230;&#xFF0C; Kyle Simpson &#x7B97;&#x662F;&#x5728;&#x7A0B;&#x5F0F;&#x958B;&#x767C;&#x883B;&#x6709;&#x500B;&#x4EBA;&#x60F3;&#x6CD5;&#x7684;&#x4EBA;&#xFF0C;&#x6240;&#x4EE5;&#x8AB2;&#x7A0B;&#x4E2D;&#x5F88;&#x591A;&#x5B9A;&#x7FA9;&#x3001;&#x8AAA;&#x6CD5;&#x53EF;&#x80FD;&#x90FD;&#x662F;&#x4ED6;&#x500B;&#x4EBA;&#x7684;&#x7406;&#x89E3;&#xFF0C;&#x53EF;&#x4EE5;&#x7576;&#x4F5C;&#x53C3;&#x8003;&#x5C31;&#x597D;&#x56C9;&#x3002;</p>
-<p>&#x4E0D;&#x904E;&#x300C;same input, same output&#x300D;&#x3001;&#x300C;no side-effects&#x300D;&#x3001;&#x300C;referencial  transparency&#x300D;&#x5247;&#x662F;&#x591A;&#x6578;&#x63D0;&#x53CA; pure function &#x4E00;&#x5B9A;&#x6703;&#x8B1B;&#x5230;&#x7684;&#x5B9A;&#x7FA9;&#xFF0C;&#x60F3;&#x77E5;&#x9053;&#x66F4;&#x591A;&#x7684;&#x8A71;&#x53EF;&#x4EE5;&#x9EDE;&#x64CA;&#x4E0B;&#x65B9;&#x53C3;&#x8003;&#x8CC7;&#x6599;&#x7684;&#x9023;&#x7D50;&#x3002;</p>
-<p>&#x6700;&#x5F8C;&#xFF0C;&#x5982;&#x679C;&#x5167;&#x5BB9;&#x6709;&#x932F;&#x8AA4;&#x7684;&#x8A71;&#x4E5F;&#x9EBB;&#x7169;&#x4E0D;&#x541D;&#x6307;&#x6559;&#xFF0C;&#x6211;&#x6703;&#x5F88;&#x611F;&#x6FC0;&#x7684;&#xFF01;</p>
+<p>雖然運作來說我懂在幹嘛，但概念上我可能還沒抓到真正的精髓，就先當作筆記放著 QQ</p>
+<h2 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h2><p>pure function 在 FP 裡面至關重要，正因為 function 是 pure 的，我們才能享受到使用 FP 的好處，才可以運用到數學上的特性。</p>
+<p>Kyle Simpson 在課程中提到，他認為「pure function」不是一個二元的概念，也就是說不是 0 和 1，只能分成「pure」和「impure」，而是類似於一個光譜，指的是「一個 function pure 的程度是多少」，function pure 的程度代表了 「level of confidence」，當你的 function 越 pure，你對這段程式碼的信心就越高，因為你更確定它的結果能夠預測，不會發生非預期的狀況搞你。</p>
+<p>「pure function 不是二分法，pure 指的是程度上的差別」這說法，我也只有從 Kyle Simpson 的課程裡聽到， Kyle Simpson 算是在程式開發蠻有個人想法的人，所以課程中很多定義、說法可能都是他個人的理解，可以當作參考就好囉。</p>
+<p>不過「same input, same output」、「no side-effects」、「referencial  transparency」則是多數提及 pure function 一定會講到的定義，想知道更多的話可以點擊下方參考資料的連結。</p>
+<p>最後，如果內容有錯誤的話也麻煩不吝指教，我會很感激的！</p>
 <h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><p><a href="https://www.educative.io/courses/functional-programming-patterns-with-ramdajs" target="_blank" rel="noopener">Functional Programming Patterns With RamdaJS!</a></p>
+<li><p><a target="_blank" rel="noopener" href="https://www.educative.io/courses/functional-programming-patterns-with-ramdajs">Functional Programming Patterns With RamdaJS!</a></p>
 </li>
-<li><p><a href="https://frontendmasters.com/courses/functional-javascript-v3/" target="_blank" rel="noopener">Functional-Light JavaScript, v3</a> </p>
+<li><p><a target="_blank" rel="noopener" href="https://frontendmasters.com/courses/functional-javascript-v3/">Functional-Light JavaScript, v3</a> </p>
 </li>
-<li><p><a href="https://medium.com/frochu/%E7%B4%94%E7%B2%B9%E7%9A%84%E5%A5%BD-pure-function-%E7%9F%A5%E9%81%93-574d5c0d7819" target="_blank" rel="noopener">&#x7D14;&#x7CB9;&#x7684;&#x597D;&#xFF0C;Pure Function &#x77E5;&#x9053;</a></p>
+<li><p><a target="_blank" rel="noopener" href="https://medium.com/frochu/%E7%B4%94%E7%B2%B9%E7%9A%84%E5%A5%BD-pure-function-%E7%9F%A5%E9%81%93-574d5c0d7819">純粹的好，Pure Function 知道</a></p>
 </li>
-<li><p><a href="https://www.freecodecamp.org/news/what-is-a-pure-function-in-javascript-acb887375dfe/" target="_blank" rel="noopener">What Is a Pure Function in JavaScript?</a></p>
+<li><p><a target="_blank" rel="noopener" href="https://www.freecodecamp.org/news/what-is-a-pure-function-in-javascript-acb887375dfe/">What Is a Pure Function in JavaScript?</a></p>
 </li>
-<li><p><a href="https://mostly-adequate.gitbooks.io/mostly-adequate-guide/content/" target="_blank" rel="noopener">mostly-adequate-guide</a></p>
+<li><p><a target="_blank" rel="noopener" href="https://mostly-adequate.gitbooks.io/mostly-adequate-guide/content/">mostly-adequate-guide</a></p>
 </li>
 </ul>
-</body></html>
-    
+
     </div>
-    
-    <div class="columns is-variable is-1 is-multiline is-mobile">
-    
-        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/JavaScript/">#JavaScript</a></span>
-    
-        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Functional-Programming/">#Functional Programming</a></span>
-    
-        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/frontend-master/">#frontend master</a></span>
-    
-    </div>
-    
-    
-    <div class="columns is-mobile is-multiline article-nav">
-        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
-            
-            <a href="/2021/02/06/Functional-Light-JavaScript-Argument-Adapters/">Functional-Light JavaScript - Argument Adapters</a>
-            
-        </span>
-        <span class="column is-12-mobile is-half-desktop  article-nav-next">
-            
-            <a href="/2021/01/07/headspace-guide-to-meditation-day02/">冥想正念指南 day02 - 如何放下</a>
-            
-        </span>
-    </div>
-    
-</article>
 
-
-<div class="sharebox">
     
-<div class="sharethis-inline-share-buttons"></div>
-<script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5e4221ec7a88780012e1744e&amp;product=inline-share-buttons' async='async'></script>
-
-</div>
-
-
-
-<div class="comments">
-    <h3 class="title is-4">Comments</h3>
     
-<script>
-    var disqus_config = function () {
-        this.page.url = 'https://chihyang41.github.io/2021/02/06/Functional-Light-JavaScript-Pure-Function/';
-        this.page.identifier = '2021/02/06/Functional-Light-JavaScript-Pure-Function/';
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Functional-Programming/" rel="tag"># Functional Programming</a>
+              <a href="/tags/frontend-master/" rel="tag"># frontend master</a>
+          </div>
+
         
-        this.language = 'en';
-        
-    };
-    (function() {
-        var d = document, s = d.createElement('script');  
-        s.src = '//' + 'ChihYang41-blog' + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
 
-<div id="disqus_thread">
-    
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
-</div>
-</div>
-
-    </div>
-</section>
-    <footer class="footer">
-    <div class="container">
-        <div class="columns content">
-            <div class="column is-narrow has-text-centered">
-                &copy; 2021 Chih Yang&nbsp;
-                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
-                        href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
-            </div>
-            <div class="column is-hidden-mobile"></div>
-
-            
-            <div class="column is-narrow">
-                <div class="columns is-mobile is-multiline is-centered">
-                
-                    
-                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/ChihYang41" target="_blank" rel="noopener">
-                    
-                    GitHub
-                    
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/01/07/headspace-guide-to-meditation-day02/" rel="prev" title="冥想正念指南 day02 - 如何放下">
+                  <i class="fa fa-chevron-left"></i> 冥想正念指南 day02 - 如何放下
                 </a>
-                
-                </div>
             </div>
-            
-            
-        </div>
-    </div>
-</footer>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
-
-<!-- test if the browser is outdated -->
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/" target="_blank" rel="noopener">Update my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+            <div class="post-nav-item">
+                <a href="/2021/02/06/Functional-Light-JavaScript-Argument-Adapters/" rel="next" title="Functional-Light JavaScript - Argument Adapters">
+                  Functional-Light JavaScript - Argument Adapters <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
 </div>
-<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
-<script>
-    $(document).ready(function () {
-        // plugin function, place inside DOM ready function
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        })
-    });
-</script>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
 
 <script>
-    window.FontAwesomeConfig = {
-        searchPseudoElements: true
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
     }
-    moment.locale("en-AU");
-</script>
-
-
-    
-    
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<script>
-    MathJax.Hub.Config({
-        "HTML-CSS": {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
     });
+  }
 </script>
-
-    
-    
-    
-    
-<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
-<script>
-    (function ($) {
-        $(document).ready(function () {
-            if (typeof($.fn.lightGallery) === 'function') {
-                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
-            }
-            if (typeof($.fn.justifiedGallery) === 'function') {
-                $('.justified-gallery').justifiedGallery();
-            }
-        });
-    })(jQuery);
-</script>
-
-    
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-    <style>
-        .hljs {
-            position: relative;
-        }
-
-        .hljs .clipboard-btn {
-            float: right;
-            color: #9a9a9a;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .hljs .clipboard-btn:hover {
-          color: #8a8a8a;
-        }
-
-        .hljs > .clipboard-btn {
-            display: none;
-            position: absolute;
-            right: 4px;
-            top: 4px;
-        }
-
-        .hljs:hover > .clipboard-btn {
-            display: inline;
-        }
-
-        .hljs > figcaption > .clipboard-btn {
-            margin-right: 4px;
-        }
-    </style>
-    <script>
-      $(document).ready(function () {
-        $('figure.hljs').each(function(i, figure) {
-          var codeId = 'code-' + i;
-          var code = figure.querySelector('.code');
-          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
-          code.id = codeId;
-          copyButton.addClass('clipboard-btn');
-          copyButton.attr('data-clipboard-target-id', codeId);
-
-          var figcaption = figure.querySelector('figcaption');
-
-          if (figcaption) {
-            figcaption.append(copyButton[0]);
-          } else {
-            figure.prepend(copyButton[0]);
-          }
-        })
-
-        var clipboard = new ClipboardJS('.clipboard-btn', {
-          target: function(trigger) {
-            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
-          }
-        });
-        clipboard.on('success', function(e) {
-          e.clearSelection();
-        })
-      })
-    </script>
-
-    
-    
-
-    
-
-
-
-<script src="/js/script.js"></script>
-
-
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-mask"></div>
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
 </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chih Yang</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
 <script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
+  var disqus_config = function() {
+    this.page.url = "https://chihyang41.github.io/2021/02/06/Functional-Light-JavaScript-Pure-Function/";
+    this.page.identifier = "2021/02/06/Functional-Light-JavaScript-Pure-Function/";
+    this.page.title = "Functional-Light JavaScript - Pure Function";
+    };
+  NexT.utils.loadComments('#disqus_thread', () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ChihYang41-blog.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
 </script>
 
-<script src="/js/insight.js"></script>
-
-    
 </body>
 </html>

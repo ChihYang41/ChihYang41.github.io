@@ -1,34 +1,39 @@
 <!DOCTYPE html>
-<html class="has-navbar-fixed-top">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-<title>VSCode 自動刪除沒屁用 import 以及排版 - Chih Yang&#39;s Blog</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
-
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
 
 
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="pdI9OcgtLe0I27rizFD2U3s553wFM8nsth5viFyCbOk">
 
-<meta name="description" content="Chih Yang 的前端小天地">
+<link rel="stylesheet" href="/css/main.css">
 
 
 
-<meta name="keywords" content="前端">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
 
-
-
-    <meta name="description" content="&amp;#x1F91E;&amp;#x524D;&amp;#x8A00;&amp;#x76EE;&amp;#x524D; Framework &amp;#x90FD;&amp;#x4F7F;&amp;#x7528;&amp;#x6A21;&amp;#x7D44;&amp;#x5316;&amp;#x65B9;&amp;#x5F0F;&amp;#x64B0;&amp;#x5BEB;&amp;#x7684;&amp;#x95DC;&amp;#x4FC2;&amp;#xFF0C;&amp;#x901A;&amp;#x5E38;&amp;#x90FD;&amp;#x6703; imp">
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="🤞前言目前 Framework 都使用模組化方式撰寫的關係，通常都會 import 各種 library、component，不過通常會遇到兩個煩惱，第一個是 import 沒用到的內容，把沒用到的東西 import 進來除了擾亂閱讀以外，還會跳出很煩的黃字警告（最討厭的是這個），第二個是 import 的排版，一般來說為了可讀性，在排版上會有一些順序的規則，通常順序規則會是： 「library">
 <meta property="og:type" content="article">
 <meta property="og:title" content="VSCode 自動刪除沒屁用 import 以及排版">
 <meta property="og:url" content="https://chihyang41.github.io/2020/06/27/VSCode-Auto-Organize-Import/index.html">
 <meta property="og:site_name" content="Chih Yang&#39;s Blog">
-<meta property="og:description" content="&amp;#x1F91E;&amp;#x524D;&amp;#x8A00;&amp;#x76EE;&amp;#x524D; Framework &amp;#x90FD;&amp;#x4F7F;&amp;#x7528;&amp;#x6A21;&amp;#x7D44;&amp;#x5316;&amp;#x65B9;&amp;#x5F0F;&amp;#x64B0;&amp;#x5BEB;&amp;#x7684;&amp;#x95DC;&amp;#x4FC2;&amp;#xFF0C;&amp;#x901A;&amp;#x5E38;&amp;#x90FD;&amp;#x6703; imp">
+<meta property="og:description" content="🤞前言目前 Framework 都使用模組化方式撰寫的關係，通常都會 import 各種 library、component，不過通常會遇到兩個煩惱，第一個是 import 沒用到的內容，把沒用到的東西 import 進來除了擾亂閱讀以外，還會跳出很煩的黃字警告（最討厭的是這個），第二個是 import 的排版，一般來說為了可讀性，在排版上會有一些順序的規則，通常順序規則會是： 「library">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.imgur.com/1s92Xtn.png">
 <meta property="og:image" content="https://i.imgur.com/mkgYc3W.png">
 <meta property="article:published_time" content="2020-06-26T16:10:17.000Z">
-<meta property="article:modified_time" content="2020-06-26T16:12:37.287Z">
+<meta property="article:modified_time" content="2020-06-26T16:10:17.000Z">
 <meta property="article:author" content="Chih Yang">
 <meta property="article:tag" content="JavaScript">
 <meta property="article:tag" content="Front-End">
@@ -37,415 +42,427 @@
 <meta name="twitter:image" content="https://i.imgur.com/1s92Xtn.png">
 
 
+<link rel="canonical" href="https://chihyang41.github.io/2020/06/27/VSCode-Auto-Organize-Import/">
 
 
-
-<link rel="icon" href="https://upload.cc/i1/2020/03/05/MXS6WH.png">
-
-
-<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
-
-
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
-
-
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
-
-
-<link rel="stylesheet" href="/css/style.css">
-
-
-<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-146838618-1');
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
 </script>
-
-
-    
-
-
-<meta name="generator" content="Hexo 4.2.0"></head>
-<body>
-    
-<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
-    <div class="container">
-        <div class="navbar-brand">
-            <a class="navbar-item navbar-logo" href="/">
-                
-                    
-                    Chih Yang&#39;s Blog
-                    
-                
-            </a>
-            <div class="navbar-burger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-        
-        <div class="navbar-menu navbar-start">
-            
-            <a class="navbar-item "
-               href="/archives">Archives</a>
-            
-            <a class="navbar-item "
-               href="/tags">Tags</a>
-            
-            <a class="navbar-item "
-               href="/categories">Categories</a>
-            
-        </div>
-        
-        <div class="navbar-menu navbar-end">
-            
-            <a class="navbar-item search" title="Search" href="javascript:;">
-                <i class="fas fa-search"></i>
-            </a>
-            
-            
-            
-            <a class="navbar-item" title="GitHub" href="https://github.com/ChihYang41" target="_blank" rel="noopener">
-                
-                <i class="fab fa-github"></i>
-                
-            </a>
-               
-            
-        </div>
-    </div>
-</nav>
-
-    <section class="section">
-    <div class="container">
-    <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            VSCode 自動刪除沒屁用 import 以及排版
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            <time datetime="2020-06-26T16:10:17.000Z" itemprop="datePublished">Jun 27 2020</time>
-        </span>
-        
-        <span class="column is-narrow article-category">
-            <i class="far fa-folder"></i>
-            <a class="article-category-link" href="/categories/frontend/">frontend</a>
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            3 minutes read (About 508 words)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <html><head></head><body><h3 id="&#x1F91E;&#x524D;&#x8A00;"><a href="#&#x1F91E;&#x524D;&#x8A00;" class="headerlink" title="&#x1F91E;&#x524D;&#x8A00;"></a>&#x1F91E;&#x524D;&#x8A00;</h3><p>&#x76EE;&#x524D; Framework &#x90FD;&#x4F7F;&#x7528;&#x6A21;&#x7D44;&#x5316;&#x65B9;&#x5F0F;&#x64B0;&#x5BEB;&#x7684;&#x95DC;&#x4FC2;&#xFF0C;&#x901A;&#x5E38;&#x90FD;&#x6703; import &#x5404;&#x7A2E; library&#x3001;component&#xFF0C;&#x4E0D;&#x904E;&#x901A;&#x5E38;&#x6703;&#x9047;&#x5230;&#x5169;&#x500B;&#x7169;&#x60F1;&#xFF0C;&#x7B2C;&#x4E00;&#x500B;&#x662F; import &#x6C92;&#x7528;&#x5230;&#x7684;&#x5167;&#x5BB9;&#xFF0C;&#x628A;&#x6C92;&#x7528;&#x5230;&#x7684;&#x6771;&#x897F; import &#x9032;&#x4F86;&#x9664;&#x4E86;&#x64FE;&#x4E82;&#x95B1;&#x8B80;&#x4EE5;&#x5916;&#xFF0C;&#x9084;&#x6703;&#x8DF3;&#x51FA;&#x5F88;&#x7169;&#x7684;&#x9EC3;&#x5B57;&#x8B66;&#x544A;&#xFF08;&#x6700;&#x8A0E;&#x53AD;&#x7684;&#x662F;&#x9019;&#x500B;&#xFF09;&#xFF0C;&#x7B2C;&#x4E8C;&#x500B;&#x662F; import &#x7684;&#x6392;&#x7248;&#xFF0C;&#x4E00;&#x822C;&#x4F86;&#x8AAA;&#x70BA;&#x4E86;&#x53EF;&#x8B80;&#x6027;&#xFF0C;&#x5728;&#x6392;&#x7248;&#x4E0A;&#x6703;&#x6709;&#x4E00;&#x4E9B;&#x9806;&#x5E8F;&#x7684;&#x898F;&#x5247;&#xFF0C;&#x901A;&#x5E38;&#x9806;&#x5E8F;&#x898F;&#x5247;&#x6703;&#x662F;&#xFF1A; &#x300C;library &#x27A1;&#xFE0F; &#x4F60;&#x7684; component &#x27A1;&#xFE0F; &#x6839;&#x64DA;&#x8DEF;&#x5F91;&#x7684;&#x9577;&#x77ED;&#x6392;&#x7248;&#x300D;&#xFF0C;&#x6BD4;&#x5982;&#x50CF;&#x9019;&#x6A23;&#xFF1A;</p>
-<p></p><figure class="highlight jsx hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;react&apos;</span>;</span><br><span class="line"><span class="hljs-keyword">import</span> { BrowserRouter <span class="hljs-keyword">as</span> Router, Route, Switch } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;react-router-dom&quot;</span>;</span><br><span class="line"><span class="hljs-keyword">import</span> <span class="hljs-string">&apos;./App.css&apos;</span>;</span><br><span class="line"><span class="hljs-keyword">import</span> Chat <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./components/ChatPage&apos;</span>;</span><br><span class="line"><span class="hljs-keyword">import</span> Join <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./components/JoinPage&apos;</span>;</span><br><span class="line"><span class="hljs-keyword">import</span> Playground <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;./components/Playground&apos;</span>;</span><br></pre></td></tr></tbody></table></figure><p></p>
-<a id="more"></a>
-
-<h3 id="&#x1F91E;&#x600E;&#x9EBC;&#x89E3;&#x6C7A;"><a href="#&#x1F91E;&#x600E;&#x9EBC;&#x89E3;&#x6C7A;" class="headerlink" title="&#x1F91E;&#x600E;&#x9EBC;&#x89E3;&#x6C7A;"></a>&#x1F91E;&#x600E;&#x9EBC;&#x89E3;&#x6C7A;</h3><p>&#x597D;&#xFF0C;&#x90A3;&#x5728;&#x9047;&#x5230;&#x9019;&#x5169;&#x500B;&#x554F;&#x984C;&#x6642;&#xFF0C;&#x6211;&#x90FD;&#x600E;&#x9EBC;&#x89E3;&#x6C7A;&#x5462;&#xFF1F;&#x7B2C;&#x4E00;&#x500B;&#x6C92;&#x7528; import &#x7684;&#x554F;&#x984C;&#xFF0C;&#x6211;&#x662F;&#x90FD;&#x6703;&#x628A;&#x5B83;&#x522A;&#x6389;&#xFF0C;&#x4F46;&#x600E;&#x9EBC;&#x522A;&#x6389;&#x5462;&#xFF1F;&#x624B;&#x52D5;&#x522A;&#x6389;&#xFF0C;&#x90A3;&#x7B2C;&#x4E8C;&#x500B;&#x6392;&#x7248;&#x9806;&#x5E8F;&#x7684;&#x554F;&#x984C;&#x5462;&#xFF1F;&#x624B;&#x52D5;&#x6392;&#x7248;&#x3002;&#x5C0D;&#xFF0C;&#x8D85;&#x7D1A; DRY &#x7684;&#xFF0C;&#x6211;&#x5F88;&#x7F9E;&#x6127;&#x3002;</p>
-<p>&#x524D;&#x5E7E;&#x5929;&#x89BA;&#x5F97;&#x5594;&#x5E79;&#x771F;&#x7684;&#x592A;&#x9EBB;&#x7169;&#x4E86;&#xFF0C;&#x6BCF;&#x6B21;&#x90FD;&#x8981;&#x6AA2;&#x67E5;&#x4E00;&#x904D;&#x771F;&#x7684; hen &#x9EBB;&#x7169;&#xFF0C;IDE &#x6709;&#x6C92;&#x6709;&#x81EA;&#x52D5;&#x5E6B;&#x6211;&#x6AA2;&#x67E5;&#x7136;&#x5F8C;&#x522A;&#x6389;&#x6C92;&#x7528; import &#x9084;&#x6709;&#x6392;&#x7248;&#x7684;&#x529F;&#x80FD;&#x554A;&#xFF1F;&#xFF1F;&#x6709;&#xFF01;&#x800C;&#x4E14;&#x53EA;&#x8981;&#x5169;&#x4E09;&#x884C;&#x8A2D;&#x5B9A;&#x5C31;&#x53EF;&#x4EE5;&#x4E86;&#x3002;</p>
-<p>&#x9996;&#x5148;&#x6253;&#x958B; VSCode &#x7684; settings.json&#xFF08;&#x5C31;&#x662F; VScode &#x7684;&#x8A2D;&#x5B9A;&#x6A94;&#xFF09;&#xFF0C;&#x52A0;&#x4E0A;&#x9019;&#x884C;&#xFF1A;<br></p><figure class="highlight hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;editor.codeActionsOnSave&quot;: {</span><br><span class="line">  &quot;source.organizeImports&quot;: true</span><br><span class="line">},</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x5149;&#x770B;&#x8A9E;&#x610F;&#x4E0A;&#x7684;&#x610F;&#x601D;&#x61C9;&#x8A72;&#x5F88;&#x660E;&#x767D;&#xFF0C;<code>editor.codeActionsOnSave</code> &#x5C31;&#x662F;&#x4F60;&#x7684; IDE &#x5728;&#x5132;&#x5B58;&#x6642;&#x6703;&#x57F7;&#x884C;&#x7684; actions&#xFF0C;<code>source.organizeImports</code> &#x5C31;&#x662F;&#x6703;&#x5E6B;&#x4F60; <code>organize</code> import&#xFF0C;&#x628A;&#x6C92;&#x7528;&#x7684; import &#x90FD;&#x522A;&#x6389;&#x5566;&#xFF5E;&#xFF5E;</p>
-<p>&#x4F7F;&#x7528;&#x524D;&#xFF1A;<br>&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x6709;&#x5169;&#x500B;&#x6C92;&#x7528;&#x7684; useEffect &#x548C; useCallback&#xFF0C;&#x4EE5;&#x53CA;&#x51CC;&#x4E82;&#x7684;&#x6392;&#x7248;<br><img src="https://i.imgur.com/1s92Xtn.png" alt="before"></p>
-<p>&#x4F7F;&#x7528;&#x5F8C;&#xFF1A;<br>&#x6309;&#x4E0B; ctrl + s &#x5F8C;<br><img src="https://i.imgur.com/mkgYc3W.png" alt="after"></p>
-<p>&#x5679;&#x5577;&#xFF01;&#x4E7E;&#x6DE8;&#x7684;&#x7248;&#x9762;&#x51FA;&#x73FE;&#x4E86;&#xFF01;&#x800C;&#x4E14;&#x65B9;&#x4FBF;&#x5230;&#x9760;&#x5317;&#xFF01;</p>
-</body></html>
-    
-    </div>
-    
-    <div class="columns is-variable is-1 is-multiline is-mobile">
-    
-        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/JavaScript/">#JavaScript</a></span>
-    
-        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Front-End/">#Front-End</a></span>
-    
-        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/VSCode/">#VSCode</a></span>
-    
-    </div>
-    
-    
-    <div class="columns is-mobile is-multiline article-nav">
-        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
-            
-            <a href="/2020/09/07/React-Query-Tutorial/">React Query Tutorial</a>
-            
-        </span>
-        <span class="column is-12-mobile is-half-desktop  article-nav-next">
-            
-            <a href="/2020/05/09/Lidemy-MTR-%E7%AC%AC%E5%9B%9B%E6%9C%9F%E5%AE%98%E7%B6%B2-%E6%89%93%E9%9B%9C%E5%B0%8F%E5%BC%9F%E5%BF%83%E5%BE%97/">Lidemy MTR 第四期官網 - 打雜小弟心得</a>
-            
-        </span>
-    </div>
-    
-</article>
-
-
-<div class="sharebox">
-    
-<div class="sharethis-inline-share-buttons"></div>
-<script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5e4221ec7a88780012e1744e&amp;product=inline-share-buttons' async='async'></script>
-
-</div>
-
-
-
-<div class="comments">
-    <h3 class="title is-4">Comments</h3>
-    
-<script>
-    var disqus_config = function () {
-        this.page.url = 'https://chihyang41.github.io/2020/06/27/VSCode-Auto-Organize-Import/';
-        this.page.identifier = '2020/06/27/VSCode-Auto-Organize-Import/';
-        
-        this.language = 'en';
-        
-    };
-    (function() {
-        var d = document, s = d.createElement('script');  
-        s.src = '//' + 'ChihYang41-blog' + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-
-<div id="disqus_thread">
-    
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
-</div>
-</div>
-
-    </div>
-</section>
-    <footer class="footer">
-    <div class="container">
-        <div class="columns content">
-            <div class="column is-narrow has-text-centered">
-                &copy; 2021 Chih Yang&nbsp;
-                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
-                        href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
-            </div>
-            <div class="column is-hidden-mobile"></div>
-
-            
-            <div class="column is-narrow">
-                <div class="columns is-mobile is-multiline is-centered">
-                
-                    
-                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/ChihYang41" target="_blank" rel="noopener">
-                    
-                    GitHub
-                    
-                </a>
-                
-                </div>
-            </div>
-            
-            
-        </div>
-    </div>
-</footer>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
-
-<!-- test if the browser is outdated -->
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/" target="_blank" rel="noopener">Update my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
-</div>
-<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
-<script>
-    $(document).ready(function () {
-        // plugin function, place inside DOM ready function
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        })
-    });
-</script>
-
-<script>
-    window.FontAwesomeConfig = {
-        searchPseudoElements: true
-    }
-    moment.locale("en-AU");
-</script>
-
-
-    
-    
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<script>
-    MathJax.Hub.Config({
-        "HTML-CSS": {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
-    });
-</script>
-
-    
-    
-    
-    
-<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
-<script>
-    (function ($) {
-        $(document).ready(function () {
-            if (typeof($.fn.lightGallery) === 'function') {
-                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
-            }
-            if (typeof($.fn.justifiedGallery) === 'function') {
-                $('.justified-gallery').justifiedGallery();
-            }
-        });
-    })(jQuery);
-</script>
-
-    
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-    <style>
-        .hljs {
-            position: relative;
-        }
-
-        .hljs .clipboard-btn {
-            float: right;
-            color: #9a9a9a;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .hljs .clipboard-btn:hover {
-          color: #8a8a8a;
-        }
-
-        .hljs > .clipboard-btn {
-            display: none;
-            position: absolute;
-            right: 4px;
-            top: 4px;
-        }
-
-        .hljs:hover > .clipboard-btn {
-            display: inline;
-        }
-
-        .hljs > figcaption > .clipboard-btn {
-            margin-right: 4px;
-        }
-    </style>
+<title>VSCode 自動刪除沒屁用 import 以及排版 | Chih Yang's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
     <script>
-      $(document).ready(function () {
-        $('figure.hljs').each(function(i, figure) {
-          var codeId = 'code-' + i;
-          var code = figure.querySelector('.code');
-          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
-          code.id = codeId;
-          copyButton.addClass('clipboard-btn');
-          copyButton.attr('data-clipboard-target-id', codeId);
-
-          var figcaption = figure.querySelector('figcaption');
-
-          if (figcaption) {
-            figcaption.append(copyButton[0]);
-          } else {
-            figure.prepend(copyButton[0]);
-          }
-        })
-
-        var clipboard = new ClipboardJS('.clipboard-btn', {
-          target: function(trigger) {
-            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
-          }
-        });
-        clipboard.on('success', function(e) {
-          e.clearSelection();
-        })
-      })
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-146838618-1');
+      }
     </script>
 
-    
-    
-
-    
 
 
 
-<script src="/js/script.js"></script>
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
 
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
 
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-mask"></div>
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
+  </div>
+
+  <div class="site-meta">
+      <img class="custom-logo-image" src="/images/logo.png" alt="Chih Yang's Blog">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Chih Yang's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
 </div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%A4%9E%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">🤞前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%A4%9E%E6%80%8E%E9%BA%BC%E8%A7%A3%E6%B1%BA"><span class="nav-number">2.</span> <span class="nav-text">🤞怎麼解決</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Chih Yang</p>
+  <div class="site-description" itemprop="description">Chih Yang 的前端小天地</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ChihYang41" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ChihYang41" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/chihyang41" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;chihyang41" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chihyang41.github.io/2020/06/27/VSCode-Auto-Organize-Import/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Chih Yang">
+      <meta itemprop="description" content="Chih Yang 的前端小天地">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chih Yang's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          VSCode 自動刪除沒屁用 import 以及排版
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-06-27 00:10:17" itemprop="dateCreated datePublished" datetime="2020-06-27T00:10:17+08:00">2020-06-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/frontend/" itemprop="url" rel="index"><span itemprop="name">frontend</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="🤞前言"><a href="#🤞前言" class="headerlink" title="🤞前言"></a>🤞前言</h3><p>目前 Framework 都使用模組化方式撰寫的關係，通常都會 import 各種 library、component，不過通常會遇到兩個煩惱，第一個是 import 沒用到的內容，把沒用到的東西 import 進來除了擾亂閱讀以外，還會跳出很煩的黃字警告（最討厭的是這個），第二個是 import 的排版，一般來說為了可讀性，在排版上會有一些順序的規則，通常順序規則會是： 「library ➡️ 你的 component ➡️ 根據路徑的長短排版」，比如像這樣：</p>
+<pre class="line-numbers language-jsx" data-language="jsx"><code class="language-jsx"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> BrowserRouter <span class="token keyword">as</span> Router<span class="token punctuation">,</span> Route<span class="token punctuation">,</span> Switch <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">"react-router-dom"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token string">'./App.css'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> Chat <span class="token keyword">from</span> <span class="token string">'./components/ChatPage'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> Join <span class="token keyword">from</span> <span class="token string">'./components/JoinPage'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> Playground <span class="token keyword">from</span> <span class="token string">'./components/Playground'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<span id="more"></span>
+
+<h3 id="🤞怎麼解決"><a href="#🤞怎麼解決" class="headerlink" title="🤞怎麼解決"></a>🤞怎麼解決</h3><p>好，那在遇到這兩個問題時，我都怎麼解決呢？第一個沒用 import 的問題，我是都會把它刪掉，但怎麼刪掉呢？手動刪掉，那第二個排版順序的問題呢？手動排版。對，超級 DRY 的，我很羞愧。</p>
+<p>前幾天覺得喔幹真的太麻煩了，每次都要檢查一遍真的 hen 麻煩，IDE 有沒有自動幫我檢查然後刪掉沒用 import 還有排版的功能啊？？有！而且只要兩三行設定就可以了。</p>
+<p>首先打開 VSCode 的 settings.json（就是 VScode 的設定檔），加上這行：</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"editor.codeActionsOnSave"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+  <span class="token property">"source.organizeImports"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>光看語意上的意思應該很明白，<code>editor.codeActionsOnSave</code> 就是你的 IDE 在儲存時會執行的 actions，<code>source.organizeImports</code> 就是會幫你 <code>organize</code> import，把沒用的 import 都刪掉啦～～</p>
+<p>使用前：<br>可以看到有兩個沒用的 useEffect 和 useCallback，以及凌亂的排版<br><img src="https://i.imgur.com/1s92Xtn.png" alt="before"></p>
+<p>使用後：<br>按下 ctrl + s 後<br><img src="https://i.imgur.com/mkgYc3W.png" alt="after"></p>
+<p>噹啷！乾淨的版面出現了！而且方便到靠北！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Front-End/" rel="tag"># Front-End</a>
+              <a href="/tags/VSCode/" rel="tag"># VSCode</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/05/09/Lidemy-MTR-%E7%AC%AC%E5%9B%9B%E6%9C%9F%E5%AE%98%E7%B6%B2-%E6%89%93%E9%9B%9C%E5%B0%8F%E5%BC%9F%E5%BF%83%E5%BE%97/" rel="prev" title="Lidemy MTR 第四期官網 - 打雜小弟心得">
+                  <i class="fa fa-chevron-left"></i> Lidemy MTR 第四期官網 - 打雜小弟心得
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/09/07/React-Query-Tutorial/" rel="next" title="React Query Tutorial">
+                  React Query Tutorial <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+
 <script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chih Yang</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://chihyang41.github.io/2020/06/27/VSCode-Auto-Organize-Import/";
+    this.page.identifier = "2020/06/27/VSCode-Auto-Organize-Import/";
+    this.page.title = "VSCode 自動刪除沒屁用 import 以及排版";
+    };
+  NexT.utils.loadComments('#disqus_thread', () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ChihYang41-blog.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
 </script>
 
-<script src="/js/insight.js"></script>
-
-    
 </body>
 </html>

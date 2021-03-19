@@ -1,33 +1,38 @@
 <!DOCTYPE html>
-<html class="has-navbar-fixed-top">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-<title>Functional-Light JavaScript - Point Free - Chih Yang&#39;s Blog</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
-
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
 
 
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="pdI9OcgtLe0I27rizFD2U3s553wFM8nsth5viFyCbOk">
 
-<meta name="description" content="Chih Yang 的前端小天地">
+<link rel="stylesheet" href="/css/main.css">
 
 
 
-<meta name="keywords" content="前端">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
 
-
-
-    <meta name="description" content="&amp;#x524D;&amp;#x8A00;&amp;#x6B64;&amp;#x70BA; frontend master &amp;#x7684; Functional-Light JavaScript, v3 &amp;#x7684;&amp;#x8AB2;&amp;#x7A0B;&amp;#x7B46;&amp;#x8A18;&amp;#xFF0C;&amp;#x9019;&amp;#x7BC7;&amp;#x8B1B;&amp;#x7684;&amp;#x662F; point free&amp;#xFF0C;poi">
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="前言此為 frontend master 的 Functional-Light JavaScript, v3 的課程筆記，這篇講的是 point free，point free 是我在剛接觸 FP 時完全不懂的概念，經過一點時間的接觸後，我想應該有比較了解 point free 的概念了，所以這篇就來稍稍講解什麼是 point free、point free 的好處是什麼。 內容不完全和課程編排相">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Functional-Light JavaScript - Point Free">
 <meta property="og:url" content="https://chihyang41.github.io/2021/02/07/Functional-Light-JavaScript-Point-Free/index.html">
 <meta property="og:site_name" content="Chih Yang&#39;s Blog">
-<meta property="og:description" content="&amp;#x524D;&amp;#x8A00;&amp;#x6B64;&amp;#x70BA; frontend master &amp;#x7684; Functional-Light JavaScript, v3 &amp;#x7684;&amp;#x8AB2;&amp;#x7A0B;&amp;#x7B46;&amp;#x8A18;&amp;#xFF0C;&amp;#x9019;&amp;#x7BC7;&amp;#x8B1B;&amp;#x7684;&amp;#x662F; point free&amp;#xFF0C;poi">
+<meta property="og:description" content="前言此為 frontend master 的 Functional-Light JavaScript, v3 的課程筆記，這篇講的是 point free，point free 是我在剛接觸 FP 時完全不懂的概念，經過一點時間的接觸後，我想應該有比較了解 point free 的概念了，所以這篇就來稍稍講解什麼是 point free、point free 的好處是什麼。 內容不完全和課程編排相">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gmgsnllvduj316m0ei0u6.jpg">
 <meta property="article:published_time" content="2021-02-07T06:34:20.000Z">
-<meta property="article:modified_time" content="2021-02-07T09:23:05.197Z">
+<meta property="article:modified_time" content="2021-02-07T06:34:20.000Z">
 <meta property="article:author" content="Chih Yang">
 <meta property="article:tag" content="JavaScript">
 <meta property="article:tag" content="Functional Programming">
@@ -36,528 +41,788 @@
 <meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gmgsnllvduj316m0ei0u6.jpg">
 
 
+<link rel="canonical" href="https://chihyang41.github.io/2021/02/07/Functional-Light-JavaScript-Point-Free/">
 
 
-
-<link rel="icon" href="https://upload.cc/i1/2020/03/05/MXS6WH.png">
-
-
-<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
-
-
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
-
-
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
-
-
-<link rel="stylesheet" href="/css/style.css">
-
-
-<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-146838618-1');
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
 </script>
+<title>Functional-Light JavaScript - Point Free | Chih Yang's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-146838618-1');
+      }
+    </script>
 
 
-    
 
 
-<meta name="generator" content="Hexo 4.2.0"></head>
-<body>
-    
-<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
-    <div class="container">
-        <div class="navbar-brand">
-            <a class="navbar-item navbar-logo" href="/">
-                
-                    
-                    Chih Yang&#39;s Blog
-                    
-                
-            </a>
-            <div class="navbar-burger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-        
-        <div class="navbar-menu navbar-start">
-            
-            <a class="navbar-item "
-               href="/archives">Archives</a>
-            
-            <a class="navbar-item "
-               href="/tags">Tags</a>
-            
-            <a class="navbar-item "
-               href="/categories">Categories</a>
-            
-        </div>
-        
-        <div class="navbar-menu navbar-end">
-            
-            <a class="navbar-item search" title="Search" href="javascript:;">
-                <i class="fas fa-search"></i>
-            </a>
-            
-            
-            
-            <a class="navbar-item" title="GitHub" href="https://github.com/ChihYang41" target="_blank" rel="noopener">
-                
-                <i class="fab fa-github"></i>
-                
-            </a>
-               
-            
-        </div>
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
+  </div>
+
+  <div class="site-meta">
+      <img class="custom-logo-image" src="/images/logo.png" alt="Chih Yang's Blog">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Chih Yang's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
 </nav>
 
-    <section class="section">
-    <div class="container">
-    <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            Functional-Light JavaScript - Point Free
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            <time datetime="2021-02-07T06:34:20.000Z" itemprop="datePublished">Feb 7 2021</time>
-        </span>
-        
-        <span class="column is-narrow article-category">
-            <i class="far fa-folder"></i>
-            <a class="article-category-link" href="/categories/%E7%AD%86%E8%A8%98/">筆記</a>
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            25 minutes read (About 3685 words)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <html><head></head><body><h2 id="&#x524D;&#x8A00;"><a href="#&#x524D;&#x8A00;" class="headerlink" title="&#x524D;&#x8A00;"></a>&#x524D;&#x8A00;</h2><p>&#x6B64;&#x70BA; frontend master &#x7684; <a href="https://frontendmasters.com/courses/functional-javascript-v3/" target="_blank" rel="noopener">Functional-Light JavaScript, v3</a> &#x7684;&#x8AB2;&#x7A0B;&#x7B46;&#x8A18;&#xFF0C;&#x9019;&#x7BC7;&#x8B1B;&#x7684;&#x662F; point free&#xFF0C;point free &#x662F;&#x6211;&#x5728;&#x525B;&#x63A5;&#x89F8; FP &#x6642;&#x5B8C;&#x5168;&#x4E0D;&#x61C2;&#x7684;&#x6982;&#x5FF5;&#xFF0C;&#x7D93;&#x904E;&#x4E00;&#x9EDE;&#x6642;&#x9593;&#x7684;&#x63A5;&#x89F8;&#x5F8C;&#xFF0C;&#x6211;&#x60F3;&#x61C9;&#x8A72;&#x6709;&#x6BD4;&#x8F03;&#x4E86;&#x89E3; point free &#x7684;&#x6982;&#x5FF5;&#x4E86;&#xFF0C;&#x6240;&#x4EE5;&#x9019;&#x7BC7;&#x5C31;&#x4F86;&#x7A0D;&#x7A0D;&#x8B1B;&#x89E3;&#x4EC0;&#x9EBC;&#x662F; point free&#x3001;point free &#x7684;&#x597D;&#x8655;&#x662F;&#x4EC0;&#x9EBC;&#x3002;</p>
-<p>&#x5167;&#x5BB9;&#x4E0D;&#x5B8C;&#x5168;&#x548C;&#x8AB2;&#x7A0B;&#x7DE8;&#x6392;&#x76F8;&#x540C;&#xFF0C;&#x55AE;&#x7D14;&#x662F;&#x500B;&#x4EBA;&#x6D88;&#x5316;&#x904E;&#x5F8C;&#x7684;&#x7DE8;&#x6392;&#x3002;</p>
-<p>&#x56E0;&#x70BA;&#x525B;&#x958B;&#x59CB;&#x5B78; functional programming &#x7684;&#x7DE3;&#x6545;&#xFF0C;&#x5167;&#x5BB9;&#x3001;&#x89C0;&#x5FF5;&#x53EF;&#x80FD;&#x6703;&#x6709;&#x8AF8;&#x591A;&#x932F;&#x8AA4;&#xFF0C;&#x5982;&#x6709;&#x767C;&#x73FE;&#x932F;&#x8AA4;&#x9EBB;&#x7169;&#x4E0D;&#x541D;&#x6307;&#x6559;&#xFF0C;&#x611F;&#x8B1D;&#xFF01;</p>
-<a id="more"></a>
 
-<h2 id="&#x4EC0;&#x9EBC;&#x662F;-Point-Free&#xFF1F;"><a href="#&#x4EC0;&#x9EBC;&#x662F;-Point-Free&#xFF1F;" class="headerlink" title="&#x4EC0;&#x9EBC;&#x662F; Point Free&#xFF1F;"></a>&#x4EC0;&#x9EBC;&#x662F; Point Free&#xFF1F;</h2><p>&#x6839;&#x64DA;&#x7DAD;&#x57FA;&#x767E;&#x79D1;&#x6240;&#x8AAA;&#xFF1A;</p>
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-Point-Free%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">什麼是 Point Free？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Point-Free-Refactor"><span class="nav-number">3.</span> <span class="nav-text">Point Free Refactor</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E8%A6%81%E5%8F%A6%E5%A4%96%E5%AE%A3%E5%91%8A-isEven%EF%BC%9F"><span class="nav-number">3.1.</span> <span class="nav-text">為什麼要另外宣告 isEven？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E8%A6%81%E7%94%A8-point-free%EF%BC%9F"><span class="nav-number">3.2.</span> <span class="nav-text">為什麼要用 point free？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Point-Free-Exercise"><span class="nav-number">4.</span> <span class="nav-text">Point Free Exercise</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%96%8B%E5%A7%8B%E5%89%8D%E5%85%88%E8%A7%A3%E9%87%8B"><span class="nav-number">4.1.</span> <span class="nav-text">開始前先解釋</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E6%AD%A5%E4%B8%80%E6%AD%A5%E9%87%8D%E6%A7%8B"><span class="nav-number">4.2.</span> <span class="nav-text">一步一步重構</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Advanced-Point-Free"><span class="nav-number">5.</span> <span class="nav-text">Advanced Point Free</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF%E6%80%8E%E9%BA%BC%E9%81%8B%E4%BD%9C%E7%9A%84%EF%BC%9F"><span class="nav-number">5.1.</span> <span class="nav-text">思路怎麼運作的？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Function-Parameter-Order"><span class="nav-number">6.</span> <span class="nav-text">Function Parameter Order</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">7.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Chih Yang</p>
+  <div class="site-description" itemprop="description">Chih Yang 的前端小天地</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ChihYang41" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ChihYang41" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/chihyang41" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;chihyang41" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chihyang41.github.io/2021/02/07/Functional-Light-JavaScript-Point-Free/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Chih Yang">
+      <meta itemprop="description" content="Chih Yang 的前端小天地">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chih Yang's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Functional-Light JavaScript - Point Free
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-02-07 14:34:20" itemprop="dateCreated datePublished" datetime="2021-02-07T14:34:20+08:00">2021-02-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>此為 frontend master 的 <a target="_blank" rel="noopener" href="https://frontendmasters.com/courses/functional-javascript-v3/">Functional-Light JavaScript, v3</a> 的課程筆記，這篇講的是 point free，point free 是我在剛接觸 FP 時完全不懂的概念，經過一點時間的接觸後，我想應該有比較了解 point free 的概念了，所以這篇就來稍稍講解什麼是 point free、point free 的好處是什麼。</p>
+<p>內容不完全和課程編排相同，單純是個人消化過後的編排。</p>
+<p>因為剛開始學 functional programming 的緣故，內容、觀念可能會有諸多錯誤，如有發現錯誤麻煩不吝指教，感謝！</p>
+<span id="more"></span>
+
+<h2 id="什麼是-Point-Free？"><a href="#什麼是-Point-Free？" class="headerlink" title="什麼是 Point Free？"></a>什麼是 Point Free？</h2><p>根據維基百科所說：</p>
 <blockquote>
-<p>Tacit programming (point-free programming) is a programming paradigm in which a function definition does not include information regarding its arguments, using combinators and function composition [&#x2026;] instead of variables.</p>
+<p>Tacit programming (point-free programming) is a programming paradigm in which a function definition does not include information regarding its arguments, using combinators and function composition […] instead of variables.</p>
 </blockquote>
-<p>Kyle Simpson &#x5247;&#x662F;&#x8B1B;&#x7684;&#x66F4;&#x7C21;&#x7565;&#x4E00;&#x9EDE;&#xFF1A;</p>
+<p>Kyle Simpson 則是講的更簡略一點：</p>
 <blockquote>
 <p>point free definition is defining a function without needing to defining its point, aka, its inputs.</p>
 </blockquote>
-<p>point &#x6307;&#x7684;&#x662F; function &#x7684; input&#xFF0C;point free &#x7684;&#x5B57;&#x9762;&#x610F;&#x601D;&#x5C31;&#x662F;&#x4F60;&#x53EF;&#x4EE5;&#x4E0D;&#x7528;&#x53BB;&#x5B9A;&#x7FA9; function &#x7684; input&#xFF0C;&#x90A3;&#x70BA;&#x4EC0;&#x9EBC;&#x4E0D;&#x7528;&#x5B9A;&#x7FA9;&#x5462;&#xFF1F;&#x56E0;&#x70BA;&#x4F60;&#x5728;&#x5225;&#x7684;&#x5730;&#x65B9;&#x5DF2;&#x7D93;&#x5B9A;&#x7FA9;&#x4E86;&#x5176;&#x4ED6; function&#xFF0C;&#x900F;&#x904E;&#x7D44;&#x5408;&#x5176;&#x4ED6; function &#x5C31;&#x80FD;&#x5920;&#x5F97;&#x5230;&#x65B0;&#x7684; function&#x3002;</p>
-<p>&#x6240;&#x4EE5;&#xFF0C;point free &#x5C31;&#x662F;&#x4F60;&#x4E0D;&#x7528;&#x5BEB;&#x51FA; function &#x7684;&#x53C3;&#x6578;&#xFF0C;&#x7C21;&#x55AE;&#x7684;&#x8AAA;&#x5C31;&#x662F;&#xFF1A;&#x300C;point free &#x6C92;&#x6709;&#x5728;&#x8DDF;&#x4F60;&#x8AAA;&#x8CC7;&#x6599;&#x9577;&#x600E;&#x6A23;&#x7684;&#x3002;&#x300D;</p>
-<p>&#x807D;&#x8D77;&#x4F86;&#x9084;&#x662F;&#x5F88;&#x62BD;&#x8C61;&#xFF0C;&#x6240;&#x4EE5;&#x4F86;&#x8209;&#x5E7E;&#x500B;&#x4F8B;&#x5B50;&#xFF1A;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">print</span>(<span class="hljs-params">text</span>) </span>{</span><br><span class="line">  <span class="hljs-built_in">console</span>.log(text)</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x5176;&#x5BE6;&#x53EF;&#x4EE5;&#x7C21;&#x5316;&#x6210;</span></span><br><span class="line"><span class="hljs-keyword">const</span> print = <span class="hljs-built_in">console</span>.log</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x70BA;&#x4EC0;&#x9EBC;&#x6211;&#x5011;&#x80FD;&#x5920;&#x9019;&#x6A23;&#x7C21;&#x5316;&#x5462;&#xFF1F;&#x56E0;&#x70BA;&#x6211;&#x5011;&#x5728;&#x5176;&#x4ED6;&#x5730;&#x65B9;&#x5B9A;&#x7FA9;&#x4E86; <code>log</code> &#x9019;&#x500B; function &#x8A72;&#x505A;&#x4E9B;&#x4EC0;&#x9EBC;&#x4E8B;&#x60C5;&#x4E86;&#x3002;</p>
-<p>&#x518D;&#x770B;&#x770B;&#x53E6;&#x4E00;&#x500B;&#x4F8B;&#x5B50;&#xFF1A;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> getServerStuff = <span class="hljs-function"><span class="hljs-params">callback</span> =&gt;</span> ajaxCall(<span class="hljs-function"><span class="hljs-params">json</span> =&gt;</span> callback(json));</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x4EE5; point free &#x7684;&#x65B9;&#x5F0F;&#x53EF;&#x4EE5;&#x7C21;&#x5316;&#x6210;</span></span><br><span class="line"><span class="hljs-keyword">const</span> getServerStuff = ajaxCall;</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x8A73;&#x7D30;&#x62C6;&#x89E3;</span></span><br><span class="line"><span class="hljs-comment">// this line</span></span><br><span class="line">ajaxCall(<span class="hljs-function"><span class="hljs-params">json</span> =&gt;</span> callback(json));</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// is the same as this line</span></span><br><span class="line">ajaxCall(callback);</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// so refactor getServerStuff</span></span><br><span class="line"><span class="hljs-keyword">const</span> getServerStuff = <span class="hljs-function"><span class="hljs-params">callback</span> =&gt;</span> ajaxCall(callback);</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// ...which is equivalent to this</span></span><br><span class="line"><span class="hljs-keyword">const</span> getServerStuff = ajaxCall; <span class="hljs-comment">// &lt;-- look mum, no ()&apos;s</span></span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x6982;&#x5FF5;&#x4E0A;&#x548C;&#x524D;&#x4E00;&#x500B;&#x4F8B;&#x5B50;&#x662F;&#x4E00;&#x6A23;&#x7684;&#xFF0C;&#x6211;&#x5011;&#x5728;&#x5176;&#x4ED6;&#x5730;&#x65B9;&#x5B9A;&#x7FA9;&#x597D;&#x4E86; function&#x3001;&#x9810;&#x8A08;&#x8981;&#x63A5;&#x53D7;&#x5E7E;&#x500B; arguments&#xFF0C;&#x56E0;&#x6B64;&#x900F;&#x904E;&#x539F;&#x5148;&#x5B9A;&#x7FA9;&#x597D;&#x7684; function &#x7D44;&#x5408;&#x51FA;&#x65B0; function &#x6642;&#xFF0C;&#x5C31;&#x80FD;&#x5920;&#x7701;&#x7565; input&#x3002;</p>
-<p>point free &#x7684;&#x597D;&#x8655;&#x5C31;&#x662F;&#x53EF;&#x4EE5;&#x6E1B;&#x5C11;&#x4E0D;&#x5FC5;&#x8981;&#x7684;&#x8CC7;&#x8A0A;&#xFF0C;&#x56E0;&#x70BA;&#x6211;&#x5011;&#x6839;&#x672C;&#x4E0D;&#x5728;&#x4E4E;&#x50B3;&#x5165;&#x7684;&#x53C3;&#x6578;&#x53EB;&#x4EC0;&#x9EBC;&#x540D;&#x5B57;&#xFF0C;&#x600E;&#x9EBC;&#x88AB;&#x50B3;&#x905E;&#xFF0C;&#x5176;&#x5BE6;&#x6211;&#x5011;&#x53EA;&#x5728;&#x4E4E;&#x6703;&#x5F97;&#x5230;&#x4EC0;&#x9EBC;&#x7D50;&#x679C;&#x800C;&#x5DF2;&#xFF0C;&#x56E0;&#x6B64;&#x7528;&#x4E0A; point free &#x5C31;&#x53EF;&#x4EE5;&#x95B1;&#x8B80;&#x7A0B;&#x5F0F;&#x78BC;&#x6642;&#x7684;&#x8166;&#x888B;&#x8CA0;&#x8377;&#x3002;</p>
-<p>&#x4F46; point free &#x540C;&#x6642;&#x4E5F;&#x662F;&#x4E00;&#x628A;&#x96D9;&#x5203;&#x528D;&#xFF0C;&#x904E;&#x5EA6;&#x7684;&#x4F7F;&#x7528;&#x5B83;&#x4E5F;&#x53EF;&#x80FD;&#x6703;&#x8B93;&#x95B1;&#x8B80;&#x8005;&#x4E0D;&#x77E5;&#x9053;&#x9019;&#x6BB5;&#x7A0B;&#x5F0F;&#x78BC;&#x5230;&#x5E95;&#x5728;&#x5E79;&#x561B;&#xFF0C;&#x53CD;&#x800C;&#x9020;&#x6210;&#x66F4;&#x591A;&#x7406;&#x89E3;&#x4E0A;&#x7684;&#x8CA0;&#x64D4;&#x3002;&#xFF08;&#x6BD4;&#x5982;&#x4E0A;&#x9762;&#x7684;&#x7A0B;&#x5F0F;&#x78BC;&#xFF0C;&#x6211;&#x525B;&#x770B;&#x7684;&#x6642;&#x5019;&#x5C31;&#x4E0D;&#x61C2;&#x70BA;&#x4EC0;&#x9EBC;&#x53EF;&#x4EE5;&#x9019;&#x6A23;&#xFF09;</p>
-<h2 id="Point-Free-Refactor"><a href="#Point-Free-Refactor" class="headerlink" title="Point Free Refactor"></a>Point Free Refactor</h2><p>&#x63A5;&#x8457;&#x518D;&#x91CD;&#x69CB;&#x4E00;&#x5C0F;&#x6BB5;&#x7A0B;&#x5F0F;&#x78BC;&#xFF0C;&#x8A66;&#x8457;&#x66F4;&#x719F;&#x6089; point free &#x7684;&#x6A21;&#x5F0F;&#x5427;&#x3002;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isOdd</span>(<span class="hljs-params">v</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> v % <span class="hljs-number">2</span> === <span class="hljs-number">1</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isEven</span>(<span class="hljs-params">v</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> !isOdd(v)</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">isEven(<span class="hljs-number">4</span>) <span class="hljs-comment">// true</span></span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x9019;&#x6BB5;&#x662F;&#x5F88;&#x7C21;&#x55AE;&#x5224;&#x65B7;&#x6578;&#x5B57;&#x662F;&#x5426;&#x70BA;&#x5947;&#x6578;&#x6216;&#x5076;&#x6578;&#x7684;&#x7A0B;&#x5F0F;&#x78BC;&#xFF0C;&#x6211;&#x5011;&#x600E;&#x9EBC;&#x628A;&#x9019;&#x908A;&#x6539;&#x6210; point-free style &#x5462;&#xFF1F;&#x5728;&#x601D;&#x8003;&#x5982;&#x4F55;&#x6539;&#x6210; point free &#x4EE5;&#x524D;&#xFF0C;&#x6709;&#x5169;&#x500B;&#x554F;&#x984C;&#x8981;&#x56DE;&#x7B54;&#xFF1A;</p>
+<p>point 指的是 function 的 input，point free 的字面意思就是你可以不用去定義 function 的 input，那為什麼不用定義呢？因為你在別的地方已經定義了其他 function，透過組合其他 function 就能夠得到新的 function。</p>
+<p>所以，point free 就是你不用寫出 function 的參數，簡單的說就是：「point free 沒有在跟你說資料長怎樣的。」</p>
+<p>聽起來還是很抽象，所以來舉幾個例子：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token parameter">text</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>text<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 其實可以簡化成</span>
+<span class="token keyword">const</span> print <span class="token operator">=</span> console<span class="token punctuation">.</span>log<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>為什麼我們能夠這樣簡化呢？因為我們在其他地方定義了 <code>log</code> 這個 function 該做些什麼事情了。</p>
+<p>再看看另一個例子：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token function-variable function">getServerStuff</span> <span class="token operator">=</span> <span class="token parameter">callback</span> <span class="token operator">=></span> <span class="token function">ajaxCall</span><span class="token punctuation">(</span><span class="token parameter">json</span> <span class="token operator">=></span> <span class="token function">callback</span><span class="token punctuation">(</span>json<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 以 point free 的方式可以簡化成</span>
+<span class="token keyword">const</span> getServerStuff <span class="token operator">=</span> ajaxCall<span class="token punctuation">;</span>
+
+<span class="token comment">// 詳細拆解</span>
+<span class="token comment">// this line</span>
+<span class="token function">ajaxCall</span><span class="token punctuation">(</span><span class="token parameter">json</span> <span class="token operator">=></span> <span class="token function">callback</span><span class="token punctuation">(</span>json<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// is the same as this line</span>
+<span class="token function">ajaxCall</span><span class="token punctuation">(</span>callback<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// so refactor getServerStuff</span>
+<span class="token keyword">const</span> <span class="token function-variable function">getServerStuff</span> <span class="token operator">=</span> <span class="token parameter">callback</span> <span class="token operator">=></span> <span class="token function">ajaxCall</span><span class="token punctuation">(</span>callback<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// ...which is equivalent to this</span>
+<span class="token keyword">const</span> getServerStuff <span class="token operator">=</span> ajaxCall<span class="token punctuation">;</span> <span class="token comment">// &lt;-- look mum, no ()'s</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>概念上和前一個例子是一樣的，我們在其他地方定義好了 function、預計要接受幾個 arguments，因此透過原先定義好的 function 組合出新 function 時，就能夠省略 input。</p>
+<p>point free 的好處就是可以減少不必要的資訊，因為我們根本不在乎傳入的參數叫什麼名字，怎麼被傳遞，其實我們只在乎會得到什麼結果而已，因此用上 point free 就可以閱讀程式碼時的腦袋負荷。</p>
+<p>但 point free 同時也是一把雙刃劍，過度的使用它也可能會讓閱讀者不知道這段程式碼到底在幹嘛，反而造成更多理解上的負擔。（比如上面的程式碼，我剛看的時候就不懂為什麼可以這樣）</p>
+<h2 id="Point-Free-Refactor"><a href="#Point-Free-Refactor" class="headerlink" title="Point Free Refactor"></a>Point Free Refactor</h2><p>接著再重構一小段程式碼，試著更熟悉 point free 的模式吧。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">isOdd</span><span class="token punctuation">(</span><span class="token parameter">v</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> v <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">===</span> <span class="token number">1</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">isEven</span><span class="token punctuation">(</span><span class="token parameter">v</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token operator">!</span><span class="token function">isOdd</span><span class="token punctuation">(</span>v<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function">isEven</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span> <span class="token comment">// true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>這段是很簡單判斷數字是否為奇數或偶數的程式碼，我們怎麼把這邊改成 point-free style 呢？在思考如何改成 point free 以前，有兩個問題要回答：</p>
 <ol>
-<li>&#x70BA;&#x4EC0;&#x9EBC;&#x8981;&#x53E6;&#x5916;&#x5BA3;&#x544A; isEven&#xFF1F;&#x9019;&#x6A23;&#x6709;&#x4EC0;&#x9EBC;&#x597D;&#x8655;&#x55CE;&#xFF1F;&#x660E;&#x660E; isOdd &#x5C31;&#x53EF;&#x4EE5;&#x8DB3;&#x5920;&#x5224;&#x65B7;&#x4E00;&#x500B;&#x6578;&#x5B57;&#x662F;&#x5947;&#x6578;&#x6216;&#x5076;&#x6578;&#x4E86;&#x5427;&#xFF1F;</li>
-<li>&#x70BA;&#x4EC0;&#x9EBC;&#x8981;&#x6539;&#x6210; point free &#x5462;&#xFF1F;&#x9019;&#x6A23;&#x6709;&#x4EC0;&#x9EBC;&#x597D;&#x8655;&#xFF1F;&#x73FE;&#x5728;&#x4E0D;&#x5C31;&#x5F88; ok &#x4E86;&#x55CE;&#xFF1F;</li>
+<li>為什麼要另外宣告 isEven？這樣有什麼好處嗎？明明 isOdd 就可以足夠判斷一個數字是奇數或偶數了吧？</li>
+<li>為什麼要改成 point free 呢？這樣有什麼好處？現在不就很 ok 了嗎？</li>
 </ol>
-<h3 id="&#x70BA;&#x4EC0;&#x9EBC;&#x8981;&#x53E6;&#x5916;&#x5BA3;&#x544A;-isEven&#xFF1F;"><a href="#&#x70BA;&#x4EC0;&#x9EBC;&#x8981;&#x53E6;&#x5916;&#x5BA3;&#x544A;-isEven&#xFF1F;" class="headerlink" title="&#x70BA;&#x4EC0;&#x9EBC;&#x8981;&#x53E6;&#x5916;&#x5BA3;&#x544A; isEven&#xFF1F;"></a>&#x70BA;&#x4EC0;&#x9EBC;&#x8981;&#x53E6;&#x5916;&#x5BA3;&#x544A; isEven&#xFF1F;</h3><p>&#x5148;&#x56DE;&#x7B54;&#x7B2C;&#x4E00;&#x500B;&#x554F;&#x984C;&#xFF0C;&#x7684;&#x78BA;&#x662F;&#x4E0D;&#x7528;&#x53E6;&#x5916;&#x5BA3;&#x544A;&#x5C31;&#x53EF;&#x4EE5;&#x9054;&#x6210;&#x539F;&#x672C;&#x76EE;&#x7684;&#xFF0C;&#x7562;&#x7ADF;&#x7D50;&#x679C;&#x4E0D;&#x662F;&#x5076;&#x6578;&#x5C31;&#x662F;&#x57FA;&#x6578;&#x561B;&#x3002;</p>
-<p>&#x4F46;&#x53EF;&#x4EE5;&#x60F3;&#x60F3;&#x5BA3;&#x544A;&#x4E86;&#x5F97;&#x5230;&#x4EC0;&#x9EBC;&#x597D;&#x8655;&#xFF0C;&#x90A3;&#x5C31;&#x662F;&#x8B93; <code>isEven</code> &#x548C; <code>isOdd</code> &#x7522;&#x751F;&#x4E86;&#x806F;&#x7E6B;&#x3001;&#x95DC;&#x4FC2;&#xFF0C;&#x8A66;&#x60F3;&#x5982;&#x679C;&#x55AE;&#x7D14;&#x7528; <code>isOdd</code> &#x4F86;&#x5224;&#x65B7;&#x5947;&#x5076;&#xFF0C;&#x90A3;&#x5C31;&#x6C92;&#x6709;&#x9019;&#x5C64;&#x95DC;&#x806F;&#x4E86;&#xFF1B;&#x4F46;&#x5BA3;&#x544A; <code>isEven</code> &#x6642;&#xFF0C;&#x4F60;&#x53EF;&#x4EE5;&#x5F9E;&#x7A0B;&#x5F0F;&#x78BC;&#x770B;&#x51FA;&#x5B83;&#x662F; <code>isOdd</code> &#x7684;&#x76F8;&#x53CD;&#xFF0C;&#x4E26;&#x4E14;&#x7576;&#x9700;&#x8981;&#x7528;&#x5230;&#x5224;&#x65B7;&#x5076;&#x6578;&#x7684;&#x6642;&#x5019;&#xFF0C;&#x300C;&#x67D0;&#x6578;&#x5B57;&#x662F;&#x5076;&#x6578;&#x300D;&#x76F8;&#x6BD4;&#x300C;&#x67D0;&#x6578;&#x5B57;&#x662F;&#x5947;&#x6578;&#x7684;&#x76F8;&#x53CD;&#x300D;&#x9084;&#x66F4;&#x597D;&#x7406;&#x89E3;&#x5C0D;&#x5427;&#xFF01;</p>
-<h3 id="&#x70BA;&#x4EC0;&#x9EBC;&#x8981;&#x7528;-point-free&#xFF1F;"><a href="#&#x70BA;&#x4EC0;&#x9EBC;&#x8981;&#x7528;-point-free&#xFF1F;" class="headerlink" title="&#x70BA;&#x4EC0;&#x9EBC;&#x8981;&#x7528; point free&#xFF1F;"></a>&#x70BA;&#x4EC0;&#x9EBC;&#x8981;&#x7528; point free&#xFF1F;</h3><p>&#x518D;&#x4F86;&#x662F;&#x7B2C;&#x4E8C;&#x500B;&#x554F;&#x984C;&#xFF0C;&#x6211;&#x5011;&#x76F4;&#x63A5;&#x4F86;&#x770B;&#x6539;&#x5B8C;&#x5F8C;&#x7684; code&#xFF1A;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">complement</span>(<span class="hljs-params">fn</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">negated</span>(<span class="hljs-params">...args</span>) </span>{</span><br><span class="line">    <span class="hljs-keyword">return</span> !fn(...args)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isOdd</span>(<span class="hljs-params">v</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> v % <span class="hljs-number">2</span> === <span class="hljs-number">1</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> isEven = complement(isOdd)</span><br><span class="line"></span><br><span class="line">isEven(<span class="hljs-number">4</span>) <span class="hljs-comment">// true</span></span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x6211;&#x5011;&#x53E6;&#x5916;&#x5BA3;&#x544A;&#x4E86;&#x4E00;&#x500B;&#x53EB;&#x505A; <code>complement</code> &#x7684; function&#xFF0C;&#x4ED6;&#x53EF;&#x4EE5;&#x628A;&#x539F;&#x672C; function &#x7684;&#x57F7;&#x884C;&#x7D50;&#x679C;&#x8B8A;&#x5F97;&#x76F8;&#x53CD;&#xFF0C;&#x6BD4;&#x5982; <code>isOdd</code> &#x57F7;&#x884C;&#x5B8C;&#x6703;&#x662F; true&#xFF0C;<code>complement</code> &#x56DE;&#x50B3;&#x7684; function &#x57F7;&#x884C;&#x7D50;&#x679C;&#x6703;&#x662F; false&#x3002;</p>
-<p>&#x6539;&#x5B8C;&#x5F8C;&#x7684; code &#x5F88;&#x660E;&#x986F;&#x5C31;&#x53EF;&#x4EE5;&#x611F;&#x53D7;&#x5230; point free &#x7684;&#x597D;&#x8655;&#x4E86;&#xFF0C;&#x7B2C;&#x4E00;&#x662F;&#x6211;&#x5011;&#x7701;&#x7565;&#x4E86;&#x4E0D;&#x5FC5;&#x8981;&#x7684;&#x8CC7;&#x8A0A;&#xFF0C;&#x5728;&#x4E0A;&#x4E00;&#x6BB5; code &#x4E2D; <code>isEven</code> &#x6709;&#x500B;&#x53C3;&#x6578; <code>v</code> &#xFF0C;&#x4F46;&#x9019;&#x6839;&#x672C;&#x662F;&#x4E0D;&#x5FC5;&#x8981;&#x7684;&#x8CC7;&#x8A0A;&#xFF0C;&#x6211;&#x5011;&#x6839;&#x672C;&#x4E0D;&#x5728;&#x4E4E; <code>v</code> &#x662F;&#x4E09;&#x5C0F;&#x5C0D;&#x5427;&#xFF0C;&#x56E0;&#x70BA;&#x6211;&#x5011;&#x5728;&#x4E4E;&#x7684;&#x53EA;&#x6709;&#x300C;&#x50B3;&#x9032;&#x4F86;&#x7684;&#x6578;&#x5B57;&#x662F;&#x4E0D;&#x662F;&#x5076;&#x6578;&#x300D;&#xFF0C;&#x6539;&#x6210; point free &#x5F8C; v &#x5C31;&#x4E0D;&#x898B;&#x4E86;&#xFF1B;&#x7B2C;&#x4E8C;&#x5C31;&#x662F; <code>isEven</code> &#x548C; <code>isOdd</code> &#x7684;&#x95DC;&#x806F;&#x6027;&#x8B8A;&#x5F97;&#x5F88; obvious&#xFF0C;&#x5F9E;&#x4E0A;&#x9762;&#x90A3;&#x6BB5;&#x7A0B;&#x5F0F;&#x78BC;&#x4F86;&#x8AAA;&#xFF0C;&#x5982;&#x679C;&#x4F60;&#x77E5;&#x9053; <code>complement</code>  &#x7684;&#x542B;&#x7FA9;&#x548C;&#x7528;&#x9014;&#xFF0C;&#x4F60;&#x5F88;&#x5FEB;&#x5C31;&#x53EF;&#x4EE5;&#x77E5;&#x9053; <code>isEven</code> &#x662F; <code>isOdd</code> &#x7684;&#x76F8;&#x53CD;&#x3002;</p>
+<h3 id="為什麼要另外宣告-isEven？"><a href="#為什麼要另外宣告-isEven？" class="headerlink" title="為什麼要另外宣告 isEven？"></a>為什麼要另外宣告 isEven？</h3><p>先回答第一個問題，的確是不用另外宣告就可以達成原本目的，畢竟結果不是偶數就是基數嘛。</p>
+<p>但可以想想宣告了得到什麼好處，那就是讓 <code>isEven</code> 和 <code>isOdd</code> 產生了聯繫、關係，試想如果單純用 <code>isOdd</code> 來判斷奇偶，那就沒有這層關聯了；但宣告 <code>isEven</code> 時，你可以從程式碼看出它是 <code>isOdd</code> 的相反，並且當需要用到判斷偶數的時候，「某數字是偶數」相比「某數字是奇數的相反」還更好理解對吧！</p>
+<h3 id="為什麼要用-point-free？"><a href="#為什麼要用-point-free？" class="headerlink" title="為什麼要用 point free？"></a>為什麼要用 point free？</h3><p>再來是第二個問題，我們直接來看改完後的 code：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">complement</span><span class="token punctuation">(</span><span class="token parameter">fn</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token function">negated</span><span class="token punctuation">(</span><span class="token parameter"><span class="token operator">...</span>args</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token operator">!</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token operator">...</span>args<span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">isOdd</span><span class="token punctuation">(</span><span class="token parameter">v</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> v <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">===</span> <span class="token number">1</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">var</span> isEven <span class="token operator">=</span> <span class="token function">complement</span><span class="token punctuation">(</span>isOdd<span class="token punctuation">)</span>
+
+<span class="token function">isEven</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span> <span class="token comment">// true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>我們另外宣告了一個叫做 <code>complement</code> 的 function，他可以把原本 function 的執行結果變得相反，比如 <code>isOdd</code> 執行完會是 true，<code>complement </code> 回傳的 function 執行結果會是 false。</p>
+<p>改完後的 code 很明顯就可以感受到 point free 的好處了，第一是我們省略了不必要的資訊，在上一段 code 中 <code>isEven</code> 有個參數 <code>v</code> ，但這根本是不必要的資訊，我們根本不在乎 <code>v</code> 是三小對吧，因為我們在乎的只有「傳進來的數字是不是偶數」，改成 point free 後 v 就不見了；第二就是 <code>isEven</code> 和 <code>isOdd</code> 的關聯性變得很 obvious，從上面那段程式碼來說，如果你知道 <code>complement</code>  的含義和用途，你很快就可以知道 <code>isEven</code> 是 <code>isOdd</code> 的相反。</p>
 <blockquote>
-<p>&#x5C0F;&#x88DC;&#x5145;&#xFF0C;Ramda &#x6709;&#x63D0;&#x4F9B;&#x5169;&#x500B;&#x985E;&#x4F3C;&#x529F;&#x80FD;&#x7684; utils&#xFF1A;</p>
+<p>小補充，Ramda 有提供兩個類似功能的 utils：</p>
 <ol>
-<li>&#x4E00;&#x500B;&#x53EB;&#x505A; <a href="https://ramdajs.com/docs/#complement" target="_blank" rel="noopener">complement</a>&#xFF0C;&#x5B83;&#x9810;&#x8A08;&#x63A5;&#x6536;&#x4E00;&#x500B; function(&#x6211;&#x5011;&#x5148;&#x7A31;&#x70BA; <code>f</code>&#xFF09;&#xFF0C;&#x4E26;&#x56DE;&#x50B3;&#x4E00;&#x500B; function(&#x6211;&#x5011;&#x5148;&#x7A31;&#x70BA; <code>g</code>)&#xFF0C;&#x7576; <code>f</code> return falsy &#x7684;&#x503C;&#xFF0C;<code>g</code> &#x6703; return true&#xFF1B;&#x7576; <code>f</code> return truthy. &#x7684;&#x503C;&#xFF0C;<code>g</code> &#x6703; return false&#x3002;</li>
-<li>&#x53E6;&#x4E00;&#x500B;&#x53EB;&#x505A; <a href="https://ramdajs.com/docs/#not" target="_blank" rel="noopener">not</a>&#xFF0C;&#x9810;&#x8A08;&#x63A5;&#x6536;&#x7684;&#x6703;&#x662F;&#x4E00;&#x500B; Boolean&#xFF0C;&#x55AE;&#x7D14;&#x5C31;&#x662F;&#x628A; true &#x8B8A; false&#xFF0C;false &#x8B8A; true&#x3002;</li>
+<li>一個叫做 <a target="_blank" rel="noopener" href="https://ramdajs.com/docs/#complement">complement</a>，它預計接收一個 function(我們先稱為 <code>f</code>），並回傳一個 function(我們先稱為 <code>g</code>)，當 <code>f</code> return falsy 的值，<code>g</code> 會 return true；當 <code>f</code> return truthy. 的值，<code>g</code> 會 return false。</li>
+<li>另一個叫做 <a target="_blank" rel="noopener" href="https://ramdajs.com/docs/#not">not</a>，預計接收的會是一個 Boolean，單純就是把 true 變 false，false 變 true。</li>
 </ol>
-<p>Kyle Simpson &#x5728;&#x9019;&#x5802;&#x8AB2;&#x7A0B;&#x628A;&#x4E0A;&#x9762;&#x7A0B;&#x5F0F;&#x78BC;&#x7684; utils &#x547D;&#x540D;&#x70BA; <code>not</code> &#xFF0C;&#x6211;&#x8A8D;&#x70BA;&#x6703;&#x8B93;&#x7528;&#x904E; Ramda &#x7684;&#x4EBA;&#x6709;&#x9EDE;&#x6DF7;&#x6DC6;&#xFF0C;&#x56E0;&#x6B64;&#x5C07;&#x547D;&#x540D;&#x6539;&#x70BA; <code>complement</code>&#x3002;</p>
+<p>Kyle Simpson 在這堂課程把上面程式碼的 utils 命名為 <code>not</code> ，我認為會讓用過 Ramda 的人有點混淆，因此將命名改為 <code>complement</code>。</p>
 </blockquote>
-<h2 id="Point-Free-Exercise"><a href="#Point-Free-Exercise" class="headerlink" title="Point Free Exercise"></a>Point Free Exercise</h2><p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">when</span>(<span class="hljs-params">fn</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">predicate</span>) </span>{</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">...args</span>) </span>{</span><br><span class="line">      <span class="hljs-keyword">if</span> (predicate(...args)) {</span><br><span class="line">        <span class="hljs-keyword">return</span> fn(...args)</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">output</span>(<span class="hljs-params">txt</span>) </span>{</span><br><span class="line">  <span class="hljs-built_in">console</span>.log(txt);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">printIf</span>(<span class="hljs-params">shouldPrintIt</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">msg</span>) </span>{</span><br><span class="line">    <span class="hljs-keyword">if</span> (shouldPrintIt(msg)) {</span><br><span class="line">      output(msg);</span><br><span class="line">    }</span><br><span class="line">  };</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isShortEnough</span>(<span class="hljs-params">str</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> str.length &lt;= <span class="hljs-number">5</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isLongEnough</span>(<span class="hljs-params">str</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> !isShortEnough(str);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> msg1 = <span class="hljs-string">&quot;Hello&quot;</span>;</span><br><span class="line"><span class="hljs-keyword">var</span> msg2 = msg1 + <span class="hljs-string">&quot; World&quot;</span>;</span><br><span class="line"></span><br><span class="line">printIf(isShortEnough)(msg1);		<span class="hljs-comment">// Hello</span></span><br><span class="line">printIf(isShortEnough)(msg2);</span><br><span class="line">printIf(isLongEnough)(msg1);</span><br><span class="line">printIf(isLongEnough)(msg2);		<span class="hljs-comment">// Hello World</span></span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x9019;&#x6BB5;&#x7DF4;&#x7FD2;&#x76EE;&#x7684;&#x662F;&#x8981;&#x628A; <code>output</code> &#x3001;<code>printIf</code>&#x3001;<code>isLongEnough</code> &#x4E09;&#x6BB5;&#x7A0B;&#x5F0F;&#x78BC;&#x91CD;&#x69CB;&#x70BA; point-free style&#xFF0C;&#x4E26;&#x4E14;&#x8B93;&#x539F;&#x672C; line35 - line38 &#x5370;&#x51FA;&#x5B57;&#x4E32;&#x7684;&#x884C;&#x70BA;&#x4E0D;&#x8B8A;&#xFF0C;&#x4E5F;&#x5C31;&#x662F; line35 &#x4F9D;&#x7136;&#x6703;&#x5370;&#x51FA; Hello&#xFF0C;line38 &#x4F9D;&#x7136;&#x6703;&#x5370;&#x51FA; Hello World&#x3002;</p>
-<p>&#x4E5F;&#x5C31;&#x662F;&#x8AAA;&#x7D93;&#x904E;&#x91CD;&#x69CB;&#x6210; point free &#x5F8C;&#xFF0C; <code>output</code> &#x3001;<code>printIf</code>&#x3001;<code>isLongEnough</code> &#x4E09;&#x500B; function &#x7684;&#x5BA3;&#x544A;&#x90FD;&#x4E0D;&#x6703;&#x770B;&#x5230;&#x53C3;&#x6578;&#x3002;</p>
-<h3 id="&#x958B;&#x59CB;&#x524D;&#x5148;&#x89E3;&#x91CB;"><a href="#&#x958B;&#x59CB;&#x524D;&#x5148;&#x89E3;&#x91CB;" class="headerlink" title="&#x958B;&#x59CB;&#x524D;&#x5148;&#x89E3;&#x91CB;"></a>&#x958B;&#x59CB;&#x524D;&#x5148;&#x89E3;&#x91CB;</h3><p>&#x958B;&#x59CB;&#x524D;&#x5148;&#x4F86;&#x641E;&#x6E05;&#x695A;&#x72C0;&#x6CC1;&#xFF0C;&#x77E5;&#x9053;&#x6BCF;&#x500B; function &#x5728;&#x505A;&#x4EC0;&#x9EBC;&#xFF0C;&#x7136;&#x5F8C;&#x539F;&#x672C;&#x884C;&#x70BA;&#x662F;&#x4EC0;&#x9EBC;&#x5427;&#xFF01;</p>
+<h2 id="Point-Free-Exercise"><a href="#Point-Free-Exercise" class="headerlink" title="Point Free Exercise"></a>Point Free Exercise</h2><pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">when</span><span class="token punctuation">(</span><span class="token parameter">fn</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">predicate</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token operator">...</span>args</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">predicate</span><span class="token punctuation">(</span><span class="token operator">...</span>args<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token function">fn</span><span class="token punctuation">(</span><span class="token operator">...</span>args<span class="token punctuation">)</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">output</span><span class="token punctuation">(</span><span class="token parameter">txt</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>txt<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">printIf</span><span class="token punctuation">(</span><span class="token parameter">shouldPrintIt</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">msg</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">shouldPrintIt</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token function">output</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">isShortEnough</span><span class="token punctuation">(</span><span class="token parameter">str</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> str<span class="token punctuation">.</span>length <span class="token operator">&lt;=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+
+<span class="token keyword">function</span> <span class="token function">isLongEnough</span><span class="token punctuation">(</span><span class="token parameter">str</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token operator">!</span><span class="token function">isShortEnough</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">var</span> msg1 <span class="token operator">=</span> <span class="token string">"Hello"</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> msg2 <span class="token operator">=</span> msg1 <span class="token operator">+</span> <span class="token string">" World"</span><span class="token punctuation">;</span>
+
+<span class="token function">printIf</span><span class="token punctuation">(</span>isShortEnough<span class="token punctuation">)</span><span class="token punctuation">(</span>msg1<span class="token punctuation">)</span><span class="token punctuation">;</span>		<span class="token comment">// Hello</span>
+<span class="token function">printIf</span><span class="token punctuation">(</span>isShortEnough<span class="token punctuation">)</span><span class="token punctuation">(</span>msg2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">printIf</span><span class="token punctuation">(</span>isLongEnough<span class="token punctuation">)</span><span class="token punctuation">(</span>msg1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">printIf</span><span class="token punctuation">(</span>isLongEnough<span class="token punctuation">)</span><span class="token punctuation">(</span>msg2<span class="token punctuation">)</span><span class="token punctuation">;</span>		<span class="token comment">// Hello World</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>這段練習目的是要把 <code>output</code> 、<code>printIf</code>、<code>isLongEnough</code> 三段程式碼重構為 point-free style，並且讓原本 line35 - line38 印出字串的行為不變，也就是 line35 依然會印出 Hello，line38 依然會印出 Hello World。</p>
+<p>也就是說經過重構成 point free 後， <code>output</code> 、<code>printIf</code>、<code>isLongEnough</code> 三個 function 的宣告都不會看到參數。</p>
+<h3 id="開始前先解釋"><a href="#開始前先解釋" class="headerlink" title="開始前先解釋"></a>開始前先解釋</h3><p>開始前先來搞清楚狀況，知道每個 function 在做什麼，然後原本行為是什麼吧！</p>
 <ol>
-<li><p><code>output</code>&#x7684;&#x884C;&#x70BA;&#x5F88;&#x55AE;&#x7D14;&#xFF0C;&#x5C31;&#x662F;&#x628A;&#x50B3;&#x9032;&#x4F86;&#x7684; argument &#x7528; <code>console.log</code> &#x5370;&#x51FA;&#x3002;</p>
+<li><p><code>output</code>的行為很單純，就是把傳進來的 argument 用 <code>console.log</code> 印出。</p>
 </li>
-<li><p><code>printIf</code>&#x6BD4;&#x8F03;&#x8907;&#x96DC;&#xFF0C;<code>printIf</code> &#x6703;&#x63A5;&#x53D7;&#x4E00;&#x500B; <code>shouldPrintIt</code> &#x7684; function &#x5F8C;&#x56DE;&#x50B3;&#x53E6;&#x4E00;&#x500B; function&#xFF1B;&#x4E0B;&#x4E00;&#x500B; function &#x6703;&#x63A5;&#x53D7;&#x4E00;&#x500B;&#x53EB; <code>msg</code>&#x7684; argument&#xFF0C;&#x6307;&#x7684;&#x662F;&#x8981;&#x5370;&#x51FA;&#x7684;&#x8A0A;&#x606F;&#xFF0C;&#x7576;&#x9019;&#x500B; function &#x57F7;&#x884C;&#x4E4B;&#x5F8C;&#xFF0C;&#x6703;&#x57F7;&#x884C; <code>shouldPrintIt</code> &#xFF0C;&#x5982;&#x679C; <code>shouldPrintIt</code> &#x662F; true&#xFF0C;&#x90A3;&#x5C31;&#x6703;&#x4F7F;&#x7528; <code>output</code>&#x5370;&#x51FA; &#xB7;msg&#x3002;</p>
+<li><p><code>printIf</code>比較複雜，<code>printIf</code> 會接受一個 <code>shouldPrintIt</code> 的 function 後回傳另一個 function；下一個 function 會接受一個叫 <code>msg</code>的 argument，指的是要印出的訊息，當這個 function 執行之後，會執行 <code>shouldPrintIt</code> ，如果 <code>shouldPrintIt</code> 是 true，那就會使用 <code>output </code>印出 ·msg。</p>
 </li>
-<li><p><code>isLongEnough</code> &#x5F88;&#x55AE;&#x7D14;&#xFF0C;&#x5C31;&#x662F; <code>isShortEnough</code> &#x57F7;&#x884C;&#x7D50;&#x679C;&#x7684;&#x76F8;&#x53CD;&#x3002;</p>
+<li><p><code>isLongEnough</code> 很單純，就是 <code>isShortEnough</code> 執行結果的相反。</p>
 </li>
-<li><p><code>when</code> &#x5247;&#x662F;&#x4F5C;&#x8005;&#x63D0;&#x4F9B;&#x7D66;&#x6211;&#x5011;&#x7684; utils&#xFF0C;&#x5F85;&#x6703;&#x91CD;&#x69CB;&#x6703;&#x7528;&#x5230;&#x3002;</p>
+<li><p><code>when</code> 則是作者提供給我們的 utils，待會重構會用到。</p>
 </li>
 </ol>
-<p>&#x4EE5; line35 &#x4F86;&#x8AAA;&#xFF0C;<code>printIf</code> &#x50B3;&#x5165;&#x4E86; <code>isShortEnough</code> &#xFF0C;&#x518D;&#x50B3;&#x5165;&#x4E86; <code>msg1</code>&#xFF0C;&#x56E0;&#x6B64;&#x57F7;&#x884C;&#x7684;&#x6642;&#x5019;&#xFF0C;&#x6703;&#x900F;&#x904E; <code>isShortEnough</code> &#x6AA2;&#x67E5;&#x50B3;&#x5165;&#x7684;&#x5B57;&#x4E32; length &#x662F;&#x5426; &lt;= 5&#xFF0C;&#x70BA; true &#x7684;&#x8A71;&#x5C31;&#x5370;&#x51FA;&#x5B57;&#x4E32;&#x3002;</p>
-<h3 id="&#x4E00;&#x6B65;&#x4E00;&#x6B65;&#x91CD;&#x69CB;"><a href="#&#x4E00;&#x6B65;&#x4E00;&#x6B65;&#x91CD;&#x69CB;" class="headerlink" title="&#x4E00;&#x6B65;&#x4E00;&#x6B65;&#x91CD;&#x69CB;"></a>&#x4E00;&#x6B65;&#x4E00;&#x6B65;&#x91CD;&#x69CB;</h3><p>&#x6211;&#x5011;&#x5148;&#x4F86;&#x770B; <code>output</code>&#xFF1A;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">output</span>(<span class="hljs-params">txt</span>) </span>{</span><br><span class="line">  <span class="hljs-built_in">console</span>.log(txt);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x548C;&#x6211;&#x5011;&#x524D;&#x9762;&#x7684;&#x7BC4;&#x4F8B;&#x5F88;&#x50CF;&#xFF0C;&#x76F4;&#x63A5;&#x91CD;&#x69CB;&#x6210;&#x9019;&#x6A23;&#x5C31;&#x597D;&#xFF1A;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// function output(txt) {</span></span><br><span class="line"><span class="hljs-comment">//   console.log(txt);</span></span><br><span class="line"><span class="hljs-comment">// }</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> output = <span class="hljs-built_in">console</span>.log</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x63A5;&#x8457;&#x6211;&#x5011;&#x5148;&#x8DF3;&#x904E; <code>printIf</code> &#xFF0C;&#x4F86;&#x770B; <code>isLongEnough</code> &#xFF1A;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isShortEnough</span>(<span class="hljs-params">str</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> str.length &lt;= <span class="hljs-number">5</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isLongEnough</span>(<span class="hljs-params">str</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> !isShortEnough(str);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x6709;&#x6C92;&#x6709;&#x767C;&#x73FE;&#x548C;&#x539F;&#x672C;&#x7684; <code>isOdd</code> &#x3001;<code>isEven</code> &#x5F88;&#x50CF;&#xFF0C;&#x6240;&#x4EE5;&#x5176;&#x5BE6;&#x53EF;&#x4EE5;&#x5982;&#x6CD5;&#x70AE;&#x88FD;&#xFF0C;&#x900F;&#x904E; <code>complement</code> &#x91CD;&#x69CB;&#xFF1A;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">complement</span>(<span class="hljs-params">fn</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">negated</span>(<span class="hljs-params">...args</span>) </span>{</span><br><span class="line">    <span class="hljs-keyword">return</span> !fn(..args)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isShortEnough</span>(<span class="hljs-params">str</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> str.length &lt;= <span class="hljs-number">5</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// function isLongEnough(str) {</span></span><br><span class="line"><span class="hljs-comment">//   return !isShortEnough(str);</span></span><br><span class="line"><span class="hljs-comment">// }</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> isLongEnough = complement(isShortEnough)</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x63A5;&#x8457;&#x5F80;&#x4E0B;&#x770B;&#x5230; <code>printIf</code> &#xFF1A;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">when</span>(<span class="hljs-params">fn</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">predicate</span>) </span>{</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">...args</span>) </span>{</span><br><span class="line">      <span class="hljs-keyword">if</span> (predicate(...args)) {</span><br><span class="line">        <span class="hljs-keyword">return</span> fn(...args)</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> output = <span class="hljs-built_in">console</span>.log</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">printIf</span>(<span class="hljs-params">shouldPrintIt</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">msg</span>) </span>{</span><br><span class="line">    <span class="hljs-keyword">if</span> (shouldPrintIt(msg)) {</span><br><span class="line">      output(msg);</span><br><span class="line">    }</span><br><span class="line">  };</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">printIf(isShortEnough)(msg1);	<span class="hljs-comment">// Hello</span></span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x5982;&#x679C;&#x7D30;&#x770B; <code>when</code> &#x9019;&#x500B; function&#xFF0C;&#x53EF;&#x4EE5;&#x767C;&#x73FE;&#x5230; line2 - line8 &#x7684;&#x908F;&#x8F2F;&#x548C; <code>printIf</code> &#x57FA;&#x672C;&#x4E0A;&#x662F;&#x4E00;&#x6A21;&#x4E00;&#x6A23;&#x7684;&#xFF0C;&#x6240;&#x4EE5;&#x8209;&#x4F8B;&#x4F86;&#x8AAA;&#xFF0C;&#x5982;&#x679C;&#x6211;&#x5011;&#x8981;&#x7528; when &#x9054;&#x5230;&#x548C; line19 &#x4E00;&#x6A23;&#x7684;&#x7D50;&#x679C;&#xFF0C;&#x53EF;&#x4EE5;&#x5BEB;&#x6210;&#x9019;&#x6A23;&#xFF1A;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">when(output)(isShortEnough)(msg1) </span><br><span class="line"><span class="hljs-comment">// &#x7B49;&#x540C;&#x65BC;</span></span><br><span class="line">printIf(isShortEnough)(msg1) <span class="hljs-comment">// Hello</span></span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x4E5F;&#x5C31;&#x662F;&#x8AAA; <code>when(output)</code> &#x548C;<code>printIf</code> &#x662F;&#x4E00;&#x6A23;&#x7684;&#xFF0C;&#x56E0;&#x6B64;&#x6211;&#x5011;&#x53EF;&#x4EE5;&#x91CD;&#x69CB;&#x6210;&#x9019;&#x6A23;&#xFF1A;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">when</span>(<span class="hljs-params">fn</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">predicate</span>) </span>{</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">...args</span>) </span>{</span><br><span class="line">      <span class="hljs-keyword">if</span> (predicate(...args)) {</span><br><span class="line">        <span class="hljs-keyword">return</span> fn(...args)</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> output = <span class="hljs-built_in">console</span>.log</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// function printIf(shouldPrintIt) {</span></span><br><span class="line"><span class="hljs-comment">//   return function(msg) {</span></span><br><span class="line"><span class="hljs-comment">//     if (shouldPrintIt(msg)) {</span></span><br><span class="line"><span class="hljs-comment">//       output(msg);</span></span><br><span class="line"><span class="hljs-comment">//     }</span></span><br><span class="line"><span class="hljs-comment">//   };</span></span><br><span class="line"><span class="hljs-comment">// }</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> printIf = when(output)</span><br><span class="line"></span><br><span class="line">printIf(isShortEnough)(msg1);	<span class="hljs-comment">// Hello</span></span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x6240;&#x4EE5;&#x91CD;&#x69CB;&#x5F8C;&#x7684;&#x7D50;&#x679C;&#x6703;&#x9577;&#x6210;&#x9019;&#x6A23;&#xFF1A;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">when</span>(<span class="hljs-params">fn</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">predicate</span>) </span>{</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">...args</span>) </span>{</span><br><span class="line">      <span class="hljs-keyword">if</span> (predicate(...args)) {</span><br><span class="line">        <span class="hljs-keyword">return</span> fn(...args)</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">not</span>(<span class="hljs-params">fn</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">negated</span>(<span class="hljs-params">...args</span>) </span>{</span><br><span class="line">    <span class="hljs-keyword">return</span> !fn(..args)</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> output = <span class="hljs-built_in">console</span>.log</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> printIf = when(output)</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isShortEnough</span>(<span class="hljs-params">str</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> str.length &lt;= <span class="hljs-number">5</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> isLongEnough = not(isShortEnough)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> msg1 = <span class="hljs-string">&quot;Hello&quot;</span>;</span><br><span class="line"><span class="hljs-keyword">var</span> msg2 = msg1 + <span class="hljs-string">&quot; World&quot;</span>;</span><br><span class="line"></span><br><span class="line">printIf(isShortEnough)(msg1);		<span class="hljs-comment">// Hello</span></span><br><span class="line">printIf(isShortEnough)(msg2);</span><br><span class="line">printIf(isLongEnough)(msg1);</span><br><span class="line">printIf(isLongEnough)(msg2);</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x91CD;&#x69CB;&#x5B8C;&#x6210;&#xFF01;&#x53EF;&#x4EE5;&#x767C;&#x73FE;&#x5230;&#x539F;&#x672C;&#x7684; <code>output</code> &#x3001;<code>printIf</code>&#x3001;<code>isLongEnough</code> &#x4E09;&#x500B; function &#x91CD;&#x69CB;&#x6210; point-free style &#x4EE5;&#x5F8C;&#xFF0C;&#x90FD;&#x770B;&#x4E0D;&#x5230;&#x5B83;&#x7684;&#x53C3;&#x6578;&#x60F9;&#xFF0C;&#x90A3;&#x70BA;&#x4EC0;&#x9EBC;&#x80FD;&#x5920;&#x8FA6;&#x5230;&#x9019;&#x4EF6;&#x4E8B;&#x5462;&#xFF1F;&#x56E0;&#x70BA;&#x6211;&#x5011;&#x628A;&#x73FE;&#x6709;&#x7684; function &#x62FC;&#x62FC;&#x88DD;&#x88DD;&#x7D44;&#x5408;&#x6210;&#x65B0;&#x7684; function&#x3002;</p>
-<h2 id="Advanced-Point-Free"><a href="#Advanced-Point-Free" class="headerlink" title="Advanced Point Free"></a>Advanced Point Free</h2><p>&#x9019;&#x6BB5;&#x843D;&#x6703;&#x8B1B;&#x9032;&#x968E;&#x7684; point free &#x6280;&#x5DE7;&#xFF0C;&#x4EE5;&#x53CA;&#x6703;&#x61C9;&#x7528;&#x5230;&#x7684;&#x53E6;&#x4E00;&#x500B; FP &#x6280;&#x5DE7;&#xFF0C;composition&#x3002;</p>
-<p>&#x6211;&#x5011;&#x8981;&#x628A;&#x5148;&#x524D;&#x7684; <code>isOdd</code> &#x6539;&#x6210; point free style&#xFF0C;&#x4F46;&#x5728;&#x6B64;&#x4E4B;&#x524D;&#xFF0C;&#x5148;&#x770B;&#x5E7E;&#x6BB5;&#x7A0B;&#x5F0F;&#x78BC;&#x3002;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">mod</span>(<span class="hljs-params">y</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> forX(x) {</span><br><span class="line">    <span class="hljs-keyword">return</span> x % y</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">eq</span>(<span class="hljs-params">y</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> forX(x) {</span><br><span class="line">    <span class="hljs-keyword">return</span> x === y</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x5F9E;&#x9019;&#x6BB5;&#x7A0B;&#x5F0F;&#x78BC;&#x6211;&#x5011;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C; <code>mod</code> &#x662F;&#x8CA0;&#x8CAC;&#x56DE;&#x50B3; <code>x % y</code>&#x7684;&#x9918;&#x6578;&#xFF1B; <code>eq</code> &#x8CA0;&#x8CAC;&#x5224;&#x65B7; <code>x === y</code> &#x3002;&#x65BC;&#x6B64;&#x540C;&#x6642;&#xFF0C;&#x4F60;&#x53EF;&#x80FD;&#x6703;&#x6CE8;&#x610F;&#x5230;&#xFF0C;&#x70BA;&#x4EC0;&#x9EBC;&#x9019;&#x908A;&#x662F;&#x5F9E; y &#x5148;&#x50B3;&#x9032;&#x4F86;&#xFF0C;&#x518D;&#x50B3; x &#x5462;&#xFF1F;&#x597D;&#x50CF;&#x5F88;&#x53CD;&#x76F4;&#x89BA;&#x6B38;&#xFF1F;</p>
-<p>Functional Programming &#x5F88;&#x6CE8;&#x91CD; function &#x7684; shape&#xFF0C;&#x9664;&#x6B64;&#x4E4B;&#x5916;&#xFF0C;&#x4E5F;&#x5F88;&#x6CE8;&#x91CD;&#x53C3;&#x6578;&#x7684;&#x9806;&#x5E8F;&#xFF0C;&#x9806;&#x5E8F;&#x6C7A;&#x5B9A;&#x9019;&#x500B; function &#x6709;&#x6C92;&#x6709;&#x90A3;&#x9EBC;&#x597D;&#x4F7F;&#x7528;&#xFF0C;&#x800C;&#x9019;&#x908A;&#x5148;&#x50B3; y &#x9032;&#x4F86;&#x7684;&#x597D;&#x8655;&#x662F;&#x4EC0;&#x9EBC;&#x5462;&#xFF1F;&#x8B93;&#x6211;&#x5011;&#x7E7C;&#x7E8C;&#x770B;&#x4E0B;&#x53BB;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">mod</span>(<span class="hljs-params">y</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> forX(x) {</span><br><span class="line">    <span class="hljs-keyword">return</span> x % y</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">eq</span>(<span class="hljs-params">y</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> forX(x) {</span><br><span class="line">    <span class="hljs-keyword">return</span> x === y</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> mod2 = mod(<span class="hljs-number">2</span>)</span><br><span class="line"><span class="hljs-keyword">var</span> eq1 = eq(<span class="hljs-number">1</span>)</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x61C9;&#x8A72;&#x80FD;&#x5920;&#x611F;&#x53D7;&#x5230;&#x5148;&#x5F9E; y &#x50B3;&#x7684;&#x597D;&#x8655;&#x4E86;&#x5C0D;&#x5427;&#xFF1F;&#x5148;&#x50B3; y &#x7684;&#x8A71;&#xFF0C;&#x6211;&#x5011;&#x5C31;&#x53EF;&#x4EE5;&#x5148;&#x6C7A;&#x5B9A; <code>mod</code> &#x548C; <code>eq</code> &#x90E8;&#x5206;&#x7684;&#x908F;&#x8F2F;&#xFF0C;&#x4EE5; <code>mod</code> &#x4F86;&#x8AAA;&#xFF0C;&#x6211;&#x5011;&#x80FD;&#x5920;&#x5148;&#x50B3; 2 &#x9032;&#x53BB;&#xFF0C;&#x4E26;&#x4E14;&#x5BA3;&#x544A;&#x4E00;&#x500B; <code>mod2</code> &#x7684; function&#xFF0C;&#x4EE3;&#x8868;&#x50B3;&#x5165; <code>mod2</code> &#x7684;&#x6578;&#x5B57;&#x90FD;&#x56DE;&#x50B3;&#x9664;&#x4EE5; 2 &#x7684;&#x9918;&#x6578;&#xFF1B;<code>eq</code> &#x4E5F;&#x662F;&#x5982;&#x6B64;&#xFF0C;<code>eq1</code>&#x4EE3;&#x8868;&#x4E86;&#x6703;&#x56DE;&#x50B3;&#x662F;&#x5426;&#x8207; 1 &#x76F8;&#x7B49;&#x7684;&#x7D50;&#x679C;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x8AAA;&#xFF0C;&#x5982;&#x679C;&#x5148;&#x5BEB; <code>y</code> &#x7684;&#x8A71;&#xFF0C;&#x6211;&#x5011;&#x80FD;&#x5920;&#x5148;&#x6C7A;&#x5B9A;&#x689D;&#x4EF6;&#xFF0C;&#x518D;&#x85C9;&#x6B64;&#x5BA3;&#x544A;&#x51FA;&#x66F4;&#x7279;&#x5B9A;&#x3001;&#x5BA2;&#x88FD;&#x5316;&#x7684; function&#x3002;</p>
-<p>&#x63A5;&#x8457;&#x5C31;&#x53EF;&#x4EE5;&#x9032;&#x5165;&#x6B63;&#x984C;&#x4E86;&#xFF0C;&#x4F86;&#x52D5;&#x624B;&#x7528; <code>mod2</code> &#x548C; <code>eq1</code> &#x4F86;&#x6539;&#x9020;&#x4E4B;&#x524D;&#x7684; <code>isOdd</code> &#x5427;&#xFF01;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">//... mod &#x548C; eq &#x7684;&#x5BA3;&#x544A;&#x5C31;&#x5148;&#x7701;&#x7565;</span></span><br><span class="line"><span class="hljs-keyword">var</span> mod2 = mod(<span class="hljs-number">2</span>)</span><br><span class="line"><span class="hljs-keyword">var</span> eq1 = eq(<span class="hljs-number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isOdd</span>(<span class="hljs-params">x</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> eq1(mod2(x))</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x767C;&#x73FE;&#x5230;&#x4E00;&#x4EF6;&#x5F88;&#x9177;&#x7684;&#x4E8B;&#x60C5;&#x4E86;&#x55CE;&#xFF1F;&#x5728; <code>isOdd</code>&#x88E1;&#x9762;&#xFF0C; <code>mod2(x)</code> &#x57F7;&#x884C;&#x5F8C;&#x7684; output&#xFF0C;&#x53C8;&#x6703;&#x99AC;&#x4E0A;&#x50B3;&#x5165; <code>eq1</code> &#x88E1;&#x9762;&#x7576;&#x4F5C;&#x5B83;&#x7684; input&#xFF01;</p>
-<p>&#x9019;&#x7A2E;&#x57F7;&#x884C;&#x5F8C;&#x7684;&#x7D50;&#x679C;&#xFF0C;&#x99AC;&#x4E0A;&#x53C8;&#x88AB;&#x50B3;&#x5165;&#x53E6;&#x4E00;&#x500B; function &#x7576;&#x4F5C; input &#x7684;&#x4F5C;&#x6CD5;&#xFF0C;&#x5C31;&#x88AB;&#x7A31;&#x70BA; <strong>Composition</strong>&#x3002;</p>
+<p>以 line35 來說，<code>printIf</code> 傳入了 <code>isShortEnough</code> ，再傳入了 <code>msg1</code>，因此執行的時候，會透過 <code>isShortEnough</code> 檢查傳入的字串 length 是否 &lt;= 5，為 true 的話就印出字串。</p>
+<h3 id="一步一步重構"><a href="#一步一步重構" class="headerlink" title="一步一步重構"></a>一步一步重構</h3><p>我們先來看 <code>output</code>：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">output</span><span class="token punctuation">(</span><span class="token parameter">txt</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>txt<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>和我們前面的範例很像，直接重構成這樣就好：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// function output(txt) &#123;</span>
+<span class="token comment">//   console.log(txt);</span>
+<span class="token comment">// &#125;</span>
+
+<span class="token keyword">const</span> output <span class="token operator">=</span> console<span class="token punctuation">.</span>log<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接著我們先跳過 <code>printIf</code> ，來看 <code>isLongEnough</code> ：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">isShortEnough</span><span class="token punctuation">(</span><span class="token parameter">str</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> str<span class="token punctuation">.</span>length <span class="token operator">&lt;=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+
+<span class="token keyword">function</span> <span class="token function">isLongEnough</span><span class="token punctuation">(</span><span class="token parameter">str</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token operator">!</span><span class="token function">isShortEnough</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>有沒有發現和原本的 <code>isOdd</code> 、<code>isEven</code> 很像，所以其實可以如法炮製，透過 <code>complement</code> 重構：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">complement</span><span class="token punctuation">(</span><span class="token parameter">fn</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token function">negated</span><span class="token punctuation">(</span><span class="token parameter"><span class="token operator">...</span>args</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token operator">!</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span>args<span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">isShortEnough</span><span class="token punctuation">(</span><span class="token parameter">str</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> str<span class="token punctuation">.</span>length <span class="token operator">&lt;=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// function isLongEnough(str) &#123;</span>
+<span class="token comment">//   return !isShortEnough(str);</span>
+<span class="token comment">// &#125;</span>
+
+<span class="token keyword">const</span> isLongEnough <span class="token operator">=</span> <span class="token function">complement</span><span class="token punctuation">(</span>isShortEnough<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接著往下看到 <code>printIf</code> ：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">when</span><span class="token punctuation">(</span><span class="token parameter">fn</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">predicate</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token operator">...</span>args</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">predicate</span><span class="token punctuation">(</span><span class="token operator">...</span>args<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token function">fn</span><span class="token punctuation">(</span><span class="token operator">...</span>args<span class="token punctuation">)</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> output <span class="token operator">=</span> console<span class="token punctuation">.</span>log
+
+<span class="token keyword">function</span> <span class="token function">printIf</span><span class="token punctuation">(</span><span class="token parameter">shouldPrintIt</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">msg</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">shouldPrintIt</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token function">output</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function">printIf</span><span class="token punctuation">(</span>isShortEnough<span class="token punctuation">)</span><span class="token punctuation">(</span>msg1<span class="token punctuation">)</span><span class="token punctuation">;</span>	<span class="token comment">// Hello</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>如果細看 <code>when</code> 這個 function，可以發現到 line2 - line8 的邏輯和 <code>printIf</code> 基本上是一模一樣的，所以舉例來說，如果我們要用 when 達到和 line19 一樣的結果，可以寫成這樣：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">when</span><span class="token punctuation">(</span>output<span class="token punctuation">)</span><span class="token punctuation">(</span>isShortEnough<span class="token punctuation">)</span><span class="token punctuation">(</span>msg1<span class="token punctuation">)</span> 
+<span class="token comment">// 等同於</span>
+<span class="token function">printIf</span><span class="token punctuation">(</span>isShortEnough<span class="token punctuation">)</span><span class="token punctuation">(</span>msg1<span class="token punctuation">)</span> <span class="token comment">// Hello</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>也就是說 <code>when(output)</code> 和<code>printIf</code> 是一樣的，因此我們可以重構成這樣：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">when</span><span class="token punctuation">(</span><span class="token parameter">fn</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">predicate</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token operator">...</span>args</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">predicate</span><span class="token punctuation">(</span><span class="token operator">...</span>args<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token function">fn</span><span class="token punctuation">(</span><span class="token operator">...</span>args<span class="token punctuation">)</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> output <span class="token operator">=</span> console<span class="token punctuation">.</span>log
+
+<span class="token comment">// function printIf(shouldPrintIt) &#123;</span>
+<span class="token comment">//   return function(msg) &#123;</span>
+<span class="token comment">//     if (shouldPrintIt(msg)) &#123;</span>
+<span class="token comment">//       output(msg);</span>
+<span class="token comment">//     &#125;</span>
+<span class="token comment">//   &#125;;</span>
+<span class="token comment">// &#125;</span>
+
+<span class="token keyword">const</span> printIf <span class="token operator">=</span> <span class="token function">when</span><span class="token punctuation">(</span>output<span class="token punctuation">)</span>
+
+<span class="token function">printIf</span><span class="token punctuation">(</span>isShortEnough<span class="token punctuation">)</span><span class="token punctuation">(</span>msg1<span class="token punctuation">)</span><span class="token punctuation">;</span>	<span class="token comment">// Hello</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>所以重構後的結果會長成這樣：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">when</span><span class="token punctuation">(</span><span class="token parameter">fn</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">predicate</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token operator">...</span>args</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">predicate</span><span class="token punctuation">(</span><span class="token operator">...</span>args<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token function">fn</span><span class="token punctuation">(</span><span class="token operator">...</span>args<span class="token punctuation">)</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">not</span><span class="token punctuation">(</span><span class="token parameter">fn</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token function">negated</span><span class="token punctuation">(</span><span class="token parameter"><span class="token operator">...</span>args</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token operator">!</span><span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span>args<span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> output <span class="token operator">=</span> console<span class="token punctuation">.</span>log
+
+<span class="token keyword">const</span> printIf <span class="token operator">=</span> <span class="token function">when</span><span class="token punctuation">(</span>output<span class="token punctuation">)</span>
+
+<span class="token keyword">function</span> <span class="token function">isShortEnough</span><span class="token punctuation">(</span><span class="token parameter">str</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> str<span class="token punctuation">.</span>length <span class="token operator">&lt;=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> isLongEnough <span class="token operator">=</span> <span class="token function">not</span><span class="token punctuation">(</span>isShortEnough<span class="token punctuation">)</span>
+
+<span class="token keyword">var</span> msg1 <span class="token operator">=</span> <span class="token string">"Hello"</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> msg2 <span class="token operator">=</span> msg1 <span class="token operator">+</span> <span class="token string">" World"</span><span class="token punctuation">;</span>
+
+<span class="token function">printIf</span><span class="token punctuation">(</span>isShortEnough<span class="token punctuation">)</span><span class="token punctuation">(</span>msg1<span class="token punctuation">)</span><span class="token punctuation">;</span>		<span class="token comment">// Hello</span>
+<span class="token function">printIf</span><span class="token punctuation">(</span>isShortEnough<span class="token punctuation">)</span><span class="token punctuation">(</span>msg2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">printIf</span><span class="token punctuation">(</span>isLongEnough<span class="token punctuation">)</span><span class="token punctuation">(</span>msg1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">printIf</span><span class="token punctuation">(</span>isLongEnough<span class="token punctuation">)</span><span class="token punctuation">(</span>msg2<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>重構完成！可以發現到原本的 <code>output</code> 、<code>printIf</code>、<code>isLongEnough</code> 三個 function 重構成 point-free style 以後，都看不到它的參數惹，那為什麼能夠辦到這件事呢？因為我們把現有的 function 拼拼裝裝組合成新的 function。</p>
+<h2 id="Advanced-Point-Free"><a href="#Advanced-Point-Free" class="headerlink" title="Advanced Point Free"></a>Advanced Point Free</h2><p>這段落會講進階的 point free 技巧，以及會應用到的另一個 FP 技巧，composition。</p>
+<p>我們要把先前的 <code>isOdd</code> 改成 point free style，但在此之前，先看幾段程式碼。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">mod</span><span class="token punctuation">(</span><span class="token parameter">y</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">forX</span><span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> x <span class="token operator">%</span> y
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">eq</span><span class="token punctuation">(</span><span class="token parameter">y</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">forX</span><span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> x <span class="token operator">===</span> y
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>從這段程式碼我們可以看到， <code>mod</code> 是負責回傳 <code>x % y </code>的餘數； <code>eq</code> 負責判斷 <code>x === y</code> 。於此同時，你可能會注意到，為什麼這邊是從 y 先傳進來，再傳 x 呢？好像很反直覺欸？</p>
+<p>Functional Programming 很注重 function 的 shape，除此之外，也很注重參數的順序，順序決定這個 function 有沒有那麼好使用，而這邊先傳 y 進來的好處是什麼呢？讓我們繼續看下去</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">mod</span><span class="token punctuation">(</span><span class="token parameter">y</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">forX</span><span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> x <span class="token operator">%</span> y
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">eq</span><span class="token punctuation">(</span><span class="token parameter">y</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">forX</span><span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> x <span class="token operator">===</span> y
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">var</span> mod2 <span class="token operator">=</span> <span class="token function">mod</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>
+<span class="token keyword">var</span> eq1 <span class="token operator">=</span> <span class="token function">eq</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>應該能夠感受到先從 y 傳的好處了對吧？先傳 y 的話，我們就可以先決定 <code>mod</code> 和 <code>eq</code> 部分的邏輯，以 <code>mod</code> 來說，我們能夠先傳 2 進去，並且宣告一個 <code>mod2</code> 的 function，代表傳入 <code>mod2</code> 的數字都回傳除以 2 的餘數；<code>eq</code> 也是如此，<code>eq1</code>代表了會回傳是否與 1 相等的結果，也就是說，如果先寫 <code>y</code> 的話，我們能夠先決定條件，再藉此宣告出更特定、客製化的 function。</p>
+<p>接著就可以進入正題了，來動手用 <code>mod2</code> 和 <code>eq1</code> 來改造之前的 <code>isOdd</code> 吧！</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">//... mod 和 eq 的宣告就先省略</span>
+<span class="token keyword">var</span> mod2 <span class="token operator">=</span> <span class="token function">mod</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>
+<span class="token keyword">var</span> eq1 <span class="token operator">=</span> <span class="token function">eq</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+
+<span class="token keyword">function</span> <span class="token function">isOdd</span><span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">eq1</span><span class="token punctuation">(</span><span class="token function">mod2</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>發現到一件很酷的事情了嗎？在 <code>isOdd</code>裡面， <code>mod2(x)</code> 執行後的 output，又會馬上傳入 <code>eq1</code> 裡面當作它的 input！</p>
+<p>這種執行後的結果，馬上又被傳入另一個 function 當作 input 的作法，就被稱為 <strong>Composition</strong>。</p>
 <blockquote>
-<p>Take one function&#x2019;s output, and make the input to another function </p>
+<p>Take one function’s output, and make the input to another function </p>
 </blockquote>
-<p>&#x53EF;&#x4EE5;&#x767C;&#x73FE;&#x76EE;&#x524D;&#x9084;&#x662F;&#x6C92;&#x6709;&#x5230;&#x9054; point free &#x7684;&#x6700;&#x7D42;&#x76EE;&#x6A19;&#xFF0C;&#x90A3;&#x6211;&#x5011;&#x8981;&#x600E;&#x9EBC;&#x4F7F;&#x7528; composition &#x9054;&#x5230; point free &#x5462;&#xFF1F;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">var</span> mod2 = mod(<span class="hljs-number">2</span>)</span><br><span class="line"><span class="hljs-keyword">var</span> eq1 = eq(<span class="hljs-number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isOdd</span>(<span class="hljs-params">x</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> eq1(mod2(x))</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">compose</span>(<span class="hljs-params">fn2, fn1</span>) </span>{</span><br><span class="line">  return function composed(x) [</span><br><span class="line">    <span class="hljs-keyword">return</span> fn2(fn1(x))</span><br><span class="line">  ]</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> isOdd = compose(eq1, mod2)</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x9177;&#x5427;&#xFF01;<code>compose</code> &#x505A;&#x4E86;&#x5E7E;&#x4EF6;&#x4E8B;&#xFF1A;</p>
+<p>可以發現目前還是沒有到達 point free 的最終目標，那我們要怎麼使用 composition 達到 point free 呢？</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> mod2 <span class="token operator">=</span> <span class="token function">mod</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>
+<span class="token keyword">var</span> eq1 <span class="token operator">=</span> <span class="token function">eq</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+
+<span class="token keyword">function</span> <span class="token function">isOdd</span><span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">eq1</span><span class="token punctuation">(</span><span class="token function">mod2</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">compose</span><span class="token punctuation">(</span><span class="token parameter">fn2<span class="token punctuation">,</span> fn1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token function">composed</span><span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token punctuation">[</span>
+    <span class="token keyword">return</span> <span class="token function">fn2</span><span class="token punctuation">(</span><span class="token function">fn1</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">var</span> isOdd <span class="token operator">=</span> <span class="token function">compose</span><span class="token punctuation">(</span>eq1<span class="token punctuation">,</span> mod2<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>酷吧！<code>compose</code> 做了幾件事：</p>
 <ol>
-<li>&#x63A5;&#x6536; fn2&#x3001;fn1 &#x5169;&#x500B;&#x53C3;&#x6578;&#xFF0C;&#x57F7;&#x884C;&#x5F8C;&#x56DE;&#x50B3;&#x4E00;&#x500B; <code>composed</code> function &#xFF0C;&#x63A5;&#x53D7;&#x4E00;&#x500B; <code>x</code> &#x53C3;&#x6578;&#x3002;</li>
-<li><code>composed</code> function &#x50B3;&#x5165; x &#x5F8C;&#xFF0C;&#x6703;&#x5148;&#x57F7;&#x884C; <code>fn1</code> &#xFF0C;<code>fn1</code> &#x7684; output &#x6703;&#x50B3;&#x5165; <code>fn2</code> &#x7576;&#x4F5C; input</li>
-<li>&#x57F7;&#x884C;&#x5B8C;&#x5F8C; return &#x7D50;&#x679C;</li>
+<li>接收 fn2、fn1 兩個參數，執行後回傳一個 <code>composed</code> function ，接受一個 <code>x</code> 參數。</li>
+<li><code>composed</code> function 傳入 x 後，會先執行 <code>fn1</code> ，<code>fn1</code> 的 output 會傳入 <code>fn2</code> 當作 input</li>
+<li>執行完後 return 結果</li>
 </ol>
-<p>&#x6240;&#x4EE5; <code>compose</code> &#x50B3;&#x5165; function &#x7684;&#x57F7;&#x884C;&#x9806;&#x5E8F;&#x662F;&#x7531; &#x300C;&#x53F3; -&gt; &#x5DE6;&#x300D;&#xFF0C;&#x4EE5; <code>isOdd</code> &#x70BA;&#x4F8B;&#x5B50;&#x7684;&#x8A71;&#xFF0C;<code>mod2</code> &#x5C31;&#x662F; <code>fn1</code>&#xFF1B;<code>eq1</code> &#x5C31;&#x662F; <code>fn2</code>&#x3002;</p>
-<h3 id="&#x601D;&#x8DEF;&#x600E;&#x9EBC;&#x904B;&#x4F5C;&#x7684;&#xFF1F;"><a href="#&#x601D;&#x8DEF;&#x600E;&#x9EBC;&#x904B;&#x4F5C;&#x7684;&#xFF1F;" class="headerlink" title="&#x601D;&#x8DEF;&#x600E;&#x9EBC;&#x904B;&#x4F5C;&#x7684;&#xFF1F;"></a>&#x601D;&#x8DEF;&#x600E;&#x9EBC;&#x904B;&#x4F5C;&#x7684;&#xFF1F;</h3><p>&#x770B;&#x770B;&#x539F;&#x672C;&#x7684;&#x7A0B;&#x5F0F;&#x78BC;&#xFF1A;</p>
-<p></p><figure class="highlight js hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isOdd</span>(<span class="hljs-params">x</span>) </span>{</span><br><span class="line">  <span class="hljs-keyword">return</span> eq1(mod2(x))</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">compose</span>(<span class="hljs-params">fn2, fn1</span>) </span>{</span><br><span class="line">  return function composed(x) [</span><br><span class="line">    <span class="hljs-keyword">return</span> fn2(fn1(x))</span><br><span class="line">  ]</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p><code>composed</code> &#x548C; <code>isOdd</code> &#x7684; shape &#x662F;&#x4E00;&#x6A23;&#x7684;&#xFF0C;<code>eq1(mod2(x))</code> &#x548C; <code>fn2(fn1(x))</code> &#x4E5F;&#x662F;&#x4E00;&#x6A23;&#x7684;&#xFF01;</p>
-<p>&#x800C;&#x5728;&#x6700;&#x5F8C;&#x7684;&#x6700;&#x5F8C;&#xFF0C;&#x6211;&#x5011;&#x53C8;&#x80FD;&#x5920;&#x767C;&#x73FE;&#xFF0C;<code>eq1</code> &#x548C; <code>eq(1)</code> &#x3001;<code>mod2</code> &#x548C; <code>mod(2)</code> &#x53C8;&#x662F;&#x4E00;&#x6A23;&#x7684;&#xFF0C;&#x6240;&#x4EE5;&#x5176;&#x5BE6;&#x4E5F;&#x4E0D;&#x7528;&#x53E6;&#x5916;&#x5BA3;&#x544A;&#xFF0C;&#x6700;&#x7D42;&#x7684;&#x7D50;&#x679C;&#x6703;&#x9577;&#x9019;&#x6A23;&#xFF1A;</p>
-<p></p><figure class="highlight javascript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">compose</span>(<span class="hljs-params">fn2, fn1</span>) </span>{</span><br><span class="line">  return function composed(x) [</span><br><span class="line">    <span class="hljs-keyword">return</span> fn2(fn1(x))</span><br><span class="line">  ]</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// var isOdd = compose(eq1, mod2)</span></span><br><span class="line"><span class="hljs-keyword">var</span> isOdd = compose(eq(<span class="hljs-number">1</span>), mod(<span class="hljs-number">2</span>))</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>Kyle Simpson &#x91CD;&#x69CB;&#x5B8C;&#x5F8C;&#x5982;&#x6B64;&#x8AAA;&#xFF1A;</p>
+<p>所以 <code>compose</code> 傳入 function 的執行順序是由 「右 -&gt; 左」，以 <code>isOdd</code> 為例子的話，<code>mod2</code> 就是 <code>fn1</code>；<code>eq1</code> 就是 <code>fn2</code>。</p>
+<h3 id="思路怎麼運作的？"><a href="#思路怎麼運作的？" class="headerlink" title="思路怎麼運作的？"></a>思路怎麼運作的？</h3><p>看看原本的程式碼：</p>
+<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token keyword">function</span> <span class="token function">isOdd</span><span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">eq1</span><span class="token punctuation">(</span><span class="token function">mod2</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">compose</span><span class="token punctuation">(</span><span class="token parameter">fn2<span class="token punctuation">,</span> fn1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token function">composed</span><span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token punctuation">[</span>
+    <span class="token keyword">return</span> <span class="token function">fn2</span><span class="token punctuation">(</span><span class="token function">fn1</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>composed</code> 和 <code>isOdd</code> 的 shape 是一樣的，<code>eq1(mod2(x))</code> 和 <code>fn2(fn1(x))</code> 也是一樣的！</p>
+<p>而在最後的最後，我們又能夠發現，<code>eq1</code> 和 <code>eq(1)</code> 、<code>mod2</code> 和 <code>mod(2)</code> 又是一樣的，所以其實也不用另外宣告，最終的結果會長這樣：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">compose</span><span class="token punctuation">(</span><span class="token parameter">fn2<span class="token punctuation">,</span> fn1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token function">composed</span><span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token punctuation">[</span>
+    <span class="token keyword">return</span> <span class="token function">fn2</span><span class="token punctuation">(</span><span class="token function">fn1</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// var isOdd = compose(eq1, mod2)</span>
+<span class="token keyword">var</span> isOdd <span class="token operator">=</span> <span class="token function">compose</span><span class="token punctuation">(</span><span class="token function">eq</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">mod</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>Kyle Simpson 重構完後如此說：</p>
 <blockquote>
-<p>Those piece are interchangable because they have the same shape. That&#x2019;s equational reasoning, and equational reasoning is the heart of being able to do point freestyle.</p>
+<p>Those piece are interchangable because they have the same shape. That’s equational reasoning, and equational reasoning is the heart of being able to do point freestyle.</p>
 </blockquote>
-<p>&#x5C0D;&#x65BC; equational reasoning &#x6709;&#x7591;&#x60D1;&#x7684;&#x4EBA;&#x53EF;&#x4EE5;&#x53C3;&#x8003; <a href="https://jigsawye.gitbooks.io/mostly-adequate-guide/content/ch3.html" target="_blank" rel="noopener">&#x7B2C; 3 &#x7AE0;&#xFF1A;Pure Function&#xFF0D;&#x55AE;&#x7D14;&#x7684;&#x5E78;&#x798F;</a> &#xFF0C;&#x56E0;&#x70BA;&#x6211;&#x6C92;&#x628A;&#x63E1;&#x628A;&#x5B83;&#x8AAA;&#x660E;&#x7684;&#x5F88;&#x6E05;&#x695A;&#x54C8;&#x54C8;&#x3002;</p>
+<p>對於 equational reasoning 有疑惑的人可以參考 <a target="_blank" rel="noopener" href="https://jigsawye.gitbooks.io/mostly-adequate-guide/content/ch3.html">第 3 章：Pure Function－單純的幸福</a> ，因為我沒把握把它說明的很清楚哈哈。</p>
 <h2 id="Function-Parameter-Order"><a href="#Function-Parameter-Order" class="headerlink" title="Function Parameter Order"></a>Function Parameter Order</h2><p><strong>Function Parameter Order Matters Greatly.</strong></p>
-<p>Function &#x7684; parameter &#x9806;&#x5E8F;&#x5F88;&#x91CD;&#x8981;&#xFF0C;paramter &#x7684;&#x9806;&#x5E8F;&#x6C7A;&#x5B9A;&#x4E86;&#x4F60;&#x9019;&#x500B; function &#x597D;&#x7528;&#x8207;&#x5426;&#x3002;</p>
-<p><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmgsnllvduj316m0ei0u6.jpg" alt="&#x622A;&#x5716; 2021-01-09 &#x4E0A;&#x5348;1.08.33"></p>
-<p>&#x4E00;&#x822C;&#x4F86;&#x8AAA;&#xFF0C;&#x8A2D;&#x8A08; function parameter &#x7684;&#x9806;&#x5E8F;&#x6703;&#x6309;&#x7167;&#x300C;<strong>General -&gt; Specific</strong>&#x300D;&#x7684;&#x898F;&#x5247;&#x4F86;&#x8A2D;&#x8A08;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x8D8A;&#x901A;&#x7528;&#x7684;&#x6703;&#x653E;&#x5728;&#x8D8A;&#x524D;&#x9762;&#x7684;&#x9806;&#x5E8F;&#xFF0C;&#x8D8A;&#x7279;&#x5B9A;&#x7684;&#x6703;&#x653E;&#x5728;&#x8D8A;&#x5F8C;&#x9762;&#x7684;&#x9806;&#x5E8F;&#x3002;</p>
-<p>&#x5F9E; <a href="https://ramdajs.com/docs/#map" target="_blank" rel="noopener">Ramda map</a> &#x5C31;&#x53EF;&#x4EE5;&#x9019;&#x500B;&#x8A2D;&#x8A08; function &#x7684;&#x65B9;&#x5F0F;&#xFF0C;<code>R.map</code>&#x628A; function &#x653E;&#x524D;&#x9762;&#xFF0C;array &#x653E;&#x5F8C;&#x9762;&#x3002;</p>
-<p>&#x4EE5; Ramda &#x7684; map &#x8A2D;&#x8A08;&#x4F86;&#x8AAA;&#xFF0C;function &#x5176;&#x5BE6;&#x662F;&#x66F4;&#x70BA; general &#x7684; parameter&#xFF0C;&#x6BD4;&#x5982;&#x4F60;&#x53EF;&#x4EE5;&#x5BA3;&#x544A;&#x4E00;&#x500B;&#x53EB; <code>add1</code> &#x7684; function &#x5F8C;&#x653E;&#x5230;&#x5404;&#x8655;&#x4F7F;&#x7528;&#x5230; <code>R.map</code> &#x7684;&#x5730;&#x65B9;&#xFF1B;array &#x5247;&#x662F;&#x66F4; specific&#x3001;&#x66F4;&#x6709;&#x8B8A;&#x5316;&#x7684;&#x5167;&#x5BB9;&#xFF0C;&#x56E0;&#x6B64;&#x653E;&#x5728;&#x53F3;&#x908A;&#x66F4;&#x5408;&#x7406;&#x3001;&#x65B9;&#x4FBF;&#x4F7F;&#x7528;&#x3002;</p>
-<p>&#x6240;&#x4EE5; function parameter order &#x8A2D;&#x8A08;&#x7684;&#x91CD;&#x9EDE;&#x5728;&#x65BC;&#xFF0C;function paramter &#x7531;&#x5DE6;&#x800C;&#x53F3;&#x7684;&#x9806;&#x5E8F;&#x61C9;&#x8A72;&#x8981;&#x662F;&#x5F9E;&#x6700;&#x901A;&#x7528;&#x7684;&#xFF0C;&#x518D;&#x5230;&#x6700;&#x7279;&#x5B9A;&#x7684; paramter&#x3002;</p>
+<p>Function 的 parameter 順序很重要，paramter 的順序決定了你這個 function 好用與否。</p>
+<p><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmgsnllvduj316m0ei0u6.jpg" alt="截圖 2021-01-09 上午1.08.33"></p>
+<p>一般來說，設計 function parameter 的順序會按照「<strong>General -&gt; Specific</strong>」的規則來設計，也就是越通用的會放在越前面的順序，越特定的會放在越後面的順序。</p>
+<p>從 <a target="_blank" rel="noopener" href="https://ramdajs.com/docs/#map">Ramda map</a> 就可以這個設計 function 的方式，<code>R.map</code>把 function 放前面，array 放後面。</p>
+<p>以 Ramda 的 map 設計來說，function 其實是更為 general 的 parameter，比如你可以宣告一個叫 <code>add1</code> 的 function 後放到各處使用到 <code>R.map</code> 的地方；array 則是更 specific、更有變化的內容，因此放在右邊更合理、方便使用。</p>
+<p>所以 function parameter order 設計的重點在於，function paramter 由左而右的順序應該要是從最通用的，再到最特定的 paramter。</p>
 <h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a href="https://frontendmasters.com/courses/functional-javascript-v3/" target="_blank" rel="noopener">Functional-Light JavaScript, v3</a> </li>
-<li><a href="https://medium.com/%E4%B8%80%E5%80%8B%E5%B0%8F%E5%B0%8F%E5%B7%A5%E7%A8%8B%E5%B8%AB%E7%9A%84%E9%9A%A8%E6%89%8B%E7%AD%86%E8%A8%98/javascript-point-free-style-%E5%A6%82%E4%BD%95%E5%B9%AB%E5%8A%A9%E6%8F%90%E9%AB%98%E7%A8%8B%E5%BC%8F%E5%8F%AF%E8%AE%80%E6%80%A7-fe865053a06d" target="_blank" rel="noopener">[Javascript] Point Free Style &#x5982;&#x4F55;&#x5E6B;&#x52A9;&#x63D0;&#x9AD8;&#x7A0B;&#x5F0F;&#x53EF;&#x8B80;&#x6027;</a></li>
-<li><a href="https://www.ruanyifeng.com/blog/2017/03/pointfree.html" target="_blank" rel="noopener">Pointfree &#x7F16;&#x7A0B;&#x98CE;&#x683C;&#x6307;&#x5357;</a></li>
-<li><a href="https://ithelp.ithome.com.tw/articles/10239709" target="_blank" rel="noopener">Functional Programming in JS - Pointfree</a></li>
-<li><a href="https://stackoverflow.com/questions/944446/what-is-point-free-style-in-functional-programming" target="_blank" rel="noopener">What is &#x201C;point free&#x201D; style (in Functional Programming)?</a></li>
-<li><a href="https://www.coderbridge.com/series/290918dfd2f34e678c4916d836caf404/posts/e6fa3baf7c984347bf0c664233f748ad" target="_blank" rel="noopener">[Day04] Currying, Pointfree, Higher Order Function</a></li>
+<li><a target="_blank" rel="noopener" href="https://frontendmasters.com/courses/functional-javascript-v3/">Functional-Light JavaScript, v3</a> </li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/%E4%B8%80%E5%80%8B%E5%B0%8F%E5%B0%8F%E5%B7%A5%E7%A8%8B%E5%B8%AB%E7%9A%84%E9%9A%A8%E6%89%8B%E7%AD%86%E8%A8%98/javascript-point-free-style-%E5%A6%82%E4%BD%95%E5%B9%AB%E5%8A%A9%E6%8F%90%E9%AB%98%E7%A8%8B%E5%BC%8F%E5%8F%AF%E8%AE%80%E6%80%A7-fe865053a06d">[Javascript] Point Free Style 如何幫助提高程式可讀性</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2017/03/pointfree.html">Pointfree 编程风格指南</a></li>
+<li><a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10239709">Functional Programming in JS - Pointfree</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/944446/what-is-point-free-style-in-functional-programming">What is “point free” style (in Functional Programming)?</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.coderbridge.com/series/290918dfd2f34e678c4916d836caf404/posts/e6fa3baf7c984347bf0c664233f748ad">[Day04] Currying, Pointfree, Higher Order Function</a></li>
 </ul>
-</body></html>
-    
+
     </div>
-    
-    <div class="columns is-variable is-1 is-multiline is-mobile">
-    
-        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/JavaScript/">#JavaScript</a></span>
-    
-        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/Functional-Programming/">#Functional Programming</a></span>
-    
-        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/frontend-master/">#frontend master</a></span>
-    
-    </div>
-    
-    
-    <div class="columns is-mobile is-multiline article-nav">
-        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
-            
-            <a href="/2021/02/07/Functional-Light-JavaScript-Closure/">Functional-Light JavaScript - Closure</a>
-            
-        </span>
-        <span class="column is-12-mobile is-half-desktop  article-nav-next">
-            
-            <a href="/2021/02/06/Functional-Light-JavaScript-Argument-Adapters/">Functional-Light JavaScript - Argument Adapters</a>
-            
-        </span>
-    </div>
-    
-</article>
 
-
-<div class="sharebox">
     
-<div class="sharethis-inline-share-buttons"></div>
-<script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5e4221ec7a88780012e1744e&amp;product=inline-share-buttons' async='async'></script>
-
-</div>
-
-
-
-<div class="comments">
-    <h3 class="title is-4">Comments</h3>
     
-<script>
-    var disqus_config = function () {
-        this.page.url = 'https://chihyang41.github.io/2021/02/07/Functional-Light-JavaScript-Point-Free/';
-        this.page.identifier = '2021/02/07/Functional-Light-JavaScript-Point-Free/';
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Functional-Programming/" rel="tag"># Functional Programming</a>
+              <a href="/tags/frontend-master/" rel="tag"># frontend master</a>
+          </div>
+
         
-        this.language = 'en';
-        
-    };
-    (function() {
-        var d = document, s = d.createElement('script');  
-        s.src = '//' + 'ChihYang41-blog' + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
 
-<div id="disqus_thread">
-    
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
-</div>
-</div>
-
-    </div>
-</section>
-    <footer class="footer">
-    <div class="container">
-        <div class="columns content">
-            <div class="column is-narrow has-text-centered">
-                &copy; 2021 Chih Yang&nbsp;
-                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
-                        href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
-            </div>
-            <div class="column is-hidden-mobile"></div>
-
-            
-            <div class="column is-narrow">
-                <div class="columns is-mobile is-multiline is-centered">
-                
-                    
-                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/ChihYang41" target="_blank" rel="noopener">
-                    
-                    GitHub
-                    
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/02/06/Functional-Light-JavaScript-Argument-Adapters/" rel="prev" title="Functional-Light JavaScript - Argument Adapters">
+                  <i class="fa fa-chevron-left"></i> Functional-Light JavaScript - Argument Adapters
                 </a>
-                
-                </div>
             </div>
-            
-            
-        </div>
-    </div>
-</footer>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
-
-<!-- test if the browser is outdated -->
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/" target="_blank" rel="noopener">Update my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+            <div class="post-nav-item">
+                <a href="/2021/02/07/Functional-Light-JavaScript-Closure/" rel="next" title="Functional-Light JavaScript - Closure">
+                  Functional-Light JavaScript - Closure <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
 </div>
-<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
-<script>
-    $(document).ready(function () {
-        // plugin function, place inside DOM ready function
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        })
-    });
-</script>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
 
 <script>
-    window.FontAwesomeConfig = {
-        searchPseudoElements: true
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
     }
-    moment.locale("en-AU");
-</script>
-
-
-    
-    
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<script>
-    MathJax.Hub.Config({
-        "HTML-CSS": {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
     });
+  }
 </script>
-
-    
-    
-    
-    
-<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
-<script>
-    (function ($) {
-        $(document).ready(function () {
-            if (typeof($.fn.lightGallery) === 'function') {
-                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
-            }
-            if (typeof($.fn.justifiedGallery) === 'function') {
-                $('.justified-gallery').justifiedGallery();
-            }
-        });
-    })(jQuery);
-</script>
-
-    
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-    <style>
-        .hljs {
-            position: relative;
-        }
-
-        .hljs .clipboard-btn {
-            float: right;
-            color: #9a9a9a;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .hljs .clipboard-btn:hover {
-          color: #8a8a8a;
-        }
-
-        .hljs > .clipboard-btn {
-            display: none;
-            position: absolute;
-            right: 4px;
-            top: 4px;
-        }
-
-        .hljs:hover > .clipboard-btn {
-            display: inline;
-        }
-
-        .hljs > figcaption > .clipboard-btn {
-            margin-right: 4px;
-        }
-    </style>
-    <script>
-      $(document).ready(function () {
-        $('figure.hljs').each(function(i, figure) {
-          var codeId = 'code-' + i;
-          var code = figure.querySelector('.code');
-          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
-          code.id = codeId;
-          copyButton.addClass('clipboard-btn');
-          copyButton.attr('data-clipboard-target-id', codeId);
-
-          var figcaption = figure.querySelector('figcaption');
-
-          if (figcaption) {
-            figcaption.append(copyButton[0]);
-          } else {
-            figure.prepend(copyButton[0]);
-          }
-        })
-
-        var clipboard = new ClipboardJS('.clipboard-btn', {
-          target: function(trigger) {
-            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
-          }
-        });
-        clipboard.on('success', function(e) {
-          e.clearSelection();
-        })
-      })
-    </script>
-
-    
-    
-
-    
-
-
-
-<script src="/js/script.js"></script>
-
-
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-mask"></div>
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
 </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chih Yang</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
 <script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
+  var disqus_config = function() {
+    this.page.url = "https://chihyang41.github.io/2021/02/07/Functional-Light-JavaScript-Point-Free/";
+    this.page.identifier = "2021/02/07/Functional-Light-JavaScript-Point-Free/";
+    this.page.title = "Functional-Light JavaScript - Point Free";
+    };
+  NexT.utils.loadComments('#disqus_thread', () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ChihYang41-blog.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
 </script>
 
-<script src="/js/insight.js"></script>
-
-    
 </body>
 </html>

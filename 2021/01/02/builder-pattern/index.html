@@ -1,36 +1,41 @@
 <!DOCTYPE html>
-<html class="has-navbar-fixed-top">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-<title>Builder Pattern（生成器） - Chih Yang&#39;s Blog</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.css">
-
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
 
 
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="pdI9OcgtLe0I27rizFD2U3s553wFM8nsth5viFyCbOk">
 
-<meta name="description" content="Chih Yang 的前端小天地">
+<link rel="stylesheet" href="/css/main.css">
 
 
 
-<meta name="keywords" content="前端">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
 
-
-
-    <meta name="description" content="&amp;#x524D;&amp;#x8A00;&amp;#x9019;&amp;#x662F;&amp;#x5728;&amp;#x8B80;&amp;#x66F8;&amp;#x6703;&amp;#x7576;&amp;#x4E3B;&amp;#x8B1B;&amp;#x6642;&amp;#x8CA0;&amp;#x8CAC;&amp;#x7684; builder pattern&amp;#xFF0C;&amp;#x56E0;&amp;#x70BA;&amp;#x672C;&amp;#x4EBA;&amp;#x5C0D; OOP &amp;#x4EE5;&amp;#x">
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="前言這是在讀書會當主講時負責的 builder pattern，因為本人對 OOP 以及 design pattern 並沒有到非常熟悉，內容非常可能有諸多錯誤，因此僅供參考，如果有錯歡迎指正，感謝！">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Builder Pattern（生成器）">
 <meta property="og:url" content="https://chihyang41.github.io/2021/01/02/builder-pattern/index.html">
 <meta property="og:site_name" content="Chih Yang&#39;s Blog">
-<meta property="og:description" content="&amp;#x524D;&amp;#x8A00;&amp;#x9019;&amp;#x662F;&amp;#x5728;&amp;#x8B80;&amp;#x66F8;&amp;#x6703;&amp;#x7576;&amp;#x4E3B;&amp;#x8B1B;&amp;#x6642;&amp;#x8CA0;&amp;#x8CAC;&amp;#x7684; builder pattern&amp;#xFF0C;&amp;#x56E0;&amp;#x70BA;&amp;#x672C;&amp;#x4EBA;&amp;#x5C0D; OOP &amp;#x4EE5;&amp;#x">
+<meta property="og:description" content="前言這是在讀書會當主講時負責的 builder pattern，因為本人對 OOP 以及 design pattern 並沒有到非常熟悉，內容非常可能有諸多錯誤，因此僅供參考，如果有錯歡迎指正，感謝！">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.imgur.com/hCJHkBX.png">
 <meta property="og:image" content="https://i.imgur.com/3gmN3rf.png">
 <meta property="og:image" content="https://i.imgur.com/y7Z5Rh6.png">
 <meta property="og:image" content="https://i.imgur.com/cXa0fsE.png">
 <meta property="article:published_time" content="2021-01-02T08:39:54.000Z">
-<meta property="article:modified_time" content="2021-01-02T08:56:20.650Z">
+<meta property="article:modified_time" content="2021-01-02T08:39:54.000Z">
 <meta property="article:author" content="Chih Yang">
 <meta property="article:tag" content="TypeScript">
 <meta property="article:tag" content="OOP">
@@ -38,466 +43,687 @@
 <meta name="twitter:image" content="https://i.imgur.com/hCJHkBX.png">
 
 
+<link rel="canonical" href="https://chihyang41.github.io/2021/01/02/builder-pattern/">
 
 
-
-<link rel="icon" href="https://upload.cc/i1/2020/03/05/MXS6WH.png">
-
-
-<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Ovo|Source+Code+Pro">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
-
-
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/css/lightgallery.min.css">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/css/justifiedGallery.min.css">
-
-
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/atom-one-dark.min.css">
-
-
-<link rel="stylesheet" href="/css/style.css">
-
-
-<script defer src="//use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-146838618-1');
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
 </script>
-
-
-    
-
-
-<meta name="generator" content="Hexo 4.2.0"></head>
-<body>
-    
-<nav class="navbar is-transparent is-fixed-top navbar-main" role="navigation" aria-label="main navigation">
-    <div class="container">
-        <div class="navbar-brand">
-            <a class="navbar-item navbar-logo" href="/">
-                
-                    
-                    Chih Yang&#39;s Blog
-                    
-                
-            </a>
-            <div class="navbar-burger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-        
-        <div class="navbar-menu navbar-start">
-            
-            <a class="navbar-item "
-               href="/archives">Archives</a>
-            
-            <a class="navbar-item "
-               href="/tags">Tags</a>
-            
-            <a class="navbar-item "
-               href="/categories">Categories</a>
-            
-        </div>
-        
-        <div class="navbar-menu navbar-end">
-            
-            <a class="navbar-item search" title="Search" href="javascript:;">
-                <i class="fas fa-search"></i>
-            </a>
-            
-            
-            
-            <a class="navbar-item" title="GitHub" href="https://github.com/ChihYang41" target="_blank" rel="noopener">
-                
-                <i class="fab fa-github"></i>
-                
-            </a>
-               
-            
-        </div>
-    </div>
-</nav>
-
-    <section class="section">
-    <div class="container">
-    <article class="article content gallery" itemscope itemprop="blogPost">
-    <h1 class="article-title is-size-3 is-size-4-mobile" itemprop="name">
-        
-            Builder Pattern（生成器）
-        
-    </h1>
-    <div class="article-meta columns is-variable is-1 is-multiline is-mobile is-size-7-mobile">
-        <span class="column is-narrow">
-            <time datetime="2021-01-02T08:39:54.000Z" itemprop="datePublished">Jan 2 2021</time>
-        </span>
-        
-        <span class="column is-narrow article-category">
-            <i class="far fa-folder"></i>
-            <a class="article-category-link" href="/categories/%E6%8A%80%E8%A1%93/">技術</a>
-        </span>
-        
-        
-        <span class="column is-narrow">
-            
-            
-            18 minutes read (About 2754 words)
-        </span>
-        
-    </div>
-    <div class="article-entry is-size-6-mobile" itemprop="articleBody">
-    
-        <html><head></head><body><h2 id="&#x524D;&#x8A00;"><a href="#&#x524D;&#x8A00;" class="headerlink" title="&#x524D;&#x8A00;"></a>&#x524D;&#x8A00;</h2><p>&#x9019;&#x662F;&#x5728;&#x8B80;&#x66F8;&#x6703;&#x7576;&#x4E3B;&#x8B1B;&#x6642;&#x8CA0;&#x8CAC;&#x7684; builder pattern&#xFF0C;&#x56E0;&#x70BA;&#x672C;&#x4EBA;&#x5C0D; OOP &#x4EE5;&#x53CA; design pattern &#x4E26;&#x6C92;&#x6709;&#x5230;&#x975E;&#x5E38;&#x719F;&#x6089;&#xFF0C;&#x5167;&#x5BB9;&#x975E;&#x5E38;&#x53EF;&#x80FD;&#x6709;&#x8AF8;&#x591A;&#x932F;&#x8AA4;&#xFF0C;&#x56E0;&#x6B64;&#x50C5;&#x4F9B;&#x53C3;&#x8003;&#xFF0C;&#x5982;&#x679C;&#x6709;&#x932F;&#x6B61;&#x8FCE;&#x6307;&#x6B63;&#xFF0C;&#x611F;&#x8B1D;&#xFF01;</p>
-<a id="more"></a>
-
-<h2 id="&#x60C5;&#x5883;"><a href="#&#x60C5;&#x5883;" class="headerlink" title="&#x60C5;&#x5883;"></a>&#x60C5;&#x5883;</h2><p>&#x5047;&#x8A2D;&#x4ECA;&#x5929;&#x4F60;&#x662F;&#x5EFA;&#x5546;&#xFF0C;&#x8981;&#x66FF;&#x5BA2;&#x6236;&#x84CB;&#x623F;&#x5B50;&#xFF0C;&#x4F46;&#x623F;&#x5B50;&#x6703;&#x6709;&#x5404;&#x5F0F;&#x5404;&#x6A23;&#x7684;&#x8981;&#x6C42;&#xFF0C;&#x6BD4;&#x5982;&#x6703;&#x6709;&#x9700;&#x8981;&#x6CF3;&#x6C60;&#x7684;&#x3001;&#x9700;&#x8981;&#x96D5;&#x50CF;&#x7684;&#x3001;&#x9700;&#x8981;&#x8ECA;&#x5EAB;&#x7684;&#x623F;&#x5B50;&#x7B49;&#x7B49;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x8AAA;&#x751F;&#x7522;&#x7522;&#x54C1;&#x6642;&#xFF0C;&#x4F60;&#x6703;&#x6709;&#x5404;&#x5F0F;&#x5404;&#x6A23;&#x5BA2;&#x88FD;&#x5316;&#x7684;&#x9700;&#x6C42;&#x3002;</p>
-<p>&#x800C;&#x70BA;&#x4E86;&#x9054;&#x6210;&#x9019;&#x500B;&#x9700;&#x6C42;&#xFF0C;&#x4F60;&#x53EF;&#x80FD;&#x6703;&#x6709;&#x5E7E;&#x7A2E;&#x89E3;&#x6CD5;&#xFF0C;&#x4E0B;&#x9762;&#x662F;&#x53EF;&#x80FD;&#x7684;&#x89E3;&#x6CD5;&#xFF1A;</p>
-<h3 id="&#x60F3;&#x6CD5;&#x4E00;&#xFF1A;&#x5EFA;&#x7ACB;&#x4E00;&#x5806;-subclass"><a href="#&#x60F3;&#x6CD5;&#x4E00;&#xFF1A;&#x5EFA;&#x7ACB;&#x4E00;&#x5806;-subclass" class="headerlink" title="&#x60F3;&#x6CD5;&#x4E00;&#xFF1A;&#x5EFA;&#x7ACB;&#x4E00;&#x5806; subclass"></a>&#x60F3;&#x6CD5;&#x4E00;&#xFF1A;&#x5EFA;&#x7ACB;&#x4E00;&#x5806; subclass</h3><p><img src="https://i.imgur.com/hCJHkBX.png" alt></p>
-<p>&#x8FA6;&#x6CD5;&#x5C31;&#x662F;&#x57FA;&#x65BC; house &#x9019;&#x500B; class &#x53BB; extends &#x5F88;&#x591A; subclass&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x8AAA;&#x6703;&#x6709;&#x5F88;&#x591A;&#x5BA2;&#x88FD;&#x5316;&#x7684;&#x623F;&#x5B50;&#x6703;&#x7E7C;&#x627F; house &#x9019;&#x500B; class&#xFF0C;&#x7A0B;&#x5F0F;&#x78BC;&#x53EF;&#x80FD;&#x6703;&#x50CF;&#x662F;&#x9019;&#x6A23;&#xFF1A;</p>
-<p></p><figure class="highlight typescript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">class</span> House {</span><br><span class="line">  <span class="hljs-comment">// &#x623F;&#x5B50;</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">class</span> HouseWithSwimPool <span class="hljs-keyword">extends</span> House {</span><br><span class="line">  <span class="hljs-comment">// &#x6709;&#x6E38;&#x6CF3;&#x6C60;&#x7684;&#x623F;&#x5B50;</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">class</span> HouseWithStatues <span class="hljs-keyword">extends</span> House {</span><br><span class="line">  <span class="hljs-comment">// &#x6709;&#x96D5;&#x50CF;&#x7684;&#x623F;&#x5B50;</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">class</span> HouseWithGardens <span class="hljs-keyword">extends</span> House {</span><br><span class="line">  <span class="hljs-comment">// &#x6709;&#x82B1;&#x5712;&#x7684;&#x623F;&#x5B50;</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x4F46;&#x9019;&#x65B9;&#x6CD5;&#x4E0D;&#x662F;&#x5F88;&#x7406;&#x60F3;&#xFF0C;&#x56E0;&#x70BA;&#x7576;&#x4F60;&#x9700;&#x8981;&#x5BA2;&#x88FD;&#x5316;&#x7684;&#x623F;&#x5B50;&#x5F88;&#x591A;&#x7A2E;&#x985E;&#x6642;&#xFF0C;&#x5C31;&#x8981;&#x8DDF;&#x8457;&#x5BEB;&#x4E00;&#x5806; subclass&#xFF0C;&#x64F4;&#x5145;&#x8D77;&#x4F86;&#x975E;&#x5E38;&#x7684;&#x9EBB;&#x7169;&#x3002;</p>
-<h3 id="&#x60F3;&#x6CD5;&#x4E8C;&#xFF1A;&#x7528;&#x53C3;&#x6578;&#x4F86;&#x6C7A;&#x5B9A;"><a href="#&#x60F3;&#x6CD5;&#x4E8C;&#xFF1A;&#x7528;&#x53C3;&#x6578;&#x4F86;&#x6C7A;&#x5B9A;" class="headerlink" title="&#x60F3;&#x6CD5;&#x4E8C;&#xFF1A;&#x7528;&#x53C3;&#x6578;&#x4F86;&#x6C7A;&#x5B9A;"></a>&#x60F3;&#x6CD5;&#x4E8C;&#xFF1A;&#x7528;&#x53C3;&#x6578;&#x4F86;&#x6C7A;&#x5B9A;</h3><p><img src="https://i.imgur.com/3gmN3rf.png" alt></p>
-<p>&#x65E2;&#x7136; subclass &#x5F88;&#x9EBB;&#x7169;&#xFF0C;&#x90A3;&#x6211;&#x5011;&#x6539;&#x7528; constructor &#x88E1;&#x9762;&#x7684;&#x53C3;&#x6578;&#x4F86;&#x5BA2;&#x88FD;&#x5316;&#x623F;&#x5B50;&#x5427;&#xFF01;&#x8FA6;&#x6CD5;&#x5C31;&#x662F;&#x5728; new &#x4E00;&#x500B;&#x65B0;&#x7684; House &#x6642;&#xFF0C;&#x900F;&#x904E;&#x53C3;&#x6578;&#x4F86;&#x6C7A;&#x5B9A;&#x5BA2;&#x88FD;&#x5316;&#x7684;&#x5167;&#x5BB9;&#x662F;&#x751A;&#x9EBC;&#xFF0C;&#x7A0B;&#x5F0F;&#x78BC;&#x53EF;&#x80FD;&#x6703;&#x50CF;&#x662F;&#x9019;&#x6A23;&#xFF1A;</p>
-<p></p><figure class="highlight typescript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">class</span> House {</span><br><span class="line">    <span class="hljs-keyword">constructor</span>(<span class="hljs-params"></span></span><br><span class="line"><span class="hljs-params">      windows: <span class="hljs-built_in">number</span>, </span></span><br><span class="line"><span class="hljs-params">      doors: <span class="hljs-built_in">number</span>, </span></span><br><span class="line"><span class="hljs-params">      rooms: <span class="hljs-built_in">number</span>, </span></span><br><span class="line"><span class="hljs-params">      hasGarage: <span class="hljs-built_in">boolean</span>, </span></span><br><span class="line"><span class="hljs-params">      hasSwimPool: <span class="hljs-built_in">boolean</span>, </span></span><br><span class="line"><span class="hljs-params">      hasStatues: <span class="hljs-built_in">boolean</span></span>) {</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> aHouse = <span class="hljs-keyword">new</span> House(<span class="hljs-number">4</span>, <span class="hljs-number">4</span>, <span class="hljs-number">1</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">true</span>)</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x770B;&#x8D77;&#x4F86;&#x662F;&#x4E00;&#x5B9A;&#x7A0B;&#x5EA6;&#x9054;&#x6210;&#x4E86;&#x9700;&#x6C42;&#xFF0C;&#x4F46;&#x6703;&#x6709;&#x751A;&#x9EBC;&#x554F;&#x984C;&#x5462;&#xFF1F;</p>
-<p>&#x53EF;&#x4EE5;&#x767C;&#x73FE;&#x5230;&#x6BCF; new &#x4E00;&#x500B; House &#x5C31;&#x8981;&#x50B3;&#x975E;&#x5E38;&#x591A;&#x53C3;&#x6578;&#x9032;&#x53BB;&#xFF0C;&#x5047;&#x8A2D;&#x4ECA;&#x5929;&#x6709; 10 &#x500B;&#x53C3;&#x6578;&#xFF0C;new &#x7684;&#x6642;&#x5019;&#x5C31;&#x8981;&#x50B3; 10 &#x500B;&#xFF1B;&#x53C8;&#x6216;&#x8005;&#x4ECA;&#x5929;&#x4F60;&#x53EA;&#x60F3;&#x8981;&#x7B2C; 1 &#x548C;&#x7B2C; 10 &#x500B;&#x53C3;&#x6578;&#xFF0C;&#x4E2D;&#x9593; 2 - 8 &#x7684;&#x53C3;&#x6578;&#x4F60;&#x5C31;&#x53EA;&#x80FD;&#x50B3; null&#xFF0C;&#x4E0D;&#x5F97;&#x4E0D;&#x7D66;&#x5B83;&#x4E00;&#x500B;&#x503C;&#xFF0C;&#x4F46;&#x5176;&#x5BE6; 2 - 8 &#x7684;&#x53C3;&#x6578;&#x4F60;&#x662F;&#x4E0D;&#x9700;&#x8981;&#x7684;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x8AAA;&#x6BCF; new &#x4E00;&#x500B; House &#x5C31;&#x6703;&#x8B8A;&#x5F97;&#x9817;&#x70BA;&#x9EBB;&#x7169;&#x3002;</p>
-<h3 id="&#x60F3;&#x6CD5;&#x4E09;&#xFF1A;Builder-Pattern"><a href="#&#x60F3;&#x6CD5;&#x4E09;&#xFF1A;Builder-Pattern" class="headerlink" title="&#x60F3;&#x6CD5;&#x4E09;&#xFF1A;Builder Pattern"></a>&#x60F3;&#x6CD5;&#x4E09;&#xFF1A;Builder Pattern</h3><p><img src="https://i.imgur.com/y7Z5Rh6.png" alt></p>
-<p>&#x63A5;&#x8457;&#x5C31;&#x8F2A;&#x5230;&#x6211;&#x5011; Builder Pattern &#x51FA;&#x5834;&#x7684;&#x6642;&#x6A5F;&#x4E86;&#xFF0C;&#x6211;&#x5011;&#x4E0D;&#x7528; subclass&#xFF0C;&#x4E5F;&#x4E0D;&#x7528;&#x53C3;&#x6578;&#x4F86;&#x6C7A;&#x5B9A;&#x5BA2;&#x88FD;&#x5316;&#x7684;&#x7D30;&#x7BC0;&#xFF0C;&#x800C;&#x662F;&#x628A;&#x6BCF;&#x500B;&#x5BA2;&#x88FD;&#x5316;&#x7684;&#x7D30;&#x7BC0;&#x62C6;&#x5206;&#x6210;&#x4E00;&#x500B;&#x4E00;&#x500B;&#x7684; method&#xFF0C;&#x5728;&#x8ABF;&#x6574;&#x5B8C;&#x5BA2;&#x88FD;&#x5316;&#x7684;&#x5167;&#x5BB9;&#x4E4B;&#x5F8C;&#xFF0C;&#x518D;&#x547C;&#x53EB; <code>getResult</code> &#x4F86;&#x53D6;&#x5F97;&#x5BA2;&#x88FD;&#x5316;&#x7684;&#x7D50;&#x679C;&#x3002;</p>
-<h2 id="Builder-Pattern-&#x7A0B;&#x5F0F;&#x78BC;&#x793A;&#x7BC4;&#x5462;&#xFF1F;"><a href="#Builder-Pattern-&#x7A0B;&#x5F0F;&#x78BC;&#x793A;&#x7BC4;&#x5462;&#xFF1F;" class="headerlink" title="Builder Pattern &#x7A0B;&#x5F0F;&#x78BC;&#x793A;&#x7BC4;&#x5462;&#xFF1F;"></a>Builder Pattern &#x7A0B;&#x5F0F;&#x78BC;&#x793A;&#x7BC4;&#x5462;&#xFF1F;</h2><p>&#x4F86;&#x60F9;&#x4F86;&#x60F9;&#xFF0C;&#x71B1;&#x9A30;&#x9A30;&#x7684;&#x7BC4;&#x4F8B;&#x4F86;&#x60F9;&#x3002;</p>
-<h3 id="Builder-Pattern-&#x7684;-UML"><a href="#Builder-Pattern-&#x7684;-UML" class="headerlink" title="Builder Pattern &#x7684; UML"></a>Builder Pattern &#x7684; UML</h3><p>&#x55AE;&#x7D14;&#x7528;&#x6587;&#x5B57;&#x8B1B;&#x89E3;&#x6709;&#x9EDE;&#x4E0D;&#x5920;&#x529B;&#xFF0C;&#x8981;&#x7406;&#x89E3; Builder Pattern &#x4F86;&#x770B;&#x7A0B;&#x5F0F;&#x78BC;&#x6703;&#x66F4;&#x5FEB;&#x4E00;&#x9EDE;&#xFF01;&#x9996;&#x5148;&#x4F86;&#x770B;&#x4E00;&#x4E0B; Builder Pattern &#x7684; UML &#x5716;&#xFF1A;</p>
-<p><img src="https://i.imgur.com/cXa0fsE.png" alt></p>
-<p>&#x5F9E;&#x4E0A;&#x5716;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x95DC;&#x65BC; Builder Pattern &#x6211;&#x5011;&#x9700;&#x8981;&#x5E7E;&#x500B;&#x6771;&#x897F;&#xFF0C;</p>
-<ol>
-<li><strong>Builder &#x7684; Interface</strong>&#xFF1A;&#x5B9A;&#x7FA9; Builder class &#x9700;&#x8981;&#x5BE6;&#x4F5C;&#x7684; method&#x3002;</li>
-<li><strong>Builder &#x7684; class</strong>&#xFF1A;&#x5EFA;&#x9020;&#x5BA2;&#x88FD;&#x5316;&#x7522;&#x54C1;&#x7684; Class&#xFF0C;&#x88E1;&#x9762;&#x6703;&#x5BE6;&#x4F5C; <code>Builder Interface</code> &#x7684;&#x5BA2;&#x88FD;&#x5316; method&#x3002;</li>
-<li><strong>Director</strong>&#xFF1A;&#x5C6C;&#x65BC; optional &#x7684; class&#xFF0C;&#x5728; Builder Pattern &#x88E1;&#x9762;&#x53EF;&#x7528;&#x53EF;&#x4E0D;&#x7528;&#xFF0C;&#x7528;&#x8655;&#x662F;&#x628A;&#x5E38;&#x7528;&#x7684;&#x5EFA;&#x9020;&#x7522;&#x54C1;&#x6B65;&#x9A5F;&#x5BEB;&#x6210;&#x4E00;&#x500B; method&#xFF0C;&#x800C;&#x5F8C;&#x518D;&#x4F7F;&#x7528; builder &#x5FEB;&#x901F;&#x5EFA;&#x7ACB;&#x51FA;&#x5E38;&#x7528;&#x7684;&#x7522;&#x54C1;&#x3002;</li>
-<li><strong>Product &#x7684; class</strong>&#xFF1A;&#x8981;&#x751F;&#x7522;&#x7684;&#x5BA2;&#x88FD;&#x5316;&#x7522;&#x54C1;&#x3002;</li>
-</ol>
-<p>&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x7E3D;&#x5171;&#x9700;&#x8981;&#x6709;&#x4E09;&#x500B; class&#xFF0C;&#x4E00;&#x500B; interface&#xFF0C;&#x63A5;&#x8457;&#x6211;&#x5011;&#x5C31;&#x4E00;&#x500B;&#x4E00;&#x500B;&#x4F86;&#x5BE6;&#x4F5C;&#xFF0C;&#x66F4;&#x4ED4;&#x7D30;&#x63A2;&#x8A0E;&#x6BCF;&#x500B; class &#x7684;&#x7528;&#x9014;&#x53CA;&#x7D30;&#x7BC0;&#x5427;&#xFF01;</p>
-<p>&#x65E2;&#x7136;&#x6211;&#x5011;&#x525B;&#x525B;&#x7684;&#x60C5;&#x5883;&#x662F;&#x64D4;&#x4EFB;&#x5EFA;&#x5546;&#xFF0C;&#x90A3;&#x6211;&#x5011;&#x5C31;&#x5148;&#x770B;&#x770B;&#x9700;&#x8981;&#x4EC0;&#x9EBC;&#xFF1A;</p>
-<ol>
-<li><code>IHouseBuilder</code>&#xFF1A;HouseBuilder &#x7684; Interface</li>
-<li><code>HouseBuilder</code>&#xFF1A;&#x623F;&#x5B50;&#x7684;&#x5EFA;&#x9020;&#x8005;</li>
-<li><code>Director</code>&#xFF1A;&#x6307;&#x63EE; HouseBuilder &#x9032;&#x884C;&#x4E00;&#x9023;&#x4E32;&#x6B65;&#x9A5F;&#x84CB;&#x51FA;&#x623F;&#x5B50;&#x7684; class&#x3002;</li>
-<li><code>House</code>&#xFF1A;&#x8981;&#x5BA2;&#x88FD;&#x5316;&#x7684;&#x623F;&#x5B50;&#x3002;</li>
-</ol>
-<p>&#x65E2;&#x7136;&#x77E5;&#x9053;&#x9700;&#x8981;&#x4EC0;&#x9EBC;&#x4E86;&#xFF0C;&#x5C31;&#x4F86;&#x52D5;&#x624B;&#x5BE6;&#x4F5C;&#x5427;&#xFF01;</p>
-<h3 id="&#x5BE6;&#x4F5C;&#xFF1A;House-Class"><a href="#&#x5BE6;&#x4F5C;&#xFF1A;House-Class" class="headerlink" title="&#x5BE6;&#x4F5C;&#xFF1A;House Class"></a>&#x5BE6;&#x4F5C;&#xFF1A;House Class</h3><p>&#x9996;&#x5148;&#x4F86;&#x5230;&#x6211;&#x5011;&#x60F3;&#x8981;&#x88FD;&#x9020;&#x7684;&#x7522;&#x54C1; &#x2014; <code>House</code>&#xFF1A;<br></p><figure class="highlight typescript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// &#x8981;&#x88FD;&#x9020;&#x7684; product</span></span><br><span class="line"><span class="hljs-keyword">class</span> House {</span><br><span class="line">  <span class="hljs-keyword">public</span> windows: <span class="hljs-built_in">number</span> = <span class="hljs-number">2</span></span><br><span class="line">  <span class="hljs-keyword">public</span> walls: <span class="hljs-built_in">number</span> = <span class="hljs-number">4</span></span><br><span class="line">  <span class="hljs-keyword">public</span> doors: <span class="hljs-built_in">number</span> = <span class="hljs-number">1</span></span><br><span class="line">  <span class="hljs-keyword">public</span> rooms: <span class="hljs-built_in">number</span> = <span class="hljs-number">2</span></span><br><span class="line">  <span class="hljs-keyword">public</span> hasGarage: <span class="hljs-built_in">boolean</span> = <span class="hljs-literal">false</span></span><br><span class="line">  <span class="hljs-keyword">public</span> hasSwimPool: <span class="hljs-built_in">boolean</span> = <span class="hljs-literal">false</span></span><br><span class="line">  <span class="hljs-keyword">public</span> hasStatue: <span class="hljs-built_in">boolean</span> = <span class="hljs-literal">false</span></span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">constructor</span>(<span class="hljs-params">windows: <span class="hljs-built_in">number</span>, walls: <span class="hljs-built_in">number</span></span>) {</span><br><span class="line">    <span class="hljs-keyword">this</span>.windows = windows</span><br><span class="line">    <span class="hljs-keyword">this</span>.walls = walls</span><br><span class="line">  }</span><br><span class="line">  </span><br><span class="line">  <span class="hljs-comment">// &#x70BA;&#x4E86;&#x5F85;&#x6703;&#x5217;&#x51FA;&#x8ABF;&#x6574;&#x5B8C;&#x5BA2;&#x88FD;&#x5316;&#x7D30;&#x7BC0;&#x800C;&#x4F7F;&#x7528;&#x7684; console.log&#xFF0C;&#x5BE6;&#x969B;&#x4E0A;&#x4E0D;&#x9700;&#x8981;</span></span><br><span class="line">  <span class="hljs-keyword">public</span> listParts() {</span><br><span class="line">    <span class="hljs-built_in">console</span>.log({</span><br><span class="line">      <span class="hljs-built_in">window</span>: <span class="hljs-keyword">this</span>.windows,</span><br><span class="line">      walls: <span class="hljs-keyword">this</span>.walls,</span><br><span class="line">      doors: <span class="hljs-keyword">this</span>.doors,</span><br><span class="line">      rooms: <span class="hljs-keyword">this</span>.rooms,</span><br><span class="line">      hasGarage: <span class="hljs-keyword">this</span>.hasGarage,</span><br><span class="line">      hasSwimPool: <span class="hljs-keyword">this</span>.hasSwimPool,</span><br><span class="line">      hasStatue: <span class="hljs-keyword">this</span>.hasStatue</span><br><span class="line">    })</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x5F9E; House &#x7684; class &#x80FD;&#x770B;&#x5230;&#x5167;&#x5BB9;&#x5C31;&#x662F;&#x5404;&#x7A2E;&#x53EF;&#x4EE5;&#x8ABF;&#x6574;&#x7684; member&#xFF0C;&#x4EE5;&#x53CA;&#x70BA;&#x4E86; console &#x51FA; member &#x6240;&#x4F7F;&#x7528;&#x7684; method&#x3002;</p>
-<h3 id="&#x5BE6;&#x4F5C;&#xFF1A;IHouseBuilder"><a href="#&#x5BE6;&#x4F5C;&#xFF1A;IHouseBuilder" class="headerlink" title="&#x5BE6;&#x4F5C;&#xFF1A;IHouseBuilder"></a>&#x5BE6;&#x4F5C;&#xFF1A;IHouseBuilder</h3><p>&#x518D;&#x4F86;&#x8F2A;&#x5230;&#x4E86; <code>IHouseBuilder</code>&#xFF0C;&#x9019;&#x500B; interface &#x7684;&#x7528;&#x9014;&#x662F;&#x7528;&#x4F86;&#x5B9A;&#x7FA9; <code>HouseBuilder</code> &#x9700;&#x8981;&#x5BE6;&#x4F5C;&#x4EC0;&#x9EBC; method &#x7684;&#x3002;</p>
-<p></p><figure class="highlight typescript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// builder &#x7684; interface</span></span><br><span class="line"><span class="hljs-keyword">interface</span> IHouseBuilder {</span><br><span class="line">  reset(windows: <span class="hljs-built_in">number</span>, walls: <span class="hljs-built_in">number</span>): <span class="hljs-built_in">void</span></span><br><span class="line">  buildDoors(doors: <span class="hljs-built_in">number</span>): IHouseBuilder</span><br><span class="line">  buildRooms(rooms: <span class="hljs-built_in">number</span>): IHouseBuilder</span><br><span class="line">  buildGarage(): IHouseBuilder</span><br><span class="line">  buildSwimPool(): IHouseBuilder</span><br><span class="line">  buildStatue(): IHouseBuilder</span><br><span class="line">  getResult(): House</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><br>&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x9019;&#x908A;&#x5B9A;&#x7FA9;&#x4E86; <code>reset</code>&#xFF0C;&#x76EE;&#x7684;&#x662F;&#x5EFA;&#x9020;&#x5B8C;&#x7522;&#x54C1;&#x5F8C;&#x53EF;&#x4EE5;&#x6B78;&#x96F6;&#xFF0C;&#x4EE5;&#x4FBF;&#x9032;&#x884C;&#x4E0B;&#x4E00;&#x6B21;&#x7684;&#x751F;&#x7522;&#xFF1B;<code>buildDoors</code>&#x3001;<code>buildRooms</code> &#x7B49;&#x7B49;&#x7684; method&#xFF0C;&#x5247;&#x662F;&#x6211;&#x5011;&#x8981;&#x5BA2;&#x88FD;&#x5316;&#x9700;&#x8981;&#x4F7F;&#x7528;&#x7684; method&#xFF0C;&#x8B93;&#x6211;&#x5011;&#x80FD;&#x5920;&#x8ABF;&#x6574; House &#x7684;&#x7D30;&#x7BC0;&#xFF1B;<code>getResult</code> &#x5247;&#x662F;&#x8ABF;&#x6574;&#x5B8C;&#x5404;&#x7A2E;&#x6771;&#x897F;&#x5F8C;&#xFF0C;&#x547C;&#x53EB;&#x5B83;&#x80FD;&#x5920;&#x8B93;&#x6211;&#x5011;&#x5F97;&#x5230;&#x5BA2;&#x88FD;&#x5316;&#x5F8C;&#x7684; <code>House</code>&#x3002;<p></p>
-<h3 id="&#x5BE6;&#x4F5C;&#xFF1A;HouseBuilder"><a href="#&#x5BE6;&#x4F5C;&#xFF1A;HouseBuilder" class="headerlink" title="&#x5BE6;&#x4F5C;&#xFF1A;HouseBuilder"></a>&#x5BE6;&#x4F5C;&#xFF1A;HouseBuilder</h3><p>&#x63A5;&#x8457;&#x4F86;&#x5230;&#x6211;&#x5011;&#x7684;&#x4E3B;&#x89D2;&#xFF0C;<code>House Builder</code></p>
-<p></p><figure class="highlight typescript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="hljs-comment">// house builder</span></span><br><span class="line"><span class="hljs-keyword">class</span> HouseBuilder <span class="hljs-keyword">implements</span> IHouseBuilder {</span><br><span class="line">  <span class="hljs-keyword">private</span> house: House;</span><br><span class="line">  </span><br><span class="line">  <span class="hljs-keyword">constructor</span>(<span class="hljs-params">windows: <span class="hljs-built_in">number</span>, walls: <span class="hljs-built_in">number</span></span>) {</span><br><span class="line">    <span class="hljs-keyword">this</span>.house = <span class="hljs-keyword">new</span> House(windows, walls)</span><br><span class="line">    <span class="hljs-keyword">this</span>.reset()</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="hljs-comment">/* &#x91CD;&#x7F6E; this.house&#xFF0C;&#x4EE5;&#x4FBF;&#x4E0B;&#x4E00;&#x6B21;&#x7684; build */</span></span><br><span class="line">  reset() {</span><br><span class="line">    <span class="hljs-keyword">this</span>.house = <span class="hljs-keyword">new</span> House(<span class="hljs-number">2</span>, <span class="hljs-number">4</span>)</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="hljs-comment">/**</span></span><br><span class="line"><span class="hljs-comment">   * &#x5BA2;&#x88FD;&#x5316; product &#x7528;&#x7684; method &#x5011;</span></span><br><span class="line"><span class="hljs-comment">   * &#x53E6;&#x5916;&#xFF0C;return this &#x7684;&#x539F;&#x56E0;&#x662F;&#x65B9;&#x4FBF;&#x53EF;&#x4EE5;&#x7528; chain &#x7684;&#x65B9;&#x5F0F;&#x4F86;&#x547C;&#x53EB; method&#xFF0C;</span></span><br><span class="line"><span class="hljs-comment">   * &#x9019;&#x500B;&#x65B9;&#x5F0F;&#x53EB;&#x505A; Fluent interface&#xFF08;&#x6D41;&#x66A2;&#x4ECB;&#x9762;&#xFF09;</span></span><br><span class="line"><span class="hljs-comment">   */</span> </span><br><span class="line">  buildDoors(doors: <span class="hljs-built_in">number</span>) {</span><br><span class="line">    <span class="hljs-keyword">this</span>.house.doors = doors</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span></span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  buildRooms(rooms: <span class="hljs-built_in">number</span>) {</span><br><span class="line">    <span class="hljs-keyword">this</span>.house.rooms = rooms</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span></span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  buildGarage() {</span><br><span class="line">    <span class="hljs-keyword">this</span>.house.hasGarage = <span class="hljs-literal">true</span></span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span></span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  buildSwimPool() {</span><br><span class="line">    <span class="hljs-keyword">this</span>.house.hasSwimPool = <span class="hljs-literal">true</span></span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span></span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  buildStatue() {</span><br><span class="line">    <span class="hljs-keyword">this</span>.house.hasStatue = <span class="hljs-literal">true</span></span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span></span><br><span class="line">  }</span><br><span class="line">  <span class="hljs-comment">/**</span></span><br><span class="line"><span class="hljs-comment">   * getResult &#x6703; return &#x5BA2;&#x88FD;&#x5316;&#x5B8C;&#x6210;&#x7684; product&#xFF0C;&#x4E26;&#x4E14; reset&#xFF0C;</span></span><br><span class="line"><span class="hljs-comment">   * &#x4EE5;&#x4FBF;&#x4E0B;&#x4E00;&#x6B21;&#x5BA2;&#x88FD;&#x5316; product&#x3002;</span></span><br><span class="line"><span class="hljs-comment">  */</span></span><br><span class="line">  getResult() {</span><br><span class="line">    <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">this</span>.house</span><br><span class="line">    <span class="hljs-keyword">this</span>.reset()</span><br><span class="line">    <span class="hljs-keyword">return</span> result</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p><code>HosueBuilder</code> &#x6709;&#x5E7E;&#x500B;&#x91CD;&#x9EDE;&#x53EF;&#x4EE5;&#x6CE8;&#x610F;&#xFF1A;</p>
-<ol>
-<li><code>reset</code>&#xFF1A;&#x6BCF;&#x6B21;&#x5BA2;&#x88FD;&#x5316;&#x5B8C;&#xFF0C;&#x4E26;&#x57F7;&#x884C; <code>getResult</code> &#x5F8C;&#xFF0C;&#x901A;&#x5E38;&#x90FD;&#x6703;&#x57F7;&#x884C; <code>reset</code>&#xFF0C;&#x5F97;&#x5230;&#x521D;&#x59CB;&#x7684; <code>House</code>&#xFF0C;&#x4EE5;&#x4FBF;&#x9032;&#x884C;&#x4E0B;&#x4E00;&#x6B21;&#x7684;&#x5BA2;&#x88FD;&#x5316;&#x751F;&#x7522;&#x3002;</li>
-<li><code>buildDoors</code>&#x3001;<code>buildStatue</code> &#x7B49; method&#xFF1A;&#x5BA2;&#x88FD;&#x5316;&#x7528;&#x7684; method&#xFF0C;&#x9019;&#x908A;&#x70BA;&#x4E86;&#x793A;&#x7BC4;&#x6709;&#x7C21;&#x5316;&#xFF0C;&#x5BE6;&#x969B;&#x61C9;&#x7528;&#x6703;&#x66F4;&#x8907;&#x96DC;&#xFF0C;&#x503C;&#x5F97;&#x6CE8;&#x610F;&#x7684;&#x662F;&#x4E00;&#x822C;&#x4F86;&#x8AAA;&#x5728;&#x6BCF;&#x500B;&#x5BA2;&#x88FD;&#x5316; method &#x90FD;&#x6703; <code>return this</code>&#xFF0C;&#x76EE;&#x7684;&#x662F;&#x70BA;&#x4E86;&#x53EF;&#x4EE5;&#x7528; chain &#x7684;&#x65B9;&#x5F0F;&#x4F86;&#x8ABF;&#x7528; method&#x3002;&#xFF08;&#x5F85;&#x6703;&#x770B;&#x7BC4;&#x4F8B;&#x5C31;&#x6703;&#x61C2;&#x5728;&#x8AAA;&#x4EC0;&#x9EBC;&#x4E86;&#xFF09;</li>
-<li><code>getResult</code>&#xFF1A;&#x5BA2;&#x88FD;&#x5316;&#x5B8C;&#x53D6;&#x5F97;&#x7522;&#x54C1;&#x7528;&#x7684; method&#xFF0C;&#x901A;&#x5E38;&#x6703;&#x5728;&#x9019;&#x500B;&#x5730;&#x65B9;&#x505A; reset&#xFF0C;&#x56E0;&#x70BA;&#x5F97;&#x5230;&#x7D50;&#x679C;&#x5F8C;&#x901A;&#x5E38;&#x5C31;&#x53C8;&#x6703;&#x518D;&#x9032;&#x884C;&#x4E0B;&#x4E00;&#x6B21;&#x5BA2;&#x88FD;&#x5316;&#xFF0C;&#x4E0D;&#x904E;&#x9019;&#x53EA;&#x662F;&#x901A;&#x5E38;&#xFF0C;&#x5BE6;&#x969B; reset &#x7684;&#x6642;&#x6A5F;&#x53EF;&#x4EE5;&#x770B;&#x61C9;&#x7528;&#x7684;&#x60C5;&#x666F;&#x3002;</li>
-</ol>
-<h3 id="&#x5BE6;&#x4F5C;&#xFF1A;Director"><a href="#&#x5BE6;&#x4F5C;&#xFF1A;Director" class="headerlink" title="&#x5BE6;&#x4F5C;&#xFF1A;Director"></a>&#x5BE6;&#x4F5C;&#xFF1A;Director</h3><p>&#x518D;&#x4F86;&#x8F2A;&#x5230; <code>Director</code><br></p><figure class="highlight typescript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">class</span> Director {</span><br><span class="line">  <span class="hljs-keyword">private</span> builder: IHouseBuilder</span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">constructor</span>(<span class="hljs-params"></span>) {</span><br><span class="line">    <span class="hljs-keyword">this</span>.builder = <span class="hljs-keyword">new</span> HouseBuilder(<span class="hljs-number">2</span>, <span class="hljs-number">4</span>)</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">public</span> setBuilder(builder: HouseBuilder): <span class="hljs-built_in">void</span> {</span><br><span class="line">    <span class="hljs-keyword">this</span>.builder = builder</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">public</span> buildCastle() {</span><br><span class="line">    <span class="hljs-keyword">this</span>.builder.buildRooms(<span class="hljs-number">200</span>)</span><br><span class="line">    <span class="hljs-keyword">this</span>.builder.buildDoors(<span class="hljs-number">1000</span>)</span><br><span class="line">    <span class="hljs-keyword">this</span>.builder.buildStatue()</span><br><span class="line">    <span class="hljs-keyword">this</span>.builder.buildGarage()</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  buildApartment() {</span><br><span class="line">    <span class="hljs-keyword">this</span>.builder.buildDoors(<span class="hljs-number">1</span>)</span><br><span class="line">    <span class="hljs-keyword">this</span>.builder.buildRooms(<span class="hljs-number">1</span>)</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><br>&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x9019;&#x908A; <code>Director</code> &#x7684;&#x7528;&#x8655;&#x5C31;&#x662F;&#x547D;&#x4EE4; <code>Builder</code> &#x4F86;&#x57F7;&#x884C;&#x4E00;&#x9023;&#x4E32;&#x7684;&#x5BA2;&#x88FD;&#x5316; method&#xFF0C;&#x628A;&#x5E38;&#x7528;&#x7684;&#x7522;&#x54C1;&#x6B65;&#x9A5F;&#x96C6;&#x5408;&#x6210;&#x4E00;&#x500B; method&#xFF0C;&#x5FEB;&#x901F;&#x5EFA;&#x7ACB;&#x51FA;&#x5E38;&#x7528;&#x7522;&#x54C1;&#x3002;<p></p>
-<h3 id="&#x5BE6;&#x4F5C;&#xFF1A;&#x5BE6;&#x969B;&#x4F7F;&#x7528;"><a href="#&#x5BE6;&#x4F5C;&#xFF1A;&#x5BE6;&#x969B;&#x4F7F;&#x7528;" class="headerlink" title="&#x5BE6;&#x4F5C;&#xFF1A;&#x5BE6;&#x969B;&#x4F7F;&#x7528;"></a>&#x5BE6;&#x4F5C;&#xFF1A;&#x5BE6;&#x969B;&#x4F7F;&#x7528;</h3><p></p><figure class="highlight typescript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// new &#x51FA; Director </span></span><br><span class="line"><span class="hljs-keyword">let</span> director = <span class="hljs-keyword">new</span> Director()</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// new &#x51FA; HouseBuilder</span></span><br><span class="line"><span class="hljs-keyword">let</span> houseBuilder = <span class="hljs-keyword">new</span> HouseBuilder(<span class="hljs-number">2</span>, <span class="hljs-number">4</span>)</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x5EFA;&#x9020; houseA</span></span><br><span class="line"><span class="hljs-keyword">const</span> houseA = houseBuilder.buildDoors(<span class="hljs-number">2</span>)</span><br><span class="line">      .buildGarage()</span><br><span class="line">      .buildRooms(<span class="hljs-number">2</span>)</span><br><span class="line">      .getResult()</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x5EFA;&#x9020; hosueB</span></span><br><span class="line"><span class="hljs-keyword">const</span> houseB = houseBuilder.buildDoors(<span class="hljs-number">100</span>)</span><br><span class="line">      .buildGarage()</span><br><span class="line">      .buildSwimPool()</span><br><span class="line">      .buildRooms(<span class="hljs-number">2</span>)</span><br><span class="line">      .getResult()</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x5BA2;&#x88FD;&#x5316;&#x7684; houseA&#xFF0C;&#x7D50;&#x679C;&#xFF1A;</span></span><br><span class="line"><span class="hljs-comment">// {</span></span><br><span class="line"><span class="hljs-comment">//   window: 2,</span></span><br><span class="line"><span class="hljs-comment">//   walls: 4,</span></span><br><span class="line"><span class="hljs-comment">//   doors: 2,</span></span><br><span class="line"><span class="hljs-comment">//   rooms: 2,</span></span><br><span class="line"><span class="hljs-comment">//   hasGarage: true,</span></span><br><span class="line"><span class="hljs-comment">//   hasSwimPool: false,</span></span><br><span class="line"><span class="hljs-comment">//   hasStatue: false</span></span><br><span class="line"><span class="hljs-comment">// }</span></span><br><span class="line">houseA.listParts()</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x5EFA;&#x9020;&#x5BA2;&#x88FD;&#x5316;&#x7684; houseB&#xFF0C;&#x7D50;&#x679C;&#xFF1A;</span></span><br><span class="line"><span class="hljs-comment">// {</span></span><br><span class="line"><span class="hljs-comment">//   window: 2,</span></span><br><span class="line"><span class="hljs-comment">//   walls: 4,</span></span><br><span class="line"><span class="hljs-comment">//   doors: 100,</span></span><br><span class="line"><span class="hljs-comment">//   rooms: 2,</span></span><br><span class="line"><span class="hljs-comment">//   hasGarage: true,</span></span><br><span class="line"><span class="hljs-comment">//   hasSwimPool: true,</span></span><br><span class="line"><span class="hljs-comment">//   hasStatue: false</span></span><br><span class="line"><span class="hljs-comment">// }</span></span><br><span class="line">houseB.listParts()</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x4F7F;&#x7528; director&#xFF0C;&#x5148;&#x8A2D;&#x5B9A; builder &#x70BA; HouseBuilder</span></span><br><span class="line">director.setBuilder(houseBuilder)</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x63A5;&#x8457; director &#x547D;&#x4EE4; builder &#x57F7;&#x884C;&#x4E00;&#x9023;&#x4E32;&#x5BA2;&#x88FD;&#x5316; method</span></span><br><span class="line">director.buildCastle()</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x4F7F;&#x7528; houseBuilder &#x5F97;&#x5230;&#x7D50;&#x679C;</span></span><br><span class="line"><span class="hljs-keyword">const</span> houseC = houseBuilder.getResult()</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// &#x5EFA;&#x9020;&#x5BA2;&#x88FD;&#x5316;&#x7684; houseC&#xFF0C;&#x7D50;&#x679C;&#xFF1A;</span></span><br><span class="line"><span class="hljs-comment">// {</span></span><br><span class="line"><span class="hljs-comment">//   window: 2,</span></span><br><span class="line"><span class="hljs-comment">//   walls: 4,</span></span><br><span class="line"><span class="hljs-comment">//   doors: 1000,</span></span><br><span class="line"><span class="hljs-comment">//   rooms: 200,</span></span><br><span class="line"><span class="hljs-comment">//   hasGarage: true,</span></span><br><span class="line"><span class="hljs-comment">//   hasSwimPool: false,</span></span><br><span class="line"><span class="hljs-comment">//   hasStatue: true</span></span><br><span class="line"><span class="hljs-comment">// }</span></span><br><span class="line">houseC.listParts()</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>&#x5BE6;&#x4F5C;&#x4E0A;&#x5927;&#x6982;&#x662F;&#x9019;&#x6A23;&#xFF0C;&#x4F46;&#x9019;&#x908A;&#x60F3;&#x63D0;&#x4E00;&#x6B21;&#x525B;&#x525B;&#x5BE6;&#x4F5C; <code>HouseBuilder</code> &#x6642;&#x63D0;&#x5230;&#x6BCF;&#x500B;&#x5BA2;&#x88FD;&#x5316; method <code>return this</code> &#x7684;&#x4E8B;&#x60C5;&#x3002;</p>
-<p>jQuery &#x7528; chain &#x7684;&#x65B9;&#x5F0F;&#x4F86;&#x8ABF;&#x7528; function &#x7684;&#x7528;&#x6CD5;&#x5927;&#x5BB6;&#x61C9;&#x8A72;&#x90FD;&#x6709;&#x5370;&#x8C61;&#xFF0C;&#x6BD4;&#x5982;&#x53EF;&#x4EE5;&#x50CF;&#x662F;&#x9019;&#x6A23;&#xFF1A;</p>
-<p></p><figure class="highlight js hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$( <span class="hljs-string">&quot;button.continue&quot;</span> ).html( <span class="hljs-string">&quot;Next Step...&quot;</span> ).a().b()</span><br></pre></td></tr></tbody></table></figure><br>&#x53EF;&#x4EE5;&#x9019;&#x6A23;&#x4F7F;&#x7528;&#x7684;&#x539F;&#x56E0;&#xFF0C;&#x662F;&#x56E0;&#x70BA;&#x6BCF;&#x6B21; jQuery &#x5167;&#x5EFA;&#x7684;&#x65B9;&#x6CD5;&#x57F7;&#x884C;&#x5B8C;&#x4E4B;&#x5F8C;&#xFF0C;&#x90FD;&#x6703;&#x518D;&#x56DE;&#x50B3;&#x4E00;&#x6B21; jQuery &#x7684; element&#xFF0C;&#x4F60;&#x5C31;&#x53EF;&#x4EE5;&#x518D;&#x6B21;&#x4F7F;&#x7528;&#x5B83;&#x5167;&#x5EFA;&#x7684;&#x65B9;&#x6CD5;&#x4E86;&#x3002;<p></p>
-<p>&#x800C; <code>HouseBuilder</code> &#x6703; <code>return this</code> &#x7684;&#x539F;&#x56E0;&#x4E5F;&#x662F;&#x4E00;&#x6A23;&#xFF0C;&#x7576;&#x6211;&#x5011;&#x5728;&#x5BA2;&#x88FD;&#x5316; method &#x88E1;&#x9762; <code>return this</code> &#x7684;&#x6642;&#x5019;&#xFF1A;</p>
-<p></p><figure class="highlight typescript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">buildGarage() {</span><br><span class="line">  <span class="hljs-keyword">this</span>.house.hasGarage = <span class="hljs-literal">true</span></span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><br>&#x6211;&#x5011; return &#x7684;&#x662F; <code>HouseBuilder</code> &#x672C;&#x8EAB;&#xFF0C;&#x800C; return <code>HouseBuilder</code> &#x80FD;&#x505A;&#x4EC0;&#x9EBC;&#x5462;&#xFF1F;&#x6211;&#x5011;&#x5C31;&#x80FD;&#x5920;&#x7E7C;&#x7E8C; chain &#x4E0B;&#x53BB;&#xFF0C;&#x547C;&#x53EB; <code>buildeRooms</code>&#x3001;<code>buildeDoors</code> &#x7B49; method &#x4E86;&#xFF01;<p></p>
-<p>&#x6240;&#x4EE5;&#x5BE6;&#x969B;&#x4F7F;&#x7528;&#x5C31;&#x6703;&#x8B8A;&#x6210;&#x50CF;&#x525B;&#x525B;&#x5BE6;&#x4F5C;&#x90A3;&#x6A23;&#xFF1A;<br></p><figure class="highlight typescript hljs"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> houseA = houseBuilder</span><br><span class="line">      .buildDoors(<span class="hljs-number">2</span>) <span class="hljs-comment">// &#x57F7;&#x884C;&#x5B8C; return houseBuilder</span></span><br><span class="line">      .buildGarage() <span class="hljs-comment">// &#x57F7;&#x884C;&#x5B8C; return houseBuilder</span></span><br><span class="line">      .buildRooms(<span class="hljs-number">2</span>)  <span class="hljs-comment">// &#x57F7;&#x884C;&#x5B8C; return houseBuilder</span></span><br><span class="line">      .getResult() <span class="hljs-comment">// &#x5F97;&#x5230;&#x7D50;&#x679C;</span></span><br></pre></td></tr></tbody></table></figure><p></p>
-<h2 id="&#x61C9;&#x7528;&#x6642;&#x6A5F;"><a href="#&#x61C9;&#x7528;&#x6642;&#x6A5F;" class="headerlink" title="&#x61C9;&#x7528;&#x6642;&#x6A5F;"></a>&#x61C9;&#x7528;&#x6642;&#x6A5F;</h2><p>&#x53EF;&#x4EE5;&#x767C;&#x73FE;&#x5230;&#x548C;&#x5DE5;&#x5EE0;&#x6A21;&#x5F0F;&#x4E0D;&#x540C;&#xFF0C;&#x5DE5;&#x5EE0;&#x6A21;&#x5F0F;&#x8457;&#x91CD;&#x5728;&#x751F;&#x7522;&#x7684;&#x6BCF;&#x500B;&#x7522;&#x54C1;&#xFF0C;&#x800C; Builder &#x5247;&#x662F;&#x6CE8;&#x91CD;&#x5728;&#x6BCF;&#x500B;&#x7522;&#x54C1;&#x7684;&#x5BA2;&#x88FD;&#x5316;&#x5167;&#x5BB9;&#xFF0C;&#x4E5F;&#x56E0;&#x6B64;&#x7576;&#x4F60;&#x6709;&#x9700;&#x8981;&#x5F88;&#x591A;&#x7684;&#x5BA2;&#x88FD;&#x5316;&#x7D30;&#x7BC0;&#x9700;&#x8981;&#x8ABF;&#x6574;&#x6642;&#xFF0C;&#x5C31;&#x53EF;&#x4EE5;&#x8003;&#x616E; Builder &#x9019;&#x500B; Pattern&#xFF0C;&#x800C;&#x6839;&#x64DA;&#x6211;&#x770B;&#x5230;&#x7684;&#x6587;&#x7AE0;&#x6240;&#x8AAA;&#xFF0C;&#x7576;&#x4F60;&#x767C;&#x73FE;&#x4E00;&#x500B; class &#x7684; contructor &#x6709;&#x8D85;&#x904E;&#x56DB;&#x500B;&#x53C3;&#x6578;&#x6642;&#xFF0C;&#x5C31;&#x662F;&#x4F7F;&#x7528; Builder &#x7684;&#x6642;&#x6A5F;&#x4E86;&#xFF01;</p>
-<p>Builder &#x7684;&#x512A;&#x9EDE;&#x986F;&#x800C;&#x6613;&#x898B;&#xFF0C;&#x5C31;&#x662F;&#x6211;&#x5011;&#x53EF;&#x4EE5;&#x66F4;&#x7D30;&#x90E8;&#x7684;&#x8ABF;&#x6574;&#x6BCF;&#x4E00;&#x500B; new &#x51FA;&#x4F86;&#x7684; instance&#xFF0C;&#x4E26;&#x4E14; <code>getResult</code> &#x7684;&#x6642;&#x6A5F;&#x4E5F;&#x53EF;&#x4EE5;&#x9069;&#x6642;&#x7684;&#x8ABF;&#x6574;&#xFF1B;&#x800C; Builder &#x7F3A;&#x9EDE;&#x662F;&#x4EC0;&#x9EBC;&#x5462;&#xFF1F;&#x662F;&#x6BCF;&#x500B; product &#x7684;&#x540C;&#x8CEA;&#x6027;&#x8981;&#x5920;&#x9AD8;&#xFF0C;&#x50CF;&#x662F; <code>IHouseBuilder</code> &#x5B9A;&#x7FA9;&#x7684;&#x65B9;&#x6CD5;&#x5C31;&#x5F88;&#x4FB7;&#x9650;&#xFF0C;&#x5E7E;&#x4E4E;&#x548C;&#x623F;&#x5B50;&#x6709;&#x95DC;&#x7684; class &#x624D;&#x80FD;&#x5920; implement&#xFF0C;&#x5DEE;&#x7570;&#x6BD4;&#x8F03;&#x5927;&#x7684; class &#x5C31;&#x9700;&#x8981;&#x53E6;&#x95E2;&#x8E4A;&#x5F91;&#xFF0C;&#x91CD;&#x65B0;&#x5BEB;&#x4E0D;&#x4E00;&#x6A23;&#x7684; builder&#x3002;</p>
-<h2 id="&#x73FE;&#x5BE6;&#x7684;&#x61C9;&#x7528;"><a href="#&#x73FE;&#x5BE6;&#x7684;&#x61C9;&#x7528;" class="headerlink" title="&#x73FE;&#x5BE6;&#x7684;&#x61C9;&#x7528;"></a>&#x73FE;&#x5BE6;&#x7684;&#x61C9;&#x7528;</h2><p>&#x53EF;&#x4EE5;&#x53C3;&#x8003;&#x770B;&#x770B; Android &#x7684; <a href="https://developer.android.com/reference/android/app/Notification.Builder" target="_blank" rel="noopener">Notification.Builder</a></p>
-<h2 id="&#x7D50;&#x8A9E;"><a href="#&#x7D50;&#x8A9E;" class="headerlink" title="&#x7D50;&#x8A9E;"></a>&#x7D50;&#x8A9E;</h2><p>&#x9019;&#x6B21;&#x7576; builder pattern &#x7684;&#x4E3B;&#x8B1B;&#x611F;&#x60F3;&#x662F;&#x81EA;&#x5DF1;&#x5C0D; OOP &#x771F;&#x7684;&#x9084;&#x5F88;&#x4E0D;&#x719F;&#xFF0C;&#x5BE6;&#x4F5C;&#x3001;&#x6982;&#x5FF5;&#x4E0A;&#x90FD;&#x662F;&#xFF0C;&#x4EE5;&#x76EE;&#x524D;&#x7684;&#x6587;&#x7AE0;&#x800C;&#x8A00;&#xFF0C;&#x5BE6;&#x4F5C;&#x4E5F;&#x50C5;&#x6B62;&#x65BC;&#x66F8;&#x4E0A;&#x7D19;&#x4E0A;&#x8AC7;&#x5175;&#x7684;&#x7A0B;&#x5EA6;&#xFF0C;&#x6C92;&#x6709;&#x5BE6;&#x969B;&#x61C9;&#x7528;&#x5728;&#x5C08;&#x6848;&#x7684;&#x7D93;&#x9A57;&#xFF0C;&#x7576;&#x60F3;&#x8981;&#x8B1B;&#x89E3;&#x9019;&#x500B; pattern &#x7684;&#x6982;&#x5FF5;&#x7D66;&#x5176;&#x4ED6;&#x4EBA;&#x7684;&#x6642;&#x5019;&#xFF0C;&#x6703;&#x6709;&#x9EDE;&#x4E0D;&#x592A;&#x77E5;&#x9053;&#x8A72;&#x7528;&#x4EC0;&#x9EBC;&#x6A23;&#x5BE6;&#x969B;&#x7684;&#x61C9;&#x7528;&#x4F86;&#x8B93;&#x81EA;&#x5DF1;&#x4EE5;&#x53CA;&#x5225;&#x4EBA;&#x77E5;&#x9053;&#x5BE6;&#x6230;&#x4E0A;&#x5982;&#x4F55;&#x4F7F;&#x7528; QQ  &#x4F46;&#x80FD;&#x5920;&#x5148;&#x77E5;&#x9053;&#x9019;&#x500B; pattern &#x4E5F;&#x662F;&#x597D;&#x7684;&#xFF0C;&#x672A;&#x4F86;&#x770B;&#x5230;&#x76F8;&#x95DC;&#x61C9;&#x7528;&#x7684;&#x6642;&#x5019;&#x5C31;&#x80FD;&#x5920;&#x8F03;&#x5FEB;&#x7684;&#x7406;&#x89E3;&#x7A0B;&#x5F0F;&#x78BC;&#x3002;</p>
-<h2 id="Refercences"><a href="#Refercences" class="headerlink" title="Refercences"></a>Refercences</h2><p><a href="https://zhuanlan.zhihu.com/p/126305311" target="_blank" rel="noopener">TypeScript &#x8BBE;&#x8BA1;&#x6A21;&#x5F0F;&#x4E0E;&#x91CD;&#x6784;&#x6280;&#x5DE7; &#xB7; &#x5EFA;&#x9020;&#x8005;&#x6A21;&#x5F0F;</a></p>
-<p><a href="https://juejin.cn/post/6844904133519114253" target="_blank" rel="noopener">&#x8BBE;&#x8BA1;&#x6A21;&#x5F0F;&#x2014;&#x2014;&#x5EFA;&#x9020;&#x8005;&#x6A21;&#x5F0F;&#xFF08;TypeScript&#x7248;&#xFF09;</a></p>
-<p><a href="https://medium.com/wenchin-rolls-around/%E8%A8%AD%E8%A8%88%E6%A8%A1%E5%BC%8F-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F-builder-design-pattern-7c8eac7c9a7" target="_blank" rel="noopener">&#x8A2D;&#x8A08;&#x6A21;&#x5F0F;&#x2014;&#x5EFA;&#x9020;&#x8005;&#x6A21;&#x5F0F; (Builder Design Pattern)</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/58093669" target="_blank" rel="noopener">&#x79D2;&#x61C2;&#x8BBE;&#x8BA1;&#x6A21;&#x5F0F;&#x4E4B;&#x5EFA;&#x9020;&#x8005;&#x6A21;&#x5F0F;&#xFF08;Builder pattern&#xFF09;</a></p>
-<p><a href="https://blog.techbridge.cc/2017/05/22/factory-method-and-abstract-factory/" target="_blank" rel="noopener">&#x8A2D;&#x8A08;&#x6A21;&#x5F0F; - &#x5DE5;&#x5EE0;&#x65B9;&#x6CD5;&#x53CA;&#x62BD;&#x8C61;&#x5DE5;&#x5EE0;</a></p>
-</body></html>
-    
-    </div>
-    
-    <div class="columns is-variable is-1 is-multiline is-mobile">
-    
-        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/TypeScript/">#TypeScript</a></span>
-    
-        <span class="column is-narrow"><a class="tag is-light article-tag" href="/tags/OOP/">#OOP</a></span>
-    
-    </div>
-    
-    
-    <div class="columns is-mobile is-multiline article-nav">
-        <span class="column is-12-mobile is-half-desktop  article-nav-prev">
-            
-            <a href="/2021/01/02/2020-review/">技術菜菜 2020 在幹嘛？2021 要幹嘛？</a>
-            
-        </span>
-        <span class="column is-12-mobile is-half-desktop  article-nav-next">
-            
-            <a href="/2020/12/06/first-contribution/">第一次貢獻開源就緊張到手抖</a>
-            
-        </span>
-    </div>
-    
-</article>
-
-
-<div class="sharebox">
-    
-<div class="sharethis-inline-share-buttons"></div>
-<script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5e4221ec7a88780012e1744e&amp;product=inline-share-buttons' async='async'></script>
-
-</div>
-
-
-
-<div class="comments">
-    <h3 class="title is-4">Comments</h3>
-    
-<script>
-    var disqus_config = function () {
-        this.page.url = 'https://chihyang41.github.io/2021/01/02/builder-pattern/';
-        this.page.identifier = '2021/01/02/builder-pattern/';
-        
-        this.language = 'en';
-        
-    };
-    (function() {
-        var d = document, s = d.createElement('script');  
-        s.src = '//' + 'ChihYang41-blog' + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-
-<div id="disqus_thread">
-    
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
-</div>
-</div>
-
-    </div>
-</section>
-    <footer class="footer">
-    <div class="container">
-        <div class="columns content">
-            <div class="column is-narrow has-text-centered">
-                &copy; 2021 Chih Yang&nbsp;
-                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
-                        href="http://github.com/ppoffice/hexo-theme-minos">Minos</a>
-            </div>
-            <div class="column is-hidden-mobile"></div>
-
-            
-            <div class="column is-narrow">
-                <div class="columns is-mobile is-multiline is-centered">
-                
-                    
-                <a class="column is-narrow has-text-black" title="GitHub" href="https://github.com/ChihYang41" target="_blank" rel="noopener">
-                    
-                    GitHub
-                    
-                </a>
-                
-                </div>
-            </div>
-            
-            
-        </div>
-    </div>
-</footer>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
-
-<!-- test if the browser is outdated -->
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/" target="_blank" rel="noopener">Update my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
-</div>
-<script src="//cdnjs.cloudflare.com/ajax/libs/outdated-browser/1.1.5/outdatedbrowser.min.js"></script>
-<script>
-    $(document).ready(function () {
-        // plugin function, place inside DOM ready function
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        })
-    });
-</script>
-
-<script>
-    window.FontAwesomeConfig = {
-        searchPseudoElements: true
-    }
-    moment.locale("en-AU");
-</script>
-
-
-    
-    
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<script>
-    MathJax.Hub.Config({
-        "HTML-CSS": {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
-    });
-</script>
-
-    
-    
-    
-    
-<script src="//cdnjs.cloudflare.com/ajax/libs/lightgallery/1.6.8/js/lightgallery-all.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/justifiedGallery/3.6.5/js/jquery.justifiedGallery.min.js"></script>
-<script>
-    (function ($) {
-        $(document).ready(function () {
-            if (typeof($.fn.lightGallery) === 'function') {
-                $('.article.gallery').lightGallery({ selector: '.gallery-item' });
-            }
-            if (typeof($.fn.justifiedGallery) === 'function') {
-                $('.justified-gallery').justifiedGallery();
-            }
-        });
-    })(jQuery);
-</script>
-
-    
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-    <style>
-        .hljs {
-            position: relative;
-        }
-
-        .hljs .clipboard-btn {
-            float: right;
-            color: #9a9a9a;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .hljs .clipboard-btn:hover {
-          color: #8a8a8a;
-        }
-
-        .hljs > .clipboard-btn {
-            display: none;
-            position: absolute;
-            right: 4px;
-            top: 4px;
-        }
-
-        .hljs:hover > .clipboard-btn {
-            display: inline;
-        }
-
-        .hljs > figcaption > .clipboard-btn {
-            margin-right: 4px;
-        }
-    </style>
+<title>Builder Pattern（生成器） | Chih Yang's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
     <script>
-      $(document).ready(function () {
-        $('figure.hljs').each(function(i, figure) {
-          var codeId = 'code-' + i;
-          var code = figure.querySelector('.code');
-          var copyButton = $('<button>Copy <i class="far fa-clipboard"></i></button>');
-          code.id = codeId;
-          copyButton.addClass('clipboard-btn');
-          copyButton.attr('data-clipboard-target-id', codeId);
-
-          var figcaption = figure.querySelector('figcaption');
-
-          if (figcaption) {
-            figcaption.append(copyButton[0]);
-          } else {
-            figure.prepend(copyButton[0]);
-          }
-        })
-
-        var clipboard = new ClipboardJS('.clipboard-btn', {
-          target: function(trigger) {
-            return document.getElementById(trigger.getAttribute('data-clipboard-target-id'));
-          }
-        });
-        clipboard.on('success', function(e) {
-          e.clearSelection();
-        })
-      })
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-146838618-1');
+      }
     </script>
 
-    
-    
-
-    
 
 
 
-<script src="/js/script.js"></script>
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
 
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
 
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-mask"></div>
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
+  </div>
+
+  <div class="site-meta">
+      <img class="custom-logo-image" src="/images/logo.png" alt="Chih Yang's Blog">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Chih Yang's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
 </div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%85%E5%A2%83"><span class="nav-number">2.</span> <span class="nav-text">情境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%83%B3%E6%B3%95%E4%B8%80%EF%BC%9A%E5%BB%BA%E7%AB%8B%E4%B8%80%E5%A0%86-subclass"><span class="nav-number">2.1.</span> <span class="nav-text">想法一：建立一堆 subclass</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%83%B3%E6%B3%95%E4%BA%8C%EF%BC%9A%E7%94%A8%E5%8F%83%E6%95%B8%E4%BE%86%E6%B1%BA%E5%AE%9A"><span class="nav-number">2.2.</span> <span class="nav-text">想法二：用參數來決定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%83%B3%E6%B3%95%E4%B8%89%EF%BC%9ABuilder-Pattern"><span class="nav-number">2.3.</span> <span class="nav-text">想法三：Builder Pattern</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Builder-Pattern-%E7%A8%8B%E5%BC%8F%E7%A2%BC%E7%A4%BA%E7%AF%84%E5%91%A2%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">Builder Pattern 程式碼示範呢？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Builder-Pattern-%E7%9A%84-UML"><span class="nav-number">3.1.</span> <span class="nav-text">Builder Pattern 的 UML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%A6%E4%BD%9C%EF%BC%9AHouse-Class"><span class="nav-number">3.2.</span> <span class="nav-text">實作：House Class</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%A6%E4%BD%9C%EF%BC%9AIHouseBuilder"><span class="nav-number">3.3.</span> <span class="nav-text">實作：IHouseBuilder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%A6%E4%BD%9C%EF%BC%9AHouseBuilder"><span class="nav-number">3.4.</span> <span class="nav-text">實作：HouseBuilder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%A6%E4%BD%9C%EF%BC%9ADirector"><span class="nav-number">3.5.</span> <span class="nav-text">實作：Director</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%A6%E4%BD%9C%EF%BC%9A%E5%AF%A6%E9%9A%9B%E4%BD%BF%E7%94%A8"><span class="nav-number">3.6.</span> <span class="nav-text">實作：實際使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%87%89%E7%94%A8%E6%99%82%E6%A9%9F"><span class="nav-number">4.</span> <span class="nav-text">應用時機</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8F%BE%E5%AF%A6%E7%9A%84%E6%87%89%E7%94%A8"><span class="nav-number">5.</span> <span class="nav-text">現實的應用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AA%9E"><span class="nav-number">6.</span> <span class="nav-text">結語</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Refercences"><span class="nav-number">7.</span> <span class="nav-text">Refercences</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Chih Yang</p>
+  <div class="site-description" itemprop="description">Chih Yang 的前端小天地</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ChihYang41" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ChihYang41" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/chihyang41" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;chihyang41" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chihyang41.github.io/2021/01/02/builder-pattern/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Chih Yang">
+      <meta itemprop="description" content="Chih Yang 的前端小天地">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chih Yang's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Builder Pattern（生成器）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-01-02 16:39:54" itemprop="dateCreated datePublished" datetime="2021-01-02T16:39:54+08:00">2021-01-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E8%A1%93/" itemprop="url" rel="index"><span itemprop="name">技術</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>這是在讀書會當主講時負責的 builder pattern，因為本人對 OOP 以及 design pattern 並沒有到非常熟悉，內容非常可能有諸多錯誤，因此僅供參考，如果有錯歡迎指正，感謝！</p>
+<span id="more"></span>
+
+<h2 id="情境"><a href="#情境" class="headerlink" title="情境"></a>情境</h2><p>假設今天你是建商，要替客戶蓋房子，但房子會有各式各樣的要求，比如會有需要泳池的、需要雕像的、需要車庫的房子等等，也就是說生產產品時，你會有各式各樣客製化的需求。</p>
+<p>而為了達成這個需求，你可能會有幾種解法，下面是可能的解法：</p>
+<h3 id="想法一：建立一堆-subclass"><a href="#想法一：建立一堆-subclass" class="headerlink" title="想法一：建立一堆 subclass"></a>想法一：建立一堆 subclass</h3><p><img src="https://i.imgur.com/hCJHkBX.png"></p>
+<p>辦法就是基於 house 這個 class 去 extends 很多 subclass，也就是說會有很多客製化的房子會繼承 house 這個 class，程式碼可能會像是這樣：</p>
+<pre class="line-numbers language-typescript" data-language="typescript"><code class="language-typescript"><span class="token keyword">class</span> <span class="token class-name">House</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 房子</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">HouseWithSwimPool</span> <span class="token keyword">extends</span> <span class="token class-name">House</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 有游泳池的房子</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">HouseWithStatues</span> <span class="token keyword">extends</span> <span class="token class-name">House</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 有雕像的房子</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">HouseWithGardens</span> <span class="token keyword">extends</span> <span class="token class-name">House</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 有花園的房子</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>但這方法不是很理想，因為當你需要客製化的房子很多種類時，就要跟著寫一堆 subclass，擴充起來非常的麻煩。</p>
+<h3 id="想法二：用參數來決定"><a href="#想法二：用參數來決定" class="headerlink" title="想法二：用參數來決定"></a>想法二：用參數來決定</h3><p><img src="https://i.imgur.com/3gmN3rf.png"></p>
+<p>既然 subclass 很麻煩，那我們改用 constructor 裡面的參數來客製化房子吧！辦法就是在 new 一個新的 House 時，透過參數來決定客製化的內容是甚麼，程式碼可能會像是這樣：</p>
+<pre class="line-numbers language-typescript" data-language="typescript"><code class="language-typescript"><span class="token keyword">class</span> <span class="token class-name">House</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">constructor</span><span class="token punctuation">(</span>
+      windows<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">,</span> 
+      doors<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">,</span> 
+      rooms<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">,</span> 
+      hasGarage<span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">,</span> 
+      hasSwimPool<span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">,</span> 
+      hasStatues<span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> aHouse <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">House</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>看起來是一定程度達成了需求，但會有甚麼問題呢？</p>
+<p>可以發現到每 new 一個 House 就要傳非常多參數進去，假設今天有 10 個參數，new 的時候就要傳 10 個；又或者今天你只想要第 1 和第 10 個參數，中間 2 - 8 的參數你就只能傳 null，不得不給它一個值，但其實 2 - 8 的參數你是不需要的，也就是說每 new 一個 House 就會變得頗為麻煩。</p>
+<h3 id="想法三：Builder-Pattern"><a href="#想法三：Builder-Pattern" class="headerlink" title="想法三：Builder Pattern"></a>想法三：Builder Pattern</h3><p><img src="https://i.imgur.com/y7Z5Rh6.png"></p>
+<p>接著就輪到我們 Builder Pattern 出場的時機了，我們不用 subclass，也不用參數來決定客製化的細節，而是把每個客製化的細節拆分成一個一個的 method，在調整完客製化的內容之後，再呼叫 <code>getResult</code> 來取得客製化的結果。</p>
+<h2 id="Builder-Pattern-程式碼示範呢？"><a href="#Builder-Pattern-程式碼示範呢？" class="headerlink" title="Builder Pattern 程式碼示範呢？"></a>Builder Pattern 程式碼示範呢？</h2><p>來惹來惹，熱騰騰的範例來惹。</p>
+<h3 id="Builder-Pattern-的-UML"><a href="#Builder-Pattern-的-UML" class="headerlink" title="Builder Pattern 的 UML"></a>Builder Pattern 的 UML</h3><p>單純用文字講解有點不夠力，要理解 Builder Pattern 來看程式碼會更快一點！首先來看一下 Builder Pattern 的 UML 圖：</p>
+<p><img src="https://i.imgur.com/cXa0fsE.png"></p>
+<p>從上圖可以看到關於 Builder Pattern 我們需要幾個東西，</p>
+<ol>
+<li><strong>Builder 的 Interface</strong>：定義 Builder class 需要實作的 method。</li>
+<li><strong>Builder 的 class</strong>：建造客製化產品的 Class，裡面會實作 <code>Builder Interface</code> 的客製化 method。</li>
+<li><strong>Director</strong>：屬於 optional 的 class，在 Builder Pattern 裡面可用可不用，用處是把常用的建造產品步驟寫成一個 method，而後再使用 builder 快速建立出常用的產品。</li>
+<li><strong>Product 的 class</strong>：要生產的客製化產品。</li>
+</ol>
+<p>可以看到總共需要有三個 class，一個 interface，接著我們就一個一個來實作，更仔細探討每個 class 的用途及細節吧！</p>
+<p>既然我們剛剛的情境是擔任建商，那我們就先看看需要什麼：</p>
+<ol>
+<li><code>IHouseBuilder</code>：HouseBuilder 的 Interface</li>
+<li><code>HouseBuilder</code>：房子的建造者</li>
+<li><code>Director</code>：指揮 HouseBuilder 進行一連串步驟蓋出房子的 class。</li>
+<li><code>House</code>：要客製化的房子。</li>
+</ol>
+<p>既然知道需要什麼了，就來動手實作吧！</p>
+<h3 id="實作：House-Class"><a href="#實作：House-Class" class="headerlink" title="實作：House Class"></a>實作：House Class</h3><p>首先來到我們想要製造的產品 — <code>House</code>：</p>
+<pre class="line-numbers language-typescript" data-language="typescript"><code class="language-typescript"><span class="token comment">// 要製造的 product</span>
+<span class="token keyword">class</span> <span class="token class-name">House</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">public</span> windows<span class="token operator">:</span> <span class="token builtin">number</span> <span class="token operator">=</span> <span class="token number">2</span>
+  <span class="token keyword">public</span> walls<span class="token operator">:</span> <span class="token builtin">number</span> <span class="token operator">=</span> <span class="token number">4</span>
+  <span class="token keyword">public</span> doors<span class="token operator">:</span> <span class="token builtin">number</span> <span class="token operator">=</span> <span class="token number">1</span>
+  <span class="token keyword">public</span> rooms<span class="token operator">:</span> <span class="token builtin">number</span> <span class="token operator">=</span> <span class="token number">2</span>
+  <span class="token keyword">public</span> hasGarage<span class="token operator">:</span> <span class="token builtin">boolean</span> <span class="token operator">=</span> <span class="token boolean">false</span>
+  <span class="token keyword">public</span> hasSwimPool<span class="token operator">:</span> <span class="token builtin">boolean</span> <span class="token operator">=</span> <span class="token boolean">false</span>
+  <span class="token keyword">public</span> hasStatue<span class="token operator">:</span> <span class="token builtin">boolean</span> <span class="token operator">=</span> <span class="token boolean">false</span>
+
+  <span class="token keyword">constructor</span><span class="token punctuation">(</span>windows<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">,</span> walls<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>windows <span class="token operator">=</span> windows
+    <span class="token keyword">this</span><span class="token punctuation">.</span>walls <span class="token operator">=</span> walls
+  <span class="token punctuation">&#125;</span>
+  
+  <span class="token comment">// 為了待會列出調整完客製化細節而使用的 console.log，實際上不需要</span>
+  <span class="token keyword">public</span> <span class="token function">listParts</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+      window<span class="token operator">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>windows<span class="token punctuation">,</span>
+      walls<span class="token operator">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>walls<span class="token punctuation">,</span>
+      doors<span class="token operator">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>doors<span class="token punctuation">,</span>
+      rooms<span class="token operator">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>rooms<span class="token punctuation">,</span>
+      hasGarage<span class="token operator">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>hasGarage<span class="token punctuation">,</span>
+      hasSwimPool<span class="token operator">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>hasSwimPool<span class="token punctuation">,</span>
+      hasStatue<span class="token operator">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>hasStatue
+    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>從 House 的 class 能看到內容就是各種可以調整的 member，以及為了 console 出 member 所使用的 method。</p>
+<h3 id="實作：IHouseBuilder"><a href="#實作：IHouseBuilder" class="headerlink" title="實作：IHouseBuilder"></a>實作：IHouseBuilder</h3><p>再來輪到了 <code>IHouseBuilder</code>，這個 interface 的用途是用來定義 <code>HouseBuilder</code> 需要實作什麼 method 的。</p>
+<pre class="line-numbers language-typescript" data-language="typescript"><code class="language-typescript"><span class="token comment">// builder 的 interface</span>
+<span class="token keyword">interface</span> <span class="token class-name">IHouseBuilder</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">reset</span><span class="token punctuation">(</span>windows<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">,</span> walls<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span>
+  <span class="token function">buildDoors</span><span class="token punctuation">(</span>doors<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span><span class="token operator">:</span> IHouseBuilder
+  <span class="token function">buildRooms</span><span class="token punctuation">(</span>rooms<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span><span class="token operator">:</span> IHouseBuilder
+  <span class="token function">buildGarage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> IHouseBuilder
+  <span class="token function">buildSwimPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> IHouseBuilder
+  <span class="token function">buildStatue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> IHouseBuilder
+  <span class="token function">getResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> House
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以看到這邊定義了 <code>reset</code>，目的是建造完產品後可以歸零，以便進行下一次的生產；<code>buildDoors</code>、<code>buildRooms</code> 等等的 method，則是我們要客製化需要使用的 method，讓我們能夠調整 House 的細節；<code>getResult</code> 則是調整完各種東西後，呼叫它能夠讓我們得到客製化後的 <code>House</code>。</p>
+<h3 id="實作：HouseBuilder"><a href="#實作：HouseBuilder" class="headerlink" title="實作：HouseBuilder"></a>實作：HouseBuilder</h3><p>接著來到我們的主角，<code>House Builder</code></p>
+<pre class="line-numbers language-typescript" data-language="typescript"><code class="language-typescript">
+<span class="token comment">// house builder</span>
+<span class="token keyword">class</span> <span class="token class-name">HouseBuilder</span> <span class="token keyword">implements</span> <span class="token class-name">IHouseBuilder</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">private</span> house<span class="token operator">:</span> House<span class="token punctuation">;</span>
+  
+  <span class="token keyword">constructor</span><span class="token punctuation">(</span>windows<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">,</span> walls<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>house <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">House</span><span class="token punctuation">(</span>windows<span class="token punctuation">,</span> walls<span class="token punctuation">)</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">reset</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token comment">/* 重置 this.house，以便下一次的 build */</span>
+  <span class="token function">reset</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>house <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">House</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token comment">/**
+   * 客製化 product 用的 method 們
+   * 另外，return this 的原因是方便可以用 chain 的方式來呼叫 method，
+   * 這個方式叫做 Fluent interface（流暢介面）
+   */</span> 
+  <span class="token function">buildDoors</span><span class="token punctuation">(</span>doors<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>house<span class="token punctuation">.</span>doors <span class="token operator">=</span> doors
+    <span class="token keyword">return</span> <span class="token keyword">this</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token function">buildRooms</span><span class="token punctuation">(</span>rooms<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>house<span class="token punctuation">.</span>rooms <span class="token operator">=</span> rooms
+    <span class="token keyword">return</span> <span class="token keyword">this</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token function">buildGarage</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>house<span class="token punctuation">.</span>hasGarage <span class="token operator">=</span> <span class="token boolean">true</span>
+    <span class="token keyword">return</span> <span class="token keyword">this</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token function">buildSwimPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>house<span class="token punctuation">.</span>hasSwimPool <span class="token operator">=</span> <span class="token boolean">true</span>
+    <span class="token keyword">return</span> <span class="token keyword">this</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token function">buildStatue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>house<span class="token punctuation">.</span>hasStatue <span class="token operator">=</span> <span class="token boolean">true</span>
+    <span class="token keyword">return</span> <span class="token keyword">this</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token comment">/**
+   * getResult 會 return 客製化完成的 product，並且 reset，
+   * 以便下一次客製化 product。
+  */</span>
+  <span class="token function">getResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>house
+    <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">reset</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> result
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>HosueBuilder</code> 有幾個重點可以注意：</p>
+<ol>
+<li><code>reset</code>：每次客製化完，並執行 <code>getResult</code> 後，通常都會執行 <code>reset</code>，得到初始的 <code>House</code>，以便進行下一次的客製化生產。</li>
+<li><code>buildDoors</code>、<code>buildStatue</code> 等 method：客製化用的 method，這邊為了示範有簡化，實際應用會更複雜，值得注意的是一般來說在每個客製化 method 都會 <code>return this</code>，目的是為了可以用 chain 的方式來調用 method。（待會看範例就會懂在說什麼了）</li>
+<li><code>getResult</code>：客製化完取得產品用的 method，通常會在這個地方做 reset，因為得到結果後通常就又會再進行下一次客製化，不過這只是通常，實際 reset 的時機可以看應用的情景。</li>
+</ol>
+<h3 id="實作：Director"><a href="#實作：Director" class="headerlink" title="實作：Director"></a>實作：Director</h3><p>再來輪到 <code>Director</code></p>
+<pre class="line-numbers language-typescript" data-language="typescript"><code class="language-typescript"><span class="token keyword">class</span> <span class="token class-name">Director</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">private</span> builder<span class="token operator">:</span> IHouseBuilder
+
+  <span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>builder <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HouseBuilder</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token keyword">public</span> <span class="token function">setBuilder</span><span class="token punctuation">(</span>builder<span class="token operator">:</span> HouseBuilder<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>builder <span class="token operator">=</span> builder
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token keyword">public</span> <span class="token function">buildCastle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>builder<span class="token punctuation">.</span><span class="token function">buildRooms</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">)</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>builder<span class="token punctuation">.</span><span class="token function">buildDoors</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>builder<span class="token punctuation">.</span><span class="token function">buildStatue</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>builder<span class="token punctuation">.</span><span class="token function">buildGarage</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token function">buildApartment</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>builder<span class="token punctuation">.</span><span class="token function">buildDoors</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>builder<span class="token punctuation">.</span><span class="token function">buildRooms</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以看到這邊 <code>Director</code> 的用處就是命令 <code>Builder</code> 來執行一連串的客製化 method，把常用的產品步驟集合成一個 method，快速建立出常用產品。</p>
+<h3 id="實作：實際使用"><a href="#實作：實際使用" class="headerlink" title="實作：實際使用"></a>實作：實際使用</h3><pre class="line-numbers language-typescript" data-language="typescript"><code class="language-typescript"><span class="token comment">// new 出 Director </span>
+<span class="token keyword">let</span> director <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Director</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment">// new 出 HouseBuilder</span>
+<span class="token keyword">let</span> houseBuilder <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HouseBuilder</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span>
+
+<span class="token comment">// 建造 houseA</span>
+<span class="token keyword">const</span> houseA <span class="token operator">=</span> houseBuilder<span class="token punctuation">.</span><span class="token function">buildDoors</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">buildGarage</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">buildRooms</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">getResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment">// 建造 hosueB</span>
+<span class="token keyword">const</span> houseB <span class="token operator">=</span> houseBuilder<span class="token punctuation">.</span><span class="token function">buildDoors</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">buildGarage</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">buildSwimPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">buildRooms</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">getResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment">// 客製化的 houseA，結果：</span>
+<span class="token comment">// &#123;</span>
+<span class="token comment">//   window: 2,</span>
+<span class="token comment">//   walls: 4,</span>
+<span class="token comment">//   doors: 2,</span>
+<span class="token comment">//   rooms: 2,</span>
+<span class="token comment">//   hasGarage: true,</span>
+<span class="token comment">//   hasSwimPool: false,</span>
+<span class="token comment">//   hasStatue: false</span>
+<span class="token comment">// &#125;</span>
+houseA<span class="token punctuation">.</span><span class="token function">listParts</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment">// 建造客製化的 houseB，結果：</span>
+<span class="token comment">// &#123;</span>
+<span class="token comment">//   window: 2,</span>
+<span class="token comment">//   walls: 4,</span>
+<span class="token comment">//   doors: 100,</span>
+<span class="token comment">//   rooms: 2,</span>
+<span class="token comment">//   hasGarage: true,</span>
+<span class="token comment">//   hasSwimPool: true,</span>
+<span class="token comment">//   hasStatue: false</span>
+<span class="token comment">// &#125;</span>
+houseB<span class="token punctuation">.</span><span class="token function">listParts</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment">// 使用 director，先設定 builder 為 HouseBuilder</span>
+director<span class="token punctuation">.</span><span class="token function">setBuilder</span><span class="token punctuation">(</span>houseBuilder<span class="token punctuation">)</span>
+
+<span class="token comment">// 接著 director 命令 builder 執行一連串客製化 method</span>
+director<span class="token punctuation">.</span><span class="token function">buildCastle</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment">// 使用 houseBuilder 得到結果</span>
+<span class="token keyword">const</span> houseC <span class="token operator">=</span> houseBuilder<span class="token punctuation">.</span><span class="token function">getResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment">// 建造客製化的 houseC，結果：</span>
+<span class="token comment">// &#123;</span>
+<span class="token comment">//   window: 2,</span>
+<span class="token comment">//   walls: 4,</span>
+<span class="token comment">//   doors: 1000,</span>
+<span class="token comment">//   rooms: 200,</span>
+<span class="token comment">//   hasGarage: true,</span>
+<span class="token comment">//   hasSwimPool: false,</span>
+<span class="token comment">//   hasStatue: true</span>
+<span class="token comment">// &#125;</span>
+houseC<span class="token punctuation">.</span><span class="token function">listParts</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>實作上大概是這樣，但這邊想提一次剛剛實作 <code>HouseBuilder</code> 時提到每個客製化 method <code>return this</code> 的事情。</p>
+<p>jQuery 用 chain 的方式來調用 function 的用法大家應該都有印象，比如可以像是這樣：</p>
+<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token function">$</span><span class="token punctuation">(</span> <span class="token string">"button.continue"</span> <span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">html</span><span class="token punctuation">(</span> <span class="token string">"Next Step..."</span> <span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">a</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">b</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>可以這樣使用的原因，是因為每次 jQuery 內建的方法執行完之後，都會再回傳一次 jQuery 的 element，你就可以再次使用它內建的方法了。</p>
+<p>而 <code>HouseBuilder</code> 會 <code>return this</code> 的原因也是一樣，當我們在客製化 method 裡面 <code>return this</code> 的時候：</p>
+<pre class="line-numbers language-typescript" data-language="typescript"><code class="language-typescript"><span class="token function">buildGarage</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>house<span class="token punctuation">.</span>hasGarage <span class="token operator">=</span> <span class="token boolean">true</span>
+  <span class="token keyword">return</span> <span class="token keyword">this</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>我們 return 的是 <code>HouseBuilder</code> 本身，而 return <code>HouseBuilder</code> 能做什麼呢？我們就能夠繼續 chain 下去，呼叫 <code>buildeRooms</code>、<code>buildeDoors</code> 等 method 了！</p>
+<p>所以實際使用就會變成像剛剛實作那樣：</p>
+<pre class="line-numbers language-typescript" data-language="typescript"><code class="language-typescript"><span class="token keyword">const</span> houseA <span class="token operator">=</span> houseBuilder
+      <span class="token punctuation">.</span><span class="token function">buildDoors</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token comment">// 執行完 return houseBuilder</span>
+      <span class="token punctuation">.</span><span class="token function">buildGarage</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 執行完 return houseBuilder</span>
+      <span class="token punctuation">.</span><span class="token function">buildRooms</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>  <span class="token comment">// 執行完 return houseBuilder</span>
+      <span class="token punctuation">.</span><span class="token function">getResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 得到結果</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="應用時機"><a href="#應用時機" class="headerlink" title="應用時機"></a>應用時機</h2><p>可以發現到和工廠模式不同，工廠模式著重在生產的每個產品，而 Builder 則是注重在每個產品的客製化內容，也因此當你有需要很多的客製化細節需要調整時，就可以考慮 Builder 這個 Pattern，而根據我看到的文章所說，當你發現一個 class 的 contructor 有超過四個參數時，就是使用 Builder 的時機了！</p>
+<p>Builder 的優點顯而易見，就是我們可以更細部的調整每一個 new 出來的 instance，並且 <code>getResult</code> 的時機也可以適時的調整；而 Builder 缺點是什麼呢？是每個 product 的同質性要夠高，像是 <code>IHouseBuilder</code> 定義的方法就很侷限，幾乎和房子有關的 class 才能夠 implement，差異比較大的 class 就需要另闢蹊徑，重新寫不一樣的 builder。</p>
+<h2 id="現實的應用"><a href="#現實的應用" class="headerlink" title="現實的應用"></a>現實的應用</h2><p>可以參考看看 Android 的 <a target="_blank" rel="noopener" href="https://developer.android.com/reference/android/app/Notification.Builder">Notification.Builder</a></p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>這次當 builder pattern 的主講感想是自己對 OOP 真的還很不熟，實作、概念上都是，以目前的文章而言，實作也僅止於書上紙上談兵的程度，沒有實際應用在專案的經驗，當想要講解這個 pattern 的概念給其他人的時候，會有點不太知道該用什麼樣實際的應用來讓自己以及別人知道實戰上如何使用 QQ  但能夠先知道這個 pattern 也是好的，未來看到相關應用的時候就能夠較快的理解程式碼。</p>
+<h2 id="Refercences"><a href="#Refercences" class="headerlink" title="Refercences"></a>Refercences</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/126305311">TypeScript 设计模式与重构技巧 · 建造者模式</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904133519114253">设计模式——建造者模式（TypeScript版）</a></p>
+<p><a target="_blank" rel="noopener" href="https://medium.com/wenchin-rolls-around/%E8%A8%AD%E8%A8%88%E6%A8%A1%E5%BC%8F-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F-builder-design-pattern-7c8eac7c9a7">設計模式—建造者模式 (Builder Design Pattern)</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/58093669">秒懂设计模式之建造者模式（Builder pattern）</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.techbridge.cc/2017/05/22/factory-method-and-abstract-factory/">設計模式 - 工廠方法及抽象工廠</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/TypeScript/" rel="tag"># TypeScript</a>
+              <a href="/tags/OOP/" rel="tag"># OOP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/12/06/first-contribution/" rel="prev" title="第一次貢獻開源就緊張到手抖">
+                  <i class="fa fa-chevron-left"></i> 第一次貢獻開源就緊張到手抖
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/01/02/2020-review/" rel="next" title="技術菜菜 2020 在幹嘛？2021 要幹嘛？">
+                  技術菜菜 2020 在幹嘛？2021 要幹嘛？ <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+
 <script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chih Yang</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://chihyang41.github.io/2021/01/02/builder-pattern/";
+    this.page.identifier = "2021/01/02/builder-pattern/";
+    this.page.title = "Builder Pattern（生成器）";
+    };
+  NexT.utils.loadComments('#disqus_thread', () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ChihYang41-blog.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
 </script>
 
-<script src="/js/insight.js"></script>
-
-    
 </body>
 </html>
