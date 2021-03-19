@@ -3205,7 +3205,7 @@ mark.search-keyword {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #e8bbff;
+  background: #d9ffff;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -3234,6 +3234,7 @@ p {
 }
 code {
   color: #2bbc8a;
+  background: #3c3b3b;
 }
 blockquote {
   border-left-color: #2bbc8a;
