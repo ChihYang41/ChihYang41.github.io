@@ -1029,6 +1029,74 @@ x <span class="token operator">=</span> <span class="token number">0</span><span
       </tags>
   </entry>
   <entry>
+    <title>React Native v2 - Setup</title>
+    <url>/2021/03/18/React-Native-v2-Setup/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近要轉換跑道學習開發 React Native，目前學習的課程是 Kadi Kraman 的 <a href="https://frontendmasters.com/courses/react-native-v2/">React Native v2</a> ，之前完全碰過 App 的開發，所以寫這篇文的時候是我學習 React Native 第一天，主要是講講基本的 Setup，但應該會跳過 Native 的 Setup，單純只使用 Expo。</p>
+<p>我認為這門課程適合的人：</p>
+<ul>
+<li>會使用 React 的人</li>
+<li>沒碰過 React Native 的人，而且對 React Native 有興趣</li>
+</ul>
+<p>課程最終會做出一個簡單的 React Native App，功能就是可以顯示現有的調色盤、檢視調色盤的細節、彈出 Modal 新增調色盤等等。</p>
+<p>大概就這樣，因為初學的關係，內容應該會有諸多錯誤，有誤的地方也麻煩不吝指正，感恩感恩。</p>
+<span id="more"></span>
+
+<h3 id="Getting-Started-with-Expo"><a href="#Getting-Started-with-Expo" class="headerlink" title="Getting Started with Expo"></a>Getting Started with Expo</h3><p><a href="https://kadikraman.github.io/react-native-v2/setup-expo">[Expo] Getting started with Expo</a></p>
+<p>基本上可以參考 React Native 官方文件的 Quick Start with Expo CLI</p>
+<h3 id="Getting-Started-with-Plain-React-Native"><a href="#Getting-Started-with-Plain-React-Native" class="headerlink" title="Getting Started with Plain React Native"></a>Getting Started with Plain React Native</h3><p>這章節我先略過，感覺很麻煩，後續有時間看的時候會再補上。</p>
+<h3 id="Adding-a-Linter"><a href="#Adding-a-Linter" class="headerlink" title="Adding a Linter"></a>Adding a Linter</h3><p><a href="https://kadikraman.github.io/react-native-v2/code-style">Adding a linter</a></p>
+<p>主要是安裝 React Native 的 eslint plugin，首先輸入：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">yarn</span> <span class="token function">add</span> eslint @react-native-community/eslint-config --dev<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ul>
+<li><strong>eslint</strong> - the code linter for JavaScript</li>
+<li><strong>@react-native-community/eslint-config</strong> - a community-built eslint configuration for React Native</li>
+</ul>
+<p>再來於 root 新增 <code>.eslintrc.js</code> 檔案，在檔案裡面加上：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// .eslintrc.js</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  root<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  <span class="token keyword">extends</span><span class="token operator">:</span> <span class="token string">'@react-native-community'</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>讓 linter 知道我們用了什麼 extends。</p>
+<p>另外還要調整 prettier 的設定檔，所以我們要新增 <code>.prettierrc.js</code>，然後再裡面加上：</p>
+<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token comment">// .prettierrc.js</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  bracketSpacing<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  singleQuote<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  trailingComma<span class="token operator">:</span> <span class="token string">'all'</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li><code>bracketSpacing</code> - adding a space around brackets, e.g. <code>import &#123; useState &#125; from &#39;react&#39;;</code> vs <code>import &#123;useState&#125; from &#39;react&#39;;</code></li>
+<li><code>singleQuote</code> - using single quotes for strings, e.g. <code>import React from &#39;react&#39;</code> vs <code>import React from &quot;react&quot;</code></li>
+<li><code>trailingComma</code> - adding a trailing comma after array arguments (the default is not to have a trailing comma for the last element of the array)</li>
+</ul>
+<h3 id="Debugging"><a href="#Debugging" class="headerlink" title="Debugging"></a>Debugging</h3><p>如果 Expo 在手機裝置上 debug 的方式蠻酷的，就是搖手機，帥吧！</p>
+<ul>
+<li>on device - shake the device (yes, really!)</li>
+<li>iOS simulator - Cmd + D</li>
+<li>Android emulator - Cmd + M on Mac, Crl + M on Windows/Linux</li>
+</ul>
+<p>搖手機之後可以看到幾個 debug 工具，目前覺得最有用的應該就是「Debug Remote JS」，可以在 Chrome 打開 dev tool 來看 console。</p>
+<p>「Show Element Inspector」我目前感受不到它的用處，因為是在手機裡面 inspect element，眼睛真的是會看到脫窗。</p>
+<p>另外，除了熟悉的 <code>console.log</code> 以外，<code>console.warn</code> 和 <code>console.error</code> 也是很棒的除錯工具。</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p><a href="https://frontendmasters.com/courses/react-native-v2/">React Native, v2</a></p>
+]]></content>
+      <categories>
+        <category>筆記</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+        <tag>frontend master</tag>
+        <tag>React Native</tag>
+        <tag>Expo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>React Native v2 - Hooks and Network Requests</title>
     <url>/2021/03/18/React-Native-v2-Hooks-and-Network-Requests/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近要轉換跑道學習開發 React Native，學習的課程是 Kadi Kraman 的 <a href="https://frontendmasters.com/courses/react-native-v2/">React Native v2</a> ，寫這篇筆記的時候是學習 React Native 的第三天，這個章節的前半部在講 Hook，算是我相對熟悉的區塊，看到熟人總是有點感動。</p>
@@ -1132,74 +1200,6 @@ x <span class="token operator">=</span> <span class="token number">0</span><span
 
 
 
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p><a href="https://frontendmasters.com/courses/react-native-v2/">React Native, v2</a></p>
-]]></content>
-      <categories>
-        <category>筆記</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-        <tag>frontend master</tag>
-        <tag>React Native</tag>
-        <tag>Expo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>React Native v2 - Setup</title>
-    <url>/2021/03/18/React-Native-v2-Setup/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近要轉換跑道學習開發 React Native，目前學習的課程是 Kadi Kraman 的 <a href="https://frontendmasters.com/courses/react-native-v2/">React Native v2</a> ，之前完全碰過 App 的開發，所以寫這篇文的時候是我學習 React Native 第一天，主要是講講基本的 Setup，但應該會跳過 Native 的 Setup，單純只使用 Expo。</p>
-<p>我認為這門課程適合的人：</p>
-<ul>
-<li>會使用 React 的人</li>
-<li>沒碰過 React Native 的人，而且對 React Native 有興趣</li>
-</ul>
-<p>課程最終會做出一個簡單的 React Native App，功能就是可以顯示現有的調色盤、檢視調色盤的細節、彈出 Modal 新增調色盤等等。</p>
-<p>大概就這樣，因為初學的關係，內容應該會有諸多錯誤，有誤的地方也麻煩不吝指正，感恩感恩。</p>
-<span id="more"></span>
-
-<h3 id="Getting-Started-with-Expo"><a href="#Getting-Started-with-Expo" class="headerlink" title="Getting Started with Expo"></a>Getting Started with Expo</h3><p><a href="https://kadikraman.github.io/react-native-v2/setup-expo">[Expo] Getting started with Expo</a></p>
-<p>基本上可以參考 React Native 官方文件的 Quick Start with Expo CLI</p>
-<h3 id="Getting-Started-with-Plain-React-Native"><a href="#Getting-Started-with-Plain-React-Native" class="headerlink" title="Getting Started with Plain React Native"></a>Getting Started with Plain React Native</h3><p>這章節我先略過，感覺很麻煩，後續有時間看的時候會再補上。</p>
-<h3 id="Adding-a-Linter"><a href="#Adding-a-Linter" class="headerlink" title="Adding a Linter"></a>Adding a Linter</h3><p><a href="https://kadikraman.github.io/react-native-v2/code-style">Adding a linter</a></p>
-<p>主要是安裝 React Native 的 eslint plugin，首先輸入：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">yarn</span> <span class="token function">add</span> eslint @react-native-community/eslint-config --dev<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<ul>
-<li><strong>eslint</strong> - the code linter for JavaScript</li>
-<li><strong>@react-native-community/eslint-config</strong> - a community-built eslint configuration for React Native</li>
-</ul>
-<p>再來於 root 新增 <code>.eslintrc.js</code> 檔案，在檔案裡面加上：</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// .eslintrc.js</span>
-
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  root<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-  <span class="token keyword">extends</span><span class="token operator">:</span> <span class="token string">'@react-native-community'</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>讓 linter 知道我們用了什麼 extends。</p>
-<p>另外還要調整 prettier 的設定檔，所以我們要新增 <code>.prettierrc.js</code>，然後再裡面加上：</p>
-<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token comment">// .prettierrc.js</span>
-
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  bracketSpacing<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-  singleQuote<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-  trailingComma<span class="token operator">:</span> <span class="token string">'all'</span><span class="token punctuation">,</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<ul>
-<li><code>bracketSpacing</code> - adding a space around brackets, e.g. <code>import &#123; useState &#125; from &#39;react&#39;;</code> vs <code>import &#123;useState&#125; from &#39;react&#39;;</code></li>
-<li><code>singleQuote</code> - using single quotes for strings, e.g. <code>import React from &#39;react&#39;</code> vs <code>import React from &quot;react&quot;</code></li>
-<li><code>trailingComma</code> - adding a trailing comma after array arguments (the default is not to have a trailing comma for the last element of the array)</li>
-</ul>
-<h3 id="Debugging"><a href="#Debugging" class="headerlink" title="Debugging"></a>Debugging</h3><p>如果 Expo 在手機裝置上 debug 的方式蠻酷的，就是搖手機，帥吧！</p>
-<ul>
-<li>on device - shake the device (yes, really!)</li>
-<li>iOS simulator - Cmd + D</li>
-<li>Android emulator - Cmd + M on Mac, Crl + M on Windows/Linux</li>
-</ul>
-<p>搖手機之後可以看到幾個 debug 工具，目前覺得最有用的應該就是「Debug Remote JS」，可以在 Chrome 打開 dev tool 來看 console。</p>
-<p>「Show Element Inspector」我目前感受不到它的用處，因為是在手機裡面 inspect element，眼睛真的是會看到脫窗。</p>
-<p>另外，除了熟悉的 <code>console.log</code> 以外，<code>console.warn</code> 和 <code>console.error</code> 也是很棒的除錯工具。</p>
 <h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p><a href="https://frontendmasters.com/courses/react-native-v2/">React Native, v2</a></p>
 ]]></content>
       <categories>
@@ -1325,6 +1325,40 @@ module<span class="token punctuation">.</span>exports <span class="token operato
       </tags>
   </entry>
   <entry>
+    <title>VSCode 自動刪除沒屁用 import 以及排版</title>
+    <url>/2020/06/27/VSCode-Auto-Organize-Import/</url>
+    <content><![CDATA[<h3 id="🤞前言"><a href="#🤞前言" class="headerlink" title="🤞前言"></a>🤞前言</h3><p>目前 Framework 都使用模組化方式撰寫的關係，通常都會 import 各種 library、component，不過通常會遇到兩個煩惱，第一個是 import 沒用到的內容，把沒用到的東西 import 進來除了擾亂閱讀以外，還會跳出很煩的黃字警告（最討厭的是這個），第二個是 import 的排版，一般來說為了可讀性，在排版上會有一些順序的規則，通常順序規則會是： 「library ➡️ 你的 component ➡️ 根據路徑的長短排版」，比如像這樣：</p>
+<pre class="line-numbers language-jsx" data-language="jsx"><code class="language-jsx"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> BrowserRouter <span class="token keyword">as</span> Router<span class="token punctuation">,</span> Route<span class="token punctuation">,</span> Switch <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">"react-router-dom"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token string">'./App.css'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> Chat <span class="token keyword">from</span> <span class="token string">'./components/ChatPage'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> Join <span class="token keyword">from</span> <span class="token string">'./components/JoinPage'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> Playground <span class="token keyword">from</span> <span class="token string">'./components/Playground'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<span id="more"></span>
+
+<h3 id="🤞怎麼解決"><a href="#🤞怎麼解決" class="headerlink" title="🤞怎麼解決"></a>🤞怎麼解決</h3><p>好，那在遇到這兩個問題時，我都怎麼解決呢？第一個沒用 import 的問題，我是都會把它刪掉，但怎麼刪掉呢？手動刪掉，那第二個排版順序的問題呢？手動排版。對，超級 DRY 的，我很羞愧。</p>
+<p>前幾天覺得喔幹真的太麻煩了，每次都要檢查一遍真的 hen 麻煩，IDE 有沒有自動幫我檢查然後刪掉沒用 import 還有排版的功能啊？？有！而且只要兩三行設定就可以了。</p>
+<p>首先打開 VSCode 的 settings.json（就是 VScode 的設定檔），加上這行：</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"editor.codeActionsOnSave"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+  <span class="token property">"source.organizeImports"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>光看語意上的意思應該很明白，<code>editor.codeActionsOnSave</code> 就是你的 IDE 在儲存時會執行的 actions，<code>source.organizeImports</code> 就是會幫你 <code>organize</code> import，把沒用的 import 都刪掉啦～～</p>
+<p>使用前：<br>可以看到有兩個沒用的 useEffect 和 useCallback，以及凌亂的排版<br><img src="https://i.imgur.com/1s92Xtn.png" alt="before"></p>
+<p>使用後：<br>按下 ctrl + s 後<br><img src="https://i.imgur.com/mkgYc3W.png" alt="after"></p>
+<p>噹啷！乾淨的版面出現了！而且方便到靠北！</p>
+]]></content>
+      <categories>
+        <category>frontend</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+        <tag>Front-End</tag>
+        <tag>VSCode</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>The Complete Junior to Senior Web Developer Roadmap - SSH 筆記</title>
     <url>/2020/03/07/The-Complete-Junior-to-Senior-Web-Developer-Roadmap-SSH-%E7%AD%86%E8%A8%98/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>這部分就是我學習 「The Complete Junior to Senior Web Developer Roadmap」這堂 Udemy 線上課程的筆記，這篇是有關 SSH 的內容。</p>
@@ -1434,40 +1468,6 @@ module<span class="token punctuation">.</span>exports <span class="token operato
       <tags>
         <tag>Udemy 課程</tag>
         <tag>ssh</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>VSCode 自動刪除沒屁用 import 以及排版</title>
-    <url>/2020/06/27/VSCode-Auto-Organize-Import/</url>
-    <content><![CDATA[<h3 id="🤞前言"><a href="#🤞前言" class="headerlink" title="🤞前言"></a>🤞前言</h3><p>目前 Framework 都使用模組化方式撰寫的關係，通常都會 import 各種 library、component，不過通常會遇到兩個煩惱，第一個是 import 沒用到的內容，把沒用到的東西 import 進來除了擾亂閱讀以外，還會跳出很煩的黃字警告（最討厭的是這個），第二個是 import 的排版，一般來說為了可讀性，在排版上會有一些順序的規則，通常順序規則會是： 「library ➡️ 你的 component ➡️ 根據路徑的長短排版」，比如像這樣：</p>
-<pre class="line-numbers language-jsx" data-language="jsx"><code class="language-jsx"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> BrowserRouter <span class="token keyword">as</span> Router<span class="token punctuation">,</span> Route<span class="token punctuation">,</span> Switch <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">"react-router-dom"</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token string">'./App.css'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> Chat <span class="token keyword">from</span> <span class="token string">'./components/ChatPage'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> Join <span class="token keyword">from</span> <span class="token string">'./components/JoinPage'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> Playground <span class="token keyword">from</span> <span class="token string">'./components/Playground'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<span id="more"></span>
-
-<h3 id="🤞怎麼解決"><a href="#🤞怎麼解決" class="headerlink" title="🤞怎麼解決"></a>🤞怎麼解決</h3><p>好，那在遇到這兩個問題時，我都怎麼解決呢？第一個沒用 import 的問題，我是都會把它刪掉，但怎麼刪掉呢？手動刪掉，那第二個排版順序的問題呢？手動排版。對，超級 DRY 的，我很羞愧。</p>
-<p>前幾天覺得喔幹真的太麻煩了，每次都要檢查一遍真的 hen 麻煩，IDE 有沒有自動幫我檢查然後刪掉沒用 import 還有排版的功能啊？？有！而且只要兩三行設定就可以了。</p>
-<p>首先打開 VSCode 的 settings.json（就是 VScode 的設定檔），加上這行：</p>
-<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"editor.codeActionsOnSave"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
-  <span class="token property">"source.organizeImports"</span><span class="token operator">:</span> <span class="token boolean">true</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p>光看語意上的意思應該很明白，<code>editor.codeActionsOnSave</code> 就是你的 IDE 在儲存時會執行的 actions，<code>source.organizeImports</code> 就是會幫你 <code>organize</code> import，把沒用的 import 都刪掉啦～～</p>
-<p>使用前：<br>可以看到有兩個沒用的 useEffect 和 useCallback，以及凌亂的排版<br><img src="https://i.imgur.com/1s92Xtn.png" alt="before"></p>
-<p>使用後：<br>按下 ctrl + s 後<br><img src="https://i.imgur.com/mkgYc3W.png" alt="after"></p>
-<p>噹啷！乾淨的版面出現了！而且方便到靠北！</p>
-]]></content>
-      <categories>
-        <category>frontend</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-        <tag>Front-End</tag>
-        <tag>VSCode</tag>
       </tags>
   </entry>
   <entry>
