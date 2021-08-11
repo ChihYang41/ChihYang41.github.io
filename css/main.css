@@ -3205,7 +3205,7 @@ mark.search-keyword {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #d514ff;
+  background: #12b59a;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -3240,6 +3240,8 @@ blockquote {
   border-left-color: #2bbc8a;
   background-color: #292d2f;
   border-radius: 5px;
+  padding: 7px 15px;
+  margin-bottom: 25px;
 }
 pre[class*="language-"].line-numbers {
   border: 1px dotted #615f5f;
@@ -3251,4 +3253,10 @@ pre[class*="language-"].line-numbers {
 .post-body a {
   color: #69ade6;
   border-bottom-color: #69ade6;
+}
+code[class*="language-"] {
+  font-size: 1.1em;
+}
+blockquote p:last-child {
+  margin: 0px;
 }

@@ -207,7 +207,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-count">29</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -220,7 +220,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -257,6 +257,167 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://chihyang41.github.io/2021/06/29/AST-and-ESLint-Introduction-part-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Chih Yang">
+      <meta itemprop="description" content="Chih Yang 的前端小天地">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chih Yang's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/06/29/AST-and-ESLint-Introduction-part-2/" class="post-title-link" itemprop="url">淺談 AST 及 ESlint Rule：撰寫屬於自己的 ESLint Rule（下）</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-06-29 01:04:01" itemprop="dateCreated datePublished" datetime="2021-06-29T01:04:01+08:00">2021-06-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E8%A1%93/" itemprop="url" rel="index"><span itemprop="name">技術</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>這篇延續了上一篇對於 AST 的介紹，基於上篇對 AST 的理解，這篇文會開始實際使用 AST Explorer 以及 ESLint 提供的 API，實際的撰寫屬於自己專案的 ESLint Rule。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/06/29/AST-and-ESLint-Introduction-part-2/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://chihyang41.github.io/2021/06/28/AST-and-ESLint-Introduction-part-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Chih Yang">
+      <meta itemprop="description" content="Chih Yang 的前端小天地">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chih Yang's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/06/28/AST-and-ESLint-Introduction-part-1/" class="post-title-link" itemprop="url">淺談 AST 及 ESlint Rule：AST 是殺毀？（上）</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-06-28 01:04:01" itemprop="dateCreated datePublished" datetime="2021-06-28T01:04:01+08:00">2021-06-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E8%A1%93/" itemprop="url" rel="index"><span itemprop="name">技術</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>AST 和 ESlint Rule 是我近期在公司技術分享的主題，AST 是我一直想去了解。但是默默就拖延沒去研究的領域；ESlint Rule 則是既然都研究 AST 了，那總該有個實際應用的例子，所以就一併放進主題中了。</p>
+<p>AST &amp; ESlint Rule 會分成上下兩章節，上半章節簡單介紹 AST，下半章節則是會透過兩個例子來了解 AST 在 ESlint 裡是如何被利用的，以及如何實際開發專屬自己的 ESlint Rule。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/06/28/AST-and-ESLint-Introduction-part-1/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -897,169 +1058,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/02/07/Functional-Light-JavaScript-Point-Free/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://chihyang41.github.io/2021/02/06/Functional-Light-JavaScript-Argument-Adapters/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Chih Yang">
-      <meta itemprop="description" content="Chih Yang 的前端小天地">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Chih Yang's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/02/06/Functional-Light-JavaScript-Argument-Adapters/" class="post-title-link" itemprop="url">Functional-Light JavaScript - Argument Adapters</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-02-06 17:34:10" itemprop="dateCreated datePublished" datetime="2021-02-06T17:34:10+08:00">2021-02-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>此為 frontend master 的 <a target="_blank" rel="noopener" href="https://frontendmasters.com/courses/functional-javascript-v3/">Functional-Light JavaScript, v3</a> 的課程筆記，這篇主要講的是 argument adapters，在使用 function 時，不一定每個 function parameters 的順序、數量符合我們的需求，因此就需要透過 adapter 去調整，把 function 修改成符合我們需求的形狀。</p>
-<p>內容不完全和課程編排相同，單純是個人消化過後的編排。</p>
-<p>因為剛開始學 functional programming 的緣故，內容、觀念可能會有諸多錯誤，如有發現錯誤麻煩不吝指教，感謝！</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/02/06/Functional-Light-JavaScript-Argument-Adapters/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://chihyang41.github.io/2021/02/06/Functional-Light-JavaScript-Pure-Function/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Chih Yang">
-      <meta itemprop="description" content="Chih Yang 的前端小天地">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Chih Yang's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/02/06/Functional-Light-JavaScript-Pure-Function/" class="post-title-link" itemprop="url">Functional-Light JavaScript - Pure Function</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2021-02-06 15:10:15" itemprop="dateCreated datePublished" datetime="2021-02-06T15:10:15+08:00">2021-02-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">筆記</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>此為 frontend master 的 <a target="_blank" rel="noopener" href="https://frontendmasters.com/courses/functional-javascript-v3/">Functional-Light JavaScript, v3</a> ˇ的課程筆記，這篇主要講的是 pure function，內容不完全和課程編排相同，單純是個人消化過後的編排。</p>
-<p>因為剛開始學 functional programming 的緣故，內容、觀念可能會有諸多錯誤，如有發現錯誤麻煩不吝指教，感謝！</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/02/06/Functional-Light-JavaScript-Pure-Function/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
