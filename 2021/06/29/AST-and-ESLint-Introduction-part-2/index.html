@@ -21,7 +21,7 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 <meta name="description" content="前言這篇延續了上一篇對於 AST 的介紹，基於上篇對 AST 的理解，這篇文會開始實際使用 AST Explorer 以及 ESLint 提供的 API，實際的撰寫屬於自己專案的 ESLint Rule。">
 <meta property="og:type" content="article">
@@ -268,6 +268,8 @@
     <span>0%</span>
   </div>
 
+  <a href="https://github.com/ChihYang41" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
 <noscript>
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
 </noscript>
@@ -508,7 +510,7 @@ ruleTester<span class="token punctuation">.</span><span class="token function">r
 <p>不合法 test case 的包括了「async function 但沒有 Async 結尾」、「async function 但結尾不是 camel case」、「async function 但 Async 不是放在結尾」</p>
 <p>接著我們就可以把這些測試案例貼在 AST Explorer：</p>
 <p><a target="_blank" rel="noopener" href="https://astexplorer.net/#/gist/1712e379b79c3d2ed053a1def505305c/bbc7052c81353ddccd283066e6de8d8a337cb055">AST Explorer 連結</a></p>
-<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gtazja0bduj31is0u07b0.jpg" alt="截圖 2021-08-10 上午12.06.49"></p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gtazja0bduj31is0u07b0.jpg" alt="截圖 2021-08-10 上午12.06.49"></p>
 <h3 id="第二步：觀察-AST，找出想要操作的-node"><a href="#第二步：觀察-AST，找出想要操作的-node" class="headerlink" title="第二步：觀察 AST，找出想要操作的 node"></a>第二步：觀察 AST，找出想要操作的 node</h3><p>我們需要的資訊有兩個：</p>
 <blockquote>
 <ol>
@@ -517,9 +519,9 @@ ruleTester<span class="token punctuation">.</span><span class="token function">r
 </ol>
 </blockquote>
 <p>知道需要哪些資訊以後，接著就來觀察 AST 裡面哪些地方放有這些資訊：</p>
-<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gtazq5v947j31iv0u0q9t.jpg" alt="截圖 2021-08-10 上午12.09.45"></p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gtazq5v947j31iv0u0q9t.jpg" alt="截圖 2021-08-10 上午12.09.45"></p>
 <p>從上圖可以發現到一個 function 的宣告就會是一個 <code>FunctionDeclaration</code> 的 node，接著仔細看 <code>FunctionDeclaration</code> 的內部，會看到：</p>
-<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gtazn0ctruj61id0u0tej02.jpg" alt="截圖 2021-08-10 上午12.10.51"></p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gtazn0ctruj61id0u0tej02.jpg" alt="截圖 2021-08-10 上午12.10.51"></p>
 <p><code>FunctionDeclaration</code> 中還有 id 裡的 <code>Identifier</code>，<code>Identifier</code> 的 name 就會是該 function 的名稱，如果我們要檢查 function name 是否有「Async」的話，<code>Identifier</code> 的 name 就會是我需要的資訊；另外，<code>FunctionDeclaration</code> 當中會有一個叫 <code>async</code> 的 boolean，這就是 function 是否為 async function 的資訊，這就是我們所需的兩個資訊！</p>
 <p>接著，以我們的需求來看，我們需要選擇到 <code>FunctionDeclaration</code> 來得到該 function 的資訊並做名稱相關的檢查，不寫成 <code>&quot;FunctionDeclaration &gt; Identifier&quot;</code> 的原因是除了 function name 檢查以外，我們也要確定這個 function 是 async，而這個資訊只會在 <code>FunctionDeclaration</code> 的 <code>async</code> 才有。</p>
 <p>了解該做什麼後，現在就移動到 AST Explore 並寫下 code：</p>
@@ -542,7 +544,7 @@ ruleTester<span class="token punctuation">.</span><span class="token function">r
 
 <p><code>node</code> 會是我們選擇到的 <code>FunctionDeclaration</code> 這幾個 node，得到 <code>FunctionDeclaration</code> 的資訊後，我們就可以透過 <code>node.async</code> 檢查是否為 async function，以及用 regex 檢查 function name 結尾是否符合規範。</p>
 <p>當符合條件後，代表這就是我們想要揪出的錯誤命名 function，透過 <code>contex.report</code> 可以回報找出的錯誤，傳入 <code>node</code> 可以讓 ESLnt 幫你指出錯誤的地方在哪，<code>message</code> 則是想要跳出的錯誤提示文字。</p>
-<p>所以在 AST Exploer 可以在右下角看到這樣的 output：<br><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gtazwny6k2j31in0u0th4.jpg" alt="截圖 2021-08-10 上午12.20.00"></p>
+<p>所以在 AST Exploer 可以在右下角看到這樣的 output：<br><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gtazwny6k2j31in0u0th4.jpg" alt="截圖 2021-08-10 上午12.20.00"></p>
 <p> ESLint 成功幫我們找出錯誤了！</p>
 <h2 id="ESLint-Rule-實戰二：don’t-call-this-function-please🥺"><a href="#ESLint-Rule-實戰二：don’t-call-this-function-please🥺" class="headerlink" title="ESLint Rule 實戰二：don’t call this function please🥺"></a>ESLint Rule 實戰二：don’t call this function please🥺</h2><p>完成第一個實戰範例了，接下來再看看第二個範例吧，這個範例源自於工作時專案上看到的狀況，不禁就想試看看能怎麼用 ESLint 自動化的處理。</p>
 <p>前情提要是我在專案上看到這個 function：</p>
@@ -610,9 +612,9 @@ ruleTester<span class="token punctuation">.</span><span class="token function">r
 <p>另外會發現到這邊出現 error message 的方式改成寫 <code>messageId: &#39;dontCallMsg&#39;</code> 了，這也是 ESLint Rule 提供的功能，叫做 <code>messageId</code>，屬於一個更簡單去寫錯誤提示的方式，有興趣可以看 <a target="_blank" rel="noopener" href="https://eslint.org/docs/developer-guide/working-with-rules#messageids">ESLint - messageId</a> 了解如何使用。</p>
 <p>接下來一樣是把 test cases 貼到 AST Explorer 上面：</p>
 <p><a target="_blank" rel="noopener" href="https://astexplorer.net/#/gist/1712e379b79c3d2ed053a1def505305c/6bba20b713281709d350b4b3971207f4cff31718">AST Explorer 連結</a></p>
-<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gtb06t3thyj31io0u0n2w.jpg" alt="截圖 2021-08-10 上午12.29.29"></p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gtb06t3thyj31io0u0n2w.jpg" alt="截圖 2021-08-10 上午12.29.29"></p>
 <h3 id="第二步：觀察-AST，selector-對準獵物"><a href="#第二步：觀察-AST，selector-對準獵物" class="headerlink" title="第二步：觀察 AST，selector 對準獵物"></a>第二步：觀察 AST，selector 對準獵物</h3><p>因為我們要檢查的是「function call 名稱是否在黑名單裡面」，所以需要的是 function call 的 name，那這個資訊會在哪裡出現呢？觀察了 AST 以後可以看到：</p>
-<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gtb09s20m4j31j00u00xl.jpg" alt="截圖 2021-08-10 上午12.32.48"></p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gtb09s20m4j31j00u00xl.jpg" alt="截圖 2021-08-10 上午12.32.48"></p>
 <p><code>CallExpression</code> 當中的 <code>Identifier</code> 的 <code>name</code> 就是 function call 的名稱，因此這就是我們要的資訊！</p>
 <p>知道要選取誰以後就很簡單了，用 selector 選擇到想要的 node：</p>
 <p><a target="_blank" rel="noopener" href="https://astexplorer.net/#/gist/1712e379b79c3d2ed053a1def505305c/25cb7217fd756616ae754a22b42a1a377e74d693">AST Explorer 連結</a></p>
@@ -678,7 +680,7 @@ module<span class="token punctuation">.</span>exports <span class="token operato
 
 <p>單純就只是用 <code>includes</code> 這個內建函式去檢查 function call 的名稱。</p>
 <p>另外，需求上還有說要檢查的是「測試檔案」以外的地方，關於這個需求可以到 <code>eslintrc.js</code> 裡面的 overrides 做設定：</p>
-<p><img src="https://i.imgur.com/jXvJqL6.png"></p>
+<p><img data-src="https://i.imgur.com/jXvJqL6.png"></p>
 <p><code>rules</code> 就是一般設定想要開啟的規則，但如果有些檔案想要部分套用規則而已，<code>overrides</code> 可以設定哪些檔案想開啟、關閉哪些規則，做出更客製化的 ESLint 設定套用。</p>
 <h3 id="中場休息：盤點-TODO"><a href="#中場休息：盤點-TODO" class="headerlink" title="中場休息：盤點 TODO"></a>中場休息：盤點 TODO</h3><blockquote>
 <ol>
@@ -900,7 +902,7 @@ module<span class="token punctuation">.</span>exports <span class="token operato
 </ol>
 </blockquote>
 <p>這次我們終於完成更彈性的寫法了，剩下最後一個「自動修正錯誤」的功能，相信使用過 ESLint 的人都一定看過一個功能是在我們將滑鼠移到 warning 上得時候，會出現一個叫「quick fix」的功能，點下去之後就會神奇地幫我們修正那個錯誤，如下圖：</p>
-<p><img src="https://i.imgur.com/8yxNdfL.png"></p>
+<p><img data-src="https://i.imgur.com/8yxNdfL.png"></p>
 <p>這個功能是怎麼做到的呢？這就要講到 ESLint Rule 的 <code>fixer</code> 了。</p>
 <h3 id="ESLint-Rule：Fixer"><a href="#ESLint-Rule：Fixer" class="headerlink" title="ESLint Rule：Fixer"></a>ESLint Rule：<code>Fixer</code></h3><p>回到我們的需求來說：</p>
 <blockquote>
@@ -917,7 +919,7 @@ module<span class="token punctuation">.</span>exports <span class="token operato
 <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>fixer 當中提供了不少的 method 可以使用：</p>
-<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gtd65cshwlj61aw0eyn1e02.jpg" alt="截圖 2021-08-11 下午9.27.01"></p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gtd65cshwlj61aw0eyn1e02.jpg" alt="截圖 2021-08-11 下午9.27.01"></p>
 <p>以目前的需求為例，我們要做的是「移除掉某段不合法 function call」，所以照理來說會用到的是 <code>remove</code> ，知道可以用什麼 API 以後，就可以繼續往下了。</p>
 <p>不過在真正刪除 node 之前，要先要到 ESLint Rule 的 <code>meta</code> 調整 <code>fixable</code>：</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
@@ -989,12 +991,12 @@ module<span class="token punctuation">.</span>exports <span class="token operato
 
 <p>這邊的 <code>output</code> 指的是「經過 quick fix 修正過後，預期的程式碼長怎麼樣」，因為我們會把整段程式碼移除掉的緣故，所以 <code>output</code> 會什麼都沒有。</p>
 <p>接著就到了快樂的觀察 AST 時間了，來觀察一下我們想要刪除的是哪個 node？</p>
-<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gtd6ns1doyj61nl0u0jwb02.jpg" alt="截圖 2021-08-11 下午9.23.08"></p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gtd6ns1doyj61nl0u0jwb02.jpg" alt="截圖 2021-08-11 下午9.23.08"></p>
 <p>以一開始的直覺來說，應該會想刪除掉的是 <code>CallExperssion</code> ，因為是要移除掉 function call，這想法也很合理，不過這邊會發現只要在程式碼中加個分號：</p>
-<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gtd728pmp3j61ld0u043v02.jpg" alt="截圖 2021-08-11 下午9.23.23"></p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gtd728pmp3j61ld0u043v02.jpg" alt="截圖 2021-08-11 下午9.23.23"></p>
 <p>就發現 <code>CallExperssion</code> 沒有包含那個分號，如果我們使用 <code>fixer.remove</code> 的話，就只會移除掉 function call 而留下分號了，所以這邊預期要移除掉的會是 <code>ExpressionStatement</code>。</p>
 <p>但要怎麼選擇到 ExpressionStatement？畢竟我們在剛剛使用 selector 選擇 node 的時候是 <code>CallExpression &gt; Identifier</code>，選擇到的 node 都會是最深處的 <code>Identifier</code>，那要如何選擇到更上層的 node 呢？假如我們 console 出目前的 node 的話，可以看到這樣的內容：</p>
-<p><img src="https://tva1.sinaimg.cn/large/008i3skNgy1gtd77ntskzj60pe0miq5c02.jpg" alt="截圖 2021-08-11 下午10.04.03"></p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gtd77ntskzj60pe0miq5c02.jpg" alt="截圖 2021-08-11 下午10.04.03"></p>
 <p><code>Identifier</code> 這個 node 當中會包含 <code>parent</code> 這個 property，而 <code>parent</code> 就是它上一層的 <code>CallExperssion</code>，<code>CallExpression</code> 當然也會有屬於它自己的 parent， <code>CallExpression</code> 的 parent 就會指向 <code>ExpressionStatement</code>，而這就是我們想要刪除的 node。</p>
 <p>所以關於 fixer 的程式碼會寫成這樣：</p>
 <p><a target="_blank" rel="noopener" href="https://astexplorer.net/#/gist/1712e379b79c3d2ed053a1def505305c/be022a675e6451e190472618b47458fc55054ea3">AST Explorer - Fixer</a></p>
@@ -1102,11 +1104,7 @@ module<span class="token punctuation">.</span>exports <span class="token operato
 
 
 
-    
-  <div class="comments" id="disqus_thread">
-    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
-  </div>
-  
+    <div class="comments utterances-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -1150,6 +1148,8 @@ module<span class="token punctuation">.</span>exports <span class="token operato
 
   
   <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js"></script>
 <script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
   
@@ -1167,24 +1167,16 @@ module<span class="token punctuation">.</span>exports <span class="token operato
 
 
 <script>
-  var disqus_config = function() {
-    this.page.url = "https://chihyang41.github.io/2021/06/29/AST-and-ESLint-Introduction-part-2/";
-    this.page.identifier = "2021/06/29/AST-and-ESLint-Introduction-part-2/";
-    this.page.title = "淺談 AST 及 ESlint Rule：撰寫屬於自己的 ESLint Rule（下）";
-    };
-  NexT.utils.loadComments('#disqus_thread', () => {
-    if (window.DISQUS) {
-      DISQUS.reset({
-        reload: true,
-        config: disqus_config
-      });
-    } else {
-      var d = document, s = d.createElement('script');
-      s.src = 'https://ChihYang41-blog.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', '' + +new Date());
-      (d.head || d.body).appendChild(s);
-    }
-  });
+NexT.utils.loadComments('.utterances-container', () => {
+  const script = document.createElement('script');
+  script.src = 'https://utteranc.es/client.js';
+  script.setAttribute('repo', "ChihYang41/ChihYang41.github.io");
+  script.setAttribute('issue-term', "title");
+  script.setAttribute('theme', "github-light");
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+  document.querySelector('.utterances-container').appendChild(script);
+});
 </script>
 
 </body>

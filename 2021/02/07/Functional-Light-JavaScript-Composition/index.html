@@ -21,7 +21,7 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 <meta name="description" content="前言此為 frontend master 的 Functional-Light JavaScript, v3 的課程筆記，這篇講的是 composition，指的是如何把 function 結合，將小積木堆疊成大城堡的技巧。 內容不完全和課程編排相同，單純是個人消化過後的編排。 因為剛開始學 functional programming 的緣故，內容、觀念可能會有諸多錯誤，如有發現錯誤麻煩不吝指教">
 <meta property="og:type" content="article">
@@ -261,6 +261,8 @@
     <span>0%</span>
   </div>
 
+  <a href="https://github.com/ChihYang41" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
 <noscript>
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
 </noscript>
@@ -346,7 +348,7 @@ tmp <span class="token operator">=</span> <span class="token function">triple</s
 <span class="token keyword">let</span> totalCost <span class="token operator">=</span> basePrice <span class="token operator">+</span> <span class="token function">minus2</span><span class="token punctuation">(</span>tmp<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>但我們看看就好，暫時先不談 code，而是先談一個生活化的情境。</p>
-<p><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmj2tjkjudj316m0kmq6e.jpg" alt="截圖 2021-01-11 上午12.13.30"></p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmj2tjkjudj316m0kmq6e.jpg" alt="截圖 2021-01-11 上午12.13.30"></p>
 <blockquote>
 <p>某天老闆跟你說：「我們的競爭對手產量遠超我們啊！快用你無敵的白金之星想想辦法！趕快增加產量超過競爭對手吧！」</p>
 <p>你開始苦惱怎麼處理這問題，因為要增加產量又需要更多機器，可是廠房空間不夠，以目前的運作機制只能放一台機器，但不管了，煩惱放一旁，我們先回去寫程式。</p>
@@ -360,7 +362,7 @@ tmp <span class="token operator">=</span> <span class="token function">triple</s
 
 <p>我們簡化了原本較冗長的方式， <code>increment(4)</code> 執行完後的 output， 會被放進 <code>triple</code> 當作 input，<code>triple</code> 執行完的 output，又會被放進 <code>minus2</code> 當作 input，最終得到我們的結果。</p>
 <p>想著想著，有發現提高巧克力工廠生產量的方法了嗎？</p>
-<img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmj30aoytwj30ci0w0q54.jpg" width="200px" height="auto"/>
+<img data-src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmj30aoytwj30ci0w0q54.jpg" width="200px" height="auto"/>
 
 <p>沒錯，如同我們的 function 生產完後的 output 會被當作下個 function 的 input 一樣，我們生產機器的 output 也可以當成下一個機器的 input 對吧，這樣就可以省去輸送帶佔的空間了！</p>
 <h3 id="更加抽象化"><a href="#更加抽象化" class="headerlink" title="更加抽象化"></a>更加抽象化</h3><blockquote>
@@ -388,7 +390,7 @@ tmp <span class="token operator">=</span> <span class="token function">triple</s
 <p>所以，我更直接的說我的需求好了，你有沒有辦法…製造出一個能夠製造機器的…機器？這樣我們就可以辦到同樣事情惹！」</p>
 </blockquote>
 <p>這是老闆理想的設計圖：</p>
-<p><img src="https://raw.githubusercontent.com/Simingchen/Functional-Light-JS/master/manuscript/images/fig5.png"></p>
+<p><img data-src="https://raw.githubusercontent.com/Simingchen/Functional-Light-JS/master/manuscript/images/fig5.png"></p>
 <p>只要把小機器丟進超巨大機器裡，就可以幫我們把這些零件結合，變成新的機器，讚拉。</p>
 <p>雖然聽起來很荒謬，但你依然決定走老樣子的路線，寫程式找改造機器的靈感。</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">composeThree</span><span class="token punctuation">(</span><span class="token parameter">fn3<span class="token punctuation">,</span> fn2<span class="token punctuation">,</span> fn1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -417,7 +419,7 @@ tmp <span class="token operator">=</span> <span class="token function">triple</s
 <span class="token function">compose</span><span class="token punctuation">(</span><span class="token function">compose</span><span class="token punctuation">(</span>toUpperCase<span class="token punctuation">,</span> head<span class="token punctuation">)</span><span class="token punctuation">,</span> reverse<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>又或者像是下圖：</p>
-<p><img src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmlafplfc9j30ru0skqde.jpg" alt="截圖 2021-01-12 下午10.37.44"></p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmlafplfc9j30ru0skqde.jpg" alt="截圖 2021-01-12 下午10.37.44"></p>
 <p><code>f</code> 和 <code>p</code> 看似不同的 function，但其實都是一樣的，只是 compose 結合 function 的方式不一樣而已，只要你的 function 順序一樣，因為 compose 符合結合律，所以你要怎麼 compose 都可以。</p>
 <p>結合律的特性為我們提供了很大的靈活性，更能夠有效的運用 function，從小小小塊的樂高積木，逐漸蓋出一座大城堡。</p>
 <h2 id="Composition-with-Currying"><a href="#Composition-with-Currying" class="headerlink" title="Composition with Currying"></a>Composition with Currying</h2><pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">sum</span><span class="token punctuation">(</span><span class="token parameter">x<span class="token punctuation">,</span> y</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> x <span class="token operator">+</span> y <span class="token punctuation">&#125;</span>
@@ -485,11 +487,7 @@ divBy <span class="token operator">=</span> <span class="token function">curry</
 
 
 
-    
-  <div class="comments" id="disqus_thread">
-    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
-  </div>
-  
+    <div class="comments utterances-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -533,6 +531,8 @@ divBy <span class="token operator">=</span> <span class="token function">curry</
 
   
   <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js"></script>
 <script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
   
@@ -550,24 +550,16 @@ divBy <span class="token operator">=</span> <span class="token function">curry</
 
 
 <script>
-  var disqus_config = function() {
-    this.page.url = "https://chihyang41.github.io/2021/02/07/Functional-Light-JavaScript-Composition/";
-    this.page.identifier = "2021/02/07/Functional-Light-JavaScript-Composition/";
-    this.page.title = "Functional-Light JavaScript - Composition";
-    };
-  NexT.utils.loadComments('#disqus_thread', () => {
-    if (window.DISQUS) {
-      DISQUS.reset({
-        reload: true,
-        config: disqus_config
-      });
-    } else {
-      var d = document, s = d.createElement('script');
-      s.src = 'https://ChihYang41-blog.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', '' + +new Date());
-      (d.head || d.body).appendChild(s);
-    }
-  });
+NexT.utils.loadComments('.utterances-container', () => {
+  const script = document.createElement('script');
+  script.src = 'https://utteranc.es/client.js';
+  script.setAttribute('repo', "ChihYang41/ChihYang41.github.io");
+  script.setAttribute('issue-term', "title");
+  script.setAttribute('theme', "github-light");
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+  document.querySelector('.utterances-container').appendChild(script);
+});
 </script>
 
 </body>

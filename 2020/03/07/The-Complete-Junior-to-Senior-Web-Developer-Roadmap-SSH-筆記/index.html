@@ -21,7 +21,7 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 <meta name="description" content="前言這部分就是我學習 「The Complete Junior to Senior Web Developer Roadmap」這堂 Udemy 線上課程的筆記，這篇是有關 SSH 的內容。">
 <meta property="og:type" content="article">
@@ -264,6 +264,8 @@
     <span>0%</span>
   </div>
 
+  <a href="https://github.com/ChihYang41" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
 <noscript>
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
 </noscript>
@@ -336,18 +338,18 @@
 <p>這時候你可能會想，那跟 HTTPS 差在哪？畢竟他們兩個都能用於兩台機器間的溝通，過程中也會加密啊！Well，就像 web browser 透過 HTTPS 與 Server 溝通，並且呈現 Web 頁面一樣，shell 需要一個特定的協定來交換資料，或是讓兩台電腦溝通（並不只是 browser 跟 server），這也是為什麼 SSH 稱為 <strong>secure shell protocal</strong>。</p>
 <p>SSH 最大的優點就是它用了加密的方式，讓 client 和 host 之間傳遞資訊的時候能夠保持安全。</p>
 <h2 id="SSH-Command"><a href="#SSH-Command" class="headerlink" title="SSH Command"></a>SSH Command</h2><p>接下來要開始實作了！首先我們要買虛擬機器，這邊課程選擇的是 Digital Ocean，最便宜的方案是 $5 美金/月，但其實有其他免費的平台可以買虛擬機器，比如 AWS、GCP 等，但這邊我就用 Digital Ocean 了。</p>
-<p>首先點擊 Navbar 的 product 中的 Droplet。<br><img src="https://upload.cc/i1/2020/03/01/KSCBg6.png" alt="image"></p>
-<p>接著會進入到 console 面板中，點擊 New Droplet。<br><img src="https://upload.cc/i1/2020/03/01/Gfq3rC.png" alt="new droplet"></p>
+<p>首先點擊 Navbar 的 product 中的 Droplet。<br><img data-src="https://upload.cc/i1/2020/03/01/KSCBg6.png" alt="image"></p>
+<p>接著會進入到 console 面板中，點擊 New Droplet。<br><img data-src="https://upload.cc/i1/2020/03/01/Gfq3rC.png" alt="new droplet"></p>
 <p>點擊後會進入到 Create Droplet 頁面，裡面可以調整一些像是作業系統、使用方案等等的選項，這邊我作業系統選擇 Ubuntu，plan 選擇最便宜的 $5 /月的方案。</p>
-<p><img src="https://upload.cc/i1/2020/03/01/yeA34o.png" alt="create droplet"></p>
-<p><img src="https://upload.cc/i1/2020/03/01/y5lsWE.png" alt="plan"></p>
-<p>datacenter region 我就隨便選，離自己所在地近一點應該會比較好。<br><img src="https://upload.cc/i1/2020/03/01/Ei5F1B.png" alt="datacenter"></p>
+<p><img data-src="https://upload.cc/i1/2020/03/01/yeA34o.png" alt="create droplet"></p>
+<p><img data-src="https://upload.cc/i1/2020/03/01/y5lsWE.png" alt="plan"></p>
+<p>datacenter region 我就隨便選，離自己所在地近一點應該會比較好。<br><img data-src="https://upload.cc/i1/2020/03/01/Ei5F1B.png" alt="datacenter"></p>
 <p>create 成功後，可以點擊進去自己剛剛買的機器，看詳細的資訊，此時我們順便複製機器的 IPv4，並且將我們目光轉移到自己的 Terminal 上，我們要開始連接到自己剛剛創建的機器裡了！</p>
 <p>在 Terminal 輸入這行：</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ssh</span> sudo@剛剛複製的 IPv4<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>此時它會要求你輸入密碼，密碼可以在 digital ocean 寄給你的 email 中看到 password，成功進入機器後，又會要求你更改密碼，再次輸入 email 中的密碼後，就可以改成自己想要的密碼了～</p>
-<p>當你看到這樣的畫面時，就代表成功連進去遠端的機器了！<br><img src="https://upload.cc/i1/2020/03/01/IH3NjU.png" alt="remote"></p>
+<p>當你看到這樣的畫面時，就代表成功連進去遠端的機器了！<br><img data-src="https://upload.cc/i1/2020/03/01/IH3NjU.png" alt="remote"></p>
 <h3 id="說明一下剛剛的-command-line"><a href="#說明一下剛剛的-command-line" class="headerlink" title="說明一下剛剛的 command line"></a>說明一下剛剛的 command line</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ssh</span> <span class="token punctuation">&#123;</span>user<span class="token punctuation">&#125;</span>@<span class="token punctuation">&#123;</span>host<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>透過 ssh，我們可以遠端連線到任何允許 ssh 連線的電腦中，酷吧！</p>
 <p><code>ssh</code> 代表你要使用 ssh 加密的方式連線，</p>
@@ -363,7 +365,7 @@
 
 <h3 id="複製本機的檔案到遠端機器中"><a href="#複製本機的檔案到遠端機器中" class="headerlink" title="複製本機的檔案到遠端機器中"></a>複製本機的檔案到遠端機器中</h3><p>接著試試看把本機的資料夾透過 ssh 複製到遠端機器裡吧！</p>
 <p>首先我在 Desktop 創建一個叫 <code>emptyFolder</code> 的資料夾，接著進入 <code>emptyFolder</code>中，此時的 terminal 長這樣：</p>
-<p><img src="https://upload.cc/i1/2020/03/02/6cFQ1z.png" alt="emptyFolder"></p>
+<p><img data-src="https://upload.cc/i1/2020/03/02/6cFQ1z.png" alt="emptyFolder"></p>
 <p>接著輸入</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">rsync</span> -av <span class="token builtin class-name">.</span> @機器的IPv4 ~/路由<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
@@ -375,7 +377,7 @@
 <li>Hashing （雜湊）</li>
 </ol>
 <h3 id="Symmetrical-Encryption"><a href="#Symmetrical-Encryption" class="headerlink" title="Symmetrical Encryption"></a>Symmetrical Encryption</h3><p>對稱性加密提供一把 secret key 讓加密/解密兩方使用，</p>
-<p>運作的方式像是以下的圖片<br><img src="https://upload.cc/i1/2020/03/02/mgQtRZ.png" alt="symmetrical encryption"></p>
+<p>運作的方式像是以下的圖片<br><img data-src="https://upload.cc/i1/2020/03/02/mgQtRZ.png" alt="symmetrical encryption"></p>
 <p>client 端把想要傳遞的內容經過 secret key 加密後，會變成一串奇妙的文字，讓第三方沒辦法看懂， host 端再藉由那把 secret key 解密，得到 client 端傳遞的資訊。</p>
 <p>此時能注意到的問題是，看來只要能有這把鑰匙的人，就能得到資訊的內容，<strong>那鑰匙被幹走怎辦呢？</strong> 看來問題就會出現在「交換鑰匙的方式」是否安全了，因此，這個安全交換鑰匙的方式我們就稱為 <strong>key exchange algorithm。</strong></p>
 <h3 id="Asymmetrical-Encryption"><a href="#Asymmetrical-Encryption" class="headerlink" title="Asymmetrical Encryption"></a>Asymmetrical Encryption</h3><p>延續前面提及的 key exchange algorithm，它需要透過一個叫做 asymmetrical encryption（非對稱性加密）的方式執行。</p>
@@ -462,11 +464,7 @@
 
 
 
-    
-  <div class="comments" id="disqus_thread">
-    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
-  </div>
-  
+    <div class="comments utterances-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -510,6 +508,8 @@
 
   
   <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js"></script>
 <script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
   
@@ -527,24 +527,16 @@
 
 
 <script>
-  var disqus_config = function() {
-    this.page.url = "https://chihyang41.github.io/2020/03/07/The-Complete-Junior-to-Senior-Web-Developer-Roadmap-SSH-%E7%AD%86%E8%A8%98/";
-    this.page.identifier = "2020/03/07/The-Complete-Junior-to-Senior-Web-Developer-Roadmap-SSH-筆記/";
-    this.page.title = "The Complete Junior to Senior Web Developer Roadmap - SSH 筆記";
-    };
-  NexT.utils.loadComments('#disqus_thread', () => {
-    if (window.DISQUS) {
-      DISQUS.reset({
-        reload: true,
-        config: disqus_config
-      });
-    } else {
-      var d = document, s = d.createElement('script');
-      s.src = 'https://ChihYang41-blog.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', '' + +new Date());
-      (d.head || d.body).appendChild(s);
-    }
-  });
+NexT.utils.loadComments('.utterances-container', () => {
+  const script = document.createElement('script');
+  script.src = 'https://utteranc.es/client.js';
+  script.setAttribute('repo', "ChihYang41/ChihYang41.github.io");
+  script.setAttribute('issue-term', "title");
+  script.setAttribute('theme', "github-light");
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+  document.querySelector('.utterances-container').appendChild(script);
+});
 </script>
 
 </body>

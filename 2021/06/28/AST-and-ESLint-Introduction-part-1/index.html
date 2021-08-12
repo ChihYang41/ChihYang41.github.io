@@ -21,7 +21,7 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 <meta name="description" content="前言AST 和 ESlint Rule 是我近期在公司技術分享的主題，AST 是我一直想去了解。但是默默就拖延沒去研究的領域；ESlint Rule 則是既然都研究 AST 了，那總該有個實際應用的例子，所以就一併放進主題中了。 AST &amp; ESlint Rule 會分成上下兩章節，上半章節簡單介紹 AST，下半章節則是會透過兩個例子來了解 AST 在 ESlint 裡是如何被利用的，以及">
 <meta property="og:type" content="article">
@@ -267,6 +267,8 @@
     <span>0%</span>
   </div>
 
+  <a href="https://github.com/ChihYang41" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
 <noscript>
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
 </noscript>
@@ -334,16 +336,16 @@
 <span id="more"></span>
 
 <h2 id="Why-should-I-care？"><a href="#Why-should-I-care？" class="headerlink" title="Why should I care？"></a>Why should I care？</h2><p>AST 和我們日常開發常用到的工具息息相關，舉例來說，像是 babel：</p>
-<p><img src="https://i.imgur.com/MBTRSCW.png"></p>
+<p><img data-src="https://i.imgur.com/MBTRSCW.png"></p>
 <p>透過 babel 的幫助，我們可以寫更新更潮的程式碼，再透過 babel 轉換得到較舊的語法，不必擔心寫新語法造成的相容問題。</p>
 <p>又比如像是可以幫你做 cherry pick 的 babel plugin：</p>
-<p><img src="https://i.imgur.com/KNYEZtH.png"></p>
-<p>又者是 Eslint：<br><img src="https://i.imgur.com/bajBPUW.png"></p>
+<p><img data-src="https://i.imgur.com/KNYEZtH.png"></p>
+<p>又者是 Eslint：<br><img data-src="https://i.imgur.com/bajBPUW.png"></p>
 <p>透過 Eslint，除了檢查語法上的 coding style 以外，更可以提前偵錯，比如 import 路徑出錯：</p>
-<p><img src="https://i.imgur.com/vpSYiXt.png"></p>
+<p><img data-src="https://i.imgur.com/vpSYiXt.png"></p>
 <p>又或者是 Webpack、TypeScript 等等談及程式碼靜態分析或是調整程式碼的工具，都會涉及到 AST，因此了解 AST 的好處是你可以更了解這些工具是如何運作的，更而甚者是你可以寫一個自己的 plugin，滿足自己客製化的需求。</p>
 <h2 id="AST-是什麼？"><a href="#AST-是什麼？" class="headerlink" title="AST 是什麼？"></a>AST 是什麼？</h2><p>談論到 AST 以前，讓我們先談談 JavaScript code 如何被執行的（以 V8 為例）：</p>
-<p><img src="https://i.imgur.com/qK9v9pJ.png"></p>
+<p><img data-src="https://i.imgur.com/qK9v9pJ.png"></p>
 <p>我們寫的 JavaScript code 在經過 Parser 解析之後產生了 AST(Abstract Syntax Tree)，而產生後的 AST 就是我們要談論的，但離題一下，先繼續往下講。</p>
 <p>AST 接著會進到 V8 引擎做執行，Interpreter 負責編譯程式碼變為 bytecode，當 bytecode 被頻繁的執行時，會被丟到 optimizing compiler 做編譯，編譯成執行起來更有效率的 machine code，變成經過優化的 code。</p>
 <h2 id="所以到底什麼是-AST？"><a href="#所以到底什麼是-AST？" class="headerlink" title="所以到底什麼是 AST？"></a>所以到底什麼是 AST？</h2><p>當 JavaScript 的 source code 經過 parser 轉換的時候會經歷以下階段：</p>
@@ -354,12 +356,12 @@
 <li>Code Generation</li>
 </ol>
 </blockquote>
-<p><img src="https://i.imgur.com/Ytkf5pz.png"></p>
+<p><img data-src="https://i.imgur.com/Ytkf5pz.png"></p>
 <h3 id="Lexical-Analysis-Tokenization-："><a href="#Lexical-Analysis-Tokenization-：" class="headerlink" title="Lexical Analysis(Tokenization)："></a>Lexical Analysis(Tokenization)：</h3><p>在 Lexical Analysis（又稱為 Tokenization）會把程式碼切成一小塊一小塊的 tokens，如下圖：</p>
-<p><img src="https://twilio-cms-prod.s3.amazonaws.com/original_images/4Q1Fa-SX8smqvRKZYupkUeodmma76QViKAZASsyP4wLlap2YAyRr9Oz3mOaYGYL7VERPmhmgk0flsS"></p>
+<p><img data-src="https://twilio-cms-prod.s3.amazonaws.com/original_images/4Q1Fa-SX8smqvRKZYupkUeodmma76QViKAZASsyP4wLlap2YAyRr9Oz3mOaYGYL7VERPmhmgk0flsS"></p>
 <p>可以把這階段想成像是把「一個句子」拆成「一個一個字」，每個字都會有自己的 type，比如名詞、動詞又或者是標點符號，但此時我們還不知道句子本身的含義，以及每個字在句子中的關聯。</p>
 <h3 id="Syntax-Analysis-Parsing-："><a href="#Syntax-Analysis-Parsing-：" class="headerlink" title="Syntax Analysis(Parsing)："></a>Syntax Analysis(Parsing)：</h3><p>在這個階段 parser 會把一整個 list 的 tokens 變成 AST，parser 將這些所有的 tokens 變成一個真正代表我們程式碼結構的 tree，像是比如我們原本 token 裡有 <code>()</code> 兩個括號，但我們不知道那是什麼意思，但現在我們知道他是一個 function call 了。 </p>
-<p><img src="https://twilio-cms-prod.s3.amazonaws.com/original_images/QRjqUpCw9t8dOD1VfI4OrZnRZLmtsbXpn5bUZKRlpc2o6-nAOx-8IFtABbxyxV1ncZaMz8EGF75C-H"></p>
+<p><img data-src="https://twilio-cms-prod.s3.amazonaws.com/original_images/QRjqUpCw9t8dOD1VfI4OrZnRZLmtsbXpn5bUZKRlpc2o6-nAOx-8IFtABbxyxV1ncZaMz8EGF75C-H"></p>
 <p>那再舉一個例子的話，像是 HTML 不是會被轉成 DOM Tree 嗎？這也是同樣的概念，我們可能寫了像是 <code>h2</code>、<code>div</code> 等等的 tag，也是同樣會被轉成 token 後，再被連結成一棵 tree。</p>
 <p>那可以特別注意的是現在沒有一種特定的 AST 規格，也就是說產生出來的抽象語法樹裡面的屬性會因為不同的 parser 而有不一樣的屬性，當然內容看起來會大同小異，但可能一些名稱會不一樣，或是多一些、少一些內容都有可能。</p>
 <p>像我們剛剛的 <code>isPanda(&#39;🐼&#39;)</code> 使用 Eslint 的 parser Espree 產生出來的 AST 會長這樣：</p>
@@ -418,17 +420,17 @@
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h3 id="Code-Generation"><a href="#Code-Generation" class="headerlink" title="Code Generation"></a>Code Generation</h3><p>接下來，我們就可以針對產生的 AST 內容進行操弄，調整出自己想要的 code：</p>
-<p><img src="https://twilio-cms-prod.s3.amazonaws.com/original_images/upwCkqTNYmuXRxKifsICQkJxclDHCtIjLqiKAGUdOuKpjVKAFb4iBq5u16XgGVKoQgAsQnsyrapCFy"></p>
+<p><img data-src="https://twilio-cms-prod.s3.amazonaws.com/original_images/upwCkqTNYmuXRxKifsICQkJxclDHCtIjLqiKAGUdOuKpjVKAFb4iBq5u16XgGVKoQgAsQnsyrapCFy"></p>
 <p>針對 AST 進行調整的好處是什麼呢？因為我們有時候想調整一段程式碼，比如通過 code 直接調整，又或者是直接調整 token，有可能會發生非預期的結果，比如我們以為改動的範圍在自己理解的 scope，但因為不知道程式碼之間的結構、關聯性的緣故，會影響到其他 scope。</p>
 <p>那透過 AST 來改動程式碼的好處是提供了我們足夠的訊息，讓我們知道 code 的結構如何，就可以了解到調整某段程式碼之後影響的範圍，所以用 AST 來調整程式碼是相對安全的。</p>
 <h3 id="AST-中場小結"><a href="#AST-中場小結" class="headerlink" title="AST 中場小結"></a>AST 中場小結</h3><p>簡而言之，我們剛剛講的所有東西可以簡化成下面這張圖：</p>
-<p><img src="https://i.imgur.com/bJIuBp5.png"></p>
+<p><img data-src="https://i.imgur.com/bJIuBp5.png"></p>
 <p>左邊是我們人看的程式碼，也就是我們寫的 source code；右邊則是電腦看的程式碼，會經過 Lexical Analysis、Syntax Analysis 後產生出 AST，我們的各種工具再透過操作 AST 產生出想要的程式碼。</p>
 <p>以我簡單的理解來看，<strong>AST 就是包含你程式碼資訊的 object</strong>，「抽象語法樹」聽起來很恐怖，但實際上就是個 object。</p>
 <p>因為 AST 包含了更多資訊、結構更加齊全，我們就可以透過操弄這棵 tree 來得到自己想要的結果，又或是透過 tree 針對程式碼進行分析，進而提早偵錯。</p>
 <h2 id="AST-Explorer"><a href="#AST-Explorer" class="headerlink" title="AST Explorer"></a>AST Explorer</h2><p>那目前有什麼工具是可以更簡單的知道程式碼被 parser 轉換過後的 AST 嗎？有的，那就是 <a target="_blank" rel="noopener" href="https://astexplorer.net/">AST Explorer</a>！</p>
 <p>以下圖來說：</p>
-<p><img src="https://i.imgur.com/2Bk6dps.png" alt="AST Explorer"></p>
+<p><img data-src="https://i.imgur.com/2Bk6dps.png" alt="AST Explorer"></p>
 <ul>
 <li>左上角的區塊代表原本程式碼</li>
 <li>右上角代表 AST 的長相，AST 在滑鼠上去的時候會 hightlight 到對應的程式碼。</li>
@@ -489,11 +491,7 @@
 
 
 
-    
-  <div class="comments" id="disqus_thread">
-    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
-  </div>
-  
+    <div class="comments utterances-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -537,6 +535,8 @@
 
   
   <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js"></script>
 <script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
   
@@ -554,24 +554,16 @@
 
 
 <script>
-  var disqus_config = function() {
-    this.page.url = "https://chihyang41.github.io/2021/06/28/AST-and-ESLint-Introduction-part-1/";
-    this.page.identifier = "2021/06/28/AST-and-ESLint-Introduction-part-1/";
-    this.page.title = "淺談 AST 及 ESlint Rule：AST 是殺毀？（上）";
-    };
-  NexT.utils.loadComments('#disqus_thread', () => {
-    if (window.DISQUS) {
-      DISQUS.reset({
-        reload: true,
-        config: disqus_config
-      });
-    } else {
-      var d = document, s = d.createElement('script');
-      s.src = 'https://ChihYang41-blog.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', '' + +new Date());
-      (d.head || d.body).appendChild(s);
-    }
-  });
+NexT.utils.loadComments('.utterances-container', () => {
+  const script = document.createElement('script');
+  script.src = 'https://utteranc.es/client.js';
+  script.setAttribute('repo', "ChihYang41/ChihYang41.github.io");
+  script.setAttribute('issue-term', "title");
+  script.setAttribute('theme', "github-light");
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+  document.querySelector('.utterances-container').appendChild(script);
+});
 </script>
 
 </body>

@@ -21,7 +21,7 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 <meta name="description" content="前言最近要轉換跑道學習開發 React Native，學習的課程是 Kadi Kraman 的 React Native v2 ，寫這篇筆記的時候是學習 React Native 的第三天，不知不覺到了這個課程的結尾，算是窺探了 React Native 的冰山一角，基本的 Component、簡單的 Navigation、基本的 Form 都在這個課程學到了，未來應該還有超長的路要走，祝我自己一">
 <meta property="og:type" content="article">
@@ -261,6 +261,8 @@
     <span>0%</span>
   </div>
 
+  <a href="https://github.com/ChihYang41" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
 <noscript>
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
 </noscript>
@@ -378,7 +380,7 @@
 <h2 id="Opening-a-full-screen-modal"><a href="#Opening-a-full-screen-modal" class="headerlink" title="Opening a full screen modal"></a>Opening a full screen modal</h2><p><a target="_blank" rel="noopener" href="https://kadikraman.github.io/react-native-v2/modals">Opening a full screen modal</a></p>
 <p>這章節的可以參考官方文件的 <a target="_blank" rel="noopener" href="https://reactnavigation.org/docs/modal/">Opening a full-screen modal</a>，以及 React Navigation 的 <a target="_blank" rel="noopener" href="https://reactnavigation.org/docs/typescript/#combining-navigation-props">Combining navigation props</a>。</p>
 <p>首先這是我們預計要有的 Navigation Stack 樹狀圖：</p>
-<p><img src="https://tva1.sinaimg.cn/large/008eGmZEly1gonzvwbi65j30nd0ewdfu.jpg" alt="stack"></p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008eGmZEly1gonzvwbi65j30nd0ewdfu.jpg" alt="stack"></p>
 <p>也就是說，原本的 Stack 變為 <code>MainStack</code>，<code>MainStack</code> 負責導航到 <code>HomeScreen</code> 和 <code>ColorPalette</code> 兩個 Screen；更上層的 <code>RootStack</code> 則是負責 <code>MainStack</code> 的導航以及 <code>ModalScreen</code> 。</p>
 <p>首先我們先來新增 ModalScreen，我們來去 <code>screen</code> 建立<code>ColorPaletteModal.tsx</code>：</p>
 <pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span>
@@ -489,7 +491,7 @@
 <p>除了原本的 <code>StackNavigationProp</code> 以外，也要 combine <code>MainNavigationProp</code>。</p>
 <p>這樣子就可以順利解決了！依然是感謝 React Navigation 的官方文件寫的很詳細。</p>
 <p>這時候我們點擊 <code>Button</code> 並跳出彈窗的行為大概會像是這樣：</p>
-<p><img src="https://kadikraman.github.io/react-native-v2/a13f62bcf5af5f4b8cbc7363faef86ce/open-modal-demo.gif"></p>
+<p><img data-src="https://kadikraman.github.io/react-native-v2/a13f62bcf5af5f4b8cbc7363faef86ce/open-modal-demo.gif"></p>
 <h2 id="Form-exercise-📝"><a href="#Form-exercise-📝" class="headerlink" title="Form exercise 📝"></a>Form exercise 📝</h2><p>這章節的筆記會比較簡略，因為累惹，想要簡單記錄就好，簡單來說大概會做幾件事情：</p>
 <ol>
 <li>調整 Home 的「Add a Color scheme」</li>
@@ -500,7 +502,7 @@
 <li>處理 Home route 的 type 以及 route.params</li>
 </ol>
 <p>這是預計要實踐的畫面和功能：</p>
-<p><img src="https://kadikraman.github.io/react-native-v2/6794ed6012089fa8f378be2542cde666/forms-exercise.gif"></p>
+<p><img data-src="https://kadikraman.github.io/react-native-v2/6794ed6012089fa8f378be2542cde666/forms-exercise.gif"></p>
 <h3 id="Home-tsx-新增-Button"><a href="#Home-tsx-新增-Button" class="headerlink" title="Home.tsx 新增 Button"></a>Home.tsx 新增 Button</h3><p>首先我們要做的是到 Home.tsx 新增 「Add a Color scheme」的 button：</p>
 <pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token punctuation">;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">FlatList</span></span>
   <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>container<span class="token punctuation">&#125;</span></span>
@@ -931,11 +933,7 @@
 
 
 
-    
-  <div class="comments" id="disqus_thread">
-    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
-  </div>
-  
+    <div class="comments utterances-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -979,6 +977,8 @@
 
   
   <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js"></script>
 <script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
   
@@ -996,24 +996,16 @@
 
 
 <script>
-  var disqus_config = function() {
-    this.page.url = "https://chihyang41.github.io/2021/03/18/React-Native-v2-Form/";
-    this.page.identifier = "2021/03/18/React-Native-v2-Form/";
-    this.page.title = "React Native v2 - Forms";
-    };
-  NexT.utils.loadComments('#disqus_thread', () => {
-    if (window.DISQUS) {
-      DISQUS.reset({
-        reload: true,
-        config: disqus_config
-      });
-    } else {
-      var d = document, s = d.createElement('script');
-      s.src = 'https://ChihYang41-blog.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', '' + +new Date());
-      (d.head || d.body).appendChild(s);
-    }
-  });
+NexT.utils.loadComments('.utterances-container', () => {
+  const script = document.createElement('script');
+  script.src = 'https://utteranc.es/client.js';
+  script.setAttribute('repo', "ChihYang41/ChihYang41.github.io");
+  script.setAttribute('issue-term', "title");
+  script.setAttribute('theme', "github-light");
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+  document.querySelector('.utterances-container').appendChild(script);
+});
 </script>
 
 </body>
