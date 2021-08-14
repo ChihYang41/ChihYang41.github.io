@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="pdI9OcgtLe0I27rizFD2U3s553wFM8nsth5viFyCbOk">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="前言這部分就是我學習 「The Complete Junior to Senior Web Developer Roadmap」這堂 Udemy 線上課程的筆記，這篇是有關 SSH 的內容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Complete Junior to Senior Web Developer Roadmap - SSH 筆記">
+<meta property="og:url" content="https://chihyang41.github.io/2020/03/07/The-Complete-Junior-to-Senior-Web-Developer-Roadmap-SSH-%E7%AD%86%E8%A8%98/index.html">
+<meta property="og:site_name" content="Chih Yang&#39;s Blog">
+<meta property="og:description" content="前言這部分就是我學習 「The Complete Junior to Senior Web Developer Roadmap」這堂 Udemy 線上課程的筆記，這篇是有關 SSH 的內容。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://upload.cc/i1/2020/03/01/KSCBg6.png">
+<meta property="og:image" content="https://upload.cc/i1/2020/03/01/Gfq3rC.png">
+<meta property="og:image" content="https://upload.cc/i1/2020/03/01/yeA34o.png">
+<meta property="og:image" content="https://upload.cc/i1/2020/03/01/y5lsWE.png">
+<meta property="og:image" content="https://upload.cc/i1/2020/03/01/Ei5F1B.png">
+<meta property="og:image" content="https://upload.cc/i1/2020/03/01/IH3NjU.png">
+<meta property="og:image" content="https://upload.cc/i1/2020/03/02/6cFQ1z.png">
+<meta property="og:image" content="https://upload.cc/i1/2020/03/02/mgQtRZ.png">
+<meta property="article:published_time" content="2020-03-07T07:33:16.000Z">
+<meta property="article:modified_time" content="2020-03-07T07:33:16.000Z">
+<meta property="article:author" content="Chih Yang">
+<meta property="article:tag" content="Udemy 課程">
+<meta property="article:tag" content="ssh">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://upload.cc/i1/2020/03/01/KSCBg6.png">
+
+
+<link rel="canonical" href="https://chihyang41.github.io/2020/03/07/The-Complete-Junior-to-Senior-Web-Developer-Roadmap-SSH-%E7%AD%86%E8%A8%98/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>The Complete Junior to Senior Web Developer Roadmap - SSH 筆記 | Chih Yang's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-146838618-1');
+      }
+    </script>
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+      <img class="custom-logo-image" src="/images/logo.png" alt="Chih Yang's Blog">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Chih Yang's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction-to-SSH"><span class="nav-number">2.</span> <span class="nav-text">Introduction to SSH</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSH-Command"><span class="nav-number">3.</span> <span class="nav-text">SSH Command</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AA%AA%E6%98%8E%E4%B8%80%E4%B8%8B%E5%89%9B%E5%89%9B%E7%9A%84-command-line"><span class="nav-number">3.1.</span> <span class="nav-text">說明一下剛剛的 command line</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%BA%E4%BD%95%E8%A6%81%E5%AD%B8-SSH"><span class="nav-number">3.2.</span> <span class="nav-text">為何要學 SSH</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Saving-The-Day-Through-SSH"><span class="nav-number">4.</span> <span class="nav-text">Saving The Day Through SSH</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-nodejs"><span class="nav-number">4.1.</span> <span class="nav-text">安裝 nodejs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A4%87%E8%A3%BD%E6%9C%AC%E6%A9%9F%E7%9A%84%E6%AA%94%E6%A1%88%E5%88%B0%E9%81%A0%E7%AB%AF%E6%A9%9F%E5%99%A8%E4%B8%AD"><span class="nav-number">4.2.</span> <span class="nav-text">複製本機的檔案到遠端機器中</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#How-SSH-Works"><span class="nav-number">5.</span> <span class="nav-text">How SSH Works</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Symmetrical-Encryption"><span class="nav-number">5.1.</span> <span class="nav-text">Symmetrical Encryption</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Asymmetrical-Encryption"><span class="nav-number">5.2.</span> <span class="nav-text">Asymmetrical Encryption</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="nav-number">5.2.1.</span> <span class="nav-text">參考資料</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hashing"><span class="nav-number">5.3.</span> <span class="nav-text">Hashing</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSH-Into-a-Server"><span class="nav-number">6.</span> <span class="nav-text">SSH Into a Server</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5-%E9%80%B2%E5%85%A5-ssh-%E8%B3%87%E6%96%99%E5%A4%BE"><span class="nav-number">6.0.1.</span> <span class="nav-text">第一步 - 進入 ssh 資料夾</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5-%E7%94%A2%E7%94%9F-ssh-key"><span class="nav-number">6.0.2.</span> <span class="nav-text">第二步 - 產生 ssh key</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5-%E6%8A%8A-public-key-%E5%85%A7%E5%AE%B9%E6%94%BE%E9%80%B2%E9%81%A0%E7%AB%AF%E6%A9%9F%E5%99%A8%E4%B8%AD"><span class="nav-number">6.0.3.</span> <span class="nav-text">第三步 - 把 public key 內容放進遠端機器中</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5-%E5%9C%A8%E6%9C%AC%E6%A9%9F%E5%81%9A-ssh-add"><span class="nav-number">6.0.4.</span> <span class="nav-text">第四步 - 在本機做 ssh-add</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Digital-Ocean"><span class="nav-number">6.1.</span> <span class="nav-text">Digital Ocean</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Github-%E7%B7%B4%E7%BF%92"><span class="nav-number">6.2.</span> <span class="nav-text">Github 練習</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Chih Yang</p>
+  <div class="site-description" itemprop="description">Chih Yang 的前端小天地</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ChihYang41" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ChihYang41" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/chihyang41" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;chihyang41" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/ChihYang41" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chihyang41.github.io/2020/03/07/The-Complete-Junior-to-Senior-Web-Developer-Roadmap-SSH-%E7%AD%86%E8%A8%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Chih Yang">
+      <meta itemprop="description" content="Chih Yang 的前端小天地">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chih Yang's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          The Complete Junior to Senior Web Developer Roadmap - SSH 筆記
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-03-07 15:33:16" itemprop="dateCreated datePublished" datetime="2020-03-07T15:33:16+08:00">2020-03-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/frontend/" itemprop="url" rel="index"><span itemprop="name">frontend</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>這部分就是我學習 「The Complete Junior to Senior Web Developer Roadmap」這堂 Udemy 線上課程的筆記，這篇是有關 SSH 的內容。</p>
+<span id="more"></span>
+
+<h2 id="Introduction-to-SSH"><a href="#Introduction-to-SSH" class="headerlink" title="Introduction to SSH"></a>Introduction to SSH</h2><p>SSH 是一種協定。</p>
+<p>什麼意思呢？你也許聽過 HTTP、FTP、HTTPS 等協定，這些協定都是用於讓兩台電腦間溝通的協定，SSH 也是同理，是一座讓兩台機器溝通的橋樑。</p>
+<p>舉個例子，HTTP 讓你能夠在 Browser 和 Server 兩者傳輸檔案（像 HTML、CSS、JavaScript 檔）；FTP 讓你能夠傳輸檔案、在 hostgator 或 generic hostng 等平台上傳檔案；HTTPS 類似於 HTTP，但是有經過加密，這代表著第三方沒辦法讀取正在傳輸的檔案。</p>
+<p>SSH 也是一種協議，讓兩台電腦能夠在網路連結，它讓使用者能夠透過網路控制遠端電腦，並且在連結過程中加密，使第三方的壞蛋沒辦法監控你。</p>
+<p>這時候你可能會想，那跟 HTTPS 差在哪？畢竟他們兩個都能用於兩台機器間的溝通，過程中也會加密啊！Well，就像 web browser 透過 HTTPS 與 Server 溝通，並且呈現 Web 頁面一樣，shell 需要一個特定的協定來交換資料，或是讓兩台電腦溝通（並不只是 browser 跟 server），這也是為什麼 SSH 稱為 <strong>secure shell protocal</strong>。</p>
+<p>SSH 最大的優點就是它用了加密的方式，讓 client 和 host 之間傳遞資訊的時候能夠保持安全。</p>
+<h2 id="SSH-Command"><a href="#SSH-Command" class="headerlink" title="SSH Command"></a>SSH Command</h2><p>接下來要開始實作了！首先我們要買虛擬機器，這邊課程選擇的是 Digital Ocean，最便宜的方案是 $5 美金/月，但其實有其他免費的平台可以買虛擬機器，比如 AWS、GCP 等，但這邊我就用 Digital Ocean 了。</p>
+<p>首先點擊 Navbar 的 product 中的 Droplet。<br><img data-src="https://upload.cc/i1/2020/03/01/KSCBg6.png" alt="image"></p>
+<p>接著會進入到 console 面板中，點擊 New Droplet。<br><img data-src="https://upload.cc/i1/2020/03/01/Gfq3rC.png" alt="new droplet"></p>
+<p>點擊後會進入到 Create Droplet 頁面，裡面可以調整一些像是作業系統、使用方案等等的選項，這邊我作業系統選擇 Ubuntu，plan 選擇最便宜的 $5 /月的方案。</p>
+<p><img data-src="https://upload.cc/i1/2020/03/01/yeA34o.png" alt="create droplet"></p>
+<p><img data-src="https://upload.cc/i1/2020/03/01/y5lsWE.png" alt="plan"></p>
+<p>datacenter region 我就隨便選，離自己所在地近一點應該會比較好。<br><img data-src="https://upload.cc/i1/2020/03/01/Ei5F1B.png" alt="datacenter"></p>
+<p>create 成功後，可以點擊進去自己剛剛買的機器，看詳細的資訊，此時我們順便複製機器的 IPv4，並且將我們目光轉移到自己的 Terminal 上，我們要開始連接到自己剛剛創建的機器裡了！</p>
+<p>在 Terminal 輸入這行：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ssh</span> sudo@剛剛複製的 IPv4<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>此時它會要求你輸入密碼，密碼可以在 digital ocean 寄給你的 email 中看到 password，成功進入機器後，又會要求你更改密碼，再次輸入 email 中的密碼後，就可以改成自己想要的密碼了～</p>
+<p>當你看到這樣的畫面時，就代表成功連進去遠端的機器了！<br><img data-src="https://upload.cc/i1/2020/03/01/IH3NjU.png" alt="remote"></p>
+<h3 id="說明一下剛剛的-command-line"><a href="#說明一下剛剛的-command-line" class="headerlink" title="說明一下剛剛的 command line"></a>說明一下剛剛的 command line</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ssh</span> <span class="token punctuation">&#123;</span>user<span class="token punctuation">&#125;</span>@<span class="token punctuation">&#123;</span>host<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>透過 ssh，我們可以遠端連線到任何允許 ssh 連線的電腦中，酷吧！</p>
+<p><code>ssh</code> 代表你要使用 ssh 加密的方式連線，</p>
+<p><code>user</code> 代表你要登入的帳戶，舉例來說，你想要使用 root 來登入，root 代表你是系統的管理者，有完整的權限可以更改系統。</p>
+<p><code>host</code> 代表你想要登入的電腦，可以是 IP 名稱或者是 domain name。</p>
+<h3 id="為何要學-SSH"><a href="#為何要學-SSH" class="headerlink" title="為何要學 SSH"></a>為何要學 SSH</h3><p>在工程師的生涯中，你很可能會遇到各種需要用到 SSH 的情況，像課程中的老師過去就發生已經部署好的 App 不小心被刪除，所以需要重新用 SSH 連線到遠端電腦，重新 install 的狀況。</p>
+<h2 id="Saving-The-Day-Through-SSH"><a href="#Saving-The-Day-Through-SSH" class="headerlink" title="Saving The Day Through SSH"></a>Saving The Day Through SSH</h2><h3 id="安裝-nodejs"><a href="#安裝-nodejs" class="headerlink" title="安裝 nodejs"></a>安裝 nodejs</h3><p>首先 ssh 連線進虛擬機器後，輸入：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> update<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>此時會 update 一些有的沒的，我也不太確定實際上在 update 什麼，但如果不先 update 的話，會說找不到 Nodejs 的 package。</p>
+<p>update 結束後，接著輸入：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> nodejs<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="複製本機的檔案到遠端機器中"><a href="#複製本機的檔案到遠端機器中" class="headerlink" title="複製本機的檔案到遠端機器中"></a>複製本機的檔案到遠端機器中</h3><p>接著試試看把本機的資料夾透過 ssh 複製到遠端機器裡吧！</p>
+<p>首先我在 Desktop 創建一個叫 <code>emptyFolder</code> 的資料夾，接著進入 <code>emptyFolder</code>中，此時的 terminal 長這樣：</p>
+<p><img data-src="https://upload.cc/i1/2020/03/02/6cFQ1z.png" alt="emptyFolder"></p>
+<p>接著輸入</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">rsync</span> -av <span class="token builtin class-name">.</span> @機器的IPv4 ~/路由<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>就可以成功把本機的檔案傳送到遠端機器囉。</p>
+<h2 id="How-SSH-Works"><a href="#How-SSH-Works" class="headerlink" title="How SSH Works"></a>How SSH Works</h2><p>SSH 當中有三項技術</p>
+<ol>
+<li>Symmetrical Encryption (對稱性加密)</li>
+<li>Asymmetrical Encryption （非對稱性加密）</li>
+<li>Hashing （雜湊）</li>
+</ol>
+<h3 id="Symmetrical-Encryption"><a href="#Symmetrical-Encryption" class="headerlink" title="Symmetrical Encryption"></a>Symmetrical Encryption</h3><p>對稱性加密提供一把 secret key 讓加密/解密兩方使用，</p>
+<p>運作的方式像是以下的圖片<br><img data-src="https://upload.cc/i1/2020/03/02/mgQtRZ.png" alt="symmetrical encryption"></p>
+<p>client 端把想要傳遞的內容經過 secret key 加密後，會變成一串奇妙的文字，讓第三方沒辦法看懂， host 端再藉由那把 secret key 解密，得到 client 端傳遞的資訊。</p>
+<p>此時能注意到的問題是，看來只要能有這把鑰匙的人，就能得到資訊的內容，<strong>那鑰匙被幹走怎辦呢？</strong> 看來問題就會出現在「交換鑰匙的方式」是否安全了，因此，這個安全交換鑰匙的方式我們就稱為 <strong>key exchange algorithm。</strong></p>
+<h3 id="Asymmetrical-Encryption"><a href="#Asymmetrical-Encryption" class="headerlink" title="Asymmetrical Encryption"></a>Asymmetrical Encryption</h3><p>延續前面提及的 key exchange algorithm，它需要透過一個叫做 asymmetrical encryption（非對稱性加密）的方式執行。</p>
+<p>至於非對稱性加密是什麼，以下取自<a target="_blank" rel="noopener" href="https://blog.techbridge.cc/2017/04/16/simple-cryptography/">網路安全(1) - 基礎密碼學</a>一文：</p>
+<blockquote>
+<p>非對稱式加密，就是每個鑰匙 pair 有兩個鑰匙，一個公鑰一個私鑰。</p>
+<p>可以公鑰加密私鑰解密，也可以私鑰加密公鑰解密。</p>
+<p>可以公鑰加密私鑰解密，也可以私鑰加密公鑰解密。</p>
+<p>可以公鑰加密私鑰解密，也可以私鑰加密公鑰解密。</p>
+<p>傳訊之前呢，A 跟 B 都先生成一組公私鑰的 pair，A 把 A 的公鑰傳給 B，B 把 B 的公鑰傳給 A。</p>
+<p>好現在 A 有他自己的私鑰跟 B 的公鑰，B 有他自己的私鑰跟 A 的公鑰。<br>A 要傳東西給 B 就用 B 的公鑰加密，然後 B 拿到之後用 B 自己的私鑰解密。</p>
+<p>一切搞定，即使在中途被攔截，只要 B 的私鑰沒有流出就完全不會有事。反之亦然。</p>
+<p>中心思想就是利用公鑰可以用來加密的特性，而如果你是用公鑰加密你必須要用私鑰解密。所以我根本不怕公鑰流出(公開給所有人也沒差)，只要我私鑰保存好就好，我私鑰根本就沒傳過，也不可能被攔截。</p>
+</blockquote>
+<h4 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h4><p><a target="_blank" rel="noopener" href="https://blog.techbridge.cc/2017/04/16/simple-cryptography/">網路安全(1) - 基礎密碼學</a></p>
+<p><a target="_blank" rel="noopener" href="https://medium.com/@RiverChan/%E5%9F%BA%E7%A4%8E%E5%AF%86%E7%A2%BC%E5%AD%B8-%E5%B0%8D%E7%A8%B1%E5%BC%8F%E8%88%87%E9%9D%9E%E5%B0%8D%E7%A8%B1%E5%BC%8F%E5%8A%A0%E5%AF%86%E6%8A%80%E8%A1%93-de25fd5fa537">基礎密碼學(對稱式與非對稱式加密技術)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=NmM9HA2MQGI">Secret Key Exchange (Diffie-Hellman) - Computerphile</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=Yjrfm_oRO0w">Diffie Hellman -the Mathematics bit- Computerphile</a></p>
+<h3 id="Hashing"><a href="#Hashing" class="headerlink" title="Hashing"></a>Hashing</h3><p>透過 Symmetrical Encryption + Asymmetrical Encryption 的搭配，看起來 client 和 host 溝通是挺安全的，沒什麼問題對吧！</p>
+<p>但此時又有一個問題，就是如果有個中間人可以偽造他自己的身份，讓 host 相信對面是 client，讓 client 相信對面是 host，偽造了身份並且在當中做手腳，就會很不妙，因此需要 hash 來做相關處理。</p>
+<p>以下取自<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html">SSH原理与运用（一）：远程登录</a>：</p>
+<blockquote>
+<p>SSH之所以能够保证安全，原因在于它采用了公钥加密。</p>
+<p>整个过程是这样的：（1）远程主机收到用户的登录请求，把自己的公钥发给用户。（2）用户使用这个公钥，将登录密码加密后，发送回来。（3）远程主机用自己的私钥，解密登录密码，如果密码正确，就同意用户登录。</p>
+<p>这个过程本身是安全的，但是实施的时候存在一个风险：如果有人截获了登录请求，然后冒充远程主机，将伪造的公钥发给用户，那么用户很难辨别真伪。因为不像https协议，SSH协议的公钥是没有证书中心（CA）公证的，也就是说，都是自己签发的。</p>
+<p>可以设想，如果攻击者插在用户与远程主机之间（比如在公共的wifi区域），用伪造的公钥，获取用户的登录密码。再用这个密码登录远程主机，那么SSH的安全机制就荡然无存了。这种风险就是著名的”中间人攻击”（Man-in-the-middle attack）。</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html">SSH原理与运用（一）：远程登录</a></p>
+<h2 id="SSH-Into-a-Server"><a href="#SSH-Into-a-Server" class="headerlink" title="SSH Into a Server"></a>SSH Into a Server</h2><p>根據前面連線到遠端機器的經驗，應該會發現每次輸入 <code>ssh root@IPv4</code>都必須輸入 password 才能連線，那更方便的辦法是什麼呢？</p>
+<p>就是用前面提到的 ssh key 來進行登入！</p>
+<p>至於要怎麼做呢？</p>
+<h4 id="第一步-進入-ssh-資料夾"><a href="#第一步-進入-ssh-資料夾" class="headerlink" title="第一步 - 進入 ssh 資料夾"></a>第一步 - 進入 ssh 資料夾</h4><p>首先在 terminal 輸入 <code>cd ~/.ssh</code>，此時可以進入到隱藏的 <code>.ssh</code> 資料夾中，這邊是存放你電腦各種 ssh key 的地方。</p>
+<h4 id="第二步-產生-ssh-key"><a href="#第二步-產生-ssh-key" class="headerlink" title="第二步 - 產生 ssh key"></a>第二步 - 產生 ssh key</h4><p>接下來，我們要輸入 command line 產生 public 和 private 的 ssh key for Digital Ocean。</p>
+<p>輸入<code>ssh-keygen -C &quot;你的email&quot;</code>，-C 代表 comment，按下 enter 後可以看到 terminal 出現「Generating public/private rsa key pair.」，代表產生了一對 public/private key。</p>
+<p>接著要輸入你想儲存的檔案名，因為是為了 digital ocean 的 server 而創建的，我就把名稱取為 <code>id_rsa_digitalocean</code></p>
+<p>再來會問你 passphrase，這是為了額外的安全設定而出現的，可以直接按 Enter 略過，它就會是 empty。</p>
+<p>連按兩次 Enter 後，我們就成功產生 ssh key 了！</p>
+<h4 id="第三步-把-public-key-內容放進遠端機器中"><a href="#第三步-把-public-key-內容放進遠端機器中" class="headerlink" title="第三步 - 把 public key 內容放進遠端機器中"></a>第三步 - 把 public key 內容放進遠端機器中</h4><p>首先在 <code>.ssh</code> 資料夾內，輸入這個 command line：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pbcopy <span class="token operator">&lt;</span> ~/.ssh/id_rsa_digitalocean.pub<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>這個指令的用途是可以把檔案內的內容複製。</p>
+<p>接下來輸入 <code>ssh root@IPv4</code> 連線到你的遠端機器裡，再輸入 <code>cd .ssh</code> 進入 ssh 資料夾中，輸入 <code>ls</code> 可以發現裡面會有一個叫做 <code>authorized key</code> 的檔案，這份檔案用途就是記錄 public key 的 rsa 內容，所以輸入 <code>nano authorized_key</code> 把剛剛複製的內容貼到檔案裡面後，按下 CTRL + X 並且保存退出。</p>
+<h4 id="第四步-在本機做-ssh-add"><a href="#第四步-在本機做-ssh-add" class="headerlink" title="第四步 - 在本機做 ssh-add"></a>第四步 - 在本機做 ssh-add</h4><p>接著要進入最後一步了！</p>
+<p>如果沒有做最後一步的話，連線到遠端機器的時候應該會出現 <code>permission denied</code>。</p>
+<p>因此要回到剛剛本機的 <code>.ssh</code> 資料夾中，輸入 <code>ssh-add ~/.ssh/id_rsa_digital_ocean</code> ，把 private key 的內容加進去，這樣就能不用輸入密碼，利用 ssh key 快速來往自己租用的機器啦！</p>
+<p>也可以試試看把本機裡面 .ssh 檔案的 digital ocean private key 刪掉試試看，會發現被 permission denied 喔，因為你不再有 private key 了。</p>
+<h3 id="Digital-Ocean"><a href="#Digital-Ocean" class="headerlink" title="Digital Ocean"></a>Digital Ocean</h3><p>其實 Digital Ocean 也有提供更快速的方式用 ssh key 連線，進入到 console 控制台點擊 add ssh key，把產生的 public key 複製貼上後就能使用，超級快速！</p>
+<h3 id="Github-練習"><a href="#Github-練習" class="headerlink" title="Github 練習"></a>Github 練習</h3><p>為了練習，接著就用 Github 來實作吧！</p>
+<p>你可以發現，一般在 clone 別人的 repo 時，是用 HTTPS 的方式來 clone，麻煩的是每次都要重複輸入自己 Github 帳密，但我們現在學了 ssh key 的使用方式，當然就是要讓自己生活方便點啦。</p>
+<p>至於怎麼實作，其實和前面 digital ocean 使用 ssh key 的方式大同小異，Github 文件也寫得很完整，就附上連結自行練習了～<br><a target="_blank" rel="noopener" href="https://help.github.com/en/enterprise/2.17/user/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Generating a new SSH key and adding it to the ssh-agent</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Udemy-%E8%AA%B2%E7%A8%8B/" rel="tag"># Udemy 課程</a>
+              <a href="/tags/ssh/" rel="tag"># ssh</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/03/01/Just-JavaScript-Values-and-Variables-%E9%9A%A8%E6%84%8F%E7%AD%86%E8%A8%98/" rel="prev" title="Just JavaScript - Values and Variables 隨意筆記">
+                  <i class="fa fa-chevron-left"></i> Just JavaScript - Values and Variables 隨意筆記
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/03/28/The-Complete-Junior-to-Senior-Web-Developer-Roadmap-Performance-part2-%E9%9A%A8%E6%84%8F%E7%AD%86%E8%A8%98/" rel="next" title="The Complete Junior to Senior Web Developer Roadmap - Performance part2 隨意筆記">
+                  The Complete Junior to Senior Web Developer Roadmap - Performance part2 隨意筆記 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chih Yang</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+<script>
+NexT.utils.loadComments('.utterances-container', () => {
+  const script = document.createElement('script');
+  script.src = 'https://utteranc.es/client.js';
+  script.setAttribute('repo', "ChihYang41/ChihYang41.github.io");
+  script.setAttribute('issue-term', "title");
+  script.setAttribute('theme', "github-light");
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+  document.querySelector('.utterances-container').appendChild(script);
+});
+</script>
+
+</body>
+</html>

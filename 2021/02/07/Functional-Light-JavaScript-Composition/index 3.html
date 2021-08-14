@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="pdI9OcgtLe0I27rizFD2U3s553wFM8nsth5viFyCbOk">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="前言此為 frontend master 的 Functional-Light JavaScript, v3 的課程筆記，這篇講的是 composition，指的是如何把 function 結合，將小積木堆疊成大城堡的技巧。 內容不完全和課程編排相同，單純是個人消化過後的編排。 因為剛開始學 functional programming 的緣故，內容、觀念可能會有諸多錯誤，如有發現錯誤麻煩不吝指教">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Functional-Light JavaScript - Composition">
+<meta property="og:url" content="https://chihyang41.github.io/2021/02/07/Functional-Light-JavaScript-Composition/index.html">
+<meta property="og:site_name" content="Chih Yang&#39;s Blog">
+<meta property="og:description" content="前言此為 frontend master 的 Functional-Light JavaScript, v3 的課程筆記，這篇講的是 composition，指的是如何把 function 結合，將小積木堆疊成大城堡的技巧。 內容不完全和課程編排相同，單純是個人消化過後的編排。 因為剛開始學 functional programming 的緣故，內容、觀念可能會有諸多錯誤，如有發現錯誤麻煩不吝指教">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gmj2tjkjudj316m0kmq6e.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gmj30aoytwj30ci0w0q54.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Simingchen/Functional-Light-JS/master/manuscript/images/fig5.png">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gmlafplfc9j30ru0skqde.jpg">
+<meta property="article:published_time" content="2021-02-07T09:40:57.000Z">
+<meta property="article:modified_time" content="2021-02-07T09:40:57.000Z">
+<meta property="article:author" content="Chih Yang">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Functional Programming">
+<meta property="article:tag" content="frontend master">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008eGmZEgy1gmj2tjkjudj316m0kmq6e.jpg">
+
+
+<link rel="canonical" href="https://chihyang41.github.io/2021/02/07/Functional-Light-JavaScript-Composition/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>Functional-Light JavaScript - Composition | Chih Yang's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-146838618-1');
+      }
+    </script>
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+      <img class="custom-logo-image" src="/images/logo.png" alt="Chih Yang's Blog">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Chih Yang's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E5%8C%96-abstraction"><span class="nav-number">2.</span> <span class="nav-text">抽象化(abstraction)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%88%E5%BE%9E%E6%94%B9%E9%80%A0%E5%B7%A7%E5%85%8B%E5%8A%9B%E5%B7%A5%E5%BB%A0%E9%96%8B%E5%A7%8B"><span class="nav-number">3.</span> <span class="nav-text">先從改造巧克力工廠開始</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E5%8D%87%E7%94%A2%E9%87%8F"><span class="nav-number">3.1.</span> <span class="nav-text">提升產量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E5%8A%A0%E6%8A%BD%E8%B1%A1%E5%8C%96"><span class="nav-number">3.2.</span> <span class="nav-text">更加抽象化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Declarative-Data-Flow"><span class="nav-number">3.3.</span> <span class="nav-text">Declarative Data Flow</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Associativity"><span class="nav-number">4.</span> <span class="nav-text">Associativity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Composition-with-Currying"><span class="nav-number">5.</span> <span class="nav-text">Composition with Currying</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">6.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Chih Yang</p>
+  <div class="site-description" itemprop="description">Chih Yang 的前端小天地</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ChihYang41" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ChihYang41" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/chihyang41" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;chihyang41" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/ChihYang41" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chihyang41.github.io/2021/02/07/Functional-Light-JavaScript-Composition/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Chih Yang">
+      <meta itemprop="description" content="Chih Yang 的前端小天地">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chih Yang's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Functional-Light JavaScript - Composition
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-02-07 17:40:57" itemprop="dateCreated datePublished" datetime="2021-02-07T17:40:57+08:00">2021-02-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>此為 frontend master 的 <a target="_blank" rel="noopener" href="https://frontendmasters.com/courses/functional-javascript-v3/">Functional-Light JavaScript, v3</a> 的課程筆記，這篇講的是 composition，指的是如何把 function 結合，將小積木堆疊成大城堡的技巧。</p>
+<p>內容不完全和課程編排相同，單純是個人消化過後的編排。</p>
+<p>因為剛開始學 functional programming 的緣故，內容、觀念可能會有諸多錯誤，如有發現錯誤麻煩不吝指教，感謝！</p>
+<span id="more"></span>
+
+<h2 id="抽象化-abstraction"><a href="#抽象化-abstraction" class="headerlink" title="抽象化(abstraction)"></a>抽象化(abstraction)</h2><p>以 Kyle Simpson 的觀點來說，所謂 abstraction 指的是把兩個邏輯交織在一起的程式碼分離開來，讓我們可以關注各自的邏輯，而不是看一邊，還要顧及另一邊的邏輯。</p>
+<blockquote>
+<p>We’re not abstracting to hide details; we’re separating details to improve focus.</p>
+</blockquote>
+<h2 id="先從改造巧克力工廠開始"><a href="#先從改造巧克力工廠開始" class="headerlink" title="先從改造巧克力工廠開始"></a>先從改造巧克力工廠開始</h2><h3 id="提升產量"><a href="#提升產量" class="headerlink" title="提升產量"></a>提升產量</h3><p>我們來假設一個情境，假設今天你是個巧克力工廠的顧問，負責改進整個巧克力工廠的生產流程，或大大小小的問題，總之老闆遇到問題就會去找你求救。</p>
+<p>而你的興趣就是寫程式，有事沒事就會寫程式，還會從寫程式找出解決工作問題的靈感。好，我知道這假設有點微妙，可是先接受這個假設吧，拜偷。</p>
+<p>接著我們看一段 code，這段 code 是要計算運費：</p>
+<p>今天有段 code 是要計算運費：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token function-variable function">minus2</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token operator">=></span> x <span class="token operator">-</span> <span class="token number">2</span>
+<span class="token keyword">const</span> <span class="token function-variable function">triple</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token operator">=></span> x <span class="token operator">*</span> <span class="token number">3</span>
+<span class="token keyword">const</span> <span class="token function-variable function">increment</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token operator">=></span> x <span class="token operator">+</span> <span class="token number">1</span>
+
+<span class="token comment">// add shiping rate</span>
+<span class="token keyword">let</span> temp <span class="token operator">=</span> <span class="token function">increment</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span>
+tmp <span class="token operator">=</span> <span class="token function">triple</span><span class="token punctuation">(</span>tmp<span class="token punctuation">)</span>
+<span class="token keyword">let</span> totalCost <span class="token operator">=</span> basePrice <span class="token operator">+</span> <span class="token function">minus2</span><span class="token punctuation">(</span>tmp<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>但我們看看就好，暫時先不談 code，而是先談一個生活化的情境。</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmj2tjkjudj316m0kmq6e.jpg" alt="截圖 2021-01-11 上午12.13.30"></p>
+<blockquote>
+<p>某天老闆跟你說：「我們的競爭對手產量遠超我們啊！快用你無敵的白金之星想想辦法！趕快增加產量超過競爭對手吧！」</p>
+<p>你開始苦惱怎麼處理這問題，因為要增加產量又需要更多機器，可是廠房空間不夠，以目前的運作機制只能放一台機器，但不管了，煩惱放一旁，我們先回去寫程式。</p>
+</blockquote>
+<p>接下來回到剛剛那段 code，我們把原本的程式改良成這樣：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token function-variable function">minus2</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token operator">=></span> x <span class="token operator">-</span> <span class="token number">2</span>
+<span class="token keyword">const</span> <span class="token function-variable function">triple</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token operator">=></span> x <span class="token operator">*</span> <span class="token number">3</span>
+<span class="token keyword">const</span> <span class="token function-variable function">increment</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token operator">=></span> x <span class="token operator">+</span> <span class="token number">1</span>
+
+<span class="token keyword">let</span> totalCost <span class="token operator">=</span> baseCost <span class="token operator">+</span> <span class="token function">minus2</span><span class="token punctuation">(</span><span class="token function">triple</span><span class="token punctuation">(</span><span class="token function">increment</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>我們簡化了原本較冗長的方式， <code>increment(4)</code> 執行完後的 output， 會被放進 <code>triple</code> 當作 input，<code>triple</code> 執行完的 output，又會被放進 <code>minus2</code> 當作 input，最終得到我們的結果。</p>
+<p>想著想著，有發現提高巧克力工廠生產量的方法了嗎？</p>
+<img data-src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmj30aoytwj30ci0w0q54.jpg" width="200px" height="auto"/>
+
+<p>沒錯，如同我們的 function 生產完後的 output 會被當作下個 function 的 input 一樣，我們生產機器的 output 也可以當成下一個機器的 input 對吧，這樣就可以省去輸送帶佔的空間了！</p>
+<h3 id="更加抽象化"><a href="#更加抽象化" class="headerlink" title="更加抽象化"></a>更加抽象化</h3><blockquote>
+<p>老闆某天說：</p>
+<p>「現在的生產流程有點複雜欸，機器間的順序都要安排好，如果想調整就蠻麻煩的，所以我在想啊…」</p>
+<p>「能不能造出一台懶人專用的的機器，我直接放巧克力進去，阿出來就是包裝完整的巧克力，聽起來很讚對吧！」</p>
+</blockquote>
+<p>無奈之下我們依舊要回去寫 code 尋找靈感：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token function-variable function">minus2</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token operator">=></span> x <span class="token operator">-</span> <span class="token number">2</span>
+<span class="token keyword">const</span> <span class="token function-variable function">triple</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token operator">=></span> x <span class="token operator">*</span> <span class="token number">3</span>
+<span class="token keyword">const</span> <span class="token function-variable function">increment</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token operator">=></span> x <span class="token operator">+</span> <span class="token number">1</span>
+
+<span class="token keyword">function</span> <span class="token function">shippingRate</span><span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">minus2</span><span class="token punctuation">(</span><span class="token function">triple</span><span class="token punctuation">(</span><span class="token function">increment</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">// how to do</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">let</span> totalCost <span class="token operator">=</span> baseCost <span class="token operator">+</span> <span class="token function">shippingRate</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span> <span class="token comment">// what to do</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>這段程式碼我們做了什麼？也沒什麼，就是把原本的計算變成 <code>shippingRate</code> 的 function，但邏輯來說變得更有意義。在 line 6 的地方，我們主要做的是「how to do」，指的是如何計算 shippingRate；而在 line9，我們做的則是「what to do」，指的是用 shippingRate 來做什麼。</p>
+<p>這就是 Kyle 所指的 abstraction，我們分離出了「how to compute the shippingRate」以及「what to do with the shippingRate」</p>
+<h3 id="Declarative-Data-Flow"><a href="#Declarative-Data-Flow" class="headerlink" title="Declarative Data Flow"></a>Declarative Data Flow</h3><blockquote>
+<p>時光飛逝，巧克力工廠的生產流程經過你的改造後經營得不錯，只是又面臨了另一個問題，老闆某天又跑來說：</p>
+<p>「上次的改造的確是不錯啦，工人只要按一個按鈕就可以生產出糖果，他也不用管理面在幹嘛，每次生產只要很簡單的按下按鈕就沒問題惹，只是調整機器細部還是稍嫌不方便。</p>
+<p>而且最近我發現啊，我們的競爭對手居然每天都可以更新他們生產的巧克力品項欸？？比如今天生產 A 巧克力，隔天他就能夠生產 B 巧克力！</p>
+<p>所以，我更直接的說我的需求好了，你有沒有辦法…製造出一個能夠製造機器的…機器？這樣我們就可以辦到同樣事情惹！」</p>
+</blockquote>
+<p>這是老闆理想的設計圖：</p>
+<p><img data-src="https://raw.githubusercontent.com/Simingchen/Functional-Light-JS/master/manuscript/images/fig5.png"></p>
+<p>只要把小機器丟進超巨大機器裡，就可以幫我們把這些零件結合，變成新的機器，讚拉。</p>
+<p>雖然聽起來很荒謬，但你依然決定走老樣子的路線，寫程式找改造機器的靈感。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">composeThree</span><span class="token punctuation">(</span><span class="token parameter">fn3<span class="token punctuation">,</span> fn2<span class="token punctuation">,</span> fn1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token keyword">function</span> <span class="token function">composed</span><span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token function">fn3</span><span class="token punctuation">(</span><span class="token function">fn2</span><span class="token punctuation">(</span><span class="token function">fn1</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">var</span> shippingRate <span class="token operator">=</span> <span class="token function">composeThree</span><span class="token punctuation">(</span>minus2<span class="token punctuation">,</span> triple<span class="token punctuation">,</span> increment<span class="token punctuation">)</span>
+
+<span class="token keyword">let</span> totalCost <span class="token operator">=</span> baseCost <span class="token operator">+</span> <span class="token function">shippingRate</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>從這段 code 你可以很清楚的明白，data flow 就是從右到左，從 <code>increment</code>、<code>triple</code> 再到 <code>minus2</code> 不斷地經過加工，最後得到我們想要的 shippingRate。</p>
+<blockquote>
+<p>Your programs don’t mean anything if they don’t mean data flow. </p>
+<p>The whole point of your program is to have data coming in, doing stuff, and then going back out.</p>
+</blockquote>
+<p>整個 data flow 變得 declarative，imperative data flow 的問題在於 data flow 的變化變得難以追蹤，declarative 則清楚許多。<code>compose</code> 在 utility library 都會提供此 API，如 <a target="_blank" rel="noopener" href="https://ramdajs.com/docs/#compose">Ramda compose</a>。</p>
+<h2 id="Associativity"><a href="#Associativity" class="headerlink" title="Associativity"></a>Associativity</h2><pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token comment">// 結合律（associativity）</span>
+<span class="token keyword">var</span> associative <span class="token operator">=</span> <span class="token function">compose</span><span class="token punctuation">(</span>f<span class="token punctuation">,</span> <span class="token function">compose</span><span class="token punctuation">(</span>g<span class="token punctuation">,</span> h<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token function">compose</span><span class="token punctuation">(</span><span class="token function">compose</span><span class="token punctuation">(</span>f<span class="token punctuation">,</span> g<span class="token punctuation">)</span><span class="token punctuation">,</span> h<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>Compose 有結合律的特性，意指不管你將哪兩個分為一組都不重要，也就是說你的 code 可以像是下面這樣隨便組合：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">compose</span><span class="token punctuation">(</span>toUpperCase<span class="token punctuation">,</span> <span class="token function">compose</span><span class="token punctuation">(</span>head<span class="token punctuation">,</span> reverse<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// 或</span>
+<span class="token function">compose</span><span class="token punctuation">(</span><span class="token function">compose</span><span class="token punctuation">(</span>toUpperCase<span class="token punctuation">,</span> head<span class="token punctuation">)</span><span class="token punctuation">,</span> reverse<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>又或者像是下圖：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008eGmZEgy1gmlafplfc9j30ru0skqde.jpg" alt="截圖 2021-01-12 下午10.37.44"></p>
+<p><code>f</code> 和 <code>p</code> 看似不同的 function，但其實都是一樣的，只是 compose 結合 function 的方式不一樣而已，只要你的 function 順序一樣，因為 compose 符合結合律，所以你要怎麼 compose 都可以。</p>
+<p>結合律的特性為我們提供了很大的靈活性，更能夠有效的運用 function，從小小小塊的樂高積木，逐漸蓋出一座大城堡。</p>
+<h2 id="Composition-with-Currying"><a href="#Composition-with-Currying" class="headerlink" title="Composition with Currying"></a>Composition with Currying</h2><pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">sum</span><span class="token punctuation">(</span><span class="token parameter">x<span class="token punctuation">,</span> y</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> x <span class="token operator">+</span> y <span class="token punctuation">&#125;</span>
+<span class="token keyword">function</span> <span class="token function">triple</span><span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> x <span class="token operator">*</span> <span class="token number">3</span> <span class="token punctuation">&#125;</span>
+<span class="token keyword">function</span> <span class="token function">divBy</span><span class="token punctuation">(</span><span class="token parameter">y<span class="token punctuation">,</span> x</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> x <span class="token operator">/</span> y <span class="token punctuation">&#125;</span>
+
+<span class="token function">divBy</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token function">triple</span><span class="token punctuation">(</span><span class="token function">sum</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">// 12</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>假設我們今天想要把這段 code 用 <code>compose </code>結合，會遇到什麼問題呢？就是 shape 不一樣的問題。上面幾個使用 <code>compose </code> 例子，傳入的每個 function 都是 unary 的，但有時候我們會遇到 shape 是 binary 的 function。</p>
+<p>所以要是我們把 <code>triple</code> 的 output 放進 <code>sum</code>當作 input 就會出問題，因為 <code>sum</code>. 是 binary 的，兩者的 shape 對不上，而這時候就是 curry 要派上用場的時候惹！</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">sum</span><span class="token punctuation">(</span><span class="token parameter">x<span class="token punctuation">,</span> y</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> x <span class="token operator">+</span> y <span class="token punctuation">&#125;</span>
+<span class="token keyword">function</span> <span class="token function">triple</span><span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> x <span class="token operator">*</span> <span class="token number">3</span> <span class="token punctuation">&#125;</span>
+<span class="token keyword">function</span> <span class="token function">divBy</span><span class="token punctuation">(</span><span class="token parameter">y<span class="token punctuation">,</span> x</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> x <span class="token operator">/</span> y <span class="token punctuation">&#125;</span>
+
+<span class="token function">divBy</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token function">triple</span><span class="token punctuation">(</span><span class="token function">sum</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">// 12</span>
+
+sum <span class="token operator">=</span> <span class="token function">curry</span><span class="token punctuation">(</span>sum<span class="token punctuation">)</span>
+divBy <span class="token operator">=</span> <span class="token function">curry</span><span class="token punctuation">(</span>divBy<span class="token punctuation">)</span>
+
+<span class="token function">compose</span><span class="token punctuation">(</span>
+  <span class="token function">divBy</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  triple<span class="token punctuation">,</span>
+  <span class="token function">sum</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>5</code> 會被當作 input 傳入，之後就會順著 <code>sum(3)</code> 、<code>triple</code>、<code>divBy(2)</code> 的順序執行，這就是 curry 在 composition 的妙用，我們改變了 function 的 shape！讓它們變成 unary，就可以和其他樂高積木接上了。</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://frontendmasters.com/courses/functional-javascript-v3/">Functional-Light JavaScript, v3</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/getify/Functional-Light-JS">Functional-Light-JS</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Functional-Programming/" rel="tag"># Functional Programming</a>
+              <a href="/tags/frontend-master/" rel="tag"># frontend master</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/02/07/Functional-Light-JavaScript-Closure/" rel="prev" title="Functional-Light JavaScript - Closure">
+                  <i class="fa fa-chevron-left"></i> Functional-Light JavaScript - Closure
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/03/18/React-Native-v2-Setup/" rel="next" title="React Native v2 - Setup">
+                  React Native v2 - Setup <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chih Yang</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+<script>
+NexT.utils.loadComments('.utterances-container', () => {
+  const script = document.createElement('script');
+  script.src = 'https://utteranc.es/client.js';
+  script.setAttribute('repo', "ChihYang41/ChihYang41.github.io");
+  script.setAttribute('issue-term', "title");
+  script.setAttribute('theme', "github-light");
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+  document.querySelector('.utterances-container').appendChild(script);
+});
+</script>
+
+</body>
+</html>

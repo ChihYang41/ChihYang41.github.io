@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="pdI9OcgtLe0I27rizFD2U3s553wFM8nsth5viFyCbOk">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="前言在此紀錄人生第一次貢獻開源專案的背景和 debug 過程，好啦我也不確定算不算開源，因為是「程式導師實驗計畫」裡面使用到的「學習系統」，使用者就是課程裡的老師、助教和學生，維護者主要是老師 Huli 和助教 minw。雖然這次的貢獻蠻微小的，但因為還是挺興奮的，不記錄一下說不過去吧！！ （此次 PR 時間為 2020&#x2F;9&#x2F;27）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第一次貢獻開源就緊張到手抖">
+<meta property="og:url" content="https://chihyang41.github.io/2020/12/06/first-contribution/index.html">
+<meta property="og:site_name" content="Chih Yang&#39;s Blog">
+<meta property="og:description" content="前言在此紀錄人生第一次貢獻開源專案的背景和 debug 過程，好啦我也不確定算不算開源，因為是「程式導師實驗計畫」裡面使用到的「學習系統」，使用者就是課程裡的老師、助教和學生，維護者主要是老師 Huli 和助教 minw。雖然這次的貢獻蠻微小的，但因為還是挺興奮的，不記錄一下說不過去吧！！ （此次 PR 時間為 2020&#x2F;9&#x2F;27）">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://camo.githubusercontent.com/b806c0059ac7db9b25af29b9e02ae41ffd2040c3ed1eceeea900a0adeba75c75/68747470733a2f2f692e696d6775722e636f6d2f76306d583357762e676966">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gle2x5bs3uj30qo0qoac8.jpg">
+<meta property="article:published_time" content="2020-12-06T06:03:34.000Z">
+<meta property="article:modified_time" content="2020-12-06T06:03:34.000Z">
+<meta property="article:author" content="Chih Yang">
+<meta property="article:tag" content="廢文日記">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Front-End">
+<meta property="article:tag" content="Chrome">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://camo.githubusercontent.com/b806c0059ac7db9b25af29b9e02ae41ffd2040c3ed1eceeea900a0adeba75c75/68747470733a2f2f692e696d6775722e636f6d2f76306d583357762e676966">
+
+
+<link rel="canonical" href="https://chihyang41.github.io/2020/12/06/first-contribution/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>第一次貢獻開源就緊張到手抖 | Chih Yang's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-146838618-1');
+      }
+    </script>
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+      <img class="custom-logo-image" src="/images/logo.png" alt="Chih Yang's Blog">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Chih Yang's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">2.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E9%81%8E%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">查找過程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%8C%E7%BA%8C"><span class="nav-number">4.</span> <span class="nav-text">後續</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AA%9E"><span class="nav-number">5.</span> <span class="nav-text">結語</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">6.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Chih Yang</p>
+  <div class="site-description" itemprop="description">Chih Yang 的前端小天地</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ChihYang41" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ChihYang41" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/chihyang41" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;chihyang41" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/ChihYang41" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chihyang41.github.io/2020/12/06/first-contribution/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Chih Yang">
+      <meta itemprop="description" content="Chih Yang 的前端小天地">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chih Yang's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          第一次貢獻開源就緊張到手抖
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-12-06 14:03:34" itemprop="dateCreated datePublished" datetime="2020-12-06T14:03:34+08:00">2020-12-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/frontend/" itemprop="url" rel="index"><span itemprop="name">frontend</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在此紀錄人生第一次貢獻開源專案的背景和 debug 過程，好啦我也不確定算不算開源，因為是「程式導師實驗計畫」裡面使用到的「學習系統」，使用者就是課程裡的老師、助教和學生，維護者主要是老師 Huli 和助教 minw。雖然這次的貢獻蠻微小的，但因為還是挺興奮的，不記錄一下說不過去吧！！</p>
+<p>（此次 <a target="_blank" rel="noopener" href="https://github.com/Lidemy/lidemy-learning-frontend/pull/37">PR</a> 時間為 2020/9/27）</p>
+<span id="more"></span>
+
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>發這次 PR 起源於課程在 9 月台南的小聚會時，其中一位同學說最近使用學習系統時有個很惱人的 bug，我們的學習系統的心得頁是一堆學生的心得卡片，上面會顯示每個同學關於學習的過程，或一些日常生活（By the way，比起學習，我更愛看日常生活的紀錄），預設是每次顯示 20 筆，要看更多的話就要滑到網頁底部，按下「載入更多」的按鈕，載入更之前的 20 筆心得。</p>
+<p>行為大概會像是下面這張圖：</p>
+<p><img data-src="https://camo.githubusercontent.com/b806c0059ac7db9b25af29b9e02ae41ffd2040c3ed1eceeea900a0adeba75c75/68747470733a2f2f692e696d6775722e636f6d2f76306d583357762e676966" alt="loadmore"></p>
+<p>而擾人問題的情形，也顯示在上面這張圖。</p>
+<p>通常點 load more 的按鈕後，比較好的使用者體驗是你瀏覽器的 scroll bar 不會移動，維持在剛剛的高度，而只要往下滑就可以看到剛剛點 load more 得到的 20 筆資料。</p>
+<p>但從上面那張圖可以看到他不是這樣，你不管怎麼點 load more 按鈕，瀏覽器的 scroll bar 都會在最底部，導致你每載入一次心得又要往上滑，才能找到剛剛看到哪裡，如果每次想看更多心得都要重複這行為，真的是會覺得這網頁頗機歪。</p>
+<p>幸好同學頗熱心的在學習系統的前端 repo 發了 <a target="_blank" rel="noopener" href="https://github.com/Lidemy/lidemy-learning-frontend/issues/36">issue</a>，內容還很完整，作業系統、瀏覽器等等都幫忙先測了一遍，讓我少了蠻多定位問題的功夫，同學讚啦。</p>
+<h2 id="查找過程"><a href="#查找過程" class="headerlink" title="查找過程"></a>查找過程</h2><p>接著就是開始思考問題出在哪的過程了，因為問題的資訊提供蠻足夠的關係，過程挺順利的。</p>
+<p>同學的 issue 提到：</p>
+<blockquote>
+<p>用 chrome 看進度報告，點擊「載入更多」載入後會直接跳到頁面底部。<br>不過使用電腦的 safari 還有手機的 chrome 與 safari 都沒有這個問題，載入後頁面仍然停留在剛剛看到的最後一篇心得。<br>有嘗試重新設定 chrome 不過沒有用。</p>
+</blockquote>
+<p>初步定位問題是出在每個瀏覽器的行為不一致，而過去使用學習系統時沒有這個問題，猜測是 Chrome 在某個版本改了 scroll bar 的行為。</p>
+<p>所以一開始的關鍵是「Chrome load more button problem」，超級直白，結果好死不死還真的找到這篇 <a target="_blank" rel="noopener" href="https://support.google.com/chrome/thread/62861011?hl=en">Load More Button Click Issue </a>，裡面有位 <a target="_blank" rel="noopener" href="https://support.google.com/chrome/profile/63312008?hl=en">Hassan Tahir</a> 大大提到：</p>
+<blockquote>
+<p>Managed to find a hotfix for now: add <code>overflow-anchor: &quot;none&quot;,</code> to the CSS properties of the button, or even the parent. See <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-anchor">https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-anchor</a></p>
+</blockquote>
+<p>看了 MDN 的敘述，<code>overflow-anchor</code> property 看起來是能夠改變瀏覽器 scroll anchor 的行為，避免載入更多時的頁面跳動，造成不好的使用者體驗。而解決辦法也很簡單，就是在那顆按鈕或者是它的 parent 加上 <code>overflow-anchor:none</code> 就好了，非常滴神奇。</p>
+<h2 id="後續"><a href="#後續" class="headerlink" title="後續"></a>後續</h2><p>好奇之下，也開始想說 Chrome 的 scroll bar 預設行為到底是怎麼回事，為什麼狠狠的一夜之間換了行為，讓我變成了大人？</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/0081Kckwgy1gle2x5bs3uj30qo0qoac8.jpg" alt="CodI9CMUEAA9vlg"></p>
+<p>找著找著發現了這篇文 <a target="_blank" rel="noopener" href="https://blog.chromium.org/2017/04/scroll-anchoring-for-web-developers.html"> Scroll anchoring for web developers</a>，文章大致上是在說 Chrome 在 version 56 的時候改變了滾動的行為，裡面說到：</p>
+<blockquote>
+<p>Similar to other features designed to protect our users from bad experiences, starting in version 56 Chrome prevents these unexpected page jumps with a new feature called scroll anchoring. This feature works by locking the scroll position on an on-screen element to keep our users in the same spot even as offscreen content continues to load. </p>
+</blockquote>
+<p>嗯嗯我十分同意…不對啊如果是這樣，那為什麼會發生今天的問題！所以應該是在某個版本有改變 scroll bar 的行為吧？</p>
+<p>所以就又找到了幾篇文也在提問相關的問題，像是 ionic 框架的論壇有篇 <a target="_blank" rel="noopener" href="https://forum.ionicframework.com/t/new-scroll-behaviour-always-scrolls-to-the-former-position/194360">New scroll behaviour: Always scrolls to the former position</a>、或者是剛剛的 <a target="_blank" rel="noopener" href="https://support.google.com/chrome/thread/62861011?hl=en">Load More Button Click Issue </a>、<a target="_blank" rel="noopener" href="https://www.mmxiaowu.com/article/5f474328f40060649e041682">Chrome v84/85 追加元素后 滚动条位置问题</a>、或是 Bootstrap 的 issue <a target="_blank" rel="noopener" href="https://github.com/twbs/bootstrap/issues/31341">Accordion scroll behavior in Chrome #31341</a>，都提到 Chrome 在 v84 之後的 scroll anchor 的預設行為改變了。</p>
+<p>看來下一步就是要去找 Chrome 更新的 log，所以我跑去找了 <a target="_blank" rel="noopener" href="https://developers.google.com/web/updates/2020/07/nic84">New in Chrome 84</a>，翻了一翻都沒有，搜尋「scroll」或是「anchor」也都沒有，但說不定原因是這個改變不是 New in Chrome 84，而是舊行為被更改了，所以發在其他文章裡面嗎？像是關於棄用、修改的文章，所以又去找了 <a target="_blank" rel="noopener" href="https://developers.google.com/web/updates/2020/05/chrome-84-deps-rems">Deprecations and removals in Chrome 84</a>，ok 看來還是沒有。</p>
+<p>之後東翻西找下了各種關鍵字，還是找不到關於 scroll bar 在 Chrome v84 被修改的細節是什麼，或是也沒有任何線索，就暫時先放下它啦。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>翻找文章翻得好累。</p>
+<p>然後我也不算這算不算貢獻開源，因為只有這個課程的學生才會用到的系統，不過過去都是在自己的 repo、和其他人協作的狀況下發 PR，這次算是第一次發給沒有參與的公開專案發 PR，真的是蠻緊張的的欸乾，在 commit 前還瘋狂確認有沒有任何地方改錯，深怕造成別人的困擾。</p>
+<p>但總之是順利完成第一次的貢獻啦，可喜可賀可喜可賀。</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p><a target="_blank" rel="noopener" href="https://blog.chromium.org/2017/04/scroll-anchoring-for-web-developers.html"> Scroll anchoring for web developers</a></p>
+<p><a target="_blank" rel="noopener" href="https://support.google.com/chrome/thread/62861011?hl=en">Load More Button Click Issue </a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.kalan.dev/scroll-pin-bottom/">透過 overflow-anchor 實作 pin to bottom 元件</a></p>
+<p><a target="_blank" rel="noopener" href="https://forum.ionicframework.com/t/new-scroll-behaviour-always-scrolls-to-the-former-position/194360">New scroll behaviour: Always scrolls to the former position</a></p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/42205462/disable-chromes-scroll-preserving-feature">Disable Chrome’s scroll preserving feature</a></p>
+<p><a target="_blank" rel="noopener" href="https://saschaeggi.medium.com/fix-issue-with-scroll-position-after-loading-data-in-chrome-7deb67e5fc29">Fix issue with scroll position after loading data in Chrome</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.reddit.com/r/chrome/comments/i51r8g/load_more_button_scrolls_page_to_bottom_in_most/">“Load More” button scrolls page to bottom in most recent update!</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.mmxiaowu.com/article/5f474328f40060649e041682">Chrome v84/85 追加元素后 滚动条位置问题</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BB%A2%E6%96%87%E6%97%A5%E8%A8%98/" rel="tag"># 廢文日記</a>
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Front-End/" rel="tag"># Front-End</a>
+              <a href="/tags/Chrome/" rel="tag"># Chrome</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/11/14/react-query-and-swr-cache-strategy/" rel="prev" title="React Query、SWR 的 cache strategy & 淺談 source code">
+                  <i class="fa fa-chevron-left"></i> React Query、SWR 的 cache strategy & 淺談 source code
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/01/02/builder-pattern/" rel="next" title="Builder Pattern（生成器）">
+                  Builder Pattern（生成器） <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chih Yang</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+<script>
+NexT.utils.loadComments('.utterances-container', () => {
+  const script = document.createElement('script');
+  script.src = 'https://utteranc.es/client.js';
+  script.setAttribute('repo', "ChihYang41/ChihYang41.github.io");
+  script.setAttribute('issue-term', "title");
+  script.setAttribute('theme', "github-light");
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+  document.querySelector('.utterances-container').appendChild(script);
+});
+</script>
+
+</body>
+</html>

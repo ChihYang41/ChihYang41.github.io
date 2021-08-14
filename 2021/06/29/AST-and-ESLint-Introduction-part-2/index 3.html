@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="pdI9OcgtLe0I27rizFD2U3s553wFM8nsth5viFyCbOk">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="前言這篇延續了上一篇對於 AST 的介紹，基於上篇對 AST 的理解，這篇文會開始實際使用 AST Explorer 以及 ESLint 提供的 API，實際的撰寫屬於自己專案的 ESLint Rule。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="淺談 AST 及 ESlint Rule：撰寫屬於自己的 ESLint Rule（下）">
+<meta property="og:url" content="https://chihyang41.github.io/2021/06/29/AST-and-ESLint-Introduction-part-2/index.html">
+<meta property="og:site_name" content="Chih Yang&#39;s Blog">
+<meta property="og:description" content="前言這篇延續了上一篇對於 AST 的介紹，基於上篇對 AST 的理解，這篇文會開始實際使用 AST Explorer 以及 ESLint 提供的 API，實際的撰寫屬於自己專案的 ESLint Rule。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gtazja0bduj31is0u07b0.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gtazq5v947j31iv0u0q9t.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gtazn0ctruj61id0u0tej02.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gtazwny6k2j31in0u0th4.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gtb06t3thyj31io0u0n2w.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gtb09s20m4j31j00u00xl.jpg">
+<meta property="og:image" content="https://i.imgur.com/jXvJqL6.png">
+<meta property="og:image" content="https://i.imgur.com/8yxNdfL.png">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gtd65cshwlj61aw0eyn1e02.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gtd6ns1doyj61nl0u0jwb02.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gtd728pmp3j61ld0u043v02.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gtd77ntskzj60pe0miq5c02.jpg">
+<meta property="article:published_time" content="2021-06-28T17:04:01.000Z">
+<meta property="article:modified_time" content="2021-06-28T17:04:01.000Z">
+<meta property="article:author" content="Chih Yang">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="AST">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gtazja0bduj31is0u07b0.jpg">
+
+
+<link rel="canonical" href="https://chihyang41.github.io/2021/06/29/AST-and-ESLint-Introduction-part-2/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>淺談 AST 及 ESlint Rule：撰寫屬於自己的 ESLint Rule（下） | Chih Yang's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-146838618-1');
+      }
+    </script>
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+      <img class="custom-logo-image" src="/images/logo.png" alt="Chih Yang's Blog">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Chih Yang's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ESLint-Rule-%E7%9A%84%E5%9F%BA%E7%A4%8E%E8%A8%AD%E7%BD%AE%E3%80%81%E4%BB%8B%E7%B4%B9"><span class="nav-number">2.</span> <span class="nav-text">ESLint Rule 的基礎設置、介紹</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ESLint-Rule-%E5%9F%B7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text">ESLint Rule 執行流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Selector-%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F"><span class="nav-number">2.2.</span> <span class="nav-text">Selector 是什麼？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ESLint-Rule-%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%9E%B6%E6%A7%8B"><span class="nav-number">2.3.</span> <span class="nav-text">ESLint Rule 的基本架構</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ESLint-Rule-%E7%9A%84%E8%B3%87%E6%96%99%E5%A4%BE%E7%B5%90%E6%A7%8B"><span class="nav-number">2.4.</span> <span class="nav-text">ESLint Rule 的資料夾結構</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E7%94%A2%E5%87%BA-ESLint-Plugin%E3%80%81Rule-%E7%9A%84%E6%A8%A1%E6%9D%BF"><span class="nav-number">2.5.</span> <span class="nav-text">快速產出 ESLint Plugin、Rule 的模板</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ESLint-Plugin"><span class="nav-number">2.5.1.</span> <span class="nav-text">ESLint Plugin</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ESLint-Rule"><span class="nav-number">2.5.2.</span> <span class="nav-text">ESLint Rule</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ESLint-Rule-%E5%AF%A6%E6%88%B0%E4%B8%80%EF%BC%9A%E6%8A%93%E5%87%BA%E4%B8%8D%E5%90%88%E8%A6%8F%E7%AF%84%E7%9A%84%E5%91%BD%E5%90%8D"><span class="nav-number">3.</span> <span class="nav-text">ESLint Rule 實戰一：抓出不合規範的命名</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E5%AF%A6%E4%BD%9C%E4%B9%8B%E5%89%8D%EF%BC%8C%E5%85%88%E5%AF%AB%E6%B8%AC%E8%A9%A6"><span class="nav-number">3.1.</span> <span class="nav-text">第一步：實作之前，先寫測試</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E8%A7%80%E5%AF%9F-AST%EF%BC%8C%E6%89%BE%E5%87%BA%E6%83%B3%E8%A6%81%E6%93%8D%E4%BD%9C%E7%9A%84-node"><span class="nav-number">3.2.</span> <span class="nav-text">第二步：觀察 AST，找出想要操作的 node</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ESLint-Rule-%E5%AF%A6%E6%88%B0%E4%BA%8C%EF%BC%9Adon%E2%80%99t-call-this-function-please%F0%9F%A5%BA"><span class="nav-number">4.</span> <span class="nav-text">ESLint Rule 實戰二：don’t call this function please🥺</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E5%AF%A6%E4%BD%9C%E4%B9%8B%E5%89%8D%EF%BC%8C%E4%B8%80%E6%A8%A3%E5%85%88%E5%AF%AB%E6%B8%AC%E8%A9%A6"><span class="nav-number">4.1.</span> <span class="nav-text">第一步：實作之前，一樣先寫測試</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E8%A7%80%E5%AF%9F-AST%EF%BC%8Cselector-%E5%B0%8D%E6%BA%96%E7%8D%B5%E7%89%A9"><span class="nav-number">4.2.</span> <span class="nav-text">第二步：觀察 AST，selector 對準獵物</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E6%92%B0%E5%AF%AB-Rule-%E9%82%8F%E8%BC%AF"><span class="nav-number">4.3.</span> <span class="nav-text">第三步：撰寫 Rule 邏輯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E5%A0%B4%E4%BC%91%E6%81%AF%EF%BC%9A%E7%9B%A4%E9%BB%9E-TODO"><span class="nav-number">4.4.</span> <span class="nav-text">中場休息：盤點 TODO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ESLint-Rule-Option"><span class="nav-number">4.5.</span> <span class="nav-text">ESLint Rule Option</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E5%A0%B4%E4%BC%91%E6%81%AF%EF%BC%9A%E5%86%8D%E6%AC%A1%E7%9B%A4%E9%BB%9E-TODO"><span class="nav-number">4.6.</span> <span class="nav-text">中場休息：再次盤點 TODO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ESLint-Rule%EF%BC%9AFixer"><span class="nav-number">4.7.</span> <span class="nav-text">ESLint Rule：Fixer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E5%B0%BE"><span class="nav-number">5.</span> <span class="nav-text">結尾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">6.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Chih Yang</p>
+  <div class="site-description" itemprop="description">Chih Yang 的前端小天地</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ChihYang41" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ChihYang41" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/chihyang41" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;chihyang41" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/ChihYang41" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chihyang41.github.io/2021/06/29/AST-and-ESLint-Introduction-part-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Chih Yang">
+      <meta itemprop="description" content="Chih Yang 的前端小天地">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chih Yang's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          淺談 AST 及 ESlint Rule：撰寫屬於自己的 ESLint Rule（下）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-06-29 01:04:01" itemprop="dateCreated datePublished" datetime="2021-06-29T01:04:01+08:00">2021-06-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%80%E8%A1%93/" itemprop="url" rel="index"><span itemprop="name">技術</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>這篇延續了上一篇對於 AST 的介紹，基於上篇對 AST 的理解，這篇文會開始實際使用 AST Explorer 以及 ESLint 提供的 API，實際的撰寫屬於自己專案的 ESLint Rule。</p>
+<span id="more"></span>
+
+<h2 id="ESLint-Rule-的基礎設置、介紹"><a href="#ESLint-Rule-的基礎設置、介紹" class="headerlink" title="ESLint Rule 的基礎設置、介紹"></a>ESLint Rule 的基礎設置、介紹</h2><h3 id="ESLint-Rule-執行流程"><a href="#ESLint-Rule-執行流程" class="headerlink" title="ESLint Rule 執行流程"></a>ESLint Rule 執行流程</h3><p>ESLint 的 rule 在執行上的流程經過簡化後，大致如下：</p>
+<blockquote>
+<ol>
+<li>ESLint parser 將 code 解析成 AST</li>
+<li>透過 ESLint 的 selector 選擇 node，設置 rule 的 listener</li>
+<li>ESLint traverse AST 時，觸發 listener 的 callback</li>
+</ol>
+</blockquote>
+<p>⚠️ 上面的流程不完全是 ESLint 運作的方式，只是我個人經過閱讀文章後簡化的理解，ESLint Rule 背後執行還牽涉到 Visitor Pattern，如果對背後實際運行方式有興趣，也有許多 ESLint source code 解讀的文章。</p>
+<p>ESLint 的規則寫起來其實蠻像一般在寫 JavaScript 設置 eventLisnter 的感覺，透過選擇器（selector) 來選擇到想要的 node，接著 rule 的 listener 就會被放到 node 上，等到 ESLint traverse 到該 node 的時候，就會觸發 rule 的檢查。</p>
+<h3 id="Selector-是什麼？"><a href="#Selector-是什麼？" class="headerlink" title="Selector 是什麼？"></a>Selector 是什麼？</h3><p>可以去 <a target="_blank" rel="noopener" href="https://eslint.org/docs/developer-guide/selectors">ESLint - Selectors</a> 看到以下的說明：</p>
+<blockquote>
+<p>A selector is a string that can be used to match nodes in an Abstract Syntax Tree (AST). This is useful for describing a particular syntax pattern in your code.</p>
+<p>The syntax for AST selectors is similar to the syntax for <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors">CSS selectors</a>. If you’ve used CSS selectors before, the syntax for AST selectors should be easy to understand.</p>
+</blockquote>
+<p>簡單來說它就是類似於 CSS selectors 的東東，讓你可以很輕鬆的從選擇到想要的 AST node。</p>
+<p>舉例來說，假設我們要選擇 FunctionDeclaration 底下的 Identifier，那就可以寫成這樣子：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">create</span><span class="token punctuation">(</span><span class="token parameter">context</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// ...</span>
+    <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
+      <span class="token comment">// 透過這裡來選擇到想要的 node</span>
+      <span class="token string">"FunctionDeclaration > Identifier"</span><span class="token operator">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">node</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// listener 的 callback 邏輯寫在這裡</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>透過很像 CSS Selectors 的運作模式，就可以選擇到自己想要的節點了。</p>
+<h3 id="ESLint-Rule-的基本架構"><a href="#ESLint-Rule-的基本架構" class="headerlink" title="ESLint Rule 的基本架構"></a>ESLint Rule 的基本架構</h3><p>下面的程式碼是 ESLint 規則的基本長相</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">/**
+ * @fileoverview Rule to disallow unnecessary semicolons
+ * @author Nicholas C. Zakas
+ */</span>
+
+<span class="token string">"use strict"</span><span class="token punctuation">;</span>
+
+<span class="token comment">//------------------------------------------------------------------------------</span>
+<span class="token comment">// Rule Definition</span>
+<span class="token comment">//------------------------------------------------------------------------------</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  meta<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    type<span class="token operator">:</span> <span class="token string">"suggestion"</span><span class="token punctuation">,</span>
+    docs<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      description<span class="token operator">:</span> <span class="token string">"disallow unnecessary semicolons"</span><span class="token punctuation">,</span>
+      category<span class="token operator">:</span> <span class="token string">"Possible Errors"</span><span class="token punctuation">,</span>
+      recommended<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+      url<span class="token operator">:</span> <span class="token string">"https://eslint.org/docs/rules/no-extra-semi"</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    fixable<span class="token operator">:</span> <span class="token string">"code"</span><span class="token punctuation">,</span>
+    schema<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token comment">// no options</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token function-variable function">create</span><span class="token operator">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">context</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
+      <span class="token comment">// callback functions</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>主要分為 <code>meta</code> 及 <code>create</code> 兩個部分，<code>meta</code> 負責的是一些 ESLint Rule 的說明、設定等等，比如 docs 就是關於文件相關的說明，fixable 則是要不要啟用 quick fix 功能等等的；<code>create</code> </p>
+<h3 id="ESLint-Rule-的資料夾結構"><a href="#ESLint-Rule-的資料夾結構" class="headerlink" title="ESLint Rule 的資料夾結構"></a>ESLint Rule 的資料夾結構</h3><p>ESLint 官方文件在 <a target="_blank" rel="noopener" href="https://eslint.org/docs/developer-guide/working-with-rules">Working with Rules</a> 有說到 ESLint Rule 的資料夾結構該長怎樣：</p>
+<blockquote>
+<ul>
+<li>in the <code>lib/rules</code> directory: ESLint Rule 的實際邏輯會放在這，檔名就會是這個規則的名稱 (for example, <code>no-extra-semi.js</code>)</li>
+<li>in the <code>tests/lib/rules</code> directory: ESLint Rule 測試的檔案，檔名也是規則名稱 (for example, <code>no-extra-semi.js</code>)</li>
+<li>in the <code>docs/rules</code> directory: 關於規則說明的 markdown 放在這 (for example, <code>no-extra-semi.md</code>)</li>
+</ul>
+</blockquote>
+<h3 id="快速產出-ESLint-Plugin、Rule-的模板"><a href="#快速產出-ESLint-Plugin、Rule-的模板" class="headerlink" title="快速產出 ESLint Plugin、Rule 的模板"></a>快速產出 ESLint Plugin、Rule 的模板</h3><p>ESLint Plugin 的模板要自己慢慢新增也可以，不過目前已經有非常方便的 CLI 可以使用，只要咻咻打幾個字就可以產出 ESLint Plugin 的各種模版，非常滴爽。</p>
+<h4 id="ESLint-Plugin"><a href="#ESLint-Plugin" class="headerlink" title="ESLint Plugin"></a>ESLint Plugin</h4><p>首先要安裝 yo 以及 generator-eslint</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> -g yo generator-eslint<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>接著建立 ESLint Plugin 資料夾的名稱</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mkdir</span> yang-eslint-plugin<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>接著輸入 CLI，建立 ESLint Plugin 的模板</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">yo eslint:plugin<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>它會問幾個設定上的問題</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">? What is your name? ChihYang
+? What is the plugin ID? yanglint
+? Type a short description of this plugin: yang 專屬的 ESLint Plugin 
+? Does this plugin contain custom ESLint rules? Yes 
+? Does this plugin contain one or <span class="token function">more</span> processors? No<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接著就會生成基本的 Plugin 模板了，但這只是 Plugin</p>
+<h4 id="ESLint-Rule"><a href="#ESLint-Rule" class="headerlink" title="ESLint Rule"></a>ESLint Rule</h4><p>接著就要創建 Rule 的模板啦，首先輸入</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">yo eslint:rule<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>接著一樣是會問一些簡單的設定問題</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">? What is your name? ChihYang
+? Where will this rule be published? <span class="token punctuation">(</span>Use arrow keys<span class="token punctuation">)</span> 
+  ❯ ESLint Core  
+    ESLint Plugin 
+? What is the rule ID? async-function-name  
+? Type a short description of this rule: blablabla<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>這樣就會產出需要的 ESLint Rule 檔案了！</p>
+<h2 id="ESLint-Rule-實戰一：抓出不合規範的命名"><a href="#ESLint-Rule-實戰一：抓出不合規範的命名" class="headerlink" title="ESLint Rule 實戰一：抓出不合規範的命名"></a>ESLint Rule 實戰一：抓出不合規範的命名</h2><p>前面囉哩八嗦講一堆設定的介紹，接下來就真的要到實戰的環節了，首先來到我們第一個 ESLint Rule 的範例，「Async Function Name」，相信在一般團隊開發中都會有部分的命名是希望統一的，比如發 GET Method 的 request 會用 <code>getXXX</code> 開頭之類的。這個規則也是如此，當我們使用 async function 的時候，會希望 function 的名稱是 <code>xxxxAsync</code> 結尾，屬於一個團隊上的命名規範。</p>
+<p>所以需求如下：</p>
+<blockquote>
+<p>實作一個可以檢查 async function 命名的 rule，funcion name 結尾需要有 <strong>「Async」</strong></p>
+</blockquote>
+<p>所以實際上的範例如下，invalid 範例會無法通過 ESLint Rule 檢查：</p>
+<blockquote>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// invalid，沒有 Async 結尾</span>
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+	<span class="token comment">/* .... */</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// valid，有 Async 結尾</span>
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">getListAsync</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+	<span class="token comment">/* .... */</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</blockquote>
+<p>了解需求以後，接著就來實戰吧！</p>
+<h3 id="第一步：實作之前，先寫測試"><a href="#第一步：實作之前，先寫測試" class="headerlink" title="第一步：實作之前，先寫測試"></a>第一步：實作之前，先寫測試</h3><p>接下來想走一個 TDD 的方式，先寫下測試以後，再開始實作 ESLint Rule 的邏輯，雖然我是沒試過 TDD 的開發方式啦，但感覺很好玩，所以就這樣做吧！</p>
+<p>如何做 ESLint Rule 的測試呢？ESLint 有提供一個 <code>RuleTester</code> 的東東：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> rule <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'../../../lib/rules/async-function-name'</span><span class="token punctuation">)</span>
+<span class="token keyword">var</span> RuleTester <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'eslint'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>RuleTester
+<span class="token keyword">var</span> ruleTester <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RuleTester</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> parserOptions<span class="token operator">:</span> <span class="token punctuation">&#123;</span> ecmaVersion<span class="token operator">:</span> <span class="token number">2018</span> <span class="token punctuation">&#125;</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+ruleTester<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token string">'async-function-name'</span><span class="token punctuation">,</span> rule<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+  valid<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  invalid<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>這邊做的事情就是引入 rule 的 module、從 ESLint 引入 <code>RuleTester</code>，以及使用 <code>RuleTester</code> new 出一個 instance，instance 的 constructor 可以傳入一些 option 的設定，因為 async/await 是 ES7 的語法，所以在 parser 的 version 我就設定為 2018，不然 <code>RuleTester</code> 是沒有辦法測試的。</p>
+<p>接著執行 <code>ruleTester.run</code>，第一個參數是 rule 名稱；第二個參數是 rule module；第三個則是實際的測試案例，<code>valid</code> 如字面意思就是合法的程式碼 test case，invalid 則反之。</p>
+<p>了解到這些以後，我們就可以寫下 test cases 了：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> rule <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'../../../lib/rules/async-function-name'</span><span class="token punctuation">)</span>
+<span class="token keyword">var</span> RuleTester <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'eslint'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>RuleTester
+<span class="token keyword">var</span> ruleTester <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RuleTester</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> parserOptions<span class="token operator">:</span> <span class="token punctuation">&#123;</span> ecmaVersion<span class="token operator">:</span> <span class="token number">2018</span> <span class="token punctuation">&#125;</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+ruleTester<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token string">'async-function-name'</span><span class="token punctuation">,</span> rule<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+  valid<span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">'function foo() &#123; console.log() &#125;'</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span>
+      code<span class="token operator">:</span> <span class="token string">'async function fooAsync() &#123; return "" &#125;'</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+  invalid<span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">&#123;</span>
+      code<span class="token operator">:</span> <span class="token string">'async function myFunction() &#123; return "";&#125;'</span><span class="token punctuation">,</span>
+      errors<span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+          message<span class="token operator">:</span> <span class="token string">'async function name should have Async words'</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span>
+      code<span class="token operator">:</span> <span class="token string">'async function myFunctionasync() &#123; return "";&#125;'</span><span class="token punctuation">,</span>
+      errors<span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+          message<span class="token operator">:</span> <span class="token string">'async function name should have Async words'</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span>
+      code<span class="token operator">:</span> <span class="token string">'async function myAsyncFunction() &#123; return "";&#125;'</span><span class="token punctuation">,</span>
+      errors<span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+          message<span class="token operator">:</span> <span class="token string">'async function name should have Async words'</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>不合法 test case 的包括了「async function 但沒有 Async 結尾」、「async function 但結尾不是 camel case」、「async function 但 Async 不是放在結尾」</p>
+<p>接著我們就可以把這些測試案例貼在 AST Explorer：</p>
+<p><a target="_blank" rel="noopener" href="https://astexplorer.net/#/gist/1712e379b79c3d2ed053a1def505305c/bbc7052c81353ddccd283066e6de8d8a337cb055">AST Explorer 連結</a></p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gtazja0bduj31is0u07b0.jpg" alt="截圖 2021-08-10 上午12.06.49"></p>
+<h3 id="第二步：觀察-AST，找出想要操作的-node"><a href="#第二步：觀察-AST，找出想要操作的-node" class="headerlink" title="第二步：觀察 AST，找出想要操作的 node"></a>第二步：觀察 AST，找出想要操作的 node</h3><p>我們需要的資訊有兩個：</p>
+<blockquote>
+<ol>
+<li>檢查 function name 結尾有沒有 Async</li>
+<li>檢查 function 是不是 async function</li>
+</ol>
+</blockquote>
+<p>知道需要哪些資訊以後，接著就來觀察 AST 裡面哪些地方放有這些資訊：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gtazq5v947j31iv0u0q9t.jpg" alt="截圖 2021-08-10 上午12.09.45"></p>
+<p>從上圖可以發現到一個 function 的宣告就會是一個 <code>FunctionDeclaration</code> 的 node，接著仔細看 <code>FunctionDeclaration</code> 的內部，會看到：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gtazn0ctruj61id0u0tej02.jpg" alt="截圖 2021-08-10 上午12.10.51"></p>
+<p><code>FunctionDeclaration</code> 中還有 id 裡的 <code>Identifier</code>，<code>Identifier</code> 的 name 就會是該 function 的名稱，如果我們要檢查 function name 是否有「Async」的話，<code>Identifier</code> 的 name 就會是我需要的資訊；另外，<code>FunctionDeclaration</code> 當中會有一個叫 <code>async</code> 的 boolean，這就是 function 是否為 async function 的資訊，這就是我們所需的兩個資訊！</p>
+<p>接著，以我們的需求來看，我們需要選擇到 <code>FunctionDeclaration</code> 來得到該 function 的資訊並做名稱相關的檢查，不寫成 <code>&quot;FunctionDeclaration &gt; Identifier&quot;</code> 的原因是除了 function name 檢查以外，我們也要確定這個 function 是 async，而這個資訊只會在 <code>FunctionDeclaration</code> 的 <code>async</code> 才有。</p>
+<p>了解該做什麼後，現在就移動到 AST Explore 並寫下 code：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  meta<span class="token operator">:</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+
+  <span class="token function-variable function">create</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">context</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
+      <span class="token function-variable function">FunctionDeclaration</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">node</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>node<span class="token punctuation">.</span>async <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">Async$</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span>id<span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+          context<span class="token punctuation">.</span><span class="token function">report</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+            node<span class="token punctuation">,</span>
+            message<span class="token operator">:</span> <span class="token string">'async function name should have Async words'</span><span class="token punctuation">,</span>
+          <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+        <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>node</code> 會是我們選擇到的 <code>FunctionDeclaration</code> 這幾個 node，得到 <code>FunctionDeclaration</code> 的資訊後，我們就可以透過 <code>node.async</code> 檢查是否為 async function，以及用 regex 檢查 function name 結尾是否符合規範。</p>
+<p>當符合條件後，代表這就是我們想要揪出的錯誤命名 function，透過 <code>contex.report</code> 可以回報找出的錯誤，傳入 <code>node</code> 可以讓 ESLnt 幫你指出錯誤的地方在哪，<code>message</code> 則是想要跳出的錯誤提示文字。</p>
+<p>所以在 AST Exploer 可以在右下角看到這樣的 output：<br><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gtazwny6k2j31in0u0th4.jpg" alt="截圖 2021-08-10 上午12.20.00"></p>
+<p> ESLint 成功幫我們找出錯誤了！</p>
+<h2 id="ESLint-Rule-實戰二：don’t-call-this-function-please🥺"><a href="#ESLint-Rule-實戰二：don’t-call-this-function-please🥺" class="headerlink" title="ESLint Rule 實戰二：don’t call this function please🥺"></a>ESLint Rule 實戰二：don’t call this function please🥺</h2><p>完成第一個實戰範例了，接下來再看看第二個範例吧，這個範例源自於工作時專案上看到的狀況，不禁就想試看看能怎麼用 ESLint 自動化的處理。</p>
+<p>前情提要是我在專案上看到這個 function：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// 此 function 用於測試，不要在測試以外的檔案使用，避免造成非預期的結果！</span>
+<span class="token keyword">function</span> <span class="token function">DANGEROUS_reset</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">/* ... */</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>一般來說沒有 eslint 輔助的話，就只能在 comments 上面記得這件事情，但如果意外的使用了這個 function，也沒辦法得知，就會產生非預期的 bug，因此我們可以試試看自己寫個 ESLint Rule 來警告自己不要在測試外的地方使用這個 function！</p>
+<p>需求如下：</p>
+<blockquote>
+<ul>
+<li>檢查在 <strong>test 以外</strong>的檔案有沒有<strong>非預期的 function call</strong></li>
+<li>可以在 array <strong>列舉出一連串禁用的 fucntion</strong></li>
+<li>如果能<strong>自動修正</strong>錯誤就更棒了</li>
+</ul>
+</blockquote>
+<p>出現 warning 的範例：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// App.js</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> DANGEROUS_reset <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'./utils'</span>  
+
+<span class="token function">DANGEROUS_reset</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 欸，call 屁喔！</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="第一步：實作之前，一樣先寫測試"><a href="#第一步：實作之前，一樣先寫測試" class="headerlink" title="第一步：實作之前，一樣先寫測試"></a>第一步：實作之前，一樣先寫測試</h3><p>如同前一個範例，我們還是先寫測試</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> rule <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'../../../lib/rules/do-not-call-this-function'</span><span class="token punctuation">)</span>
+<span class="token keyword">var</span> RuleTester <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'eslint'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>RuleTester
+<span class="token keyword">var</span> ruleTester <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RuleTester</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+ruleTester<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token string">'do-not-call-this-function'</span><span class="token punctuation">,</span> rule<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+  valid<span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">'foo()'</span><span class="token punctuation">,</span>
+    <span class="token string">'console.log()'</span><span class="token punctuation">,</span>
+    <span class="token string">'getData()'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+  invalid<span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">&#123;</span>
+      code<span class="token operator">:</span> <span class="token string">'resetAll()'</span><span class="token punctuation">,</span>
+      errors<span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+          messageId<span class="token operator">:</span> <span class="token string">'dontCallMsg'</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span>
+      code<span class="token operator">:</span> <span class="token string">'destroyApp()'</span><span class="token punctuation">,</span>
+      errors<span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+          messageId<span class="token operator">:</span> <span class="token string">'dontCallMsg'</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span>
+      code<span class="token operator">:</span> <span class="token string">'printError()'</span><span class="token punctuation">,</span>
+      errors<span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+          messageId<span class="token operator">:</span> <span class="token string">'dontCallMsg'</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>在預期中，<code>resetAll</code>、<code>destroyApp</code>、<code>printError </code>這些是不希望在測試檔案以外地方呼叫的 function，所以列為不合法的 test cases。</p>
+<p>另外會發現到這邊出現 error message 的方式改成寫 <code>messageId: &#39;dontCallMsg&#39;</code> 了，這也是 ESLint Rule 提供的功能，叫做 <code>messageId</code>，屬於一個更簡單去寫錯誤提示的方式，有興趣可以看 <a target="_blank" rel="noopener" href="https://eslint.org/docs/developer-guide/working-with-rules#messageids">ESLint - messageId</a> 了解如何使用。</p>
+<p>接下來一樣是把 test cases 貼到 AST Explorer 上面：</p>
+<p><a target="_blank" rel="noopener" href="https://astexplorer.net/#/gist/1712e379b79c3d2ed053a1def505305c/6bba20b713281709d350b4b3971207f4cff31718">AST Explorer 連結</a></p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gtb06t3thyj31io0u0n2w.jpg" alt="截圖 2021-08-10 上午12.29.29"></p>
+<h3 id="第二步：觀察-AST，selector-對準獵物"><a href="#第二步：觀察-AST，selector-對準獵物" class="headerlink" title="第二步：觀察 AST，selector 對準獵物"></a>第二步：觀察 AST，selector 對準獵物</h3><p>因為我們要檢查的是「function call 名稱是否在黑名單裡面」，所以需要的是 function call 的 name，那這個資訊會在哪裡出現呢？觀察了 AST 以後可以看到：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gtb09s20m4j31j00u00xl.jpg" alt="截圖 2021-08-10 上午12.32.48"></p>
+<p><code>CallExpression</code> 當中的 <code>Identifier</code> 的 <code>name</code> 就是 function call 的名稱，因此這就是我們要的資訊！</p>
+<p>知道要選取誰以後就很簡單了，用 selector 選擇到想要的 node：</p>
+<p><a target="_blank" rel="noopener" href="https://astexplorer.net/#/gist/1712e379b79c3d2ed053a1def505305c/25cb7217fd756616ae754a22b42a1a377e74d693">AST Explorer 連結</a></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  meta<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    docs<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      description<span class="token operator">:</span> <span class="token string">'dont call this function out of test file'</span><span class="token punctuation">,</span>
+      category<span class="token operator">:</span> <span class="token string">'Fill me in'</span><span class="token punctuation">,</span>
+      recommended<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    fixable<span class="token operator">:</span> <span class="token string">'code'</span><span class="token punctuation">,</span> <span class="token comment">// or "code" or "whitespace"</span>
+    schema<span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    messages<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      dontCallMsg<span class="token operator">:</span> <span class="token string">'dont call this function out of test file'</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+
+  <span class="token function-variable function">create</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">context</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
+      <span class="token string">'CallExpression > Identifier'</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">node</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="第三步：撰寫-Rule-邏輯"><a href="#第三步：撰寫-Rule-邏輯" class="headerlink" title="第三步：撰寫 Rule 邏輯"></a>第三步：撰寫 Rule 邏輯</h3><p>接著就是實際撰寫 Rule 的檢查邏輯，我預計最基礎的作法就是可以用一個 array 存放黑名單的 function name，如果檢查到 node 的名稱在黑名單裡面的話，就需要揪出來，所以實作邏輯如下：</p>
+<p><a target="_blank" rel="noopener" href="https://astexplorer.net/#/gist/1712e379b79c3d2ed053a1def505305c/81c2080dc26d84784f2acdc0a0588d3377e10bf6">AST Explorer - disallowedMethods</a></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> disallowedMethods <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'resetAll'</span><span class="token punctuation">,</span> <span class="token string">'destroyApp'</span><span class="token punctuation">,</span> <span class="token string">'printError'</span><span class="token punctuation">]</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  meta<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    docs<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      description<span class="token operator">:</span> <span class="token string">'dont call this function out of test file'</span><span class="token punctuation">,</span>
+      category<span class="token operator">:</span> <span class="token string">'Fill me in'</span><span class="token punctuation">,</span>
+      recommended<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    fixable<span class="token operator">:</span> <span class="token string">'code'</span><span class="token punctuation">,</span> <span class="token comment">// or "code" or "whitespace"</span>
+    schema<span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    messages<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      dontCallMsg<span class="token operator">:</span> <span class="token string">'dont call this function out of test file'</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+
+  <span class="token function-variable function">create</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">context</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
+      <span class="token string">'CallExpression > Identifier'</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">node</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      	<span class="token keyword">const</span> isDisallowed <span class="token operator">=</span> disallowedMethods<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span>name<span class="token punctuation">)</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>isDisallowed<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+          context<span class="token punctuation">.</span><span class="token function">report</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+            node<span class="token punctuation">,</span>
+            messageId<span class="token operator">:</span> <span class="token string">'dontCallMsg'</span><span class="token punctuation">,</span>
+          <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+        <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>單純就只是用 <code>includes</code> 這個內建函式去檢查 function call 的名稱。</p>
+<p>另外，需求上還有說要檢查的是「測試檔案」以外的地方，關於這個需求可以到 <code>eslintrc.js</code> 裡面的 overrides 做設定：</p>
+<p><img data-src="https://i.imgur.com/jXvJqL6.png"></p>
+<p><code>rules</code> 就是一般設定想要開啟的規則，但如果有些檔案想要部分套用規則而已，<code>overrides</code> 可以設定哪些檔案想開啟、關閉哪些規則，做出更客製化的 ESLint 設定套用。</p>
+<h3 id="中場休息：盤點-TODO"><a href="#中場休息：盤點-TODO" class="headerlink" title="中場休息：盤點 TODO"></a>中場休息：盤點 TODO</h3><blockquote>
+<ol>
+<li>檢查 <strong>test 以外</strong>的檔案有沒有<strong>非預期的 function call</strong> ✅</li>
+<li>可以在 array <strong>列舉出一連串禁用的 fucntion</strong> ❔</li>
+<li>如果能<strong>自動修正</strong>錯誤就更棒了</li>
+</ol>
+</blockquote>
+<p>第一個功能確定完成了，但第二個功能其實不太彈性，只完成了基本的需求，但仍然有美中不足的地方，不太理想的地方在哪呢？就是我們想要禁用的 function 名稱被寫死在 ESLint Rule 裡面了，比如今天臨時又想要新增幾個黑名單的 function name，以目前的方式來說就只能直接去修改 ESLint Rule 內部的邏輯，其實不是很方便，那有沒有更彈性的方式來實作呢？目前有想到一個，就是透過 ESLint Rule 裡面 options，我希望可以做到的事情會像是這樣：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  rules<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token string">'yanglint/async-function-name'</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'error'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token string">'yanglint/do-not-call-this-function'</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'warn'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> disallowedMethods<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'resetAll'</span><span class="token punctuation">,</span> <span class="token string">'printError'</span><span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>透過 options 的設定，我們就可以在設定檔傳入想要加入黑名單的 function，之後我們可以在 create 裡面透過 <code>context.options</code> 接收到被傳進的設定：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  meta<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    docs<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      description<span class="token operator">:</span> <span class="token string">'dont call this function out of test file'</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    fixable<span class="token operator">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token comment">// or "code" or "whitespace"</span>
+    schema<span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token comment">// fill in your schema</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+
+  <span class="token function-variable function">create</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">context</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span>options<span class="token punctuation">)</span> <span class="token comment">// 收到剛剛傳進來的 disallowedMethods: ['resetAll', 'printError']</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>也就是說我們能夠透過 <code>eslintrc.js</code> 的 options 設置來決定要禁用哪些 function，如此一來就不用改動 ESLint Rule 內部的邏輯了，聽起來讚讚，開始實作吧！</p>
+<h3 id="ESLint-Rule-Option"><a href="#ESLint-Rule-Option" class="headerlink" title="ESLint Rule Option"></a>ESLint Rule Option</h3><p>要做到這點會用到 ESLint Rule 裡面的 <code>meta</code> 的 <code>schema</code>，還記得 <code>meta</code> 這東西嗎？忘記的話再來看看：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  meta<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    docs<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      description<span class="token operator">:</span> <span class="token string">'dont call this function out of test file'</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    fixable<span class="token operator">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token comment">// or "code" or "whitespace"</span>
+    schema<span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token comment">// fill in your schema</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+
+  <span class="token function-variable function">create</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">context</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
+      <span class="token comment">/* ... */</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>schema</code> 就是用來規定這個 ESLint Rule 的 options 預計接收的資料格式，那如何去規定資料格式要長怎樣呢？當中會使用一個叫 <a target="_blank" rel="noopener" href="https://json-schema.org/">JSON Schema</a> 的東東來制定資料格式，JSON Schema 怎麼使用呢？</p>
+<p>舉例來說，假設我們接收的 JSON 資料長這樣：</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"ChihYang"</span><span class="token punctuation">,</span>
+  <span class="token property">"age"</span><span class="token operator">:</span> <span class="token number">18</span><span class="token punctuation">,</span>
+  <span class="token property">"gender"</span><span class="token operator">:</span> <span class="token string">"male"</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>這段 JSON Data 的 JSON Schema 就會長這樣：</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"object"</span><span class="token punctuation">,</span>
+  <span class="token property">"properties"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"name"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">,</span>
+      <span class="token property">"minLength"</span><span class="token operator">:</span> <span class="token number">4</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token property">"age"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"integer"</span><span class="token punctuation">,</span>
+      <span class="token property">"minimum"</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+      <span class="token property">"maximum"</span><span class="token operator">:</span> <span class="token number">130</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token property">"gender"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">,</span>
+      <span class="token property">"enum"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token string">"male"</span><span class="token punctuation">,</span>
+        <span class="token string">"female"</span>
+      <span class="token punctuation">]</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>簡單來說就是用 JSON 來定義 JSON data 的細節，比如 type、enum 內容、最小值最大值等等的。</p>
+<p>知道如何使用以後，回到 ESLint Rule <code>meta</code> 的 <code>schema</code> 就知道該怎麼定義了：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  meta<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    docs<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      description<span class="token operator">:</span> <span class="token string">'dont call this function out of test file'</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    fixable<span class="token operator">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token comment">// or "code" or "whitespace"</span>
+    schema<span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token comment">/* &#123;disallowedMethods: ['resetAll', 'printError']&#125; */</span>
+      <span class="token punctuation">&#123;</span>
+        type<span class="token operator">:</span> <span class="token string">'object'</span><span class="token punctuation">,</span>
+        properties<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+          disallowedMethods<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+            type<span class="token operator">:</span> <span class="token string">'array'</span><span class="token punctuation">,</span>
+            items<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+              type<span class="token operator">:</span> <span class="token string">'string'</span><span class="token punctuation">,</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+            minItems<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+            uniqueItems<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+          <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+
+  <span class="token function-variable function">create</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">context</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
+      <span class="token comment">/* ... 省略 ... */</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接著，我們的測試也需要調整，<code>RuleTester</code> 很讚的地方是每個 test case 也可以決定要傳什麼樣的 option，讓我們可以測試傳入不同 option 的 case：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">ruleTester<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token string">'do-not-call-this-function'</span><span class="token punctuation">,</span> rule<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+  valid<span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">'foo()'</span><span class="token punctuation">,</span>
+    <span class="token string">'console.log()'</span><span class="token punctuation">,</span>
+    <span class="token string">'getData()'</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span>
+      code<span class="token operator">:</span> <span class="token string">'resetAll()'</span><span class="token punctuation">,</span>
+      options<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">&#123;</span> disallowedMethods<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'destroyApp'</span><span class="token punctuation">,</span> <span class="token string">'printError'</span><span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+  invalid<span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">&#123;</span>
+      code<span class="token operator">:</span> <span class="token string">'resetAll()'</span><span class="token punctuation">,</span>
+      options<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">&#123;</span> disallowedMethods<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'resetAll'</span><span class="token punctuation">,</span> <span class="token string">'printError'</span><span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      errors<span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+          messageId<span class="token operator">:</span> <span class="token string">'dontCallMsg'</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span>
+      code<span class="token operator">:</span> <span class="token string">'destroyApp()'</span><span class="token punctuation">,</span>
+      options<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">&#123;</span> disallowedMethods<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'destroyApp'</span><span class="token punctuation">,</span> <span class="token string">'resetAll'</span><span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      errors<span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+          messageId<span class="token operator">:</span> <span class="token string">'dontCallMsg'</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span>
+      code<span class="token operator">:</span> <span class="token string">'printError()'</span><span class="token punctuation">,</span>
+      options<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">&#123;</span> disallowedMethods<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'printError'</span><span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      errors<span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+          messageId<span class="token operator">:</span> <span class="token string">'dontCallMsg'</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>我們測試涵蓋了幾種情況：</p>
+<blockquote>
+<ol>
+<li>沒有傳入任何 options 的時候，因為這時候沒有禁用的 function，所以會<strong>通過</strong></li>
+<li>有在 options 傳入 disallowedMethods，但 call 的 function 和 disallowedMethods 不同，所以會<strong>通過</strong></li>
+<li>call 了 options 規定的 disallowedMethods，這種情況<strong>不通過</strong></li>
+</ol>
+</blockquote>
+<p>接著就是實際調整 ESLint Rule 的邏輯了，改的地方也不多，只是把原本宣告的 <code>disallowedMethods</code> 改成從 <code>context.options</code> 取得：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  meta<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    docs<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      description<span class="token operator">:</span> <span class="token string">'dont call this function out of test file'</span><span class="token punctuation">,</span>
+      category<span class="token operator">:</span> <span class="token string">'Fill me in'</span><span class="token punctuation">,</span>
+      recommended<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    fixable<span class="token operator">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token comment">// or "code" or "whitespace"</span>
+    schema<span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">&#123;</span>
+        type<span class="token operator">:</span> <span class="token string">'object'</span><span class="token punctuation">,</span>
+        properties<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+          disallowedMethods<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+            type<span class="token operator">:</span> <span class="token string">'array'</span><span class="token punctuation">,</span>
+            items<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+              type<span class="token operator">:</span> <span class="token string">'string'</span><span class="token punctuation">,</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+            minItems<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+            uniqueItems<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+          <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+
+  <span class="token function-variable function">create</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">context</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
+      <span class="token string">'CallExpression > Identifier'</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">node</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> disallowedMethods <span class="token operator">=</span> context<span class="token punctuation">.</span>options<span class="token punctuation">.</span>length
+          <span class="token operator">?</span> context<span class="token punctuation">.</span>options<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>disallowedMethods
+          <span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+        <span class="token keyword">const</span> isDisallowed <span class="token operator">=</span> disallowedMethods<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span>name<span class="token punctuation">)</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>isDisallowed<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+          context<span class="token punctuation">.</span><span class="token function">report</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+            node<span class="token punctuation">,</span>
+            message<span class="token operator">:</span> <span class="token string">'dont call this function'</span><span class="token punctuation">,</span>
+          <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+        <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="中場休息：再次盤點-TODO"><a href="#中場休息：再次盤點-TODO" class="headerlink" title="中場休息：再次盤點 TODO"></a>中場休息：再次盤點 TODO</h3><blockquote>
+<ol>
+<li>檢查 <strong>test 以外</strong>的檔案有沒有<strong>非預期的 function call</strong> ✅</li>
+<li>可以在 array <strong>列舉出一連串禁用的 fucntion</strong> ✅</li>
+<li>如果能<strong>自動修正</strong>錯誤就更棒了 </li>
+</ol>
+</blockquote>
+<p>這次我們終於完成更彈性的寫法了，剩下最後一個「自動修正錯誤」的功能，相信使用過 ESLint 的人都一定看過一個功能是在我們將滑鼠移到 warning 上得時候，會出現一個叫「quick fix」的功能，點下去之後就會神奇地幫我們修正那個錯誤，如下圖：</p>
+<p><img data-src="https://i.imgur.com/8yxNdfL.png"></p>
+<p>這個功能是怎麼做到的呢？這就要講到 ESLint Rule 的 <code>fixer</code> 了。</p>
+<h3 id="ESLint-Rule：Fixer"><a href="#ESLint-Rule：Fixer" class="headerlink" title="ESLint Rule：Fixer"></a>ESLint Rule：<code>Fixer</code></h3><p>回到我們的需求來說：</p>
+<blockquote>
+<p>檢查在 test 以外的檔案是否有執行這個 function，有的話跳出 warning，如果能自動修正掉就更棒了。</p>
+</blockquote>
+<p>這邊我把「自動修正錯誤」定義為「自動幫忙移除掉這個不合法的 function call」，直接移除掉某段程式碼的做法似乎有點極端，但方便起見就先這樣吧。</p>
+<p>至於怎麼刪除掉呢？ESLint 有提供一個叫 <a target="_blank" rel="noopener" href="https://eslint.org/docs/developer-guide/working-with-rules#applying-fixes">fixer</a> 的物件。當我們在使用 <code>context.report</code> 的時候，可以傳入 <code>fix</code> ，<code>fix</code> 會是一個 callback function，它會接收到 <code>fixer</code> 這個 object：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">context<span class="token punctuation">.</span><span class="token function">report</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+  node<span class="token operator">:</span> node<span class="token punctuation">,</span>
+  message<span class="token operator">:</span> <span class="token string">"Missing semicolon"</span><span class="token punctuation">,</span>
+  <span class="token function-variable function">fix</span><span class="token operator">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">fixer</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> fixer<span class="token punctuation">.</span><span class="token function">insertTextAfter</span><span class="token punctuation">(</span>node<span class="token punctuation">,</span> <span class="token string">";"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>fixer 當中提供了不少的 method 可以使用：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gtd65cshwlj61aw0eyn1e02.jpg" alt="截圖 2021-08-11 下午9.27.01"></p>
+<p>以目前的需求為例，我們要做的是「移除掉某段不合法 function call」，所以照理來說會用到的是 <code>remove</code> ，知道可以用什麼 API 以後，就可以繼續往下了。</p>
+<p>不過在真正刪除 node 之前，要先要到 ESLint Rule 的 <code>meta</code> 調整 <code>fixable</code>：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  meta<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    docs<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      description<span class="token operator">:</span> <span class="token string">'dont call this function out of test file'</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    fixable<span class="token operator">:</span> <span class="token string">'code'</span><span class="token punctuation">,</span> <span class="token comment">// 把這裡改成 code</span>
+    schema<span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token comment">/*... 省略 ... */</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+
+  <span class="token function-variable function">create</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">context</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
+      <span class="token comment">/* ... 省略 *.../
+    &#125;
+  &#125;,
+&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接著我們還是要調整測試：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">ruleTester<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token string">'do-not-call-this-function'</span><span class="token punctuation">,</span> rule<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+  valid<span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">'foo()'</span><span class="token punctuation">,</span>
+    <span class="token string">'console.log()'</span><span class="token punctuation">,</span>
+    <span class="token string">'getData()'</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span>
+      code<span class="token operator">:</span> <span class="token string">'resetAll()'</span><span class="token punctuation">,</span>
+      options<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">&#123;</span> disallowedMethods<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'destroyApp'</span><span class="token punctuation">,</span> <span class="token string">'printError'</span><span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+  invalid<span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">&#123;</span>
+      code<span class="token operator">:</span> <span class="token string">'resetAll()'</span><span class="token punctuation">,</span>
+      options<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">&#123;</span> disallowedMethods<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'resetAll'</span><span class="token punctuation">,</span> <span class="token string">'printError'</span><span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      errors<span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+          message<span class="token operator">:</span> <span class="token string">'dont call this function'</span><span class="token punctuation">,</span>
+          type<span class="token operator">:</span> <span class="token string">'Identifier'</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+      output<span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">,</span> <span class="token comment">// 新增了這行</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span>
+      code<span class="token operator">:</span> <span class="token string">'destroyApp()'</span><span class="token punctuation">,</span>
+      options<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">&#123;</span> disallowedMethods<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'destroyApp'</span><span class="token punctuation">,</span> <span class="token string">'resetAll'</span><span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      errors<span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+          message<span class="token operator">:</span> <span class="token string">'dont call this function'</span><span class="token punctuation">,</span>
+          type<span class="token operator">:</span> <span class="token string">'Identifier'</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+      output<span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">,</span> <span class="token comment">// 新增了這行</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span>
+      code<span class="token operator">:</span> <span class="token string">'printError()'</span><span class="token punctuation">,</span>
+      options<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">&#123;</span> disallowedMethods<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'printError'</span><span class="token punctuation">]</span> <span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      errors<span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+          message<span class="token operator">:</span> <span class="token string">'dont call this function'</span><span class="token punctuation">,</span>
+          type<span class="token operator">:</span> <span class="token string">'Identifier'</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+      output<span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">,</span> <span class="token comment">// 新增了這行</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>這邊的 <code>output</code> 指的是「經過 quick fix 修正過後，預期的程式碼長怎麼樣」，因為我們會把整段程式碼移除掉的緣故，所以 <code>output</code> 會什麼都沒有。</p>
+<p>接著就到了快樂的觀察 AST 時間了，來觀察一下我們想要刪除的是哪個 node？</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gtd6ns1doyj61nl0u0jwb02.jpg" alt="截圖 2021-08-11 下午9.23.08"></p>
+<p>以一開始的直覺來說，應該會想刪除掉的是 <code>CallExperssion</code> ，因為是要移除掉 function call，這想法也很合理，不過這邊會發現只要在程式碼中加個分號：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gtd728pmp3j61ld0u043v02.jpg" alt="截圖 2021-08-11 下午9.23.23"></p>
+<p>就發現 <code>CallExperssion</code> 沒有包含那個分號，如果我們使用 <code>fixer.remove</code> 的話，就只會移除掉 function call 而留下分號了，所以這邊預期要移除掉的會是 <code>ExpressionStatement</code>。</p>
+<p>但要怎麼選擇到 ExpressionStatement？畢竟我們在剛剛使用 selector 選擇 node 的時候是 <code>CallExpression &gt; Identifier</code>，選擇到的 node 都會是最深處的 <code>Identifier</code>，那要如何選擇到更上層的 node 呢？假如我們 console 出目前的 node 的話，可以看到這樣的內容：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gtd77ntskzj60pe0miq5c02.jpg" alt="截圖 2021-08-11 下午10.04.03"></p>
+<p><code>Identifier</code> 這個 node 當中會包含 <code>parent</code> 這個 property，而 <code>parent</code> 就是它上一層的 <code>CallExperssion</code>，<code>CallExpression</code> 當然也會有屬於它自己的 parent， <code>CallExpression</code> 的 parent 就會指向 <code>ExpressionStatement</code>，而這就是我們想要刪除的 node。</p>
+<p>所以關於 fixer 的程式碼會寫成這樣：</p>
+<p><a target="_blank" rel="noopener" href="https://astexplorer.net/#/gist/1712e379b79c3d2ed053a1def505305c/be022a675e6451e190472618b47458fc55054ea3">AST Explorer - Fixer</a></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  meta<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    docs<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      description<span class="token operator">:</span> <span class="token string">"don't call this function out of test file"</span><span class="token punctuation">,</span>
+      category<span class="token operator">:</span> <span class="token string">'Fill me in'</span><span class="token punctuation">,</span>
+      recommended<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    fixable<span class="token operator">:</span> <span class="token string">'code'</span>
+    schema<span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">&#123;</span>
+        type<span class="token operator">:</span> <span class="token string">'object'</span><span class="token punctuation">,</span>
+        properties<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+          disallowedMethods<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+            type<span class="token operator">:</span> <span class="token string">'array'</span><span class="token punctuation">,</span>
+            items<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+              type<span class="token operator">:</span> <span class="token string">'string'</span><span class="token punctuation">,</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+            minItems<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+            uniqueItems<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+          <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+
+  <span class="token function-variable function">create</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">context</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
+      <span class="token string">'CallExpression > Identifier'</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">node</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">const</span> disallowedMethods <span class="token operator">=</span> context<span class="token punctuation">.</span>options<span class="token punctuation">.</span>length
+          <span class="token operator">?</span> context<span class="token punctuation">.</span>options<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>disallowedMethods
+          <span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+        <span class="token keyword">const</span> isDisallowed <span class="token operator">=</span> disallowedMethods<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span>name<span class="token punctuation">)</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>isDisallowed<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+          context<span class="token punctuation">.</span><span class="token function">report</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+            node<span class="token punctuation">,</span>
+            message<span class="token operator">:</span> <span class="token string">'dont call this function'</span><span class="token punctuation">,</span>
+            <span class="token function-variable function">fix</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">fixer</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+              <span class="token keyword">return</span> fixer<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>node<span class="token punctuation">.</span>parent<span class="token punctuation">.</span>parent<span class="token punctuation">)</span>  <span class="token comment">// 這行！刪除掉 ExpressionStatement</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+          <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+        <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>這樣就大功告成了！我們自己寫的 ESLint Rule 也具備 quick fix 的功能了。</p>
+<h2 id="結尾"><a href="#結尾" class="headerlink" title="結尾"></a>結尾</h2><p>有一陣子還會搞混 Prettier 和 ESLint 的功用，畢竟他們在 coding style 的功能上是有部份重疊的，但經過這次研究發現 ESLint 更重要的價值在於提前發現可能的錯誤，它是一個邊寫邊幫你測試程式、檢查錯誤的工具，無法想像如果少了 ESLint 平常的開發會有多不便，專案當中一定也有些邏輯是屬於那個專案獨有的邏輯，這就是個很好去客製 ESLint Rule 時候，減少心智的負擔，交給工具自動去處理。</p>
+<p>當初也沒料到自己會想研究這個主題，畢竟抽象語法樹耶聽起來就非常高端（不是在講疫苗），八成是我半輩子也理解不來的東西，但經過簡單的理解以後，雖然對於真正 parser 解析的細節依然不是很清楚，但至少理解了基本運作，AST 也不再恐怖。</p>
+<p>似乎至今為止學習一門新知都是這樣，剛開始覺得喔幹我好像是個智障喔，為何什麼都聽不懂？？但耐著性子慢慢理解總會越聽越明白，這種從一無所知到漸漸理解，從自我懷疑到越學越有趣，並且實際產出成文章的過程大概就是學習新技術最好玩的地方吧。</p>
+<p>可以的話，希望後續還能補個番外篇，講述關於 Visitor Pattern 的概念及實際應用範例。</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://eslint.org/docs/developer-guide/working-with-rules">Working with Rules</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://frontendmasters.com/courses/linting-asts/">Code Transformation and Linting with ASTs</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.techbridge.cc/2021/03/20/write-your-own-eslint-plugin/">寫一個簡單堪用的 ESLint plugin</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.techbridge.cc/2018/09/22/visit-ast-with-babel-plugin/">透過製作 Babel-plugin 初訪 AST</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://obkoro1.com/web_accumulate/accumulate/tool/ESLint%E6%8F%92%E4%BB%B6.html#%E6%89%8B%E6%91%B8%E6%89%8B%E6%95%99%E4%BD%A0%E5%86%99%E4%B8%AAeslint%E6%8F%92%E4%BB%B6%E4%BB%A5%E5%8F%8A%E4%BA%86%E8%A7%A3eslint%E7%9A%84%E8%BF%90%E8%A1%8C%E5%8E%9F%E7%90%86">手摸手教你写个ESLint插件以及了解ESLint的运行原理</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://itnext.io/ast-for-javascript-developers-3e79aeb08343">AST for JavaScript developers</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.twilio.com/blog/abstract-syntax-trees">ASTs - What are they and how to use them</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://blog.bitsrc.io/what-is-an-abstract-syntax-tree-7502b71bde27">What is an Abstract Syntax Tree</a></p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/AST/" rel="tag"># AST</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/06/28/AST-and-ESLint-Introduction-part-1/" rel="prev" title="淺談 AST 及 ESlint Rule：AST 是殺毀？（上）">
+                  <i class="fa fa-chevron-left"></i> 淺談 AST 及 ESlint Rule：AST 是殺毀？（上）
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chih Yang</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+<script>
+NexT.utils.loadComments('.utterances-container', () => {
+  const script = document.createElement('script');
+  script.src = 'https://utteranc.es/client.js';
+  script.setAttribute('repo', "ChihYang41/ChihYang41.github.io");
+  script.setAttribute('issue-term', "title");
+  script.setAttribute('theme', "github-light");
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+  document.querySelector('.utterances-container').appendChild(script);
+});
+</script>
+
+</body>
+</html>

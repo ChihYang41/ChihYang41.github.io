@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="pdI9OcgtLe0I27rizFD2U3s553wFM8nsth5viFyCbOk">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="前言最近要轉換跑道學習開發 React Native，學習的課程是 Kadi Kraman 的 React Native v2 ，寫這篇筆記的時候是學習 React Native 的第三天，不知不覺到了這個課程的結尾，算是窺探了 React Native 的冰山一角，基本的 Component、簡單的 Navigation、基本的 Form 都在這個課程學到了，未來應該還有超長的路要走，祝我自己一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React Native v2 - Forms">
+<meta property="og:url" content="https://chihyang41.github.io/2021/03/18/React-Native-v2-Form/index.html">
+<meta property="og:site_name" content="Chih Yang&#39;s Blog">
+<meta property="og:description" content="前言最近要轉換跑道學習開發 React Native，學習的課程是 Kadi Kraman 的 React Native v2 ，寫這篇筆記的時候是學習 React Native 的第三天，不知不覺到了這個課程的結尾，算是窺探了 React Native 的冰山一角，基本的 Component、簡單的 Navigation、基本的 Form 都在這個課程學到了，未來應該還有超長的路要走，祝我自己一">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008eGmZEly1gonzvwbi65j30nd0ewdfu.jpg">
+<meta property="og:image" content="https://kadikraman.github.io/react-native-v2/a13f62bcf5af5f4b8cbc7363faef86ce/open-modal-demo.gif">
+<meta property="og:image" content="https://kadikraman.github.io/react-native-v2/6794ed6012089fa8f378be2542cde666/forms-exercise.gif">
+<meta property="article:published_time" content="2021-03-18T15:54:36.000Z">
+<meta property="article:modified_time" content="2021-03-18T15:54:36.000Z">
+<meta property="article:author" content="Chih Yang">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="frontend master">
+<meta property="article:tag" content="React Native">
+<meta property="article:tag" content="Expo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008eGmZEly1gonzvwbi65j30nd0ewdfu.jpg">
+
+
+<link rel="canonical" href="https://chihyang41.github.io/2021/03/18/React-Native-v2-Form/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>React Native v2 - Forms | Chih Yang's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-146838618-1');
+      }
+    </script>
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+      <img class="custom-logo-image" src="/images/logo.png" alt="Chih Yang's Blog">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Chih Yang's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Overview-of-Forms-in-React-Native"><span class="nav-number">2.</span> <span class="nav-text">Overview of Forms in React Native</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TextInput"><span class="nav-number">2.1.</span> <span class="nav-text">TextInput</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Number-input"><span class="nav-number">2.2.</span> <span class="nav-text">Number input</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Password-input"><span class="nav-number">2.3.</span> <span class="nav-text">Password input</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multiline-input"><span class="nav-number">2.4.</span> <span class="nav-text">Multiline input</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%9A%A7-Picker"><span class="nav-number">2.5.</span> <span class="nav-text">🚧 Picker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">2.6.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Opening-a-full-screen-modal"><span class="nav-number">3.</span> <span class="nav-text">Opening a full screen modal</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9E%8B%E5%88%A5%E7%9A%84%E5%AE%9A%E7%BE%A9"><span class="nav-number">3.1.</span> <span class="nav-text">型別的定義</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Form-exercise-%F0%9F%93%9D"><span class="nav-number">4.</span> <span class="nav-text">Form exercise 📝</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Home-tsx-%E6%96%B0%E5%A2%9E-Button"><span class="nav-number">4.1.</span> <span class="nav-text">Home.tsx 新增 Button</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E-Modal-%E5%85%A7%E5%AE%B9%EF%BC%88Text%EF%BC%8CTextInput%E3%80%81Submit-Button%EF%BC%89"><span class="nav-number">4.2.</span> <span class="nav-text">新增 Modal 內容（Text，TextInput、Submit Button）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Modal-%E7%9A%84-handleSubmit"><span class="nav-number">4.3.</span> <span class="nav-text">Modal 的 handleSubmit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Modal-%E7%9A%84-renderToggleItem%E3%80%81handleUpdate"><span class="nav-number">4.4.</span> <span class="nav-text">Modal 的 renderToggleItem、handleUpdate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Modal-%E7%9A%84-type"><span class="nav-number">4.5.</span> <span class="nav-text">Modal 的 type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Home-%E7%9A%84-route-type-%E4%BB%A5%E5%8F%8A-route-params"><span class="nav-number">4.6.</span> <span class="nav-text">Home 的 route type 以及 route.params</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#useState-Type-%E5%B0%8F%E7%AD%86%E8%A8%98"><span class="nav-number">4.7.</span> <span class="nav-text">useState Type 小筆記</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">5.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Chih Yang</p>
+  <div class="site-description" itemprop="description">Chih Yang 的前端小天地</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ChihYang41" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ChihYang41" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/chihyang41" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;chihyang41" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/ChihYang41" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chihyang41.github.io/2021/03/18/React-Native-v2-Form/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Chih Yang">
+      <meta itemprop="description" content="Chih Yang 的前端小天地">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chih Yang's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          React Native v2 - Forms
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-03-18 23:54:36" itemprop="dateCreated datePublished" datetime="2021-03-18T23:54:36+08:00">2021-03-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近要轉換跑道學習開發 React Native，學習的課程是 Kadi Kraman 的 <a target="_blank" rel="noopener" href="https://frontendmasters.com/courses/react-native-v2/">React Native v2</a> ，寫這篇筆記的時候是學習 React Native 的第三天，不知不覺到了這個課程的結尾，算是窺探了 React Native 的冰山一角，基本的 Component、簡單的 Navigation、基本的 Form 都在這個課程學到了，未來應該還有超長的路要走，祝我自己一切順利 QQ</p>
+<p>話說，React Native 開發上我覺得算是好理解，至少 API 可以看文件，真正讓我感受痛苦的應該是 TypeScript，常常錯誤訊息看半天還是摸不著頭緒，不禁感嘆一袋米要扛幾樓，痛苦歸痛苦，最後還是完成課程惹，感人。</p>
+<p>初學 React Native，概念上應該會有不少錯誤，如果有誤的話也麻煩不吝指正，非常感謝！</p>
+<span id="more"></span>
+
+<h2 id="Overview-of-Forms-in-React-Native"><a href="#Overview-of-Forms-in-React-Native" class="headerlink" title="Overview of Forms in React Native"></a>Overview of Forms in React Native</h2><p><a target="_blank" rel="noopener" href="https://kadikraman.github.io/react-native-v2/forms">Overview of Forms in React Native</a></p>
+<p>React Native 使用表單和 web 不同的地方是不用包裹在 <code>&lt;form&gt;</code> 裡面，這章節會簡單介紹幾個 input 如何使用。</p>
+<h3 id="TextInput"><a href="#TextInput" class="headerlink" title="TextInput"></a>TextInput</h3><p><code>TextInput</code> 大概是表單中最常用到的 Component，詳細的 API 可以參考：<a target="_blank" rel="noopener" href="https://reactnative.dev/docs/textinput">TextInput</a></p>
+<p><code>TextInput </code> 基本的四個 props：</p>
+<ul>
+<li><code>style</code> - adding some padding and a border color for the input to be better visible on the screen. The Text Input has no default styles</li>
+<li><code>value</code> - the current value</li>
+<li><code>onChangeText</code> - gets called with the new value whenever the user changes the content of the input</li>
+<li><code>placeholder</code> - some placeholder text to be displayed when the input is empty</li>
+</ul>
+<p>稍微玩了一下之後，發現很多 props 都挺有趣的，是平常使用 App 不會發現，因為一切都很直覺，但開始學習開發 App 之後才會注意到的細節。</p>
+<p>舉例來說，<code>clearButtonMode=&quot;while-editing&quot;</code> 這個 props 就是有時候輸入內容旁邊會出現的小叉叉按鈕，設置 <code>while-editing</code> 就是只有編輯的時候才會出現。</p>
+<p>下面示範簡單的用法：</p>
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">TextInput</span></span>
+  <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>input<span class="token punctuation">&#125;</span></span>
+  <span class="token attr-name">value</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>textValue<span class="token punctuation">&#125;</span></span>
+  <span class="token attr-name">onChangeText</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>setTextValue<span class="token punctuation">&#125;</span></span>
+  <span class="token attr-name">placeholder</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Please input something<span class="token punctuation">"</span></span>
+<span class="token punctuation">/></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>過程中有發現幾個和 web 不同需要注意的地方：</p>
+<ol>
+<li>需要先寫好 style，不然不會顯示（Web 會有預設的樣式）</li>
+<li>Event handler 在 React 叫 <code>onChange</code>，RN 裡面叫作 <code>onChangeText</code></li>
+<li>onChange 在 React 裡面通常都是 <code>(e) =&gt; setValue(e.target.value)</code> 的寫法，不過看來 RN 裡面的第一個參數就是輸入的 value，所以可以直接把 setTextValue 放進去，不需要再另外宣告 callback</li>
+</ol>
+<h3 id="Number-input"><a href="#Number-input" class="headerlink" title="Number input"></a>Number input</h3><p>透過 <code>keyboardType</code> ，設置為 <code>numeric</code> 就可以在 focus 輸入框的時候，讓跳出的鍵盤變成輸入數字的鍵盤，對於 UX 來說是一個好 props。</p>
+<p>這邊是兩個平台都可以使用的 value：</p>
+<ul>
+<li>default</li>
+<li>number-pad</li>
+<li>decimal-pad</li>
+<li>numeric</li>
+<li>email-address</li>
+<li>phone-pad</li>
+</ul>
+<h3 id="Password-input"><a href="#Password-input" class="headerlink" title="Password input"></a>Password input</h3><p>透過設置 <code>secureTextEntry</code> 這個 props 就可以讓輸入變成 mask 過後的內容，場景適用於輸入密碼時。</p>
+<h3 id="Multiline-input"><a href="#Multiline-input" class="headerlink" title="Multiline input"></a>Multiline input</h3><p>如果需要有多行的輸入，設置 <code>multiline=&#123;true&#125;</code> 可以達到這個效果；如果要限制行數的話，可以使用 <code>numberOfLines</code></p>
+<h3 id="🚧-Picker"><a href="#🚧-Picker" class="headerlink" title="🚧 Picker"></a>🚧 Picker</h3><p><a target="_blank" rel="noopener" href="https://reactnative.dev/docs/picker">Picker</a></p>
+<p>注意！文件裡面寫到：</p>
+<blockquote>
+<p><strong>Deprecated.</strong> Use one of the <a target="_blank" rel="noopener" href="https://reactnative.directory/?search=picker">community packages</a> instead.</p>
+</blockquote>
+<p>已經棄用了，所以可以改成在 <a target="_blank" rel="noopener" href="https://reactnative.directory/">React Native Directory</a> 去尋找適用的 picker。</p>
+<p>iOS 和 Android 的預設樣式不同，iOS 是一個滾輪，滑動的時候會有反饋；Android 則是一個 Modal。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>其他還有很多 components 可以使用，Kadi 建議我們去 <a target="_blank" rel="noopener" href="https://github.com/react-native-community">React Native Community</a> 和 <a target="_blank" rel="noopener" href="https://reactnative.directory/">React Native Directory</a> 找適合的 library，他說通常除了看 star 以外，他也會注意 fork 的數量，因為這一定程度代表這個套件的熱門程度，還有 commit 時間也值得注意，因為這代表有沒有在維護。</p>
+<p>這邊我會推薦使用 <a target="_blank" rel="noopener" href="https://openbase.com/">openbase</a> 來做搜尋，library 的各種資訊在這裡都一目瞭然。</p>
+<h2 id="Opening-a-full-screen-modal"><a href="#Opening-a-full-screen-modal" class="headerlink" title="Opening a full screen modal"></a>Opening a full screen modal</h2><p><a target="_blank" rel="noopener" href="https://kadikraman.github.io/react-native-v2/modals">Opening a full screen modal</a></p>
+<p>這章節的可以參考官方文件的 <a target="_blank" rel="noopener" href="https://reactnavigation.org/docs/modal/">Opening a full-screen modal</a>，以及 React Navigation 的 <a target="_blank" rel="noopener" href="https://reactnavigation.org/docs/typescript/#combining-navigation-props">Combining navigation props</a>。</p>
+<p>首先這是我們預計要有的 Navigation Stack 樹狀圖：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008eGmZEly1gonzvwbi65j30nd0ewdfu.jpg" alt="stack"></p>
+<p>也就是說，原本的 Stack 變為 <code>MainStack</code>，<code>MainStack</code> 負責導航到 <code>HomeScreen</code> 和 <code>ColorPalette</code> 兩個 Screen；更上層的 <code>RootStack</code> 則是負責 <code>MainStack</code> 的導航以及 <code>ModalScreen</code> 。</p>
+<p>首先我們先來新增 ModalScreen，我們來去 <code>screen</code> 建立<code>ColorPaletteModal.tsx</code>：</p>
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> View<span class="token punctuation">,</span> Text <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'react-native'</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">function</span> <span class="token function">ColorPaletteModal</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">View</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Text</span></span><span class="token punctuation">></span></span><span class="token plain-text">Hello Color Palette Modal</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">Text</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">View</span></span><span class="token punctuation">></span></span>
+  <span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接下來到達我們的重頭戲，<code>App.tsx</code>，首先除了原本的 Stack 改為 RootStack 以外，也要新增 MainStack：</p>
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token keyword">export</span> <span class="token keyword">type</span> <span class="token class-name">RootStackParamList</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  Main<span class="token operator">:</span> <span class="token keyword">undefined</span>
+  ColorPaletteModal<span class="token operator">:</span> <span class="token keyword">undefined</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">type</span> <span class="token class-name">MainStackParamList</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  Home<span class="token operator">:</span> <span class="token keyword">undefined</span>
+  ColorPalette<span class="token operator">:</span> TPalette
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> RootStack <span class="token operator">=</span> <span class="token generic-function"><span class="token function">createStackNavigator</span><span class="token generic class-name"><span class="token operator">&lt;</span>RootStackParamList<span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> MainStack <span class="token operator">=</span> <span class="token generic-function"><span class="token function">createStackNavigator</span><span class="token generic class-name"><span class="token operator">&lt;</span>MainStackParamList<span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>也別忘記兩個 Stack 型別的定義也不一樣，接著我們來新增 <code>MainStackScreen</code> ，這個 component 就是原本的 Stack：</p>
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token keyword">const</span> <span class="token function-variable function">MainStackScreen</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">MainStack.Navigator</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">MainStack.Screen</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Home<span class="token punctuation">"</span></span> <span class="token attr-name">component</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>Home<span class="token punctuation">&#125;</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">MainStack.Screen</span></span>
+        <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ColorPalette<span class="token punctuation">"</span></span>
+        <span class="token attr-name">component</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>ColorPalette<span class="token punctuation">&#125;</span></span>
+        <span class="token attr-name">options</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> route <span class="token punctuation">&#125;</span></span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">(</span><span class="token punctuation">&#123;</span> title<span class="token operator">:</span> route<span class="token punctuation">.</span>params<span class="token punctuation">.</span>paletteName <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span>
+      <span class="token punctuation">/></span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">MainStack.Navigator</span></span><span class="token punctuation">></span></span>
+  <span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>最後，把原本的 <code>App.tsx</code>的 stack 改為 <code>RootStack</code>，並且顯示 <code>MainStack</code> 以及 <code>ModalScreen</code>：</p>
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token keyword">const</span> <span class="token function-variable function">App</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">NavigationContainer</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">RootStack.Navigator</span></span> <span class="token attr-name">mode</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>modal<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">RootStack.Screen</span></span>
+          <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Main<span class="token punctuation">"</span></span>
+          <span class="token attr-name">component</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>MainStackScreen<span class="token punctuation">&#125;</span></span>
+          <span class="token attr-name">options</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#123;</span> headerShown<span class="token operator">:</span> <span class="token boolean">false</span> <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span></span>
+        <span class="token punctuation">/></span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">RootStack.Screen</span></span>
+          <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ColorPaletteModal<span class="token punctuation">"</span></span>
+          <span class="token attr-name">component</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>ColorPaletteModal<span class="token punctuation">&#125;</span></span>
+        <span class="token punctuation">/></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">RootStack.Navigator</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">NavigationContainer</span></span><span class="token punctuation">></span></span>
+  <span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>可以特別注意的是 &lt;<code>RootStack.Navigator&gt;</code> 設置了 <code>mode=&quot;modal&quot;</code>，這樣我們導航到其他 Screen 的畫面的行為才會是跳出 Modal。</p>
+<p>接著我們到 <code>Home.tsx</code> 試著新增一個 Button，然後可以點擊 Button 跳出 <code>ColorPaletteModal</code> 吧！</p>
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token comment">// Home.tsx</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> FlatList<span class="token punctuation">,</span> StyleSheet<span class="token punctuation">,</span> SafeAreaView<span class="token punctuation">,</span> Button <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'react-native'</span>
+
+<span class="token comment">/* 中間省略 */</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">Home</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">FlatList</span></span>
+      <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>container<span class="token punctuation">&#125;</span></span>
+      <span class="token attr-name">data</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>colorPalettes<span class="token punctuation">&#125;</span></span>
+      <span class="token attr-name">renderItem</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>renderPalettePreview<span class="token punctuation">&#125;</span></span>
+      <span class="token attr-name">keyExtractor</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token punctuation">(</span><span class="token parameter">item</span><span class="token punctuation">)</span> <span class="token operator">=></span> item<span class="token punctuation">.</span>paletteName<span class="token punctuation">&#125;</span></span>
+      <span class="token attr-name">ListHeaderComponent</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">(</span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Button</span></span>
+          <span class="token attr-name">title</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Press me<span class="token punctuation">"</span></span>
+          <span class="token attr-name">color</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#f194ff<span class="token punctuation">"</span></span>
+          <span class="token attr-name">onPress</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> navigation<span class="token punctuation">.</span><span class="token function">navigate</span><span class="token punctuation">(</span><span class="token string">'ColorPaletteModal'</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span>
+        <span class="token punctuation">/></span></span>
+      <span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span>
+      <span class="token attr-name">refreshing</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>isRefreshing<span class="token punctuation">&#125;</span></span>
+      <span class="token attr-name">onRefresh</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>handleRefresh<span class="token punctuation">&#125;</span></span>
+    <span class="token punctuation">/></span></span>
+  <span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>完成這邊的事情以後，彈窗的功能就順利完成！不過寫 TS 的時候會發現一件事情，那就是 <code>Button</code> 的 <code>onPress=&#123;() =&gt; navigation.navigate(&#39;ColorPaletteModal&#39;)&#125;</code> 這行會出現 TS 的紅字錯誤，這是型別上出了什麼問題？讓我們移動到下一章節。</p>
+<h3 id="型別的定義"><a href="#型別的定義" class="headerlink" title="型別的定義"></a>型別的定義</h3><p>在這邊我卡了蠻久，不知道型別哪裡出了問題，到處找資料後發現 stackover flow 的這篇：</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/59816529/how-to-write-type-definitions-while-using-nested-navigation-in-react-navigation">How to write type definitions while using nested navigation in react-navigation v5</a></p>
+<p>這邊提及 React Navigation 的官方文件： <a target="_blank" rel="noopener" href="https://reactnavigation.org/docs/typescript/#combining-navigation-props">Combining navigation props</a>，直到這裡我才真正搞定型別，我們來看一下經過 Nested 的 Stack 後型別如何定義吧。</p>
+<p>首先回到 <code>App.tsx</code>，我們要新增一個叫做 <code>MainNavigationProp</code> 的 type：</p>
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token keyword">export</span> <span class="token keyword">type</span> <span class="token class-name">MainNavigationProp</span> <span class="token operator">=</span> CompositeNavigationProp<span class="token operator">&lt;</span>
+  StackNavigationProp<span class="token operator">&lt;</span>MainStackParamList<span class="token punctuation">,</span> <span class="token string">'Home'</span><span class="token operator">></span><span class="token punctuation">,</span>
+  StackNavigationProp<span class="token operator">&lt;</span>RootStackParamList<span class="token operator">></span>
+<span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>When you nest navigators, the navigation prop of the screen is a combination of multiple navigation props. For example, if we have a tab inside a stack, the <code>navigation</code> prop will have both <code>jumpTo</code> (from the tab navigator) and <code>push</code> (from the stack navigator). To make it easier to combine types from multiple navigator, you can use the <code>CompositeNavigationProp</code> type</p>
+</blockquote>
+<p>按照官方文件的解釋，應該是因為 nest navigators 會讓你的 prop 是多個 navigation props 的結合，因此需要再透過 CompositeNavigationProp 來把 props 的 type 結合。</p>
+<p>接著回到 <code>Home.tsx</code> ，需要把 <code>HomeScreenNavigationProp</code> 的 type 改成這樣：</p>
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token keyword">type</span> <span class="token class-name">HomeScreenNavigationProp</span> <span class="token operator">=</span> CompositeNavigationProp<span class="token operator">&lt;</span>
+  StackNavigationProp<span class="token operator">&lt;</span>MainStackParamList<span class="token punctuation">,</span> <span class="token string">'Home'</span><span class="token operator">></span><span class="token punctuation">,</span>
+  MainNavigationProp
+<span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>除了原本的 <code>StackNavigationProp</code> 以外，也要 combine <code>MainNavigationProp</code>。</p>
+<p>這樣子就可以順利解決了！依然是感謝 React Navigation 的官方文件寫的很詳細。</p>
+<p>這時候我們點擊 <code>Button</code> 並跳出彈窗的行為大概會像是這樣：</p>
+<p><img data-src="https://kadikraman.github.io/react-native-v2/a13f62bcf5af5f4b8cbc7363faef86ce/open-modal-demo.gif"></p>
+<h2 id="Form-exercise-📝"><a href="#Form-exercise-📝" class="headerlink" title="Form exercise 📝"></a>Form exercise 📝</h2><p>這章節的筆記會比較簡略，因為累惹，想要簡單記錄就好，簡單來說大概會做幾件事情：</p>
+<ol>
+<li>調整 Home 的「Add a Color scheme」</li>
+<li>新增 Modal 內容（Text，TextInput、Submit Button）</li>
+<li>新增 Modal 的 <code>handleSubmit</code> 功能</li>
+<li>新增 Modal 的 <code>renderToggleItem</code> 、<code>handleUpdate </code>功能</li>
+<li>處理 Modal 的 type</li>
+<li>處理 Home route 的 type 以及 route.params</li>
+</ol>
+<p>這是預計要實踐的畫面和功能：</p>
+<p><img data-src="https://kadikraman.github.io/react-native-v2/6794ed6012089fa8f378be2542cde666/forms-exercise.gif"></p>
+<h3 id="Home-tsx-新增-Button"><a href="#Home-tsx-新增-Button" class="headerlink" title="Home.tsx 新增 Button"></a>Home.tsx 新增 Button</h3><p>首先我們要做的是到 Home.tsx 新增 「Add a Color scheme」的 button：</p>
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token punctuation">;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">FlatList</span></span>
+  <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>container<span class="token punctuation">&#125;</span></span>
+  <span class="token attr-name">data</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>colorPalettes<span class="token punctuation">&#125;</span></span>
+  <span class="token attr-name">renderItem</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>renderPalettePreview<span class="token punctuation">&#125;</span></span>
+  <span class="token attr-name">keyExtractor</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token punctuation">(</span><span class="token parameter">item</span><span class="token punctuation">)</span> <span class="token operator">=></span> item<span class="token punctuation">.</span>paletteName<span class="token punctuation">&#125;</span></span>
+  <span class="token attr-name">ListHeaderComponent</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">TouchableOpacity</span></span> <span class="token attr-name">onPress</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>handleOpenModal<span class="token punctuation">&#125;</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Text</span></span> <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>buttonText<span class="token punctuation">&#125;</span></span><span class="token punctuation">></span></span><span class="token plain-text">Add a color scheme</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">Text</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">TouchableOpacity</span></span><span class="token punctuation">></span></span>
+  <span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span>
+  <span class="token attr-name">refreshing</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>isRefreshing<span class="token punctuation">&#125;</span></span>
+  <span class="token attr-name">onRefresh</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>handleRefresh<span class="token punctuation">&#125;</span></span>
+<span class="token punctuation">/></span></span>
+
+<span class="token keyword">const</span> styles <span class="token operator">=</span> StyleSheet<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+  container<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    padding<span class="token operator">:</span> <span class="token number">10</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  buttonText<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    fontSize<span class="token operator">:</span> <span class="token number">18</span><span class="token punctuation">,</span>
+    fontWeight<span class="token operator">:</span> <span class="token string">'bold'</span><span class="token punctuation">,</span>
+    color<span class="token operator">:</span> <span class="token string">'#00A0B0'</span><span class="token punctuation">,</span>
+    marginVertical<span class="token operator">:</span> <span class="token number">15</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="新增-Modal-內容（Text，TextInput、Submit-Button）"><a href="#新增-Modal-內容（Text，TextInput、Submit-Button）" class="headerlink" title="新增 Modal 內容（Text，TextInput、Submit Button）"></a>新增 Modal 內容（Text，TextInput、Submit Button）</h3><p>接下來就是重頭戲啦，來著手進行 Modal 裡面的功能實踐，首先來切個版，我們會發現畫面大概分成幾個區塊：</p>
+<ol>
+<li>第一是「Name of your color palette」的 <code>Text</code></li>
+<li>第二是輸入 palette name 的 <code>TextInput</code></li>
+<li>第三是數個 <code>Text</code> + <code>Switch</code> 的顏色選項，會使用 <code>FlatList</code>，一個一個的選項則是用 renderItem 來細調。</li>
+<li>第四是 Submit 的 Button</li>
+</ol>
+<p>事不宜遲馬上就來切版，首先是 <code>Text</code>、<code>TextInput</code> 和 <code>FlatList</code>和 Submit Button：</p>
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">function</span> <span class="token function">ColorPaletteModal</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> navigation <span class="token punctuation">&#125;</span><span class="token operator">:</span> TProps</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">/* 中間省略 */</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">SafeAreaView</span></span> <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>container<span class="token punctuation">&#125;</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Text</span></span><span class="token punctuation">></span></span><span class="token plain-text">Name of your color palette</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">Text</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">TextInput</span></span>
+        <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>textInput<span class="token punctuation">&#125;</span></span>
+        <span class="token attr-name">value</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>name<span class="token punctuation">&#125;</span></span>
+        <span class="token attr-name">onChangeText</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>setName<span class="token punctuation">&#125;</span></span>
+        <span class="token attr-name">placeholder</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Please input palette name<span class="token punctuation">"</span></span>
+      <span class="token punctuation">/></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">FlatList</span></span>
+        <span class="token attr-name">data</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token constant">COLORS</span><span class="token punctuation">&#125;</span></span>
+        <span class="token attr-name">renderItem</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>renderColorToggle<span class="token punctuation">&#125;</span></span>
+        <span class="token attr-name">keyExtractor</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token punctuation">(</span><span class="token parameter">item</span><span class="token punctuation">)</span> <span class="token operator">=></span> item<span class="token punctuation">.</span>colorName<span class="token punctuation">&#125;</span></span>
+      <span class="token punctuation">/></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">TouchableOpacity</span></span> <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>button<span class="token punctuation">&#125;</span></span> <span class="token attr-name">onPress</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>handleSubmit<span class="token punctuation">&#125;</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Text</span></span> <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>buttonText<span class="token punctuation">&#125;</span></span><span class="token punctuation">></span></span><span class="token plain-text">Submit</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">Text</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">TouchableOpacity</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">SafeAreaView</span></span><span class="token punctuation">></span></span>
+  <span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> styles <span class="token operator">=</span> StyleSheet<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+  container<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    margin<span class="token operator">:</span> <span class="token number">15</span><span class="token punctuation">,</span>
+    flex<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  toggleContainer<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    flex<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+    flexDirection<span class="token operator">:</span> <span class="token string">'row'</span><span class="token punctuation">,</span>
+    alignItems<span class="token operator">:</span> <span class="token string">'center'</span><span class="token punctuation">,</span>
+    justifyContent<span class="token operator">:</span> <span class="token string">'space-between'</span><span class="token punctuation">,</span>
+    padding<span class="token operator">:</span> <span class="token number">10</span><span class="token punctuation">,</span>
+    borderBottomWidth<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  textInput<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    height<span class="token operator">:</span> <span class="token number">45</span><span class="token punctuation">,</span>
+    padding<span class="token operator">:</span> <span class="token number">10</span><span class="token punctuation">,</span>
+    borderRadius<span class="token operator">:</span> <span class="token number">5</span><span class="token punctuation">,</span>
+    borderWidth<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+    marginVertical<span class="token operator">:</span> <span class="token number">12</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  button<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    height<span class="token operator">:</span> <span class="token number">50</span><span class="token punctuation">,</span>
+    paddingVertical<span class="token operator">:</span> <span class="token number">5</span><span class="token punctuation">,</span>
+    paddingHorizontal<span class="token operator">:</span> <span class="token number">10</span><span class="token punctuation">,</span>
+    backgroundColor<span class="token operator">:</span> <span class="token string">'#53777A'</span><span class="token punctuation">,</span>
+    borderRadius<span class="token operator">:</span> <span class="token number">5</span><span class="token punctuation">,</span>
+    alignItems<span class="token operator">:</span> <span class="token string">'center'</span><span class="token punctuation">,</span>
+    justifyContent<span class="token operator">:</span> <span class="token string">'center'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  buttonText<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    fontSize<span class="token operator">:</span> <span class="token number">18</span><span class="token punctuation">,</span>
+    fontWeight<span class="token operator">:</span> <span class="token string">'bold'</span><span class="token punctuation">,</span>
+    color<span class="token operator">:</span> <span class="token string">'white'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接下來輪到 <code>renderItem</code> 裡面的 <code>renderColorToggle</code> ：</p>
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token keyword">const</span> <span class="token function-variable function">renderColorToggle</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> item <span class="token punctuation">&#125;</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> item<span class="token operator">:</span> TColor<span class="token punctuation">;</span> index<span class="token operator">:</span> number <span class="token punctuation">&#125;</span></span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">View</span></span> <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>toggleContainer<span class="token punctuation">&#125;</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Text</span></span><span class="token punctuation">></span></span><span class="token punctuation">&#123;</span>item<span class="token punctuation">.</span>colorName<span class="token punctuation">&#125;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">Text</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Switch</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">View</span></span><span class="token punctuation">></span></span>
+  <span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>到這邊我們的切版大致上就完成惹。</p>
+<h3 id="Modal-的-handleSubmit"><a href="#Modal-的-handleSubmit" class="headerlink" title="Modal 的 handleSubmit"></a>Modal 的 <code>handleSubmit</code></h3><p>接下來輪到 handleSubmit 的回合：</p>
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">function</span> <span class="token function">ColorPaletteModal</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> navigation <span class="token punctuation">&#125;</span><span class="token operator">:</span> TProps</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>selectedColors<span class="token punctuation">,</span> setSelectedColors<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token generic-function"><span class="token function">useState</span><span class="token generic class-name"><span class="token operator">&lt;</span>TColor<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>name<span class="token punctuation">,</span> setName<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">useState</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">const</span> <span class="token function-variable function">handleSubmit</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>name<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      Alert<span class="token punctuation">.</span><span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">'Please input palette name'</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>selectedColors<span class="token punctuation">.</span>length <span class="token operator">&lt;</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      Alert<span class="token punctuation">.</span><span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">'Please pick at lease 3 colors'</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">const</span> newPalette <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+        paletteName<span class="token operator">:</span> name<span class="token punctuation">,</span>
+        colors<span class="token operator">:</span> selectedColors<span class="token punctuation">,</span>
+      <span class="token punctuation">&#125;</span>
+
+      navigation<span class="token punctuation">.</span><span class="token function">navigate</span><span class="token punctuation">(</span><span class="token string">'Home'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> newPalette <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token comment">/* 省略 */</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">SafeAreaView</span></span> <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>container<span class="token punctuation">&#125;</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Text</span></span><span class="token punctuation">></span></span><span class="token plain-text">Name of your color palette</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">Text</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">TextInput</span></span>
+        <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>textInput<span class="token punctuation">&#125;</span></span>
+        <span class="token attr-name">value</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>name<span class="token punctuation">&#125;</span></span>
+        <span class="token attr-name">onChangeText</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>setName<span class="token punctuation">&#125;</span></span>
+        <span class="token attr-name">placeholder</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Please input palette name<span class="token punctuation">"</span></span>
+      <span class="token punctuation">/></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">FlatList</span></span>
+        <span class="token attr-name">data</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token constant">COLORS</span><span class="token punctuation">&#125;</span></span>
+        <span class="token attr-name">renderItem</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>renderColorToggle<span class="token punctuation">&#125;</span></span>
+        <span class="token attr-name">keyExtractor</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token punctuation">(</span><span class="token parameter">item</span><span class="token punctuation">)</span> <span class="token operator">=></span> item<span class="token punctuation">.</span>colorName<span class="token punctuation">&#125;</span></span>
+      <span class="token punctuation">/></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">TouchableOpacity</span></span> <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>button<span class="token punctuation">&#125;</span></span> <span class="token attr-name">onPress</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>handleSubmit<span class="token punctuation">&#125;</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+        </span><span class="token punctuation">&#123;</span><span class="token string">' '</span><span class="token punctuation">&#125;</span><span class="token plain-text">
+        // 新增 Submit
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Text</span></span> <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>buttonText<span class="token punctuation">&#125;</span></span><span class="token punctuation">></span></span><span class="token plain-text">Submit</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">Text</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">TouchableOpacity</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">SafeAreaView</span></span><span class="token punctuation">></span></span>
+  <span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>這邊的邏輯就是如果「沒有輸入 name」或是「選擇的顏色數量少於 3」就會跳出 alert，不然就會把新增的 <code>newPalette</code> 當作 params 傳到 <code>Home</code> Screen，並且導航到 <code>Home</code>。</p>
+<h3 id="Modal-的-renderToggleItem、handleUpdate"><a href="#Modal-的-renderToggleItem、handleUpdate" class="headerlink" title="Modal 的 renderToggleItem、handleUpdate"></a>Modal 的 <code>renderToggleItem</code>、<code>handleUpdate</code></h3><p>接下來輪到 <code>renderToggleItem</code> 和 <code>handleUpdate</code> 了：</p>
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">function</span> <span class="token function">ColorPaletteModal</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> navigation <span class="token punctuation">&#125;</span><span class="token operator">:</span> TProps</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>selectedColors<span class="token punctuation">,</span> setSelectedColors<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token generic-function"><span class="token function">useState</span><span class="token generic class-name"><span class="token operator">&lt;</span>TColor<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>name<span class="token punctuation">,</span> setName<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">useState</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">)</span>
+  <span class="token comment">/* 
+    這邊的邏輯是如果 value 為 true，代表從 false 變 true，代表要 push 新的 color 到 
+    array 裡面；
+    但如果是 false，那代表原本是 true，也就是從選擇到取消，那就要從現有的 colors 裡面
+    filter 掉。
+	*/</span>
+  <span class="token keyword">const</span> <span class="token function-variable function">handleUpdate</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">value<span class="token operator">:</span> boolean<span class="token punctuation">,</span> color<span class="token operator">:</span> TColor</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>value<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token function">setSelectedColors</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">currentColors</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">[</span><span class="token operator">...</span>currentColors<span class="token punctuation">,</span> color<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+      <span class="token function">setSelectedColors</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">currentColors</span><span class="token punctuation">)</span> <span class="token operator">=></span>
+        currentColors<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">c</span><span class="token punctuation">)</span> <span class="token operator">=></span> c<span class="token punctuation">.</span>colorName <span class="token operator">!==</span> color<span class="token punctuation">.</span>colorName<span class="token punctuation">)</span>
+      <span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token keyword">const</span> <span class="token function-variable function">handleSubmit</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>name<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      Alert<span class="token punctuation">.</span><span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">'Please input palette name'</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>selectedColors<span class="token punctuation">.</span>length <span class="token operator">&lt;</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      Alert<span class="token punctuation">.</span><span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">'Please pick at lease 3 colors'</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">const</span> newPalette <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+        paletteName<span class="token operator">:</span> name<span class="token punctuation">,</span>
+        colors<span class="token operator">:</span> selectedColors<span class="token punctuation">,</span>
+      <span class="token punctuation">&#125;</span>
+
+      navigation<span class="token punctuation">.</span><span class="token function">navigate</span><span class="token punctuation">(</span><span class="token string">'Home'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> newPalette <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token comment">/* 
+		這邊就是尋找目前 item 的 colorName 有沒有在 state 的 colors 裡。有的話就是已選擇的，		  		value 必須是 true，沒有的話就是 false。
+	*/</span>
+  <span class="token keyword">const</span> <span class="token function-variable function">renderColorToggle</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> item <span class="token punctuation">&#125;</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> item<span class="token operator">:</span> TColor<span class="token punctuation">;</span> index<span class="token operator">:</span> number <span class="token punctuation">&#125;</span></span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> isActive<span class="token operator">:</span> <span class="token builtin">boolean</span> <span class="token operator">=</span> <span class="token operator">!</span><span class="token operator">!</span>selectedColors<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span>
+      <span class="token punctuation">(</span><span class="token parameter">color<span class="token operator">:</span> TColor</span><span class="token punctuation">)</span> <span class="token operator">=></span> color<span class="token punctuation">.</span>colorName <span class="token operator">===</span> item<span class="token punctuation">.</span>colorName
+    <span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">View</span></span> <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>toggleContainer<span class="token punctuation">&#125;</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Text</span></span><span class="token punctuation">></span></span><span class="token punctuation">&#123;</span>item<span class="token punctuation">.</span>colorName<span class="token punctuation">&#125;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">Text</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Switch</span></span>
+          <span class="token attr-name">trackColor</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#123;</span> <span class="token boolean">false</span><span class="token operator">:</span> <span class="token string">'#767577'</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token operator">:</span> <span class="token string">'#81b0ff'</span> <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span></span>
+          <span class="token attr-name">thumbColor</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>isActive <span class="token operator">?</span> <span class="token string">'#f5dd4b'</span> <span class="token operator">:</span> <span class="token string">'#f4f3f4'</span><span class="token punctuation">&#125;</span></span>
+          <span class="token attr-name">ios_backgroundColor</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#3e3e3e<span class="token punctuation">"</span></span>
+          <span class="token attr-name">onValueChange</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token punctuation">(</span><span class="token parameter">value</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token function">handleUpdate</span><span class="token punctuation">(</span>value<span class="token punctuation">,</span> item<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span>
+          <span class="token attr-name">value</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>isActive<span class="token punctuation">&#125;</span></span>
+        <span class="token punctuation">/></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">View</span></span><span class="token punctuation">></span></span>
+    <span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">SafeAreaView</span></span> <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>container<span class="token punctuation">&#125;</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Text</span></span><span class="token punctuation">></span></span><span class="token plain-text">Name of your color palette</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">Text</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">TextInput</span></span>
+        <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>textInput<span class="token punctuation">&#125;</span></span>
+        <span class="token attr-name">value</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>name<span class="token punctuation">&#125;</span></span>
+        <span class="token attr-name">onChangeText</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>setName<span class="token punctuation">&#125;</span></span>
+        <span class="token attr-name">placeholder</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Please input palette name<span class="token punctuation">"</span></span>
+      <span class="token punctuation">/></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">FlatList</span></span>
+        <span class="token attr-name">data</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token constant">COLORS</span><span class="token punctuation">&#125;</span></span>
+        <span class="token attr-name">renderItem</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>renderColorToggle<span class="token punctuation">&#125;</span></span>
+        <span class="token attr-name">keyExtractor</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token punctuation">(</span><span class="token parameter">item</span><span class="token punctuation">)</span> <span class="token operator">=></span> item<span class="token punctuation">.</span>colorName<span class="token punctuation">&#125;</span></span>
+      <span class="token punctuation">/></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">TouchableOpacity</span></span> <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>button<span class="token punctuation">&#125;</span></span> <span class="token attr-name">onPress</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>handleSubmit<span class="token punctuation">&#125;</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Text</span></span> <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>buttonText<span class="token punctuation">&#125;</span></span><span class="token punctuation">></span></span><span class="token plain-text">Submit</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">Text</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">TouchableOpacity</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">SafeAreaView</span></span><span class="token punctuation">></span></span>
+  <span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="Modal-的-type"><a href="#Modal-的-type" class="headerlink" title="Modal 的 type"></a>Modal 的 type</h3><p>因為我們的 Modal 要使用 <code>navigate</code> 這個 props 的緣故，所以必須定義它的型別：</p>
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> CompositeNavigationProp <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@react-navigation/native'</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> StackNavigationProp <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@react-navigation/stack'</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> RootStackParamList<span class="token punctuation">,</span> MainNavigationProp <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'../App'</span>
+
+<span class="token keyword">type</span> <span class="token class-name">ModalScreenNavigationProp</span> <span class="token operator">=</span> CompositeNavigationProp<span class="token operator">&lt;</span>
+  StackNavigationProp<span class="token operator">&lt;</span>RootStackParamList<span class="token punctuation">,</span> <span class="token string">'ColorPaletteModal'</span><span class="token operator">></span><span class="token punctuation">,</span>
+  MainNavigationProp
+<span class="token operator">></span>
+
+<span class="token keyword">type</span> <span class="token class-name">TProps</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  navigation<span class="token operator">:</span> ModalScreenNavigationProp
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="Home-的-route-type-以及-route-params"><a href="#Home-的-route-type-以及-route-params" class="headerlink" title="Home 的 route type 以及 route.params"></a>Home 的 route type 以及 route.params</h3><p>從 Modal 傳遞 <code>newPalette</code> 到 Home 以後，Home 就要來接住這個 <code>newPalette</code> 了，並且新增到目前的 <code>COLOR_PALETTES</code> 裡面了對吧！</p>
+<p>首先我們到 <code>App.tsx</code>，原因是要先定義 Home 的 <code>route.params</code> 的 type：</p>
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token comment">// App.tsx</span>
+
+<span class="token comment">// 定義 Home 的 params</span>
+<span class="token keyword">type</span> <span class="token class-name">HomeParams</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  newPalette<span class="token operator">:</span> TPalette
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 修改原本的 MainStackParamList</span>
+<span class="token keyword">export</span> <span class="token keyword">type</span> <span class="token class-name">MainStackParamList</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  Home<span class="token operator">:</span> HomeParams
+  ColorPalette<span class="token operator">:</span> TPalette
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>其他依舊。</p>
+<p>接下來回到 <code>Home</code>，因為我們現在又多了一個 <code>route</code> 的 props，所以依舊是要處理 <code>route</code> 的型別：</p>
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token comment">// Home.tsx</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> CompositeNavigationProp<span class="token punctuation">,</span> RouteProp <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@react-navigation/native'</span>
+
+<span class="token keyword">type</span> <span class="token class-name">HomeScreenNavigationProp</span> <span class="token operator">=</span> CompositeNavigationProp<span class="token operator">&lt;</span>
+  StackNavigationProp<span class="token operator">&lt;</span>MainStackParamList<span class="token punctuation">,</span> <span class="token string">'Home'</span><span class="token operator">></span><span class="token punctuation">,</span>
+  MainNavigationProp
+<span class="token operator">></span>
+
+<span class="token keyword">type</span> <span class="token class-name">HomeScreenRouteProps</span> <span class="token operator">=</span> RouteProp<span class="token operator">&lt;</span>MainStackParamList<span class="token punctuation">,</span> <span class="token string">'Home'</span><span class="token operator">></span>
+
+<span class="token keyword">type</span> <span class="token class-name">TProps</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  route<span class="token operator">:</span> HomeScreenRouteProps
+  navigation<span class="token operator">:</span> HomeScreenNavigationProp
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接著就可以快樂使用 <code>route.params</code> 了！我們在 Home Component 裡面新增這行：</p>
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token keyword">const</span> newPalette<span class="token operator">:</span> TPalette <span class="token operator">|</span> <span class="token keyword">undefined</span> <span class="token operator">=</span> route<span class="token operator">?.</span>params<span class="token operator">?.</span>newPalette<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>接著新增一個 <code>useEffect</code>：</p>
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token function">useEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>newPalette<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">setColorPalettes</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">current</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">[</span>newPalette<span class="token punctuation">,</span> <span class="token operator">...</span>current<span class="token punctuation">]</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>newPalette<span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>意思是當 newPalette 有變化且有值的時候，就更新 colorPalettes 的值。</p>
+<p>完整的 <code>Home.tsx</code> 的 code：</p>
+<pre class="line-numbers language-tsx" data-language="tsx"><code class="language-tsx"><span class="token keyword">import</span> React<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> useState<span class="token punctuation">,</span> useEffect<span class="token punctuation">,</span> useCallback <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'react'</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> FlatList<span class="token punctuation">,</span> StyleSheet<span class="token punctuation">,</span> TouchableOpacity<span class="token punctuation">,</span> Text <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'react-native'</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> StackNavigationProp <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@react-navigation/stack'</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> CompositeNavigationProp<span class="token punctuation">,</span> RouteProp <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@react-navigation/native'</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> MainStackParamList<span class="token punctuation">,</span> MainNavigationProp <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'../App'</span>
+<span class="token keyword">import</span> PalettePreview <span class="token keyword">from</span> <span class="token string">'../components/PalettePreview'</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> TPalette <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'../utils/colors'</span>
+
+<span class="token keyword">type</span> <span class="token class-name">HomeScreenNavigationProp</span> <span class="token operator">=</span> CompositeNavigationProp<span class="token operator">&lt;</span>
+  StackNavigationProp<span class="token operator">&lt;</span>MainStackParamList<span class="token punctuation">,</span> <span class="token string">'Home'</span><span class="token operator">></span><span class="token punctuation">,</span>
+  MainNavigationProp
+<span class="token operator">></span>
+
+<span class="token keyword">type</span> <span class="token class-name">HomeScreenRouteProps</span> <span class="token operator">=</span> RouteProp<span class="token operator">&lt;</span>MainStackParamList<span class="token punctuation">,</span> <span class="token string">'Home'</span><span class="token operator">></span>
+
+<span class="token keyword">type</span> <span class="token class-name">TProps</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  route<span class="token operator">:</span> HomeScreenRouteProps
+  navigation<span class="token operator">:</span> HomeScreenNavigationProp
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token keyword">function</span> <span class="token function">Home</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> navigation<span class="token punctuation">,</span> route <span class="token punctuation">&#125;</span><span class="token operator">:</span> TProps</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>colorPalettes<span class="token punctuation">,</span> setColorPalettes<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token generic-function"><span class="token function">useState</span><span class="token generic class-name"><span class="token operator">&lt;</span>TPalette<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>isRefreshing<span class="token punctuation">,</span> setIsRefreshing<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">useState</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span>
+  <span class="token keyword">const</span> newPalette<span class="token operator">:</span> TPalette <span class="token operator">|</span> <span class="token keyword">undefined</span> <span class="token operator">=</span> route<span class="token operator">?.</span>params<span class="token operator">?.</span>newPalette
+
+  <span class="token keyword">const</span> fetchColorPalettes <span class="token operator">=</span> <span class="token function">useCallback</span><span class="token punctuation">(</span><span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetch</span><span class="token punctuation">(</span>
+      <span class="token string">'https://color-palette-api.kadikraman.now.sh/palettes'</span>
+    <span class="token punctuation">)</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>result<span class="token punctuation">.</span>ok<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">const</span> colors <span class="token operator">=</span> <span class="token keyword">await</span> result<span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token function">setColorPalettes</span><span class="token punctuation">(</span>colors<span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">return</span> result
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">const</span> <span class="token function-variable function">renderPalettePreview</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">&#123;</span> item <span class="token punctuation">&#125;</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> item<span class="token operator">:</span> TPalette <span class="token punctuation">&#125;</span></span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">PalettePreview</span></span>
+        <span class="token attr-name">handlePress</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> navigation<span class="token punctuation">.</span><span class="token function">navigate</span><span class="token punctuation">(</span><span class="token string">'ColorPalette'</span><span class="token punctuation">,</span> item<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span>
+        <span class="token attr-name">colorPalette</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>item<span class="token punctuation">&#125;</span></span>
+      <span class="token punctuation">/></span></span>
+    <span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token keyword">const</span> <span class="token function-variable function">handleRefresh</span> <span class="token operator">=</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token function">setIsRefreshing</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span>
+    <span class="token keyword">await</span> <span class="token function">fetchColorPalettes</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+      <span class="token function">setIsRefreshing</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token keyword">const</span> <span class="token function-variable function">handleOpenModal</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    navigation<span class="token punctuation">.</span><span class="token function">navigate</span><span class="token punctuation">(</span><span class="token string">'ColorPaletteModal'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token function">useEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token function">fetchColorPalettes</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>fetchColorPalettes<span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+  <span class="token function">useEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>newPalette<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token function">setColorPalettes</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">current</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">[</span>newPalette<span class="token punctuation">,</span> <span class="token operator">...</span>current<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>newPalette<span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">FlatList</span></span>
+      <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>container<span class="token punctuation">&#125;</span></span>
+      <span class="token attr-name">data</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>colorPalettes<span class="token punctuation">&#125;</span></span>
+      <span class="token attr-name">renderItem</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>renderPalettePreview<span class="token punctuation">&#125;</span></span>
+      <span class="token attr-name">keyExtractor</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token punctuation">(</span><span class="token parameter">item</span><span class="token punctuation">)</span> <span class="token operator">=></span> item<span class="token punctuation">.</span>paletteName<span class="token punctuation">&#125;</span></span>
+      <span class="token attr-name">ListHeaderComponent</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">(</span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">TouchableOpacity</span></span> <span class="token attr-name">onPress</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>handleOpenModal<span class="token punctuation">&#125;</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">Text</span></span> <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>styles<span class="token punctuation">.</span>buttonText<span class="token punctuation">&#125;</span></span><span class="token punctuation">></span></span><span class="token plain-text">Add a color scheme</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">Text</span></span><span class="token punctuation">></span></span><span class="token plain-text">
+        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">TouchableOpacity</span></span><span class="token punctuation">></span></span>
+      <span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span>
+      <span class="token attr-name">refreshing</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>isRefreshing<span class="token punctuation">&#125;</span></span>
+      <span class="token attr-name">onRefresh</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">&#123;</span>handleRefresh<span class="token punctuation">&#125;</span></span>
+    <span class="token punctuation">/></span></span>
+  <span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">const</span> styles <span class="token operator">=</span> StyleSheet<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+  container<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    padding<span class="token operator">:</span> <span class="token number">10</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  buttonText<span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    fontSize<span class="token operator">:</span> <span class="token number">18</span><span class="token punctuation">,</span>
+    fontWeight<span class="token operator">:</span> <span class="token string">'bold'</span><span class="token punctuation">,</span>
+    color<span class="token operator">:</span> <span class="token string">'#00A0B0'</span><span class="token punctuation">,</span>
+    marginVertical<span class="token operator">:</span> <span class="token number">15</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>這樣就順利完成新增 colorPalettes 的功能了！（不過 refresh 新增的東西就不見了，看來沒有把新增的 color palette 發給 API 還是有點小怪啦）</p>
+<h3 id="useState-Type-小筆記"><a href="#useState-Type-小筆記" class="headerlink" title="useState Type 小筆記"></a>useState Type 小筆記</h3><p>在練習過程中有遇到一些 TypeScript 的小問題，就先記在這裡。</p>
+<p><a target="_blank" rel="noopener" href="https://www.carlrippon.com/typed-usestate-with-typescript/">Typed useState with TypeScript</a></p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/52423842/what-is-not-assignable-to-parameter-of-type-never-error-in-typescript">What is “not assignable to parameter of type never” error in typescript?</a></p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p><a target="_blank" rel="noopener" href="https://frontendmasters.com/courses/react-native-v2/">React Native, v2</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/frontend-master/" rel="tag"># frontend master</a>
+              <a href="/tags/React-Native/" rel="tag"># React Native</a>
+              <a href="/tags/Expo/" rel="tag"># Expo</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/03/18/React-Native-v2-Hooks-and-Network-Requests/" rel="prev" title="React Native v2 - Hooks and Network Requests">
+                  <i class="fa fa-chevron-left"></i> React Native v2 - Hooks and Network Requests
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/06/28/AST-and-ESLint-Introduction-part-1/" rel="next" title="淺談 AST 及 ESlint Rule：AST 是殺毀？（上）">
+                  淺談 AST 及 ESlint Rule：AST 是殺毀？（上） <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chih Yang</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+<script>
+NexT.utils.loadComments('.utterances-container', () => {
+  const script = document.createElement('script');
+  script.src = 'https://utteranc.es/client.js';
+  script.setAttribute('repo', "ChihYang41/ChihYang41.github.io");
+  script.setAttribute('issue-term', "title");
+  script.setAttribute('theme', "github-light");
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+  document.querySelector('.utterances-container').appendChild(script);
+});
+</script>
+
+</body>
+</html>
