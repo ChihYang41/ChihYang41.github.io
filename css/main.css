@@ -3274,7 +3274,7 @@ mark.search-keyword {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #f69177;
+  background: #99f78c;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -3296,7 +3296,7 @@ mark.search-keyword {
 }
 body {
   background-color: #1d1f21;
-  line-height: 1.75;
+  line-height: 1.6;
 }
 p {
   margin: 0 0 25px;
@@ -3315,6 +3315,7 @@ blockquote {
 pre[class*="language-"].line-numbers {
   border: 1px dotted #615f5f;
   border-radius: 3px;
+  margin-bottom: 25px;
 }
 .token.operator {
   background: transparent;
