@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="pdI9OcgtLe0I27rizFD2U3s553wFM8nsth5viFyCbOk">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="前言不知道大家有沒有用過 VoiceTube 這個平台來學過英文？介面長得像是這樣：  我大概用過一次，但始終有個痛點沒辦法解決，那就是我只能用平台有提供的影片來做學習，很多影片提供的主題我偏偏就沒什麼興趣，有時候光是找自己有興趣的影片就比看影片本身花的時間還多了，哭哭。 所以即使我還蠻喜歡 VoiceTube 的介面，用起來也覺得蠻讚的，但始終就是只用了那一兩次，沒辦法長時間的使用。 但如今找到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="學習英文的神套件 - Language Reactor">
+<meta property="og:url" content="https://chihyang41.github.io/2021/10/01/nice-english-learning-chrome-extension/index.html">
+<meta property="og:site_name" content="Chih Yang&#39;s Blog">
+<meta property="og:description" content="前言不知道大家有沒有用過 VoiceTube 這個平台來學過英文？介面長得像是這樣：  我大概用過一次，但始終有個痛點沒辦法解決，那就是我只能用平台有提供的影片來做學習，很多影片提供的主題我偏偏就沒什麼興趣，有時候光是找自己有興趣的影片就比看影片本身花的時間還多了，哭哭。 所以即使我還蠻喜歡 VoiceTube 的介面，用起來也覺得蠻讚的，但始終就是只用了那一兩次，沒辦法長時間的使用。 但如今找到">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1guws2uxudgj610s0gzn0e02.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1guwsaqxn76j61h20qkgra02.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1guwsx2z01jj60nu0ga75q02.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1guwstqrd6uj61h90qpwku02.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1guwt6hw6lmj60wa0mcmzr02.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1guwt7nbrerj60cv0ae0tg02.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1guwt8l8uj1j60co0d6my302.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1guznxtnm3wj60zq0s0goe02.jpg">
+<meta property="article:published_time" content="2021-10-01T03:53:35.000Z">
+<meta property="article:modified_time" content="2021-10-01T03:53:35.000Z">
+<meta property="article:author" content="Chih Yang">
+<meta property="article:tag" content="English Learning">
+<meta property="article:tag" content="Chrome Extension">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1guws2uxudgj610s0gzn0e02.jpg">
+
+
+<link rel="canonical" href="https://chihyang41.github.io/2021/10/01/nice-english-learning-chrome-extension/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+<title>學習英文的神套件 - Language Reactor | Chih Yang's Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-146838618-1');
+      }
+    </script>
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+      <img class="custom-logo-image" src="/images/logo.png" alt="Chih Yang's Blog">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Chih Yang's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Language-Reactor"><span class="nav-number">2.</span> <span class="nav-text">Language Reactor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Online-Dictionary-Helper%EF%BC%88%E5%9C%A8%E7%B7%9A%E8%BE%AD%E5%85%B8%E5%8A%A9%E6%89%8B%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">Online Dictionary Helper（在線辭典助手）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">4.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Chih Yang</p>
+  <div class="site-description" itemprop="description">Chih Yang 的前端小天地</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ChihYang41" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ChihYang41" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/chihyang41" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;chihyang41" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/ChihYang41" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://chihyang41.github.io/2021/10/01/nice-english-learning-chrome-extension/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Chih Yang">
+      <meta itemprop="description" content="Chih Yang 的前端小天地">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chih Yang's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          學習英文的神套件 - Language Reactor
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2021-10-01 11:53:35" itemprop="dateCreated datePublished" datetime="2021-10-01T11:53:35+08:00">2021-10-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>不知道大家有沒有用過 VoiceTube 這個平台來學過英文？介面長得像是這樣：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1guws2uxudgj610s0gzn0e02.jpg" alt="截圖 2021-09-28 下午11.51.10"></p>
+<p>我大概用過一次，但始終有個痛點沒辦法解決，那就是我只能用平台有提供的影片來做學習，很多影片提供的主題我偏偏就沒什麼興趣，有時候光是找自己有興趣的影片就比看影片本身花的時間還多了，哭哭。</p>
+<p>所以即使我還蠻喜歡 VoiceTube 的介面，用起來也覺得蠻讚的，但始終就是只用了那一兩次，沒辦法長時間的使用。</p>
+<p>但如今找到了一個很讚，我強力推薦的 Chrome Extension 了！介面跟 VoiceTube 有 87% 像以外，還解決了我之前使用的痛點。</p>
+<p>這個 Chrome Extension 就是「<a target="_blank" rel="noopener" href="https://chrome.google.com/webstore/detail/language-reactor/hoombieeljmmljlkjmnheibnpciblicm?hl=zh-TW">Language Reactor</a>」！</p>
+<span id="more"></span>
+
+<h2 id="Language-Reactor"><a href="#Language-Reactor" class="headerlink" title="Language Reactor"></a>Language Reactor</h2><p>這款 Chrome Extension 的前身叫做 Language Learning with Netflix，改版之後就叫做 Language Reactor，我是沒用過之前的版本，但前幾天一用就覺得頗讚，忍不住寫了一篇文想要分享。</p>
+<p>廢話不多說，我們先直接看介面：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1guwsaqxn76j61h20qkgra02.jpg" alt="截圖 2021-09-28 下午11.45.54"></p>
+<p>看起來和 VoiceTube 有 87% 像，UX 我認為做得蠻不錯的，有用過 VoiceTube 的人應該馬上就可以上手，沒用過的人摸個幾分鐘也會很快熟悉。Langauge Reactor 提供了幾個我覺得蠻方便的功能：</p>
+<ol>
+<li>左右方向鍵可以逐句回放</li>
+<li>不會的單字移上去就會有單字翻譯</li>
+<li>能夠開關「讀完一句就暫停」的功能，s 可以重複播放該句字幕</li>
+<li>多種客製化選項調整（關閉下方字幕、雙語字幕、調整播放速度、調整字體大小等）</li>
+<li>單字可以加入清單（收費功能）</li>
+<li>可以做單字複習（收費功能）</li>
+</ol>
+<p>如果點開右上角的齒輪可以看到不少的選像可以做調整：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1guwsx2z01jj60nu0ga75q02.jpg" alt="截圖 2021-09-29 上午12.20.43"></p>
+<p>以我的需求來說，我需要的其實只有在右邊顯示字幕，以及逐句回放的功能，平常看影片的時候不開字幕，真的不懂、沒聽清楚的地方可以偷瞄字幕以及回放到上一句，之前 Netflix 只能回到前十秒真的是讓我有點困擾。念完一句就自動暫停的功能，對於想練習回音法時候也是蠻方便的。</p>
+<p>另外，用 Netflix 的時候有個擾人的地方是英文字幕有點醜，還會給我隨便亂跳，總之排版有點醜，Langauge Reactor 也一並解決了這個煩惱。</p>
+<p>它還有一些額外的收費功能，要登入之後才能使用，收費我記得不算太貴，但因為我很窮，所以也沒有花錢試試看付費會員的功能，目前的免費功能就已經很滿意了。</p>
+<p>但好還能夠更好，如果想要學英文的話，還能夠用什麼套件做輔助呢？</p>
+<h2 id="Online-Dictionary-Helper（在線辭典助手）"><a href="#Online-Dictionary-Helper（在線辭典助手）" class="headerlink" title="Online Dictionary Helper（在線辭典助手）"></a>Online Dictionary Helper（在線辭典助手）</h2><p><a target="_blank" rel="noopener" href="https://chrome.google.com/webstore/detail/online-dictionary-helper/lppjdajkacanlmpbbcdkccjkdbpllajb">Online Dictionary Helper</a></p>
+<p>這個 Chrome Extension 也是近期發現的好物，使用方法很單純，就是把不懂的單字選取起來就好：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1guwstqrd6uj61h90qpwku02.jpg" alt="截圖 2021-09-29 上午12.17.50"></p>
+<p>隔個一秒就會跑出 pop-up 視窗自動幫忙翻譯，有提供 Collins、Cambridge 等英漢、英英辭典使用，上圖都只有英文是因為我用的是 Collins 英英辭典。</p>
+<p>但如果只是單純翻譯的話當然有一堆套件都有這功能了，沒什麼了不起，所以它還有提供一個很方便的功能，那就是可以一鍵把單字加入 Anki 裡面。說到 Anki，因為聽聞過多少人推薦 Anki 來進行語言學習，我也曾經幻想過自己會很有毅力的使用它來學習，無奈太低估自己的惰性，我覺得 Anki 最勸退人的地方就是添加字卡了，真的好麻煩！複習我覺得不會麻煩，就是例行性的打開然後點點字卡，但添加字卡真的好花時間，大概做了幾次我就馬上放棄了。所幸「在線辭典助手」提供了一鍵添加單字的功能，讓我覺得在使用 Anki 的路上輕鬆不少。</p>
+<p>要把 Anki 結合在線辭典助手的方式也不難，首先打開 Anki，到選單的「Tools -&gt; Add-ons -&gt; Get Add-ons」，接著到 <a target="_blank" rel="noopener" href="https://ankiweb.net/shared/info/2055492159">Anki Connect</a> 複製它的 code：<code>2055492159</code> ，接著輸入到 Anki 裡面，就會安裝 Anki Connect 了。</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1guwt6hw6lmj60wa0mcmzr02.jpg" alt="截圖 2021-09-29 上午12.30.12"></p>
+<p>接著到 Chrome 點擊「在線辭典助手」做調整，點擊右上角的三個點點，就會跑到 settings：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1guwt7nbrerj60cv0ae0tg02.jpg" alt="截圖 2021-09-29 上午12.31.16"></p>
+<p>我們要做的設定就是把數據導出改成「Anki Connect」，並且設定 Anki 要存在哪個 Deck、Template 名稱、以及一些字卡要放在哪個欄位等等。</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1guwt8l8uj1j60co0d6my302.jpg" alt="截圖 2021-09-29 上午12.31.32"></p>
+<p>重點中的重點，那就是這個套件的欄位都要是如我上圖寫的，像單字就會對應到「expression」，例句就會對應到「sentence」，所以 Anki 的字卡模板都要有這些欄位可以選擇才行。</p>
+<p>這時候你可能會有疑問，靠杯我要用這套件還要自己刻模板喔？是在逼我放棄吧？不用緊張，我也折騰了一陣子，之後發現開發者的 blog 有提供好看的 Anki 卡片模板：「<a target="_blank" rel="noopener" href="https://www.laohuang.net/20180108/antimoon-template-3/">Antimoon</a>」，只要點擊下方的連結下載 Anki 的 pkg，接著點擊「File -&gt; import」把剛剛下載的 template import 就可以使用現成的 Anki 卡片模板了。</p>
+<p>Antimoon 提供的卡片模板真的蠻不錯的，重點是不用自己切版：</p>
+<img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1guznxtnm3wj60zq0s0goe02.jpg" alt="截圖 2021-10-01 上午11.45.14" style="zoom:50%;" />
+
+<p>附帶一提，如果想要配合 Language Reactor 使用的話，記得要把 Language Reactor 預設的「滑鼠懸停時」、「點擊左鍵」、「點擊右鍵」這些行為先關掉，避免兩個套件行為打架。</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://otoitsuki.info/%E5%AF%A6%E8%A1%8C-100ls-%E7%9C%8B-netflix-%E5%AD%B8%E8%8B%B1%E6%96%87%E7%9A%84%E8%B6%85%E5%A5%BD%E7%94%A8%E5%B7%A5%E5%85%B7%E5%80%91-f2d4c9dc7b01">實行 100LS 看 Netflix 學英文的超好用工具們</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/English-Learning/" rel="tag"># English Learning</a>
+              <a href="/tags/Chrome-Extension/" rel="tag"># Chrome Extension</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/06/29/AST-and-ESLint-Introduction-part-2/" rel="prev" title="淺談 AST 及 ESlint Rule：撰寫屬於自己的 ESLint Rule（下）">
+                  <i class="fa fa-chevron-left"></i> 淺談 AST 及 ESlint Rule：撰寫屬於自己的 ESLint Rule（下）
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chih Yang</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+<script>
+NexT.utils.loadComments('.utterances-container', () => {
+  const script = document.createElement('script');
+  script.src = 'https://utteranc.es/client.js';
+  script.setAttribute('repo', "ChihYang41/ChihYang41.github.io");
+  script.setAttribute('issue-term', "title");
+  script.setAttribute('theme', "github-light");
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+  document.querySelector('.utterances-container').appendChild(script);
+});
+</script>
+
+</body>
+</html>

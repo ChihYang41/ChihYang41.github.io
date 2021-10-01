@@ -2013,6 +2013,64 @@ houseC<span class="token punctuation">.</span><span class="token function">listP
       </tags>
   </entry>
   <entry>
+    <title>學習英文的神套件 - Language Reactor</title>
+    <url>/2021/10/01/nice-english-learning-chrome-extension/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>不知道大家有沒有用過 VoiceTube 這個平台來學過英文？介面長得像是這樣：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1guws2uxudgj610s0gzn0e02.jpg" alt="截圖 2021-09-28 下午11.51.10"></p>
+<p>我大概用過一次，但始終有個痛點沒辦法解決，那就是我只能用平台有提供的影片來做學習，很多影片提供的主題我偏偏就沒什麼興趣，有時候光是找自己有興趣的影片就比看影片本身花的時間還多了，哭哭。</p>
+<p>所以即使我還蠻喜歡 VoiceTube 的介面，用起來也覺得蠻讚的，但始終就是只用了那一兩次，沒辦法長時間的使用。</p>
+<p>但如今找到了一個很讚，我強力推薦的 Chrome Extension 了！介面跟 VoiceTube 有 87% 像以外，還解決了我之前使用的痛點。</p>
+<p>這個 Chrome Extension 就是「<a href="https://chrome.google.com/webstore/detail/language-reactor/hoombieeljmmljlkjmnheibnpciblicm?hl=zh-TW">Language Reactor</a>」！</p>
+<span id="more"></span>
+
+<h2 id="Language-Reactor"><a href="#Language-Reactor" class="headerlink" title="Language Reactor"></a>Language Reactor</h2><p>這款 Chrome Extension 的前身叫做 Language Learning with Netflix，改版之後就叫做 Language Reactor，我是沒用過之前的版本，但前幾天一用就覺得頗讚，忍不住寫了一篇文想要分享。</p>
+<p>廢話不多說，我們先直接看介面：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1guwsaqxn76j61h20qkgra02.jpg" alt="截圖 2021-09-28 下午11.45.54"></p>
+<p>看起來和 VoiceTube 有 87% 像，UX 我認為做得蠻不錯的，有用過 VoiceTube 的人應該馬上就可以上手，沒用過的人摸個幾分鐘也會很快熟悉。Langauge Reactor 提供了幾個我覺得蠻方便的功能：</p>
+<ol>
+<li>左右方向鍵可以逐句回放</li>
+<li>不會的單字移上去就會有單字翻譯</li>
+<li>能夠開關「讀完一句就暫停」的功能，s 可以重複播放該句字幕</li>
+<li>多種客製化選項調整（關閉下方字幕、雙語字幕、調整播放速度、調整字體大小等）</li>
+<li>單字可以加入清單（收費功能）</li>
+<li>可以做單字複習（收費功能）</li>
+</ol>
+<p>如果點開右上角的齒輪可以看到不少的選像可以做調整：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1guwsx2z01jj60nu0ga75q02.jpg" alt="截圖 2021-09-29 上午12.20.43"></p>
+<p>以我的需求來說，我需要的其實只有在右邊顯示字幕，以及逐句回放的功能，平常看影片的時候不開字幕，真的不懂、沒聽清楚的地方可以偷瞄字幕以及回放到上一句，之前 Netflix 只能回到前十秒真的是讓我有點困擾。念完一句就自動暫停的功能，對於想練習回音法時候也是蠻方便的。</p>
+<p>另外，用 Netflix 的時候有個擾人的地方是英文字幕有點醜，還會給我隨便亂跳，總之排版有點醜，Langauge Reactor 也一並解決了這個煩惱。</p>
+<p>它還有一些額外的收費功能，要登入之後才能使用，收費我記得不算太貴，但因為我很窮，所以也沒有花錢試試看付費會員的功能，目前的免費功能就已經很滿意了。</p>
+<p>但好還能夠更好，如果想要學英文的話，還能夠用什麼套件做輔助呢？</p>
+<h2 id="Online-Dictionary-Helper（在線辭典助手）"><a href="#Online-Dictionary-Helper（在線辭典助手）" class="headerlink" title="Online Dictionary Helper（在線辭典助手）"></a>Online Dictionary Helper（在線辭典助手）</h2><p><a href="https://chrome.google.com/webstore/detail/online-dictionary-helper/lppjdajkacanlmpbbcdkccjkdbpllajb">Online Dictionary Helper</a></p>
+<p>這個 Chrome Extension 也是近期發現的好物，使用方法很單純，就是把不懂的單字選取起來就好：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1guwstqrd6uj61h90qpwku02.jpg" alt="截圖 2021-09-29 上午12.17.50"></p>
+<p>隔個一秒就會跑出 pop-up 視窗自動幫忙翻譯，有提供 Collins、Cambridge 等英漢、英英辭典使用，上圖都只有英文是因為我用的是 Collins 英英辭典。</p>
+<p>但如果只是單純翻譯的話當然有一堆套件都有這功能了，沒什麼了不起，所以它還有提供一個很方便的功能，那就是可以一鍵把單字加入 Anki 裡面。說到 Anki，因為聽聞過多少人推薦 Anki 來進行語言學習，我也曾經幻想過自己會很有毅力的使用它來學習，無奈太低估自己的惰性，我覺得 Anki 最勸退人的地方就是添加字卡了，真的好麻煩！複習我覺得不會麻煩，就是例行性的打開然後點點字卡，但添加字卡真的好花時間，大概做了幾次我就馬上放棄了。所幸「在線辭典助手」提供了一鍵添加單字的功能，讓我覺得在使用 Anki 的路上輕鬆不少。</p>
+<p>要把 Anki 結合在線辭典助手的方式也不難，首先打開 Anki，到選單的「Tools -&gt; Add-ons -&gt; Get Add-ons」，接著到 <a href="https://ankiweb.net/shared/info/2055492159">Anki Connect</a> 複製它的 code：<code>2055492159</code> ，接著輸入到 Anki 裡面，就會安裝 Anki Connect 了。</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1guwt6hw6lmj60wa0mcmzr02.jpg" alt="截圖 2021-09-29 上午12.30.12"></p>
+<p>接著到 Chrome 點擊「在線辭典助手」做調整，點擊右上角的三個點點，就會跑到 settings：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1guwt7nbrerj60cv0ae0tg02.jpg" alt="截圖 2021-09-29 上午12.31.16"></p>
+<p>我們要做的設定就是把數據導出改成「Anki Connect」，並且設定 Anki 要存在哪個 Deck、Template 名稱、以及一些字卡要放在哪個欄位等等。</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1guwt8l8uj1j60co0d6my302.jpg" alt="截圖 2021-09-29 上午12.31.32"></p>
+<p>重點中的重點，那就是這個套件的欄位都要是如我上圖寫的，像單字就會對應到「expression」，例句就會對應到「sentence」，所以 Anki 的字卡模板都要有這些欄位可以選擇才行。</p>
+<p>這時候你可能會有疑問，靠杯我要用這套件還要自己刻模板喔？是在逼我放棄吧？不用緊張，我也折騰了一陣子，之後發現開發者的 blog 有提供好看的 Anki 卡片模板：「<a href="https://www.laohuang.net/20180108/antimoon-template-3/">Antimoon</a>」，只要點擊下方的連結下載 Anki 的 pkg，接著點擊「File -&gt; import」把剛剛下載的 template import 就可以使用現成的 Anki 卡片模板了。</p>
+<p>Antimoon 提供的卡片模板真的蠻不錯的，重點是不用自己切版：</p>
+<img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1guznxtnm3wj60zq0s0goe02.jpg" alt="截圖 2021-10-01 上午11.45.14" style="zoom:50%;" />
+
+<p>附帶一提，如果想要配合 Language Reactor 使用的話，記得要把 Language Reactor 預設的「滑鼠懸停時」、「點擊左鍵」、「點擊右鍵」這些行為先關掉，避免兩個套件行為打架。</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="https://otoitsuki.info/%E5%AF%A6%E8%A1%8C-100ls-%E7%9C%8B-netflix-%E5%AD%B8%E8%8B%B1%E6%96%87%E7%9A%84%E8%B6%85%E5%A5%BD%E7%94%A8%E5%B7%A5%E5%85%B7%E5%80%91-f2d4c9dc7b01">實行 100LS 看 Netflix 學英文的超好用工具們</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>筆記</category>
+      </categories>
+      <tags>
+        <tag>English Learning</tag>
+        <tag>Chrome Extension</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>複習趴萬 - Git、Command line</title>
     <url>/2019/10/20/%E8%A4%87%E7%BF%92%E8%B6%B4%E8%90%AC-Git%E3%80%81Command-line/</url>
     <content><![CDATA[<p>放一些之前的筆記還有這陣子的複習，內容比較隨意。</p>
