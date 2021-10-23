@@ -3274,7 +3274,7 @@ mark.search-keyword {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #4749cf;
+  background: #b3a173;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -3296,7 +3296,16 @@ mark.search-keyword {
 }
 body {
   background-color: #1d1f21;
-  line-height: 1.5;
+  line-height: 1.6;
+}
+.post .post-body h2 {
+  padding-bottom: 5px;
+  margin-bottom: 25px;
+  border-bottom: 1px solid rgba(255,255,255,0.5);
+}
+.post .post-body h2:before {
+  content: '# ';
+  color: rgba(105,173,230,0.8);
 }
 p {
   margin: 0 0 25px;
