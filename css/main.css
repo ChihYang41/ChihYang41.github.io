@@ -3274,7 +3274,7 @@ mark.search-keyword {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #b3a173;
+  background: #266c87;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -3293,6 +3293,30 @@ mark.search-keyword {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+:root {
+  --body-bg-color: #282828;
+  --content-bg-color: #333;
+  --card-bg-color: #555;
+  --text-color: #ccc;
+  --blockquote-color: #bbb;
+  --link-color: #ccc;
+  --link-hover-color: #eee;
+  --brand-color: #ddd;
+  --brand-hover-color: #ddd;
+  --table-row-odd-bg-color: #282828;
+  --table-row-hover-bg-color: #363636;
+  --menu-item-bg-color: #555;
+  --btn-default-bg: #222;
+  --btn-default-color: #ccc;
+  --btn-default-border-color: #555;
+  --btn-default-hover-bg: #666;
+  --btn-default-hover-color: #ccc;
+  --btn-default-hover-border-color: #666;
+  --highlight-background: #1d1f21;
+  --highlight-foreground: #c5c8c6;
+  --highlight-gutter-background: #2d2f31;
+  --highlight-gutter-foreground: #b4b7b5;
 }
 body {
   background-color: #1d1f21;
