@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="pdI9OcgtLe0I27rizFD2U3s553wFM8nsth5viFyCbOk">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="前言此為 frontend master 的 Functional-Light JavaScript, v3 的課程筆記，這篇主要講的是 pure function，內容不完全和課程編排相同，單純是個人消化過後的編排。 因為剛開始學 functional programming 的緣故，內容、觀念可能會有諸多錯誤，如有發現錯誤麻煩不吝指教，感謝！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Functional-Light JavaScript - Pure Function">
+<meta property="og:url" content="https://chihyang41.github.io/2021/02/06/Functional-Light-JavaScript-Pure-Function/index.html">
+<meta property="og:site_name" content="前端癢癢 der">
+<meta property="og:description" content="前言此為 frontend master 的 Functional-Light JavaScript, v3 的課程筆記，這篇主要講的是 pure function，內容不完全和課程編排相同，單純是個人消化過後的編排。 因為剛開始學 functional programming 的緣故，內容、觀念可能會有諸多錯誤，如有發現錯誤麻煩不吝指教，感謝！">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://cdn-media-1.freecodecamp.org/images/0*a_yub2gTwY-1eK8j.png">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gm2xtv1rpuj30vg0kwtbj.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gm554tbj5kj313y0u0dj7.jpg">
+<meta property="og:image" content="https://jigsawye.gitbooks.io/mostly-adequate-guide/content/images/function-sets.gif">
+<meta property="og:image" content="https://jigsawye.gitbooks.io/mostly-adequate-guide/content/images/relation-not-function.gif">
+<meta property="og:image" content="https://i.imgur.com/sl0NO7X.png">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gm9k78df22j316e0mqdm9.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gm9k9gy74mj31500sk7bi.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gm9u76iicyj311t0u0167.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gm9u7r4rgqj30y80u07nc.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gm9u9gnillj310d0u0dpn.jpg">
+<meta property="article:published_time" content="2021-02-06T07:10:15.000Z">
+<meta property="article:modified_time" content="2021-02-06T07:10:15.000Z">
+<meta property="article:author" content="Chih Yang">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Functional Programming">
+<meta property="article:tag" content="frontend master">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn-media-1.freecodecamp.org/images/0*a_yub2gTwY-1eK8j.png">
+
+
+<link rel="canonical" href="https://chihyang41.github.io/2021/02/06/Functional-Light-JavaScript-Pure-Function/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+<title>Functional-Light JavaScript - Pure Function | 前端癢癢 der</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-146838618-1');
+      }
+    </script>
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+      <img class="custom-logo-image" src="/images/logo.png" alt="前端癢癢 der">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">前端癢癢 der</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Function-Purity"><span class="nav-number">2.</span> <span class="nav-text">Function Purity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Function-vs-Procedure"><span class="nav-number">3.</span> <span class="nav-text">Function vs Procedure</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Function-Naming-Semantics"><span class="nav-number">4.</span> <span class="nav-text">Function Naming Semantics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Side-Effects"><span class="nav-number">5.</span> <span class="nav-text">Side Effects</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#side-effects-%E7%9A%84%E5%AE%9A%E7%BE%A9"><span class="nav-number">5.1.</span> <span class="nav-text">side effects 的定義</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%A4%96-Closure"><span class="nav-number">5.2.</span> <span class="nav-text">例外 - Closure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#no-side-effect-%E7%9A%84%E5%A5%BD%E8%99%95%E3%80%81%E5%85%B6%E4%BB%96-side-effects"><span class="nav-number">5.3.</span> <span class="nav-text">no side effect 的好處、其他 side effects</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Same-input-Same-output"><span class="nav-number">6.</span> <span class="nav-text">Same input, Same output</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Referential-Transparency"><span class="nav-number">7.</span> <span class="nav-text">Referential Transparency</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Exercise-Extracting-Impurity%E3%80%81Containing-Impurity"><span class="nav-number">8.</span> <span class="nav-text">Exercise - Extracting Impurity、Containing Impurity</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Extracting-Impurity"><span class="nav-number">8.1.</span> <span class="nav-text">Extracting Impurity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Containing-Impurity"><span class="nav-number">8.2.</span> <span class="nav-text">Containing Impurity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adapters"><span class="nav-number">8.3.</span> <span class="nav-text">Adapters</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%B5%90"><span class="nav-number">9.</span> <span class="nav-text">小結</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">10.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Chih Yang</p>
+  <div class="site-description" itemprop="description">我是前端，我是 Yang</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ChihYang41" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ChihYang41" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/chihyang41" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;chihyang41" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/ChihYang41" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://chihyang41.github.io/2021/02/06/Functional-Light-JavaScript-Pure-Function/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Chih Yang">
+      <meta itemprop="description" content="我是前端，我是 Yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端癢癢 der">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Functional-Light JavaScript - Pure Function
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2021-02-06 15:10:15" itemprop="dateCreated datePublished" datetime="2021-02-06T15:10:15+08:00">2021-02-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AD%86%E8%A8%98/" itemprop="url" rel="index"><span itemprop="name">筆記</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>此為 frontend master 的 <a target="_blank" rel="noopener" href="https://frontendmasters.com/courses/functional-javascript-v3/">Functional-Light JavaScript, v3</a> 的課程筆記，這篇主要講的是 pure function，內容不完全和課程編排相同，單純是個人消化過後的編排。</p>
+<p>因為剛開始學 functional programming 的緣故，內容、觀念可能會有諸多錯誤，如有發現錯誤麻煩不吝指教，感謝！</p>
+<span id="more"></span>
+
+<h2 id="Function-Purity"><a href="#Function-Purity" class="headerlink" title="Function Purity"></a>Function Purity</h2><p>最一開始要先談 pure function 是因為 pure function 是 functional programming 的基石，如果缺少了 pure function，那使用 functional programming 的好處可以說是少了很多。</p>
+<p>一般來說，如果我們下了 pure function 這個關鍵字去 google，會在大多數的文章看到 pure function 會符合以下的定義：</p>
+<ol>
+<li>same input, same output</li>
+<li>no side-effects</li>
+</ol>
+<p><img data-src="https://cdn-media-1.freecodecamp.org/images/0*a_yub2gTwY-1eK8j.png" alt="pure function"></p>
+<p>(圖片取自 <a target="_blank" rel="noopener" href="https://www.freecodecamp.org/news/what-is-a-pure-function-in-javascript-acb887375dfe/">What Is a Pure Function in JavaScript?</a>)</p>
+<p>所以我們就要逐條來討論這兩個定義是什麼意思，以及除了這兩個定義以外，有沒有什麼可以補充的內容。</p>
+<h2 id="Function-vs-Procedure"><a href="#Function-vs-Procedure" class="headerlink" title="Function vs Procedure"></a>Function vs Procedure</h2><p>在談 pure function  的上述兩個定義以前，不如先來聊聊在 FP 中，什麼叫做一個 function。</p>
+<p>function 在 FP 的定義上來說，就是<strong>它必須要有 input，也必須要有 output</strong>，所以如果你寫的 function 長得像這樣：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">addNumbers</span><span class="token punctuation">(</span><span class="token parameter">x <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> y <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> z <span class="token operator">=</span> <span class="token number">0</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> total <span class="token operator">=</span> x <span class="token operator">+</span> y <span class="token operator">+</span> z
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>total<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">extra</span><span class="token punctuation">(</span><span class="token parameter">x <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">,</span> <span class="token operator">...</span>args</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">addNumbers</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> <span class="token number">40</span><span class="token punctuation">,</span> <span class="token operator">...</span>args<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>addNumbers</code> 就不是一個 function，因為它只有 input，沒有 output，這個會被叫做 procedure，指的是一段邏輯的集合。</p>
+<p>那另一個有趣的問題是 <code>extra</code> 算是 function 嗎？也不算，因為 function 只會 call 其他 function，如果用到 procedure 就不算 function 了。</p>
+<p>所以在最初始的 function 定義來說，我們「必須要有 input，也必須要有 output」，不過這仍然不夠完整，因此我們繼續往下探討。</p>
+<h2 id="Function-Naming-Semantics"><a href="#Function-Naming-Semantics" class="headerlink" title="Function Naming Semantics"></a>Function Naming Semantics</h2><p><img data-src="https://tva1.sinaimg.cn/large/0081Kckwgy1gm2xtv1rpuj30vg0kwtbj.jpg" alt="截圖 2020-12-28 上午1.41.22"></p>
+<p>看到上面這個圖形很懷念對吧！這是我們國中時期的數學，在談論這個函數的時候，我們會將 <code>x</code> 代入 0，得到 3；代入 1，得到 5 之類的，這樣依此類推代入各種數字，將結果點在圖形上，最後把所有點點連起來就得到上面的圖形。</p>
+<p>這段數學函數跟程式碼的表達方式很像：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// f(x) = 2X ^ 2 + 3</span>
+<span class="token keyword">function</span> <span class="token function">f</span><span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token number">2</span> <span class="token operator">*</span> Math<span class="token punctuation">.</span><span class="token function">pow</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">3</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>從上面這段程式碼來思考，x 和 y 是有一定的關聯性的，比如我 x 放進 2，那 y ，也就是 <code>f(x)</code> 就會是 11；如果 x 放進 3，那 y 就會是 21，當 x 是某個數字的時候就會透過它來計算，得到相對應的 y。</p>
+<p>Kyle Simpson 是如此說的：</p>
+<blockquote>
+<p>Function: the semantic relationship between input and computed output</p>
+</blockquote>
+<p>也就是 function 的 input 和 output 是會有一定的語意關聯性的。</p>
+<p>不過這段定義也還不夠完整，讓我們繼續看下去。</p>
+<h2 id="Side-Effects"><a href="#Side-Effects" class="headerlink" title="Side Effects"></a>Side Effects</h2><h3 id="side-effects-的定義"><a href="#side-effects-的定義" class="headerlink" title="side effects 的定義"></a>side effects 的定義</h3><p>講到副作用，讓我們先查查維基百科，維基百科對於 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%89%AF%E4%BD%9C%E7%94%A8_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6)">副作用</a> 的定義是這樣的：</p>
+<blockquote>
+<p>在電腦科學中，<strong>函數副作用</strong>指當調用<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%87%BD%E6%95%B0">函數</a>時，除了<strong>回傳函數值</strong>之外，還<strong>對主調用函數產生附加的影響</strong>。例如修改全域變數（函數外的變數），修改參數或改變外部存儲。</p>
+</blockquote>
+<blockquote>
+<p>如果一個函數通過<strong>隱式</strong>（英語：Implicit）方式，從外界獲取資料，或者向外部輸出資料，那麼，該函數就不是純函數，叫作非純函數（英語：Impure Function）。</p>
+<p>隱式的意思是，函數通過參數和回傳值以外的渠道，和外界進行資料交換。比如，讀取全域變數，修改全域變數，都叫作以隱式的方式和外界進行資料交換；比如，利用 I/O API（輸入輸出系統函式庫）讀取設定文件，或者輸出到文件，列印到螢幕，都叫做隱式的方式和外界進行資料交換。</p>
+</blockquote>
+<p>簡而言之，就是 function 本身不是獨立的，它和外界產生了聯繫，像是讀取到外部的 variables、修改外部的 variables，都會產生 side effect，舉例來說：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">shippingRate</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  rate <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>size <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">*</span> weight<span class="token punctuation">)</span> <span class="token operator">+</span> speed 
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">let</span> rate<span class="token punctuation">;</span>
+<span class="token keyword">let</span> size <span class="token operator">=</span> <span class="token number">12</span>
+<span class="token keyword">let</span> weight <span class="token operator">=</span> <span class="token number">4</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> speed <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+<span class="token function">shippingRate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>rate<span class="token punctuation">)</span> <span class="token comment">// 57</span>
+
+size <span class="token operator">=</span> <span class="token number">8</span>
+speed <span class="token operator">=</span> <span class="token number">6</span>
+<span class="token function">shippingRate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>rate<span class="token punctuation">)</span> <span class="token comment">// 42</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>很明顯的，<code>shippingRate</code> 就和外部的 variables 產生關聯了，因為它用到了外部的 variables 進行某些計算了對吧。</p>
+<p>那如果我們把程式碼改成這樣：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">shippingRate</span><span class="token punctuation">(</span><span class="token parameter">size<span class="token punctuation">,</span> weight<span class="token punctuation">,</span> speed</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>size <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">*</span> weight<span class="token punctuation">)</span> <span class="token operator">+</span> speed 
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">let</span> rate<span class="token punctuation">;</span>
+rate <span class="token operator">=</span> <span class="token function">shippingRate</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token comment">// 7</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>就沒有 side effect 了，我們單純依賴 function 自身的 input 進行計算，得到 output 並 return，也就是說 function 是一個獨立的存在。</p>
+<blockquote>
+<p>⚠️ 在課程裡 Kyle Simpson 說這不只是有沒有使用到外面的 variable 這樣而已，而是「pure function need direct inputs and direct outputs」</p>
+<p>我對這段話的理解是指 function 會直接地使用 input 進行計算得到 output，比如上面的 <code>shippingRate</code> 直接拿 size, weight, speed 三個 input 計算出了 output。</p>
+<p>因為我對於他提出的「direct」理解還不夠深入，怕造成誤會就先省略了這個定義。</p>
+</blockquote>
+<h3 id="例外-Closure"><a href="#例外-Closure" class="headerlink" title="例外 - Closure"></a>例外 - Closure</h3><p>關於「不依賴到外部的變數」這個定義有個例外，那就是 Closure 的狀況：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">addAnother</span><span class="token punctuation">(</span><span class="token parameter">z</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token function">addTwo</span><span class="token punctuation">(</span><span class="token parameter">x<span class="token punctuation">,</span> y</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> x <span class="token operator">+</span> y <span class="token operator">+</span> z
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>以上面程式碼來說， <code>addTwo</code> 使用到了 <code>z</code> 這個外部的變數，也就是 <code>addAnother</code>  scope 的變數， 那這樣 <code>addTwo</code> 算 pure function 嗎？因為它依賴到自己 scope 以外的變數了對吧？</p>
+<p>其實還是算，所以 input 也可以是自身 scope 以外的，只是你要確保它「不會變動」，在後續提到 Closure 的章節會再針對這個例外進行詳細的解釋。</p>
+<h3 id="no-side-effect-的好處、其他-side-effects"><a href="#no-side-effect-的好處、其他-side-effects" class="headerlink" title="no side effect 的好處、其他 side effects"></a>no side effect 的好處、其他 side effects</h3><p>no side-effects 的好處在哪裡呢？在於閱讀 code 的人腦袋運作的壓力變小了，如果有段程式碼直接依賴外部變數、mutate 外部狀態的 function，或有其他 side effect 時，閱讀時我們就必須時時追蹤變數值的變化，除了可讀性較不好以外，程式也很可能產生非預期的錯誤，難以追蹤目前狀態的變化。</p>
+<p>但除了上述程式碼的範例以外，還有什麼會造成 side effect 呢？我們可以看看下圖：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/0081Kckwgy1gm554tbj5kj313y0u0dj7.jpg" alt="side effects"></p>
+<p>看了上圖會發現，靠北，這不就是我們平常會做的事情嗎？如果不要 side effect 的話是要我怎麼活？</p>
+<p>side effect 無所不在，不如說程式碼有 side effect 才是很正常的事情，所以 functional programming 並沒有在追求「no side effects」，而是「具有 side effect」（impure）和「沒有 side effect」(pure) 的程式碼要有明顯的分隔。</p>
+<p>如同 Kyle Simpson 在課程裡說到的：</p>
+<blockquote>
+<p>No such thing as “no side effects”, Avoid them where possible, make them obvious otherwise.</p>
+</blockquote>
+<p>又或者是前輩良葛格在 <a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10234206">這篇文</a> 所說的：</p>
+<blockquote>
+<p>FP 要追求的，其實不是整個程式都是 Pure，而是 Pure 與 Impure 有明顯的界線。</p>
+</blockquote>
+<p>no side effect 不是最終要追求的目標，而是將 pure function 當成程式中的核心，side effect 則是像包裹在核心之外的殼，當發生預期外的事情時，我們就能更快速、有效的定位問題在哪。</p>
+<h2 id="Same-input-Same-output"><a href="#Same-input-Same-output" class="headerlink" title="Same input, Same output"></a>Same input, Same output</h2><p>「Same input, Same output」的概念很單純，就是你給 function 相同的 input，它都會給你相對應同樣的 output。</p>
+<blockquote>
+<p>A function is a special relationship between values: Each of its input values gives back exactly one output value.</p>
+</blockquote>
+<p>換句話說，這只是兩個數值之間的關係：輸入及輸出。所以下圖就是個合法的 function：</p>
+<p><img data-src="https://jigsawye.gitbooks.io/mostly-adequate-guide/content/images/function-sets.gif"></p>
+<p>(此圖取自 <a target="_blank" rel="noopener" href="https://mostly-adequate.gitbooks.io/mostly-adequate-guide/content/">mostly-adequate-guide</a>)</p>
+<p>從圖中可以看到，當你給他相同的 x 時，就可以得到相對應的 y，符合剛剛提及的 same input, same output 的概念。</p>
+<p>如果是下圖就不是個合法的 function：</p>
+<p><img data-src="https://jigsawye.gitbooks.io/mostly-adequate-guide/content/images/relation-not-function.gif" alt="impure function"></p>
+<p>當你 x 給相同的 5 時，卻可能得到 4 或 5 或 7 三種不同的 y，代表這個結果是無法預期的，你每次給相同的值沒辦法保證它會得到一樣的結果，這就不是個 pure function。</p>
+<p>以 Pure function 的特性來說，我們可以用不同的角度來看待 same input, same output 這件事，比如我們可以把它看成一張表：</p>
+<p><img data-src="https://i.imgur.com/sl0NO7X.png"></p>
+<p>又或者是看成 mapping ：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> isPrime <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  <span class="token number">1</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+  <span class="token number">2</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  <span class="token number">3</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  <span class="token number">4</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+  <span class="token number">5</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  <span class="token number">6</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+isPrime<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token comment">//=> true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>我們有個 <code>isPrime</code> 的 mapping，key 代表 input，value 代表 output，當給入相對應的 key 時，就會得到相對應的 value，所以給入 <code>3</code> 的時候，因為 3 是質數，就會得到 true；如果給入 <code>4</code> ，因為 4 不是質數，就會得到 false。</p>
+<p>題外話，如果給入「江」呢？會得到什麼？true，因為江是質數，江直樹。</p>
+<p>mapping 這個舉例，就是要說明當我們給 pure function. 相同的 input 時，就一定會得到相對應的 output。</p>
+<h2 id="Referential-Transparency"><a href="#Referential-Transparency" class="headerlink" title="Referential Transparency"></a>Referential Transparency</h2><p>前面提了「same input, same output」、「no side effects」，這兩個定義也是大多數 FP 文章講解 pure function 時會提到的兩個定義。</p>
+<p>但還有比較少數的文章，會提到另一個重點，就是 pure function 是「<strong>Referential Transparency</strong>」的，這也是 Functional Light JS 的講者 Kyle Simpson 特別強調的一點，他認為最「full, cononical, complete」的 pure function 的定義，就是這個 function 是 referential transparency 的。</p>
+<p>所以什麼叫 referential transparency？「<strong>可以用 return value 取代 function call，而整體的程式行為不會改變</strong>」，這個定義就叫做「Referencial Transparency」。</p>
+<blockquote>
+<p>Referencial transparency means a function call can be replaced with it’s return value and not affect any of rest of the program.</p>
+</blockquote>
+<p>所以舉例來說：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">add</span><span class="token punctuation">(</span><span class="token parameter">x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> z</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> x <span class="token operator">+</span> y <span class="token operator">+</span> z
+<span class="token punctuation">&#125;</span>
+
+<span class="token function">add</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token comment">// 6</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>如果在程式的某處，我用 <code>6</code> 取代 <code>add(1, 2, 3)</code> ，程式行為依舊不變，天下太平的話，這就叫 referencial transparency，也代表 <code>add</code> 是個 pure function。</p>
+<p>那 referencial transparency 的好處是什麼呢？</p>
+<p>在 Haskell 裡面，function 永遠是 pure，也就是永遠都會有 referencial transparency，compiler 可以基於這個特性，達到 memoize 每個東西的優點，因為他們可以把 return value 取代 function call 。</p>
+<p>但 JavaScript 沒有，JavaScript 裡不會每個 function 都是 pure function，compiler 也不會幫你處理這些事情，那這樣來說，referencial transparency 在 JavaScript 的好處是什麼呢？答案是對 reader 的友善度，當 reader 重複閱讀到一樣的 function call 的時候，其實他不需要透過腦袋再思考一次，就能預測這段程式碼的結果，等同在腦袋進行 memoize 的事情，進而釋放部分腦袋的壓力，把專注力放在程式碼中其他更重要的事情。</p>
+<h2 id="Exercise-Extracting-Impurity、Containing-Impurity"><a href="#Exercise-Extracting-Impurity、Containing-Impurity" class="headerlink" title="Exercise - Extracting Impurity、Containing Impurity"></a>Exercise - Extracting Impurity、Containing Impurity</h2><h3 id="Extracting-Impurity"><a href="#Extracting-Impurity" class="headerlink" title="Extracting Impurity"></a>Extracting Impurity</h3><p>這邊指的是抽取出 impure 程式碼的技巧。</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/0081Kckwgy1gm9k78df22j316e0mqdm9.jpg" alt="Extracting Impurity - image01"></p>
+<p><code>addComment</code> 這個 function 是 impure function，可以看到它呼叫了 <code>uniqueID</code> 這個 function，以及 <code>appendChild</code> 操作了 DOM，顯而易見的都是屬於 side effect。</p>
+<p>FP 講求的不是沒有 side effect，而是把 pure 和 impure 分出明顯的界線，因此我們可以改成這樣：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/0081Kckwgy1gm9k9gy74mj31500sk7bi.jpg" alt="Extracting Impurity - image02"></p>
+<p>此時的 <code>addComment</code> 變得 pure，單純只是產生物件以及 DOM element 的 function，而 impure 的操作被放到了 function 外面，避免污染 pure function，因此分出了明顯的界線，抽取出了不純的地方。</p>
+<p>但這方法不是每次都行得通，只是其中一個可行的辦法。</p>
+<h3 id="Containing-Impurity"><a href="#Containing-Impurity" class="headerlink" title="Containing Impurity"></a>Containing Impurity</h3><p>有時候沒辦法將 impure 的程式碼抽取出來，這時我們的辦法就是減少 impure 程式碼產生的範圍。</p>
+<p>舉例來說，假設今天有一個來自第三方套件的 API：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/0081Kckwgy1gm9u76iicyj311t0u0167.jpg" alt="Containing Impurity - image01"></p>
+<p>我們可以確定第三方 API 會產生 side effect，因此做法是減少 side effect 的 surface，辦法是複製一份 numbers 的 array：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/0081Kckwgy1gm9u7r4rgqj30y80u07nc.jpg" alt="Containing Impurity - image02"></p>
+<p>這樣無論怎麼操作，至少我們發生的 side effect 都是限縮在 line 9 - line 22 ，減少了 side effect 發生的範圍。</p>
+<h3 id="Adapters"><a href="#Adapters" class="headerlink" title="Adapters"></a>Adapters</h3><p>但如果沒有辦法把 <code>insertSortedDesc</code> 包裹在 <code>getSortedNums</code> 裡呢？我們還可以怎麼做，Kyle Simpson 提供了第三種解法：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/0081Kckwgy1gm9u9gnillj310d0u0dpn.jpg" alt="Adapters - image01"></p>
+<p>這邊透過六個步驟來處理 side effect：</p>
+<ol>
+<li>取得初始的 global value</li>
+<li>設定 numbers 的 initial value</li>
+<li>side effect 的操作，就是操作 global state</li>
+<li>capture the new value</li>
+<li>restore the previous state</li>
+<li>return the new value</li>
+</ol>
+<p>雖然運作來說我懂在幹嘛，但概念上我可能還沒抓到真正的精髓，就先當作筆記放著 QQ</p>
+<h2 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h2><p>pure function 在 FP 裡面至關重要，正因為 function 是 pure 的，我們才能享受到使用 FP 的好處，才可以運用到數學上的特性。</p>
+<p>Kyle Simpson 在課程中提到，他認為「pure function」不是一個二元的概念，也就是說不是 0 和 1，只能分成「pure」和「impure」，而是類似於一個光譜，指的是「一個 function pure 的程度是多少」，function pure 的程度代表了 「level of confidence」，當你的 function 越 pure，你對這段程式碼的信心就越高，因為你更確定它的結果能夠預測，不會發生非預期的狀況搞你。</p>
+<p>「pure function 不是二分法，pure 指的是程度上的差別」這說法，我也只有從 Kyle Simpson 的課程裡聽到， Kyle Simpson 算是在程式開發蠻有個人想法的人，所以課程中很多定義、說法可能都是他個人的理解，可以當作參考就好囉。</p>
+<p>不過「same input, same output」、「no side-effects」、「referencial  transparency」則是多數提及 pure function 一定會講到的定義，想知道更多的話可以點擊下方參考資料的連結。</p>
+<p>最後，如果內容有錯誤的話也麻煩不吝指教，我會很感激的！</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.educative.io/courses/functional-programming-patterns-with-ramdajs">Functional Programming Patterns With RamdaJS!</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://frontendmasters.com/courses/functional-javascript-v3/">Functional-Light JavaScript, v3</a> </p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://medium.com/frochu/%E7%B4%94%E7%B2%B9%E7%9A%84%E5%A5%BD-pure-function-%E7%9F%A5%E9%81%93-574d5c0d7819">純粹的好，Pure Function 知道</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.freecodecamp.org/news/what-is-a-pure-function-in-javascript-acb887375dfe/">What Is a Pure Function in JavaScript?</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://mostly-adequate.gitbooks.io/mostly-adequate-guide/content/">mostly-adequate-guide</a></p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Functional-Programming/" rel="tag"># Functional Programming</a>
+              <a href="/tags/frontend-master/" rel="tag"># frontend master</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/01/07/headspace-guide-to-meditation-day02/" rel="prev" title="冥想正念指南 day02 - 如何放下">
+                  <i class="fa fa-chevron-left"></i> 冥想正念指南 day02 - 如何放下
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/02/06/Functional-Light-JavaScript-Argument-Adapters/" rel="next" title="Functional-Light JavaScript - Argument Adapters">
+                  Functional-Light JavaScript - Argument Adapters <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chih Yang</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+<script>
+NexT.utils.loadComments('.utterances-container', () => {
+  const script = document.createElement('script');
+  script.src = 'https://utteranc.es/client.js';
+  script.setAttribute('repo', "ChihYang41/ChihYang41.github.io");
+  script.setAttribute('issue-term', "title");
+  script.setAttribute('theme', "github-light");
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+  document.querySelector('.utterances-container').appendChild(script);
+});
+</script>
+
+</body>
+</html>

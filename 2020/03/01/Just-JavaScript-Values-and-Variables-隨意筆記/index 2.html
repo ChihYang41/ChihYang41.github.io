@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="pdI9OcgtLe0I27rizFD2U3s553wFM8nsth5viFyCbOk">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="前言介紹完上次的 JavaScript 宇宙觀後，今天要來談談變數與值。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Just JavaScript - Values and Variables 隨意筆記">
+<meta property="og:url" content="https://chihyang41.github.io/2020/03/01/Just-JavaScript-Values-and-Variables-%E9%9A%A8%E6%84%8F%E7%AD%86%E8%A8%98/index.html">
+<meta property="og:site_name" content="前端癢癢 der">
+<meta property="og:description" content="前言介紹完上次的 JavaScript 宇宙觀後，今天要來談談變數與值。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://ci4.googleusercontent.com/proxy/pHsMAsQ4oeXCJVvsRlzWFQYlqEXbAQ2UC6BY6qUJlTuCtxABGWKi8G8Xp_RmAJDlW15vvEpes3RVmKWatNm7bhQzSbSLCgpMW_iWLCFk2-x3COs_Mb-YjMOzRPTbxIvBan8PVJ29yrIfNNIkNLR1yHlUA7bO8GrTEy_Pdnfmg9Ehb8TY=s0-d-e1-ft#https://res.cloudinary.com/dg3gyk0gu/image/upload/v1579283157/just-javascript-email-images/jj03/immutablemap3.png">
+<meta property="og:image" content="https://ci5.googleusercontent.com/proxy/wcO3dHlW2VBtbMiLgfbSEZERAYOc21luc5E0-eHLB7Az9WYeR4O9rbYBzQxVyVt8jq5ZEPZ39HDs8J6xrN42TVEa2j0HaYR8apK3X7RecrYA_jL68QTpgLyn0tLIr1JrRansj8naa2PUG7A_uDfrOmdQOkTmChq0umF-6tIEB7vgpYvT7NyLIZo=s0-d-e1-ft#https://res.cloudinary.com/dg3gyk0gu/image/upload/v1579283157/just-javascript-email-images/jj03/narwhal-assignment.png">
+<meta property="og:image" content="https://ci6.googleusercontent.com/proxy/igd1ZQUORgMYfeinNlCgb0x4rn4mrSck1h-MmtipgsxVoFEcq5gIXdMptBdLpgQSs0F8_NxfWUoW1LEHd0ZGOqjdStYJuX3jYHKviJVPTspYH6RW04aBB9g6S1UmeS5H8dIS7bGLj5mJeJhhivESCVneB1Ipz6UYxFcDBy5Xp_5bAF8n5-nuKpML=s0-d-e1-ft#https://res.cloudinary.com/dg3gyk0gu/image/upload/v1579283157/just-javascript-email-images/jj03/kraken-reassignment.png">
+<meta property="og:image" content="https://ci5.googleusercontent.com/proxy/mRPUqNCsUztVVvWdc5b1uQ2n8itEJCm6tJoc_yFZPyxYJ_zFuDtO-8mq2MguQ6JbbfsJ68wbhxWRVWsuDv1bX8nzIsizFP_KyAaG0ACwDWnAA9tfXXC42-2h6owYtB_o8J7Uyats1v78zQms7gsFomnbcTmQ2yon8LHKLxL_VAJzVLU=s0-d-e1-ft#https://res.cloudinary.com/dg3gyk0gu/image/upload/v1579283157/just-javascript-email-images/jj03/assign-step1.gif">
+<meta property="og:image" content="https://ci3.googleusercontent.com/proxy/GWxZZv1kTtnjB7GBE3m_GTkGE9tis9TMFupwBHQiVhqd7JKtMvHwKrsta3ANMZvN1cj62-i0edlhhNs2j7OHDmG70fmxEeB5piaiREsgWC8wjnMf718EKrUHOqiqZy_0iLVG2ksA1k_nN8mPHuuFA855xoAmZl-dDvwaaElwOus7Rgg=s0-d-e1-ft#https://res.cloudinary.com/dg3gyk0gu/image/upload/v1579283157/just-javascript-email-images/jj03/assign-step2.gif">
+<meta property="og:image" content="https://ci5.googleusercontent.com/proxy/el8tFBsFMKGaJql4A6TZa1pHFZY8YaQun7-6Ns79Tj8Gcejs_AocEjpSp-c6G7rmlZILXF--bC0j47RwYaEfEMjPIooxfewket2iwAP4CePpPJalLxp61_xjIFJCRhtflOqWleuHtyH5sAycIG0ld1O-gBzX2-aNBAHzLXWH3UJXROI=s0-d-e1-ft#https://res.cloudinary.com/dg3gyk0gu/image/upload/v1579283157/just-javascript-email-images/jj03/assign-step3.gif">
+<meta property="article:published_time" content="2020-03-01T08:28:00.000Z">
+<meta property="article:modified_time" content="2020-03-01T08:28:00.000Z">
+<meta property="article:author" content="Chih Yang">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Front-End">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ci4.googleusercontent.com/proxy/pHsMAsQ4oeXCJVvsRlzWFQYlqEXbAQ2UC6BY6qUJlTuCtxABGWKi8G8Xp_RmAJDlW15vvEpes3RVmKWatNm7bhQzSbSLCgpMW_iWLCFk2-x3COs_Mb-YjMOzRPTbxIvBan8PVJ29yrIfNNIkNLR1yHlUA7bO8GrTEy_Pdnfmg9Ehb8TY=s0-d-e1-ft#https://res.cloudinary.com/dg3gyk0gu/image/upload/v1579283157/just-javascript-email-images/jj03/immutablemap3.png">
+
+
+<link rel="canonical" href="https://chihyang41.github.io/2020/03/01/Just-JavaScript-Values-and-Variables-%E9%9A%A8%E6%84%8F%E7%AD%86%E8%A8%98/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+<title>Just JavaScript - Values and Variables 隨意筆記 | 前端癢癢 der</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-146838618-1');
+      }
+    </script>
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+      <img class="custom-logo-image" src="/images/logo.png" alt="前端癢癢 der">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">前端癢癢 der</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%88%E5%9B%9E%E9%A1%A7%E4%B8%8A%E6%AC%A1%E7%9A%84%E5%B0%8F%E9%A1%8C%E7%9B%AE"><span class="nav-number">2.</span> <span class="nav-text">先回顧上次的小題目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#typeof-value-quot-date-quot-%E7%B5%90%E6%9E%9C%E6%98%AF%E5%A6%82%E4%BD%95%E5%91%A2%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">typeof(value) &#x3D;&#x3D;&#x3D; &quot;date&quot; 結果是如何呢？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#typeof-%E7%9A%84-bug"><span class="nav-number">2.2.</span> <span class="nav-text">typeof 的 bug</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#typeof-typeof-value-%E6%B0%B8%E9%81%A0%E9%83%BD%E6%9C%83%E6%98%AF-string"><span class="nav-number">2.3.</span> <span class="nav-text">typeof(typeof(value)) 永遠都會是 string</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E8%91%97%E7%B9%BC%E7%BA%8C"><span class="nav-number">2.4.</span> <span class="nav-text">接著繼續</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Primitive-Values-%E6%98%AF-Immutable-%E7%9A%84"><span class="nav-number">3.</span> <span class="nav-text">Primitive Values 是 Immutable 的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%9B%E7%9B%BE%E7%9A%84%E5%9C%B0%E6%96%B9"><span class="nav-number">4.</span> <span class="nav-text">矛盾的地方</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%8A%E8%AE%8A%E6%95%B8%E7%95%B6%E7%B7%9A"><span class="nav-number">5.</span> <span class="nav-text">把變數當線</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B3%A6%E4%BA%88%E8%AE%8A%E6%95%B8%E6%9F%90%E5%80%8B%E5%80%BC"><span class="nav-number">6.</span> <span class="nav-text">賦予變數某個值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%80%E5%8F%96%E8%AE%8A%E6%95%B8%E4%B8%AD%E7%9A%84%E5%80%BC"><span class="nav-number">7.</span> <span class="nav-text">讀取變數中的值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nouns-and-Verbs"><span class="nav-number">8.</span> <span class="nav-text">Nouns and Verbs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Put-it-toghther"><span class="nav-number">9.</span> <span class="nav-text">Put it toghther</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E5%9B%9E%E9%A1%A7"><span class="nav-number">10.</span> <span class="nav-text">小回顧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B7%B4%E7%BF%92%E9%A1%8C"><span class="nav-number">11.</span> <span class="nav-text">練習題</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Chih Yang</p>
+  <div class="site-description" itemprop="description">我是前端，我是 Yang</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ChihYang41" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ChihYang41" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/chihyang41" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;chihyang41" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/ChihYang41" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://chihyang41.github.io/2020/03/01/Just-JavaScript-Values-and-Variables-%E9%9A%A8%E6%84%8F%E7%AD%86%E8%A8%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Chih Yang">
+      <meta itemprop="description" content="我是前端，我是 Yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端癢癢 der">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Just JavaScript - Values and Variables 隨意筆記
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-03-01 16:28:00" itemprop="dateCreated datePublished" datetime="2020-03-01T16:28:00+08:00">2020-03-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/frontend/" itemprop="url" rel="index"><span itemprop="name">frontend</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>介紹完上次的 JavaScript 宇宙觀後，今天要來談談變數與值。</p>
+<span id="more"></span>
+<h2 id="先回顧上次的小題目"><a href="#先回顧上次的小題目" class="headerlink" title="先回顧上次的小題目"></a>先回顧上次的小題目</h2><h3 id="typeof-value-quot-date-quot-結果是如何呢？"><a href="#typeof-value-quot-date-quot-結果是如何呢？" class="headerlink" title="typeof(value) === &quot;date&quot; 結果是如何呢？"></a><code>typeof(value) === &quot;date&quot;</code> 結果是如何呢？</h3><p><code>typeof(value) === &quot;date&quot;</code> 的結果永遠都會是 false。</p>
+<p>因為 date 不是任何 typeof 會回傳的結果，它不是 primitive types 也不是 functions，所以 typeof date 永遠都會是 object。</p>
+<h3 id="typeof-的-bug"><a href="#typeof-的-bug" class="headerlink" title="typeof 的 bug"></a>typeof 的 bug</h3><p><code>typeof(null)</code> 回傳的結果會是 “object”。</p>
+<p>即使 null 是 primitive value，但 typeof 會回傳 object，這是個眾所皆知的 bug，但因為改掉的話會讓很多現有的網站掛點，所以就這樣一直放著維持現狀了。</p>
+<h3 id="typeof-typeof-value-永遠都會是-string"><a href="#typeof-typeof-value-永遠都會是-string" class="headerlink" title="typeof(typeof(value)) 永遠都會是 string"></a>typeof(typeof(value)) 永遠都會是 string</h3><p>因為 <code>typeof</code> 本身回傳的結果型別是 string，因此對回傳結果使用 <code>typeof</code> 的話，結果就會是 string！</p>
+<h3 id="接著繼續"><a href="#接著繼續" class="headerlink" title="接著繼續"></a>接著繼續</h3><p>好，讓我們繼續下去囉！先看一小段程式碼：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">let</span> reaction <span class="token operator">=</span> <span class="token string">'yikes'</span><span class="token punctuation">;</span>
+reaction<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">'l'</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>reaction<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>這段程式碼會回傳什麼呢？</p>
+<p>答案是 <code>&#39;yikes&#39;</code>，如果是在 strict mode 的話，則是會拋出錯誤。對，它不會回傳 <code>&#39;likes&#39;</code>。</p>
+<p>Yikes。</p>
+<h2 id="Primitive-Values-是-Immutable-的"><a href="#Primitive-Values-是-Immutable-的" class="headerlink" title="Primitive Values 是 Immutable 的"></a>Primitive Values 是 Immutable 的</h2><p>剛剛的問題有答對嗎？沒答對也沒關係，只是從剛剛的例子我們了解到一件事。</p>
+<p><strong>我們沒辦法改變 primitive values。</strong></p>
+<p>接下來再用一個小例子解釋吧！字串（屬於 primitive values）以及陣列（屬於 Objects，不是 primitive values）在某些地方有點相近，陣列是一連串的 items，字串則是一連串的字元：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">let</span> arr <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">212</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">506</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> str <span class="token operator">=</span> <span class="token string">'hello'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>對於字串和陣列，你可以用相似的方式來存取的值：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>arr<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 212</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>str<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// "h"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>你可以改變 array 的第一個 Item：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">arr<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">420</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>arr<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// [420, 8, 506]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>所以直覺性的，你很容易去假設 string 也可以做相似的改動：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">str<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">'j'</span><span class="token punctuation">;</span> <span class="token comment">// ???</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><strong>但事實上你不能。</strong></p>
+<p><strong>所有的 primitive values 都是 immutable 的</strong>，「Immutable」的相似詞是 「unchangeable」，意思就是不能改動，Read only 的，你完全沒辦法對 primitive values 上下其手。</p>
+<p>一般來說，我們可以直接 set object 的 property，比如這樣：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">let</span> a <span class="token operator">=</span> <span class="token punctuation">&#123;</span> test<span class="token operator">:</span> <span class="token number">1</span> <span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+a<span class="token punctuation">.</span>test <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>a<span class="token punctuation">.</span>test<span class="token punctuation">)</span> <span class="token comment">// 100</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>但在 primitive values 中，比如 numbers 或 string，是沒辦法 set property 的。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">let</span> fifty <span class="token operator">=</span> <span class="token number">50</span><span class="token punctuation">;</span>
+fifty<span class="token punctuation">.</span>shades <span class="token operator">=</span> <span class="token string">'gray'</span><span class="token punctuation">;</span> <span class="token comment">// No!</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>50 是 number，也就是 primitive values，因此沒辦法 set property。</p>
+<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=otCpCn0l4Wo">U can’t touch this</a></p>
+<p>在 Dan 的 JavaScript 宇宙中，所有的 primitive values 存在於 code 的外圍圈圈中（如下圖所示），就像遙遠的恆星，你可以使用它們，但沒辦法改變。</p>
+<p><img data-src="https://ci4.googleusercontent.com/proxy/pHsMAsQ4oeXCJVvsRlzWFQYlqEXbAQ2UC6BY6qUJlTuCtxABGWKi8G8Xp_RmAJDlW15vvEpes3RVmKWatNm7bhQzSbSLCgpMW_iWLCFk2-x3COs_Mb-YjMOzRPTbxIvBan8PVJ29yrIfNNIkNLR1yHlUA7bO8GrTEy_Pdnfmg9Ehb8TY=s0-d-e1-ft#https://res.cloudinary.com/dg3gyk0gu/image/upload/v1579283157/just-javascript-email-images/jj03/immutablemap3.png" alt="image"></p>
+<h2 id="矛盾的地方"><a href="#矛盾的地方" class="headerlink" title="矛盾的地方"></a>矛盾的地方</h2><p>剛剛說到 primitive values 是 immutable 的，是 read-only，那接下來再用一個例子來測試看看：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">let</span> pet <span class="token operator">=</span> <span class="token string">'Narwhal'</span><span class="token punctuation">;</span>
+pet <span class="token operator">=</span> <span class="token string">'The Kraken'</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>pet<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// ?</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>按照剛剛 read-only 的理論，輸出的答案應該是…</p>
+<p>答案是<code>&#39;The Kraken&#39;</code>！</p>
+<p>怎麼會這樣咧？？剛剛不是說 primitive values 是 immutable 的嗎！</p>
+<h2 id="把變數當線"><a href="#把變數當線" class="headerlink" title="把變數當線"></a>把變數當線</h2><p>我們再看一次剛剛的例子：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">let</span> pet <span class="token operator">=</span> <span class="token string">'Narwhal'</span><span class="token punctuation">;</span>
+pet <span class="token operator">=</span> <span class="token string">'The Kraken'</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>pet<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// "The Kraken"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>我們都知道型態為 string 的 value 因為是 primitive value 的關係，所以不能改變，但 <code>pet</code> 這個變數確實變成了 <code>&#39;The Kraken&#39;</code>，為什麼？</p>
+<p>看起來好像有點矛盾，但其實不是，我們說 primitive values 不行改變，但完全沒有談論到變數！</p>
+<p>我們必須理清一下我們的概念。</p>
+<p><strong>Variables are not values. 變數並不是值</strong><br><strong>Variables point to values. 變數指向值</strong></p>
+<p>在 Dan 的 JavaScript 宇宙中，變數像一條線，有兩個端點和一個方向，它開始於一個名字，結束於指向的某個值。</p>
+<p>舉個例子，我們可以將 <code>pet</code> 這個變數指向於 <code>&#39;Narwhal&#39;</code> 這個值。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">let</span> pet <span class="token operator">=</span> <span class="token string">'Narwhal'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><img data-src="https://ci5.googleusercontent.com/proxy/wcO3dHlW2VBtbMiLgfbSEZERAYOc21luc5E0-eHLB7Az9WYeR4O9rbYBzQxVyVt8jq5ZEPZ39HDs8J6xrN42TVEa2j0HaYR8apK3X7RecrYA_jL68QTpgLyn0tLIr1JrRansj8naa2PUG7A_uDfrOmdQOkTmChq0umF-6tIEB7vgpYvT7NyLIZo=s0-d-e1-ft#https://res.cloudinary.com/dg3gyk0gu/image/upload/v1579283157/just-javascript-email-images/jj03/narwhal-assignment.png" alt="pet point to Narwhal"></p>
+<p>我們在這之後能對變數做兩件事。</p>
+<h2 id="賦予變數某個值"><a href="#賦予變數某個值" class="headerlink" title="賦予變數某個值"></a>賦予變數某個值</h2><p>其中一件事是能夠賦予變數某個值。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">pet <span class="token operator">=</span> <span class="token string">'The Kraken'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><img data-src="https://ci6.googleusercontent.com/proxy/igd1ZQUORgMYfeinNlCgb0x4rn4mrSck1h-MmtipgsxVoFEcq5gIXdMptBdLpgQSs0F8_NxfWUoW1LEHd0ZGOqjdStYJuX3jYHKviJVPTspYH6RW04aBB9g6S1UmeS5H8dIS7bGLj5mJeJhhivESCVneB1Ipz6UYxFcDBy5Xp_5bAF8n5-nuKpML=s0-d-e1-ft#https://res.cloudinary.com/dg3gyk0gu/image/upload/v1579283157/just-javascript-email-images/jj03/kraken-reassignment.png" alt="Assigning a Value to a Variable"></p>
+<p>上面所做的就是將線左側(left side)的 pet 指向於線右側(right side)的 ‘The Kraken’，pet 會持續指向 The Kraken 這個 value 直到重新被賦值。</p>
+<p><strong>左側的 assignment 必須是一條「線」。</strong></p>
+<p><strong>右側的 assignment 則必須是 expressions。</strong> 可以是很簡單的 <code>2</code> 或是 <code>&#39;hello&#39;</code>，或是更複雜的 expressions，像是：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">pet <span class="token operator">=</span> count <span class="token operator">+</span> <span class="token string">' Dalmatians'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><code>count + &#39; Dalmatians&#39;</code>是一個 expression，JavaScript 會回應這個 expression（像是 ‘101 Dalmatians’），從現在開始，<code>pet</code>變數會指向這個值。</p>
+<p>如果右側必須是 expresssions 的話，那是否代表數字 <code>2</code> 或是 字串<code>&#39;The Kraken&#39;</code>也是 expressions 呢？沒錯！這樣的 expressions 稱為 <code>literals</code>。</p>
+<h2 id="讀取變數中的值"><a href="#讀取變數中的值" class="headerlink" title="讀取變數中的值"></a>讀取變數中的值</h2><p>我們也可以讀取變數中的值，比如用 <code>console.log</code> 印出。</p>
+<p><code>console.log(pet);</code></p>
+<p>值得注意的是，我們並不是把 <code>pet</code> 這個變數傳給 <code>console.log</code>（雖然我們口語上可能會這樣說），但我們實際上並不能把變數傳給 functions，我們傳的是 <code>pet</code> 變數目前的值，這背後怎麼運作的呢？</p>
+<p>當我們在 console.log 寫下 <code>pet</code>，是在問 JavaScript 一個問題：「<code>pet</code> 現在的值是什麼呢？」，為了回答這個問題，JavaScript 會沿著 pet 的線攀爬，並且給出這條線終點的「值（Value）」</p>
+<p>所以在相同的 expression 在不同的時機會給我們不同的 values。</p>
+<h2 id="Nouns-and-Verbs"><a href="#Nouns-and-Verbs" class="headerlink" title="Nouns and Verbs"></a>Nouns and Verbs</h2><p>爭論「傳一個值」或「傳一個變數」有點無聊，因為大家內心都能理解你要表達的意思，但於此同時，自己內心必須搞清楚在 JavaScript 中，你不能傳一個變數。</p>
+<p>這邊是一個小例子：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">double</span><span class="token punctuation">(</span><span class="token parameter">x</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  x <span class="token operator">=</span> x <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">let</span> money <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+<span class="token function">double</span><span class="token punctuation">(</span>money<span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>money<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// ?</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>如果我們把 <code>double(money)</code> 當作傳一個變數進去，那我們會預期 <code>x = x * 2</code> 會把變數 double，但事實上並不是這樣，真正運作的邏輯是：「**找出 money 這個變數的 value，然後把這個 value 傳進去 double。」</p>
+<h2 id="Put-it-toghther"><a href="#Put-it-toghther" class="headerlink" title="Put it toghther"></a>Put it toghther</h2><p>讓我們舉最後一個例子，並一步一步拆解它的運作方式吧～</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">let</span> x <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> y <span class="token operator">=</span> x<span class="token punctuation">;</span>
+x <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>第一行並沒有做太多事情：</strong></p>
+<p><img data-src="https://ci5.googleusercontent.com/proxy/mRPUqNCsUztVVvWdc5b1uQ2n8itEJCm6tJoc_yFZPyxYJ_zFuDtO-8mq2MguQ6JbbfsJ68wbhxWRVWsuDv1bX8nzIsizFP_KyAaG0ACwDWnAA9tfXXC42-2h6owYtB_o8J7Uyats1v78zQms7gsFomnbcTmQ2yon8LHKLxL_VAJzVLU=s0-d-e1-ft#https://res.cloudinary.com/dg3gyk0gu/image/upload/v1579283157/just-javascript-email-images/jj03/assign-step1.gif" alt="image"></p>
+<ul>
+<li>宣告一個名稱為 x 的變數<br>（創造一個從 x 開始的線）</li>
+<li>賦予 x 這變數 10 的值<br>（將 x 這個變數指向 10 這個值）</li>
+</ul>
+<p><strong>第二也很短，但做了一些事：</strong><br><img data-src="https://ci3.googleusercontent.com/proxy/GWxZZv1kTtnjB7GBE3m_GTkGE9tis9TMFupwBHQiVhqd7JKtMvHwKrsta3ANMZvN1cj62-i0edlhhNs2j7OHDmG70fmxEeB5piaiREsgWC8wjnMf718EKrUHOqiqZy_0iLVG2ksA1k_nN8mPHuuFA855xoAmZl-dDvwaaElwOus7Rgg=s0-d-e1-ft#https://res.cloudinary.com/dg3gyk0gu/image/upload/v1579283157/just-javascript-email-images/jj03/assign-step2.gif" alt="image"></p>
+<ul>
+<li>宣告一個名稱為 y 的變數<br>(創造一個從 y 開始的線）</li>
+<li>賦予 y 變數值，這個值是 x 變數的值</li>
+</ul>
+<ol>
+<li>詢問 x 這個變數的值，沿著 x 變數的線，找到它指向 10 這個值</li>
+<li>從 x expression 得到 10 這個結果。</li>
+<li>因此，賦予 y 變數 10 的值。</li>
+<li>y 變數把線的尾端指向 10。</li>
+</ol>
+<p><strong>最後，我們到達了第三行：</strong><br><img data-src="https://ci5.googleusercontent.com/proxy/el8tFBsFMKGaJql4A6TZa1pHFZY8YaQun7-6Ns79Tj8Gcejs_AocEjpSp-c6G7rmlZILXF--bC0j47RwYaEfEMjPIooxfewket2iwAP4CePpPJalLxp61_xjIFJCRhtflOqWleuHtyH5sAycIG0ld1O-gBzX2-aNBAHzLXWH3UJXROI=s0-d-e1-ft#https://res.cloudinary.com/dg3gyk0gu/image/upload/v1579283157/just-javascript-email-images/jj03/assign-step3.gif" alt="image"></p>
+<ul>
+<li>賦予 x 值，這個值是 0<br>（將 x 線的尾端指向 0）</li>
+</ul>
+<p>因此在結尾時， x 指向 0 這個值，y 指向 10 這個值。值得注意的地方是，<code>y = x</code> 並不代表把 y 指向 x，我們沒辦法把變數指向彼此！<strong>變數永遠指向值</strong>，當我們賦予某個值時，都是把左側的變數指向於右側的值。</p>
+<p>Dan 說到，一般大家的 Mental Models 都會把變數想成箱子，不過我們目前建立的宇宙觀並沒有提到任何箱子，<strong>只有可愛的線們</strong>。那為什麼我們不能只想像成把 0 或 10 這個值放進變數裡，而是一定要用線指向某個值的方式來想像呢？</p>
+<p>因為這對後續解釋某些概念會比較有幫助，像是 strict equality、object identity 和 mutation，這些概念在後續也會用線的概念來作延伸。</p>
+<p>Dan 的 JavaScript 宇宙觀中充滿各種線線。</p>
+<h2 id="小回顧"><a href="#小回顧" class="headerlink" title="小回顧"></a>小回顧</h2><ul>
+<li><strong>Primitive values 是 immutable 的。</strong> 我們沒辦法改變或影響它們，舉個例子，我們沒辦法幫 string 型態的值 set property，因為它是 primitive values，但 array 的話就可以。</li>
+<li><strong>變數不是值。</strong> 每個變數都指向某個特定的值，我們可以改變變數指向的值，透過 <code>=</code> 這個 assignment operator。</li>
+<li><strong>變數像是線</strong>。這不是 JavaScript 中的概念，但可以幫助我們想像變數指向某個值的狀況。</li>
+<li><strong>注意矛盾的地方</strong>。 如果你在學習某個慨念的時候彼此衝突，先不要沮喪，通常是有更深層的真相潛藏在其中。</li>
+</ul>
+<h2 id="練習題"><a href="#練習題" class="headerlink" title="練習題"></a>練習題</h2><p><a target="_blank" rel="noopener" href="https://eggheadio.typeform.com/to/RWJg3m?email=Jigsaw0401@gmail.com&ck_subscriber_id=690829198">Click here to solidify this mental model with a few short exercises.</a></p>
+<p>這是 Dan 提供的練習題，答案會在下次的信件進行講解，建議做了一週再前往下一週，這可以鞏固你目前在建立的 mental model，有了這樣的基礎，下次討論更複雜的主題時才可以更順利。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Front-End/" rel="tag"># Front-End</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/02/23/Just-JavaScript-The-JavaScript-Universe-%E9%9A%A8%E6%84%8F%E7%AD%86%E8%A8%98/" rel="prev" title="Just JavaScript - The JavaScript Universe 隨意筆記">
+                  <i class="fa fa-chevron-left"></i> Just JavaScript - The JavaScript Universe 隨意筆記
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/03/07/The-Complete-Junior-to-Senior-Web-Developer-Roadmap-SSH-%E7%AD%86%E8%A8%98/" rel="next" title="The Complete Junior to Senior Web Developer Roadmap - SSH 筆記">
+                  The Complete Junior to Senior Web Developer Roadmap - SSH 筆記 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chih Yang</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+<script>
+NexT.utils.loadComments('.utterances-container', () => {
+  const script = document.createElement('script');
+  script.src = 'https://utteranc.es/client.js';
+  script.setAttribute('repo', "ChihYang41/ChihYang41.github.io");
+  script.setAttribute('issue-term', "title");
+  script.setAttribute('theme', "github-light");
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+  document.querySelector('.utterances-container').appendChild(script);
+});
+</script>
+
+</body>
+</html>

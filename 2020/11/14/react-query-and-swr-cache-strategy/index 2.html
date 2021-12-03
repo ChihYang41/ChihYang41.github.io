@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="pdI9OcgtLe0I27rizFD2U3s553wFM8nsth5viFyCbOk">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="👉 前言繼上一篇介紹 React Query 的基本使用方法後，接著想探索 React Query 以及和它相似的 SWR 這兩個 library 的 cache strategy，還有從 source code 看兩者的 cache 如何實踐，以及從 SWR 的 source code 中觀察優化 UX、DX 的小細節。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React Query、SWR 的 cache strategy &amp; 淺談 source code">
+<meta property="og:url" content="https://chihyang41.github.io/2020/11/14/react-query-and-swr-cache-strategy/index.html">
+<meta property="og:site_name" content="前端癢癢 der">
+<meta property="og:description" content="👉 前言繼上一篇介紹 React Query 的基本使用方法後，接著想探索 React Query 以及和它相似的 SWR 這兩個 library 的 cache strategy，還有從 source code 看兩者的 cache 如何實踐，以及從 SWR 的 source code 中觀察優化 UX、DX 的小細節。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gkxejl1628j318k0o4jur.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gko3997nvsg30hs099jwv.gif">
+<meta property="og:image" content="https://raw.githubusercontent.com/donavon/hook-flow/master/hook-flow.png">
+<meta property="og:image" content="https://developers.google.com/web/fundamentals/performance/rendering/images/intro/frame-full.jpg?hl=zh-tw">
+<meta property="og:image" content="https://cythilya.github.io/assets/critical-rendering-path/requestAnimationFrame.png">
+<meta property="article:published_time" content="2020-11-13T18:58:22.000Z">
+<meta property="article:modified_time" content="2020-11-13T18:58:22.000Z">
+<meta property="article:author" content="Chih Yang">
+<meta property="article:tag" content="Front-End">
+<meta property="article:tag" content="React">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/0081Kckwgy1gkxejl1628j318k0o4jur.jpg">
+
+
+<link rel="canonical" href="https://chihyang41.github.io/2020/11/14/react-query-and-swr-cache-strategy/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+<title>React Query、SWR 的 cache strategy & 淺談 source code | 前端癢癢 der</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-146838618-1');
+      }
+    </script>
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+      <img class="custom-logo-image" src="/images/logo.png" alt="前端癢癢 der">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">前端癢癢 der</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%91%89-%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">👉 前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%91%89-Cache-Strategy"><span class="nav-number">2.</span> <span class="nav-text">👉 Cache Strategy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#stale-while-revalidate"><span class="nav-number">2.1.</span> <span class="nav-text">stale-while-revalidate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%92%8C-React-Query%E3%80%81SWR-%E7%9A%84%E9%97%9C%E8%81%AF%E6%98%AF%E7%94%9A%E9%BA%BC%E5%91%A2%EF%BC%9F"><span class="nav-number">2.2.</span> <span class="nav-text">和 React Query、SWR 的關聯是甚麼呢？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%91%89-React-Query%E3%80%81SWR-Cache-%E7%9A%84%E5%AF%A6%E8%B8%90"><span class="nav-number">3.</span> <span class="nav-text">👉 React Query、SWR Cache 的實踐</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#React-Query"><span class="nav-number">3.1.</span> <span class="nav-text">React Query</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SWR"><span class="nav-number">3.2.</span> <span class="nav-text">SWR</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%91%89-%E5%BE%9E-SWR-source-code-%E7%9C%8B%E5%A2%9E%E9%80%B2-UX%E3%80%81DX-%E7%9A%84%E5%B0%8F%E7%B4%B0%E7%AF%80"><span class="nav-number">4.</span> <span class="nav-text">👉 從 SWR source code 看增進 UX、DX 的小細節</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#useIsomorphicEffect"><span class="nav-number">4.1.</span> <span class="nav-text">useIsomorphicEffect</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#softRevalidate"><span class="nav-number">4.2.</span> <span class="nav-text">softRevalidate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rIC-requestIdleCallback"><span class="nav-number">4.3.</span> <span class="nav-text">rIC - requestIdleCallback</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%82%BA%E7%94%9A%E9%BA%BC%E8%A6%81%E7%94%A8-requestIdleCallback%EF%BC%9F%E5%85%88%E5%BE%9E%E7%80%8F%E8%A6%BD%E5%99%A8%E8%AB%87%E8%B5%B7"><span class="nav-number">4.3.1.</span> <span class="nav-text">為甚麼要用 requestIdleCallback？先從瀏覽器談起</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%82%BA%E4%BD%95%E8%A2%AB%E6%94%B9%E6%88%90-rAF%EF%BC%9F"><span class="nav-number">4.3.2.</span> <span class="nav-text">為何被改成 rAF？</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%91%89-%E7%B5%90%E8%AA%9E"><span class="nav-number">5.</span> <span class="nav-text">👉 結語</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%91%89-References"><span class="nav-number">6.</span> <span class="nav-text">👉 References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Chih Yang</p>
+  <div class="site-description" itemprop="description">我是前端，我是 Yang</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ChihYang41" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ChihYang41" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/chihyang41" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;chihyang41" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/ChihYang41" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://chihyang41.github.io/2020/11/14/react-query-and-swr-cache-strategy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Chih Yang">
+      <meta itemprop="description" content="我是前端，我是 Yang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="前端癢癢 der">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          React Query、SWR 的 cache strategy & 淺談 source code
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-11-14 02:58:22" itemprop="dateCreated datePublished" datetime="2020-11-14T02:58:22+08:00">2020-11-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/frontend/" itemprop="url" rel="index"><span itemprop="name">frontend</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="👉-前言"><a href="#👉-前言" class="headerlink" title="👉 前言"></a>👉 前言</h2><p>繼上一篇介紹 React Query 的基本使用方法後，接著想探索 React Query 以及和它相似的 SWR 這兩個 library 的 cache strategy，還有從 source code 看兩者的 cache 如何實踐，以及從 SWR 的 source code 中觀察優化 UX、DX 的小細節。</p>
+<span id="more"></span>
+
+<h2 id="👉-Cache-Strategy"><a href="#👉-Cache-Strategy" class="headerlink" title="👉 Cache Strategy"></a>👉 Cache Strategy</h2><h3 id="stale-while-revalidate"><a href="#stale-while-revalidate" class="headerlink" title="stale-while-revalidate"></a>stale-while-revalidate</h3><blockquote>
+<p>React Query caching is automatic out of the box. It uses a <code>stale-while-revalidate</code> in-memory caching strategy (popularized by <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc5861">HTTP RFC 5861</a>) and a very robust query deduping strategy to always ensure a query’s data is always readily available, only cached when it’s needed, even if that query is used multiple times across your application and updated in the background when possible.</p>
+</blockquote>
+<p>React Query 以及 SWR 的 cache strategy 是基於 <code>stale-while-revalidate</code> 的概念實踐，甚麼是 <code>stale-while-revalidate</code> 呢？還記得有個 HTTP header 叫做 <code>Cache-Control</code> 嗎？至少我是不太記得，那時候對 <code>Cache-Control</code> 最普遍認知的是裡面有個叫 <code>max-age</code> 的屬性。</p>
+<p>舉例來說，假設今天 header 設置了 <code>Cache-Control: max-age: 60</code>，代表的意思就是「我的資源在這 60 秒內取用它的話，就會從 cache 拿」，也就是說在這 60 秒內這份資料都會是新鮮的，要重複使用到它的話，只要從 cache 取出就好，不需要再跟 server 拿，但過了 60 秒後就必須要再跟 server 要資料，因為資料已經過期了。</p>
+<p><code>stale-while-revalidate</code> 則是 <code>Cache-Control</code> 的 extension（spec 可參考 <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc5861">HTTP RFC 5861</a>）我們把剛剛的舉例再延伸，這次將 <code>Cache-Control</code> 設置成 <code>Cache-Control: max-age=1, stale-while-revalidate=59</code>，意思代表的是「過了 1 秒後我的資料會過期，但沒關係，在之後的 59 秒我還是要從 cache 拿，只是會用非同步、背景更新的方式去 revalidate，等到 60 秒以後，我的資料真正的過期了，才會用同步的方式 revalidate cache」</p>
+<p>不夠清楚的話有下面圖例：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/0081Kckwgy1gkxejl1628j318k0o4jur.jpg" alt="stale-while-revalidate"></p>
+<blockquote>
+<p>此圖取自於 <a target="_blank" rel="noopener" href="https://web.dev/stale-while-revalidate/">Keeping things fresh with stale-while-revalidate</a></p>
+</blockquote>
+<p>以上面圖例來說：</p>
+<ul>
+<li>0 - 1 秒時，資料是新鮮的的，就是 <code>max-age: 1</code> 預計會有的行為。</li>
+<li>1 - 59 秒時，資料已經過期了，但因為 <code>stale-while-revalidate: 59</code> 的關係，表示我不介意繼續用過期的 cache，但同時我會在背景去 revalidate 我的 cache</li>
+<li>60 秒後，代表我資料真正的過期了，就走一般的同步 revalidate 方式</li>
+</ul>
+<h3 id="和-React-Query、SWR-的關聯是甚麼呢？"><a href="#和-React-Query、SWR-的關聯是甚麼呢？" class="headerlink" title="和 React Query、SWR 的關聯是甚麼呢？"></a>和 React Query、SWR 的關聯是甚麼呢？</h3><p>剛剛有說到這兩個 Library 都是採用 <code>stale-while-revaliate</code> 的 cache strategy，我們可以從這兩個 library 在操作時的行為來看出  <code>stale-while-revaliate</code> 概念的實踐，這時候又要到點到我們之前的 demo：</p>
+<p><a target="_blank" rel="noopener" href="https://codesandbox.io/s/blissful-poincare-vxqv8?file=/src/App.js">Star Wars Demo</a></p>
+<p><img data-src="https://tva1.sinaimg.cn/large/0081Kckwgy1gko3997nvsg30hs099jwv.gif" alt="ezgif-6-01cf903e8474"></p>
+<p>可以發現到在切換「Planets」和「People」的時候，第一次會有 loading 的文字顯示，但在這之後就可以很快速的切換頁面，並且資料已經呈現出來了，這當中的運作流程是：</p>
+<blockquote>
+<ol>
+<li>第一次 render 本來就沒有資料，所以 call API 拿資料。</li>
+<li>呈現 loading 文字給使用者看。</li>
+<li>第二次 render 時，因為有上一次 call API 的資料 cache，所以先呈現 cache 給使用者看。</li>
+<li>如果資料和上一次 call API 時相同，那就不會變動；如果資料不同，那就變動畫面。</li>
+</ol>
+</blockquote>
+<p>也就是說使用者在短期內切換畫面時，體感上會覺得挺流暢的，因為他不會每切換一次畫面就看到 loading，使用體驗就會變得比較好。</p>
+<p>從 React Query 和 SWR 「<strong>有 cache 就先端給使用者，並且在背景默默更新 cache</strong>」的行為來看，和 <code>stale-while-revalidate</code> 的概念很一致。</p>
+<h2 id="👉-React-Query、SWR-Cache-的實踐"><a href="#👉-React-Query、SWR-Cache-的實踐" class="headerlink" title="👉 React Query、SWR Cache 的實踐"></a>👉 React Query、SWR Cache 的實踐</h2><p>目前只是從這兩套 library 的一小角來窺探如何實踐，真正的邏輯更為複雜，對 source code 的理解也未必正確，如有誤也麻煩大力糾錯，感恩感恩。</p>
+<h3 id="React-Query"><a href="#React-Query" class="headerlink" title="React Query"></a>React Query</h3><p><a target="_blank" rel="noopener" href="https://github.com/tannerlinsley/react-query/blob/69236d3e0bce712376767a86eac9246b304f6be6/src/core/queryCache.ts#L140">React Query - getQueries</a></p>
+<p>我會先從 <code>QueryCache</code> 這個 class 的 <code>getQueries</code> method 開始看，因為 <code>getQueries</code> 是從 cache 中撈出 query 的方法，可以從中看到兩件事，第一是 cache 的資料結構，也是我們主要想了解的；第二個是順便了解怎麼它是怎麼取出 query 的。</p>
+<p>先看 <code>getQueries</code> 最後一行：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>queriesArray<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>predicateFn<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>從這行 code 可以推測 cache 的資料結構是 array，達成了主要目的，可以先休息了，呼。</p>
+<p>休息完後繼續看下去，會看到取出的方式是透過 filter 的 <code>predicateFn</code> callback 得到想要的 query，因此我們再看到 <code>predicateFn</code>：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">let</span> predicateFn<span class="token operator">:</span> QueryPredicateFn
+
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> predicate <span class="token operator">===</span> <span class="token string">'function'</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  predicateFn <span class="token operator">=</span> predicate <span class="token keyword">as</span> QueryPredicateFn
+<span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> <span class="token punctuation">&#123;</span> exact<span class="token punctuation">,</span> active<span class="token punctuation">,</span> stale <span class="token punctuation">&#125;</span> <span class="token operator">=</span> options <span class="token operator">||</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+  <span class="token keyword">const</span> resolvedConfig <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getResolvedQueryConfig</span><span class="token punctuation">(</span>predicate<span class="token punctuation">)</span>
+
+  <span class="token function-variable function">predicateFn</span> <span class="token operator">=</span> <span class="token parameter">query</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// Check query key if needed</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>anyKey<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>exact<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// Check if the query key matches exactly</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>query<span class="token punctuation">.</span>queryHash <span class="token operator">!==</span> resolvedConfig<span class="token punctuation">.</span>queryHash<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+          <span class="token keyword">return</span> <span class="token boolean">false</span>
+        <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// Check if the query key matches partially</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">deepIncludes</span><span class="token punctuation">(</span>query<span class="token punctuation">.</span>queryKey<span class="token punctuation">,</span> resolvedConfig<span class="token punctuation">.</span>queryKey<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+          <span class="token keyword">return</span> <span class="token boolean">false</span>
+        <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// Check active state if needed</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> active <span class="token operator">===</span> <span class="token string">'boolean'</span> <span class="token operator">&amp;&amp;</span> query<span class="token punctuation">.</span><span class="token function">isActive</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!==</span> active<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">return</span> <span class="token boolean">false</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// Check stale state if needed</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> stale <span class="token operator">===</span> <span class="token string">'boolean'</span> <span class="token operator">&amp;&amp;</span> query<span class="token punctuation">.</span><span class="token function">isStale</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!==</span> stale<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">return</span> <span class="token boolean">false</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">return</span> <span class="token boolean">true</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>從 <code>predicateFn</code> 可以看到它大概做了幾件事：</p>
+<ol>
+<li>檢查 query key 的 hash 是否相符</li>
+<li>檢查狀態是否為 active</li>
+<li>檢查狀態是否為 stale</li>
+</ol>
+<p>經過層層檢查後才會到 return true。</p>
+<p>另外，從 <code>query.queryHash</code> 也能夠大概推知 query 的 key 會經過 hash 後放到 <code>queriesArray</code> 裡。</p>
+<h3 id="SWR"><a href="#SWR" class="headerlink" title="SWR"></a>SWR</h3><p>接著輪到 SWR 了。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/vercel/swr/blob/master/src/cache.ts">swr/src/cache.ts</a></p>
+<p>先看 SWR 的 <code>class Cache</code> 裡面的 constructor：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">constructor</span><span class="token punctuation">(</span><span class="token parameter">initialData<span class="token operator">:</span> any <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>__cache <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Map</span><span class="token punctuation">(</span>Object<span class="token punctuation">.</span><span class="token function">entries</span><span class="token punctuation">(</span>initialData<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">// 這行！</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>__listeners <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以發現和 React Query Cache 的 Array 不同，SWR 的 Cache 是用 <code>Map</code> 這個資料結構來實現的。用 <code>Map</code> 來實踐我覺得蠻合理的，因為無論 React Query、SWR 都會把 key 經過 hash 後當作那筆資料的 unique identifier，而這個 unique identifier 就會對應到相對應的 data，這種 key-value pairs 的結構就蠻適合使用到 <code>Map</code> 的</p>
+<p>接著繼續往下看其他 Cache 的 source code：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">get</span><span class="token punctuation">(</span>key<span class="token operator">:</span> keyInterface<span class="token punctuation">)</span><span class="token operator">:</span> any <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>_key<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">serializeKey</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>__cache<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>_key<span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+
+<span class="token function">set</span><span class="token punctuation">(</span>key<span class="token operator">:</span> keyInterface<span class="token punctuation">,</span> value<span class="token operator">:</span> any<span class="token punctuation">)</span><span class="token operator">:</span> any <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>_key<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">serializeKey</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>__cache<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>_key<span class="token punctuation">,</span> value<span class="token punctuation">)</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">notify</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function">keys</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> Array<span class="token punctuation">.</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>__cache<span class="token punctuation">.</span><span class="token function">keys</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function">has</span><span class="token punctuation">(</span><span class="token parameter">key<span class="token operator">:</span> keyInterface</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>_key<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">serializeKey</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span>
+  <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>__cache<span class="token punctuation">.</span><span class="token function">has</span><span class="token punctuation">(</span>_key<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>__cache<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">notify</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">delete</span><span class="token punctuation">(</span>key<span class="token operator">:</span> keyInterface<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>_key<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">serializeKey</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>__cache<span class="token punctuation">.</span><span class="token function">delete</span><span class="token punctuation">(</span>_key<span class="token punctuation">)</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">notify</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以發現到這邊無論 get、set 或 clear 等等，其實都是 <code>Map</code> 內建的 function，更詳細的內容可以看 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Map">MDN - Map</a></p>
+<h2 id="👉-從-SWR-source-code-看增進-UX、DX-的小細節"><a href="#👉-從-SWR-source-code-看增進-UX、DX-的小細節" class="headerlink" title="👉 從 SWR source code 看增進 UX、DX 的小細節"></a>👉 從 SWR source code 看增進 UX、DX 的小細節</h2><p>接著再從 SWR 的 source code 挖掘它做了什麼增進 UX 和 DX 的小細節，這邊的小細節是挑我有興趣的部分講。</p>
+<h3 id="useIsomorphicEffect"><a href="#useIsomorphicEffect" class="headerlink" title="useIsomorphicEffect"></a>useIsomorphicEffect</h3><pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// React currently throws a warning when using useLayoutEffect on the server.</span>
+<span class="token comment">// To get around it, we can conditionally useEffect on the server (no-op) and</span>
+<span class="token comment">// useLayoutEffect in the browser.</span>
+<span class="token keyword">const</span> useIsomorphicLayoutEffect <span class="token operator">=</span> <span class="token constant">IS_SERVER</span> <span class="token operator">?</span> useEffect <span class="token operator">:</span> useLayoutEffect<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>這邊會發現在 Client Side Render 時，SWR 使用 <code>useLayoutEffect</code>，在 Server Side Render 時使用 <code>useEffect</code>；從註解會看到這樣做的原因是在 Server Side Render 的時候使用 <code>useLayoutEffect</code> 會有警告，因此才做了這邊三元運算子的判斷。</p>
+<p>至於為甚麼要用 <code>useLayoutEffect</code> 呢？要先從 React Hooks 的執行時機說起：</p>
+<p><img data-src="https://raw.githubusercontent.com/donavon/hook-flow/master/hook-flow.png"></p>
+<blockquote>
+<p>此圖來自於 donavon/hook-flow</p>
+</blockquote>
+<p>從上圖可以看到 <code>useLayoutEffect</code> 的執行時機在 browser paints screen 之前；<code>useEffect</code> 則是在瀏覽器畫面更新後才會執行，也因此統一改成 useLayoutEffect 後，執行時機就會更提早一些，讓 SWR 撈資料、處理資料的時機更提前。</p>
+<p>不過這邊我是有點疑惑的，根據 React 官方文件的說法：</p>
+<blockquote>
+<p><strong>Tip</strong><br>Unlike componentDidMount or componentDidUpdate, effects scheduled with useEffect don’t block the browser from updating the screen. This makes your app feel more responsive. The majority of effects don’t need to happen synchronously. In the uncommon cases where they do (such as measuring the layout), there is a separate useLayoutEffect Hook with an API identical to useEffect.</p>
+</blockquote>
+<blockquote>
+<p><strong>提示</strong><br>與 componentDidMount 或 componentDidUpdate 不同，使用 useEffect 安排的 effect 不會阻止瀏覽器更新螢幕。這使你的應用程式感覺起來響應更快。大多數 effect 不需要同步發生。在少見的需要同步發生的情況下（例如測量 layout），有另外一個 useLayoutEffect Hook，它的 API 與 useEffect 相同。</p>
+</blockquote>
+<p><code>useEffect</code> 安排在 render 完後執行的原因是如果 side effect 執行過久的話，就會 block 瀏覽器更新螢幕，所以大多數應用情境官方會比較推薦使用 useEffect，因為不會阻止瀏覽器更新螢幕。</p>
+<p>也因為如此，我會比較疑惑的地方是 SWR 改成使用 <code>useLayoutEffect</code> 不會有 side effect 執行過久導致 block UI paints 的狀況嗎？</p>
+<p>我猜依然是因為基於 <code>stale-while-revalidate</code> 這個核心思想的關係，使用者會先看到 cache ，背景會默默更新 data；因為使用者會先看到 cache，畫面上至少有東西，所以也比較不用擔心<code>useLayoutEffect</code> 執行過久導致瀏覽器更新螢幕被 block 的問題。</p>
+<h3 id="softRevalidate"><a href="#softRevalidate" class="headerlink" title="softRevalidate"></a>softRevalidate</h3><pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token function-variable function">softRevalidate</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token function">revalidate</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> dedupe<span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>這算是比較增進 DX 的部份。</p>
+<p>一般來說我們在寫 React Hook 時，會想要把重複的邏輯抽出去變成 custom hook，fetch data 的邏輯也不例外，通常會寫成像是 <code>useFetch</code> 的 custom hook，程式碼會像是這樣：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">useFetch</span><span class="token punctuation">(</span><span class="token parameter">url</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>data<span class="token punctuation">,</span> setData<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">useState</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>isLoading<span class="token punctuation">,</span> setIsLoading<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">useState</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>isError<span class="token punctuation">,</span> setIsError<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">useState</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span>
+
+  <span class="token function">useEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+    <span class="token function">setIsLoading</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span>
+      <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">fetch</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span>
+          <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">res</span><span class="token punctuation">)</span> <span class="token operator">=></span> res<span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+          <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">json</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token function">setData</span><span class="token punctuation">(</span>json<span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">setIsError</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span>
+      <span class="token punctuation">&#125;</span>
+        <span class="token function">setIsLoading</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>url<span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">[</span>data<span class="token punctuation">,</span> isLoading<span class="token punctuation">,</span> isError<span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接著假設我們有兩個 Component，Component A 和 Component B，並且都用到了 <code>useFetch</code> 這個 hook：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">ComponentA</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>data<span class="token punctuation">,</span> isLoading<span class="token punctuation">,</span> isError<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">useFetch</span><span class="token punctuation">(</span><span class="token string">'https://swapi.dev/api/people/1'</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">ComponentB</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">const</span> <span class="token punctuation">[</span>data<span class="token punctuation">,</span> isLoading<span class="token punctuation">,</span> isError<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">useFetch</span><span class="token punctuation">(</span><span class="token string">'https://swapi.dev/api/people/1'</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>並且在同一個頁面裡面都使用到了這兩個 Component：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">App</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token operator">&lt;</span><span class="token operator">></span>
+      <span class="token operator">&lt;</span>ComponentA<span class="token operator">/</span><span class="token operator">></span>
+      <span class="token operator">&lt;</span>ComponentB<span class="token operator">/</span><span class="token operator">></span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span><span class="token operator">></span>
+  <span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>這時候會發生一個問題，明明是要用同一份 API 的資料，但是卻 call 了同一支 API 兩次，也就是發了兩次拿取同樣資料的 request，造成不必要的資源浪費。</p>
+<p>但 React Query 和 SWR 不會發生這種狀況，當 query 的 key 相同的時候，就會去掉重複的 request，只會 call 一次 API。</p>
+<p>SWR 這段程式碼就是在做這件事情：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> <span class="token function-variable function">softRevalidate</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token function">revalidate</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> dedupe<span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>dedupe 設為 true 之後，就會去掉「短時間」內重複的 request，不過這個「短時間」為多少呢？在 SWR 的預設為 2 秒，因此 2 秒內重複的 request 都會被併為一次，避免不必要的 request。</p>
+<h3 id="rIC-requestIdleCallback"><a href="#rIC-requestIdleCallback" class="headerlink" title="rIC - requestIdleCallback"></a>rIC - requestIdleCallback</h3><p> <strong>⚠️ 目前 rIC 已經在 2020/11/2 <a target="_blank" rel="noopener" href="https://github.com/vercel/swr/pull/744">Replace rIC with rAF #744</a> 的 PR 被改成 rAF</strong></p>
+<p>雖然原本 rIC 已經被改成 rAF 了，但還是先從修改前的 source code 來談吧，待會再來看看為何被改成 rAF。</p>
+<p>先看看 source code：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// polyfill for requestIdleCallback</span>
+<span class="token keyword">const</span> rIC <span class="token operator">=</span> <span class="token constant">IS_SERVER</span>
+  <span class="token operator">?</span> <span class="token keyword">null</span> <span class="token operator">:</span> window<span class="token punctuation">[</span><span class="token string">'requestAnimationFrame'</span><span class="token punctuation">]</span> <span class="token operator">||</span> <span class="token punctuation">(</span><span class="token parameter">f</span> <span class="token operator">=></span> <span class="token function">setTimeout</span><span class="token punctuation">(</span>f<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment">//...中間略</span>
+
+<span class="token function">useIsomorphicLayoutEffect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">//...中間略</span>
+  
+  <span class="token comment">// trigger a revalidation</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>
+    config<span class="token punctuation">.</span>revalidateOnMount <span class="token operator">||</span>
+    <span class="token punctuation">(</span><span class="token operator">!</span>config<span class="token punctuation">.</span>initialData <span class="token operator">&amp;&amp;</span> config<span class="token punctuation">.</span>revalidateOnMount <span class="token operator">===</span> <span class="token keyword">undefined</span><span class="token punctuation">)</span>
+  <span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> latestKeyedData <span class="token operator">!==</span> <span class="token string">'undefined'</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// delay revalidate if there's cache</span>
+    <span class="token comment">// to not block the rendering</span>
+      <span class="token function">rIC</span><span class="token punctuation">(</span>softRevalidate<span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+      <span class="token function">softRevalidate</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>key<span class="token punctuation">,</span> revalidate<span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>從註解可以看到，當 <code>typeof latestKeyedData !== &#39;undefined&#39;</code> 時，也就是當我們有 cache 的時候，會執行 <code>rIC</code> 這個 function，而 <code>rIC</code> 代表的就是 Web APIs 中的 <code>requestIdleCallback</code>，所以我們現在可以探討的另一個問題是 - 「<strong>為什麼要用 <code>requestIdleCallback</code>？</strong>」</p>
+<h4 id="為甚麼要用-requestIdleCallback？先從瀏覽器談起"><a href="#為甚麼要用-requestIdleCallback？先從瀏覽器談起" class="headerlink" title="為甚麼要用 requestIdleCallback？先從瀏覽器談起"></a>為甚麼要用 requestIdleCallback？先從瀏覽器談起</h4><p>談這個問題之前，我們先談談 JavaScript 與瀏覽器的相處模式，了解一下前因後果。</p>
+<p>JavaScript 是 single thread 的，瀏覽器是 muti thread 的，瀏覽器除了處理 JavaScript 的 thread 以外，還會有 UI thread、Network thread、Main thread 等等。</p>
+<p>瀏覽器繪製每一個 frame 的流程會像是這樣，會是 JavaScript 先執行，UI thread 再繪製畫面：<br><img data-src="https://developers.google.com/web/fundamentals/performance/rendering/images/intro/frame-full.jpg?hl=zh-tw"></p>
+<blockquote>
+<p>圖片取自於 <a target="_blank" rel="noopener" href="https://developers.google.com/web/fundamentals/performance/rendering?hl=zh-tw">轉譯效能</a></p>
+</blockquote>
+<p>為什麼是 JavaScript 先執行呢？因為 JavaScript 會涉及到 DOM 的操作，如果今天 JavaScript 和 UI thread 同時在運作的話，畫面可能就會產生非預期的結果，因此 JavaScript 的執行和 UI thread 是不能同時來的，UI thread 會先等 JavaScript 執行完再繪製畫面。</p>
+<p>也因為有執行先後順序的關係，假設 JavaScript 執行時間過久，UI thread 就會在那邊苦苦等待，觸發的事件就會等不到回應，使用者就會覺得這網頁很慢。</p>
+<p>不過「執行時間過久」好像不太精確，怎麼樣才算是太久呢？目前大部分裝置都是 60 fps，也就是每一秒 60 個 frame，經過換算後，將 1 秒 / 60 (frames) 後， 可以得知一個 frame 的時間為 16.67ms（四捨五入），而一個 frame 除了 JavaScript 要執行以外，瀏覽器還有其他例行任務要做，所以 JavaScript 每個 frame 都要在 10ms 內完成，如果超過這時間就會掉幀，可能導致用戶覺得網頁使用起來不太流暢。</p>
+<p>講了這麼多，終於可以說 <code>requestIdleCallback</code> 能夠用來做甚麼了！</p>
+<blockquote>
+<p>這邊來偷偷複習一下上面那張圖的流程：<br><strong>JavaScript</strong> -&gt; <strong>Style</strong> -&gt; <strong>Layout</strong> -&gt; <strong>Paint</strong> -&gt; <strong>Composite</strong></p>
+</blockquote>
+<p><code>requestIdleCallback</code> 的用處就是在「<strong>每一個 frame 的空檔</strong>」執行 callback，要是 JavaScript 執行時間太久會導致掉幀，那我們把某些沒那麼優先的任務放在每個 frame 之間執行，就可以減少 JavaScript 執行時間，進而避免掉幀的可能性，網頁使用起來會慢的風險就降低了！簡單來說，<code>requestIdleCallback</code> 就是一個善用空閒時間的 Web API。</p>
+<p><code>requestIdleCallback</code> 也提供了一些彈性的使用空間，像是可以設置 <code>deadline</code>，來判斷這個 frame 中還有多少空閒時間（timeRemaining）來完成任務；以及有 <code>timeout</code> 這個參數能夠設置，表示超過這個時間就會讓瀏覽器停止手邊工作，強制執行任務。</p>
+<p>另外要特別注意的是，<code>requestIdleCallback</code> 最好是用來進行一些 JavaScript 的運算等等的事情，不要涉及到 DOM 的操作，原因是如果在 <code>requestIdleCallback</code> 操作到 DOM，又會觸發瀏覽器去進行 Layout、Paint 的工作，導致 frame 的執行時間無法預期。</p>
+<p>如果涉及 DOM 的操作時，建議使用 <code>requestAnimationFrame</code>，也就是待會要提到的 rAF。</p>
+<p><strong>繞了這麼久，所以為甚麼要用 requestIdleCallback？</strong></p>
+<p>前情提要結束了，我們再回頭看這段程式碼</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> latestKeyedData <span class="token operator">!==</span> <span class="token string">'undefined'</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// delay revalidate if there's cache</span>
+  <span class="token comment">// to not block the rendering</span>
+  <span class="token function">rIC</span><span class="token punctuation">(</span>softRevalidate<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">softRevalidate</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>當 <code>typeof latestKeyedData !== &#39;undefined&#39;</code> 的時候，就代表我們目前是有 cache 的，代表使用者「目前畫面上可以看到內容」，因為我們把 cache 的資料先端上去給使用者看了。所以 revalidate 這件事就可以稍微延後，先不要 block 住 rendering，而是在每一個 frame 有空檔的時候執行。</p>
+<p>從 SWR 的 source code 就能發現到，很多程式碼上的小細節，都圍繞著「<code>stale-while-revalidate</code>」這個核心概念在建構這套 library。</p>
+<h4 id="為何被改成-rAF？"><a href="#為何被改成-rAF？" class="headerlink" title="為何被改成 rAF？"></a>為何被改成 rAF？</h4><p>承接上一段，<code>requestAnimationFrame</code> 會在 frame 的最初執行，用於優化瀏覽器的動畫效能、或是操作 DOM 的任務，延續上一張圖，<code>requestAnimationFrame</code> 執行時機如下：</p>
+<p><img data-src="https://cythilya.github.io/assets/critical-rendering-path/requestAnimationFrame.png"></p>
+<blockquote>
+<p>圖片來源：<a target="_blank" rel="noopener" href="https://cythilya.github.io/2018/06/26/animation-optimization/">Making a Silky Smooth Web</a></p>
+</blockquote>
+<p>修改為 rAF 的起因是一個 issue，連結在此：<br><a target="_blank" rel="noopener" href="https://github.com/vercel/swr/issues/731">requestIdleCallback blocked by browser extensions</a></p>
+<blockquote>
+<p>Data isn’t revalidating when certain browser extensions are installed. One I know for certain is <a target="_blank" rel="noopener" href="https://chrome.google.com/webstore/detail/uivision-rpa/gcbalfbdmfieckjlnblleoemohcganoc">UI.Vision RPA</a>. It appears to hold up <code>requestIdleCallback</code> from ever being called.</p>
+</blockquote>
+<p>看起來原因是 rIC 會因為安裝了某些 browser extensions 導致被 block 住，沒辦法 revalidate。</p>
+<p>暫時性的解法是設置 <code>timeout</code>，因為剛剛有提過，設置 <code>timeout</code> 可以在超過預定的時間後，讓瀏覽器強制執行 <code>rIC</code> 的 callback。</p>
+<p>不過維護者提議可以將 <code>requestIdleCallback</code> 改為 <code>requestAnimationFrame</code>，因此在 <a target="_blank" rel="noopener" href="https://github.com/vercel/swr/pull/744">Replace rIC with rAF #744</a> 這份 PR 就被改成 rAF 了。</p>
+<p>至於維護者更深入的考量，以及這個 bug 更深入的起因，因為本人功力尚淺還無法解釋，如果有人能幫忙解答那我會非常感謝 QQ</p>
+<h2 id="👉-結語"><a href="#👉-結語" class="headerlink" title="👉 結語"></a>👉 結語</h2><p>這次從 React Query、SWR 的官方文件長了一些知識，知道了 <code>stale-while-revalidate</code> 這個 cache strategy。</p>
+<p>另外，這也是首次用不一樣的角度去看 source code，以往沒有那麼常去看 source code，去深入了解一個 library 是如何實踐的；通常是遇到 bug、或是單純想了解架構才有機會翻 source code，但這次不太一樣，是出於好奇心，想知道怎麼做的，才開始這趟翻找 source code 的旅程，並從 library 的核心理念開始探究起「為何是這樣寫？」。不過同時也深深感受到了功力的不足，導致部分的解讀帶有不確定性，抑或是不太了解維護者的改動出自何種原因，看 source code 的速度也不是很快，這部分還需要多加努力 QQ</p>
+<p>最後，如果文章有任何錯誤也麻煩不吝指正 🧐</p>
+<h2 id="👉-References"><a href="#👉-References" class="headerlink" title="👉 References"></a>👉 References</h2><p>最後的最後，感謝無數無私的開發者分享所學，以下列出的參考資料大大幫助這篇文章的構成。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/vercel/swr">vercel/swr</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/tannerlinsley/react-query">tannerlinsley/react-query</a></p>
+<p><a target="_blank" rel="noopener" href="https://developers.google.com/web/updates/2015/08/using-requestidlecallback">Using requestIdleCallback</a></p>
+<p><a target="_blank" rel="noopener" href="https://medium.com/d-d-mag/%E5%96%84%E7%94%A8%E7%A9%BA%E9%96%91%E6%99%82%E9%96%93-requestidlecallback-744a9d75faba">requestIdleCallback — 善用空閑時間</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/60307571">深入剖析 React Concurrent</a></p>
+<p><a target="_blank" rel="noopener" href="https://developers.google.com/web/fundamentals/performance/rendering?hl=zh-tw">轉譯效能</a></p>
+<p><a target="_blank" rel="noopener" href="https://developers.google.com/web/fundamentals/performance/rendering/optimize-javascript-execution?hl=zh-tw">最佳化 JavaScript 執行</a></p>
+<p><a target="_blank" rel="noopener" href="https://cythilya.github.io/2018/06/26/animation-optimization/">如何提升動畫效能？</a></p>
+<p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-TW/docs/Web/API/Window.requestAnimationFrame">Window.requestAnimationFrame()</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Front-End/" rel="tag"># Front-End</a>
+              <a href="/tags/React/" rel="tag"># React</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/09/07/React-Query-Tutorial/" rel="prev" title="React Query Tutorial">
+                  <i class="fa fa-chevron-left"></i> React Query Tutorial
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/12/06/first-contribution/" rel="next" title="第一次貢獻開源就緊張到手抖">
+                  第一次貢獻開源就緊張到手抖 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chih Yang</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+
+<script>
+NexT.utils.loadComments('.utterances-container', () => {
+  const script = document.createElement('script');
+  script.src = 'https://utteranc.es/client.js';
+  script.setAttribute('repo', "ChihYang41/ChihYang41.github.io");
+  script.setAttribute('issue-term', "title");
+  script.setAttribute('theme', "github-light");
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+  document.querySelector('.utterances-container').appendChild(script);
+});
+</script>
+
+</body>
+</html>
