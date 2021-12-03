@@ -1901,6 +1901,251 @@ houseC<span class="token punctuation">.</span><span class="token function">listP
       </tags>
   </entry>
   <entry>
+    <title>使用 p5.js and ml5.js 打造 Google Meets 的濾鏡</title>
+    <url>/2021/12/02/build-Google-Meets-filter-with-p5-and-ml5/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近偶然在 TheCodingTrain 上看到 ml5 和 p5 的教學影片，就看著教學用 ml5 + p5 玩出有趣的效果了！</p>
+<p>廢話不多說直接上圖：</p>
+<img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gv13m1tjc4g60zk0qmnph02.gif" alt="螢幕錄製 2021-10-02 下午5" style="zoom: 33%;" />
+
+<p>玩出上面圖片的效果以後，發現居然還可以搭配 OBS 放到 Google Meets 上面玩，讓會議上其他人看看這副模樣，所以現在就稍微來介紹一下這兩個小玩具。</p>
+<p>另外，這篇文的靈感來源、實作很大部份都是參考 <a href="https://www.youtube.com/channel/UCvjgXvBlbQiydffZU7m1_aw">The Coding Train</a> youtube 頻道裡的影片，大力推薦，這是個可以讓人找到寫程式快樂之處的頻道！</p>
+<span id="more"></span>
+
+<h2 id="實作流程"><a href="#實作流程" class="headerlink" title="實作流程"></a>實作流程</h2><p>首先看今天實作的流程：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gwqoexk239j30ul08dt94.jpg" alt="Screen Shot 2021-11-24 at 11.51.08 PM"></p>
+<p>流程很單純，單純是我硬要畫圖，我們會開啟鏡頭取得畫面，接著把畫面當作 input 丟給 ml5，讓 ml5 去 classify，接著 ml5 就會回傳它辨識後的 data，我們接著就可以用這些資料搭配 p5，在畫面上做一些有趣的特效！ </p>
+<h2 id="p5-js-介紹"><a href="#p5-js-介紹" class="headerlink" title="p5.js 介紹"></a>p5.js 介紹</h2><p><a href="https://processing.org/">Processing</a> 是一個廣受歡迎用來做 creative coding 的語言，後來有了各語言的版本，而 p5.js 就是 Processing 的 JavaScript 版本，標榜簡單易用，讓非工程師相關的職業如教育者、設計師、藝術家也能輕鬆上手打造自己想要的作品。</p>
+<p>要了解 p5 如何使用不難，我們可以從 p5 官方文件的 <a href="https://p5js.org/get-started/">Get Started</a> 開始著手，首先我們可以到 <a href="https://editor.p5js.org/">p5 web editor</a> 實際的操作，會先看到以下的 code：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">createCanvas</span><span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token number">400</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">background</span><span class="token punctuation">(</span><span class="token number">220</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>p5.js 的專案由 setup() 與 draw() 這兩個主要的函式所組成，setup() 會負責程式的初始化，只會執行一次；draw 則是以每秒 60 次的方式做執行，會不斷地持續更新畫面。從 <code>createCanvas(400, 400)</code> 這個 function 不難看出用意是創建出一個 canvas 的畫布，這個畫布就是我們待會要揮灑創意的地方啦～</p>
+<p>接著我們把 code 改成：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">createCanvas</span><span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token number">400</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">background</span><span class="token punctuation">(</span><span class="token number">220</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">ellipse</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">,</span><span class="token number">50</span><span class="token punctuation">,</span><span class="token number">80</span><span class="token punctuation">,</span><span class="token number">80</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>你看到的畫面應該會長得像這樣，恭喜成功畫出一個圈圈！</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gwqorel98mj30mh0j7t9w.jpg" alt="first-sketch"></p>
+<p>試著把 <code>ellipse(50, 50, 80, 80)</code> 改成 <code>ellipse(150, 100, 80, 80)</code>，會發現圈圈往下移動了：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gwqoxj4kdqj31mi0u0414.jpg" alt="Screen Shot 2021-11-25 at 12.07.09 AM"></p>
+<p>聰明的你應該發現第一跟第二個參數分別代表了 ellipse 的方位，第二跟第三則是代表了 ellipse 的 width 和 height，在 p5 的世界中，X 軸就和我們認知的方向一樣，X 軸給了 50 就會往右 50px；Y 軸則是和我們一般數學上認知的相反，給 Y 軸 100 就會往下 100px。</p>
+<p>接下來我們來了解一些 p5 內建的全域變數以及圖層的概念，假設我們有今天這段 code：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">createCanvas</span><span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token number">400</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">ellipse</span><span class="token punctuation">(</span>mouseX<span class="token punctuation">,</span> mouseY<span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0r1y58crg30go097ta9.gif" alt="p5 - example"></p>
+<p>會發現隨著滑鼠移動，圈圈跟著滑鼠的位置移動，而且圈圈竟然會一直疊加上去！有兩個值得注意的地方：</p>
+<ol>
+<li>每次 <code>draw</code> 執行的時候，可以想成是疊一層新的畫布上去，因此如果我們在 draw 最前面加上了 <code>background(255)</code>，那等同每次執行的時候都會疊上一層白色的背景，所以我們這時候移動滑鼠就只會有一個圈圈跟著滑鼠，但如果移掉 background 後，每次 draw 執行都不會疊上新的背景，也因此會看到圈圈不會消失，而是一直疊加上去。</li>
+<li>p5 提供了一些內建的全域變數以及 function 使用，以上面程式碼來說，<code>mouseX</code> 和 <code>mouseY</code> 是鼠標的 X 和 Y 軸的位置，透過這個全域變數就能夠讓 ellipse 跟著你跑啦！所以如果我們提供目前鏡頭某個部位的所在方位，那就可以讓 p5 畫出來的圖案跟著鏡頭上的部位移動了。</li>
+</ol>
+<p>p5 的介紹大概先這樣，這些基本的介紹就足夠待會要做的事情了。</p>
+<p> 想要更了解 p5.js 如何玩的話，有個很不錯的網站 <a href="https://openhome.cc/Gossip/P5JS/index.html">非關語言：玩轉 p5.js</a>，還有前言提到的 The Coding Train 也很頻繁的會釋出關於 p5.js 的 coding challenge；當然，還有<a href="https://openprocessing.org/user/139364/?view=sketches#sketches">吳哲宇的 Open Processing</a> 可以看到何謂厲害的 creative coding 創作。</p>
+<h2 id="ml5-js-介紹"><a href="#ml5-js-介紹" class="headerlink" title="ml5.js 介紹"></a>ml5.js 介紹</h2><p>ml5.js 是一個基於 tensorflow.js 之上開發的 library，在官網的介紹中：</p>
+<blockquote>
+<p>ml5.js is being developed to make machine learning more accessible to a wider audience.</p>
+</blockquote>
+<p>可以知道 ml5 跟 p5 一樣是以好上手為前提來開發的一個 library，不像使用 tensorflow.js 需要機器學習的前置知識，使用 ml5 只要看個文件，傳入想要使用的 pre-trained model，很快就能夠快樂的在瀏覽器使用 ml5。</p>
+<p>印象中 p5 有部分的開發者同時也是 ml5 的開發者，所以搜尋 ml5 相關應用的時候，很常會看到跟 p5 結合一起使用，而因為兩個 library 結合起來也真的蠻順手的，打造一些小玩具非常方便，所以能夠搜尋到不少有趣的作品。</p>
+<h3 id="PoseNet"><a href="#PoseNet" class="headerlink" title="PoseNet"></a>PoseNet</h3><p>此段落內容皆出自於 <a href="https://learn.ml5js.org/#/reference/posenet?id=posenet">PoseNet</a> 和 <a href="https://www.youtube.com/watch?v=OIo-DIOkNVg">ml5.js Pose Estimation with PoseNet</a>，如果喜歡看影片的人歡迎進去觀看，然後就可以跳過這一 part。</p>
+<p>我們待會只會用到 html + js，然後為了開發方便起見，建議安裝 VSCode 的 <a href="https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer">Live Server</a> extension，開發時就直接啟動 server 就好囉。</p>
+<p>首先是環境的設置，簡單起見我們就直接開一個 html 檔，然後引入 ml5 和 p5 的 CDN，以及引入我們待會要寫的 <code>pose-net.js</code> 檔：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">DOCTYPE</span> <span class="token name">html</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span> <span class="token attr-name">lang</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>en<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>Getting Started with ml5.js<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
+    <span class="token comment">&lt;!-- p5 --></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.2.0/p5.min.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+    <span class="token comment">&lt;!-- ml5 --></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://unpkg.com/ml5@latest/dist/ml5.min.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>./sketches/pose-net.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接著就可以開始實作了，首先我們要讀取 PoseNet 這個 pre-train model：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// 全域變數</span>
+<span class="token keyword">let</span> video
+<span class="token keyword">let</span> poseNet
+<span class="token keyword">let</span> pose
+
+<span class="token keyword">function</span> <span class="token function">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">createCanvas</span><span class="token punctuation">(</span><span class="token number">640</span><span class="token punctuation">,</span> <span class="token number">520</span><span class="token punctuation">)</span>
+  <span class="token comment">// Create the video</span>
+  video <span class="token operator">=</span> <span class="token function">createCapture</span><span class="token punctuation">(</span><span class="token constant">VIDEO</span><span class="token punctuation">)</span>
+  video<span class="token punctuation">.</span><span class="token function">hide</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+  poseNet <span class="token operator">=</span> ml5<span class="token punctuation">.</span><span class="token function">poseNet</span><span class="token punctuation">(</span>video<span class="token punctuation">,</span> modelLoaded<span class="token punctuation">)</span>
+  poseNet<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'pose'</span><span class="token punctuation">,</span> getPoses<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">modelLoaded</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'poseNet loaded'</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">function</span> <span class="token function">getPoses</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>createCapture</code> 是 p5 提供的 method，可以幫我們創造 <code>&lt;video&gt;</code> 的 element  並且會取得我們 webcam 的內容，然後 video element 預設會和 canvas 分開並被顯示，也就是說如果單純使用 <code>createCapture</code> 並且 render 出來的時候，你會發現會有個 video element 在 canvas 的外面，看起來就怪怪的，所以會搭配 <a href="https://p5js.org/reference/#/p5.Element/hide">hide()</a> 來去隱藏這個 canvas 之外的 element。</p>
+<p>這時候你可能會想，不對吧，那我怎麼看到自己目前的 webcam 畫面長怎樣，所以我們會在 <code>draw</code> 裡面顯示鏡頭的畫面：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">background</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+
+  <span class="token comment">// Draw the video</span>
+  <span class="token function">image</span><span class="token punctuation">(</span>video<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>這時候就可以正常的在瀏覽器看到鏡頭畫面了。</p>
+<p>回到剛剛的程式碼，執行 <code>ml5.poseNet(video, modelLoaded)</code> 代表我們要把目前捕捉到的畫面丟給 PoseNet 進行辨識，等 model 完成之後就會觸發 <code>modelLoaded</code> 這個 callback。</p>
+<p><code>poseNet.on(&#39;pose&#39;, getPoses)</code> 則是我們的重點，概念類似於 <code>addEventListener</code> 那樣，PoseNet 會監聽你目前畫面上的姿勢，當它發現你姿勢有變化的時候，就會觸發 <code>getPoses</code> 這個 callback，<code>getPoses</code> 預計會接收一個參數，這參數就是 PoseNet 辨識完之後回傳的 data。</p>
+<p>接著，我們就要來看看 <code>getPoses</code> 得到什麼資料，首先我們在 <code>getPoses</code> 印出它究竟收到什麼資料吧：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">getPoses</span><span class="token punctuation">(</span><span class="token parameter">poses</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>poses<span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>這時候你應該會發現，哇靠，怎麼 console 瘋狂跑出資料，這就代表 PoseNet 已經在進行辨識了！資料大概會長得像這樣：</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0n0jvffcj30j90l0q8l.jpg" alt="Screen Shot 2021-12-03 at 2.38.37 PM"></p>
+<p>會是 array 的原因是因為 PoseNet 可以辨識畫面上的多個人，而目前只有我自己被辨識到，所以 array 裡就只會有一筆資料，而 pose 裡面的資料 key 就對應到各部位的名稱，value 則是對應到部位的位置，如 <code>leftEar: &#123; x: 443, y: 244, cofidence: 0.94 &#125;</code> 就是指左耳的位置，以及它的 confidence（不知道中文怎麼翻，信心程度之類的嗎？）</p>
+<p>有了 data 以後，我們要做的事情就很簡單了，只要取得部位的資料，把它畫出來就好了，舉個例子來說，假設我今天想在鼻子上畫個紅色的圈圈，首先我們要賦予 <code>pose</code> 值，這個值就是剛剛 callback 所接收到的 <code>poses</code> ：</p>
+<pre class="line-numbers language-diff" data-language="diff"><code class="language-diff">// 變數
+let video
+let poseNet
+let pose
+
+// 創造 video element、load PoseNet
+function setup() &#123;
+<span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line"> createCanvas(640, 520)
+</span><span class="token prefix unchanged"> </span><span class="token line"> video = createCapture(VIDEO)
+</span><span class="token prefix unchanged"> </span><span class="token line"> video.hide()
+</span></span>
+<span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line"> poseNet = ml5.poseNet(video, modelLoaded)
+</span><span class="token prefix unchanged"> </span><span class="token line"> poseNet.on('pose', getPoses)
+</span></span>&#125;
+
+function getPoses(poses) &#123;
+<span class="token deleted-sign deleted"><span class="token prefix deleted">-</span><span class="token line"> console.log(poses)
+</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line"> if (poses.length) &#123;
+</span><span class="token prefix inserted">+</span><span class="token line">   pose = poses[0].pose
+</span><span class="token prefix inserted">+</span><span class="token line"> &#125;
+</span></span>&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接著就可以用 <code>pose</code> 來畫出鼻子，概念很簡單，我們把 <code>pose.nose</code> 當中的方位傳給 <code>ellipse</code> 以後，圓圈就能夠跟著目前 PoseNet 辨識到的鼻子位置移動了！<code>fill</code> 則是用於填入 <code>ellipse</code> 色彩用的：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">background</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span>
+
+  <span class="token comment">// Draw the video</span>
+  <span class="token function">image</span><span class="token punctuation">(</span>video<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+	
+  <span class="token comment">// 畫出鼻子</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>pose<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">fill</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token function">ellipse</span><span class="token punctuation">(</span>pose<span class="token punctuation">.</span>nose<span class="token punctuation">.</span>x<span class="token punctuation">,</span> pose<span class="token punctuation">.</span>nose<span class="token punctuation">.</span>y<span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>這時候打開 Live Server，應該就能看到紅鼻子出現在你臉上！</p>
+<img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0oqr4bkfg30zo0t4npf.gif" alt="螢幕錄製 2021-10-02 下午5" style="zoom: 33%;" />
+
+<p>是不是很簡單！我個人認為 p5 和 ml5 搭配起來很簡單的原因在於 ml5 的資料有時會吐一些方位的資訊（x, y），而 p5 很多繪製於畫面上的 API 都需要傳入方位，所以兩者搭配起來的時候只要簡單的把 ml5 的資料傳入 p5 API 就好，完全不費力氣。</p>
+<h2 id="搭配-OBS-在-Google-Meets-耍腦！"><a href="#搭配-OBS-在-Google-Meets-耍腦！" class="headerlink" title="搭配 OBS 在 Google Meets 耍腦！"></a>搭配 OBS 在 Google Meets 耍腦！</h2><p>知道怎麼在瀏覽器配合 ml5 + p5 在畫面上畫出自己想要的東西以後，就可以來試試看怎麼在 google mmets 輸出這個影像了！首先讓我們看看可愛的概念圖：</p>
+<img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0pd4j9hzj314l0u0gnj.jpg" alt="Screen Shot 2021-12-03 at 3.54.09 PM" style="zoom:50%;" />
+
+<p>我們剛剛做的事情都是在 Browser 上面執行的，但怎麼放到 Google Meets 上讓其他人看到呢？這時候就需要搭配 <a href="https://obsproject.com/">OBS</a> 這個 Open Source 的應用程式，它可以幫我們擷取想要影像輸出的地方，再搭配 Virtual Cam 就能夠順利輸出瀏覽器的畫面，接著在 Google Meets 的設定區選擇射影像的攝影機為 OBS Virtual Cam，就可以達到我們要的目的了。</p>
+<p>用說的似乎太抽象，直接來進行操作，首先打開 OBS，並且新增 Window Capture 的 Screen：</p>
+<img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0pi0awyfj31gu0u0gom.jpg" alt="Screen Shot 2021-12-03 at 4.05.42 PM" style="zoom:50%;" />
+
+<p>新增之後，在 Window 的部分選擇你要輸出的瀏覽器分頁，總之他會跑出你目前 Chrome 分頁的標題：</p>
+<img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0pny9xwzj31fw0u0770.jpg" alt="Screen Shot 2021-12-03 at 4.10.21 PM" style="zoom:50%;" />
+
+<blockquote>
+<p>By the way，我實作時一直找不到自己想要選擇的瀏覽器分頁，如果是這種狀況，那可能是因為 OBS 需要跟瀏覽器在同一個視窗裡，也就是說你要輸出的那個分頁不能是全螢幕，必須兩個都是小螢幕，然後放在同一個視窗（比如都放在桌面）</p>
+<p>我知道這很瞎，但我目前還找不到其他解法。</p>
+</blockquote>
+<p>選擇完之後，應該就會看到 OBS 目前預覽的畫面跑出你瀏覽器的畫面了，如果你這時有開啟剛剛開發的那個分頁，應該會看到你攝影機的畫面惹：</p>
+<img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0psg6ewvj31hj0u0tcd.jpg" alt="Screen Shot 2021-12-03 at 4.15.41 PM" style="zoom:50%;" />
+
+<p>如果擷取的畫面不滿意，可以用 option + shift 調整寬高，或是去 js 檔那裡調整 canvas、video 的大小。然後有注意到 OBS 右下角有個 Start Virtual Camera 嗎？大力按下去就對了，這時候就會啟動我們的 Virtual Cam。</p>
+<p>接著到 Google Meets，去設定那裡選擇 Virutal Cam：</p>
+<img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0puoz0srj31160u0jt2.jpg" alt="Screen Shot 2021-12-03 at 4.00.39 PM" style="zoom:50%;" />
+
+<p>這時候應該就可以順利輸出影像到 Google Meets 了，嗚呼！</p>
+<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0r055o8ug30go093tvr.gif" alt="ezgif.com-gif-maker (2)"></p>
+<p>抱歉，沒朋友只能開一人會議，嗚嗚。</p>
+<p>所以如果再處理一下 p5 畫出來的圖，就能夠繪製出像文章開頭的畫面囉！</p>
+<img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gv13m1tjc4g60zk0qmnph02.gif" alt="螢幕錄製 2021-10-02 下午5" style="zoom: 33%;" />
+
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>這次亂玩的結果收穫比我想的還多，首先 p5、ml5 這些都是我先前未接觸過的東西，每次看到 Creative Coding、機器學習都想說應該跟我無關吧，那不是藝術家跟神人們在玩的東西嗎（？）但這次才發現世界上已經有人默默創造出簡單好用的 library 讓平民如我可以一探究竟了。</p>
+<p>當初為了理解圖像辨識的原理，還去看了 CNN 模型的運作方式，如果有興趣的話可以看 <a href="https://brohrer.github.io/how_convolutional_neural_networks_work.html">How do Convolutional Neural Networks work?</a>，講得非常淺顯易懂。所以本來還想說要不要在文章放入機器學習相關的內容，但機器學習不是我的專業，感覺會錯誤連篇漏洞百出，索性就移除了，改成只講一些沒營養但是好玩的事物。</p>
+<p>雖然目前工作上用不到這些東西，但我認為跨出自身工作的領域，去探索其他人的世界在玩些什麼也是很棒，不用把自己侷限於工作的領域。前陣子時常會覺得哎呀好像暫時沒有什麼覺得有趣的東西想學習時，偶然看到 p5 + ml5 的應用時，頓時又燃起了喜歡用 Coding 探索、創造有趣事物的熱忱 😎</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a href="https://p5js.org/">p5.js</a></li>
+<li><a href="https://ml5js.org/">ml5.js</a></li>
+<li><a href="https://www.youtube.com/playlist?list=PLRqwX-V7Uu6YPSwT06y_AEYTqIwbeam3y">Beginners Guide to Machine Learning in JavaScript</a></li>
+<li><a href="https://www.youtube.com/watch?v=9z9mbiOZqSs&t=1140s">Coding Challenge #157: Zoom Annotations with Machine Learning + p5.js</a></li>
+<li><a href="https://blog.greenroots.info/princess-finder-using-react-ml5js-and-teachable-machine-learning">Princess Finder using React, ml5.js, and Teachable Machine Learning</a></li>
+<li><a href="https://www.youtube.com/watch?v=OIo-DIOkNVg">ml5.js Pose Estimation with PoseNet</a></li>
+<li><a href="https://www.youtube.com/watch?v=EA3-k9mnLHs">Hour of Code with p5.js and PoseNet</a></li>
+<li><a href="https://brohrer.github.io/how_convolutional_neural_networks_work.html">How do Convolutional Neural Networks work?</a></li>
+<li><a href="https://editor.p5js.org/brunoruchiga/sketches/ByrqL6UJE">Coding Train Clown Nose copy</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+        <tag>p5.js</tag>
+        <tag>ml5.js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>冥想正念指南 day01 - 如何開始</title>
+    <url>/2021/01/06/headspace-guide-to-meditation-day01/</url>
+    <content><![CDATA[<p>起源於看到 Netflix 上看到 <a href="https://www.netflix.com/browse?jbv=81280926">冥想正念指南</a> 這個系列，目前總共有八集，過去有陸陸續續嘗試冥想，但都不得其解，或是做做就忘了，最近打算來把這八集看完，寫下看完每集之後的感受，不一定是同一天看完，但總之會記錄一下內容，以及看完當天集數後冥想的感受。</p>
+<span id="more"></span>
+
+<h4 id="冥想的好處"><a href="#冥想的好處" class="headerlink" title="冥想的好處"></a>冥想的好處</h4><p>其實我沒有很在乎這部分，當作隨便聽聽，大意上是說 Andy（這系列的旁白、HeadSpace 創辦人）遭受情緒困擾後去了喜馬拉雅山當僧侶，從各個寺院的大師身上學習到了冥想的精髓，並打算將之推廣。</p>
+<p>有說到冥想在科學研究上證實有益於大腦發展，鍛煉大腦肌肉、增加大腦愉悅度等等。</p>
+<h4 id="車流"><a href="#車流" class="headerlink" title="車流"></a>車流</h4><p>Andy 提到大師認為看待冥想的思緒，可以把它當作你正坐在一個馬路邊，觀看車子的流動一般；思緒就像是車子，不要試圖去攔下車子，既危險又衝動，而是要不斷的提醒自己，你是一個觀看思緒流動的人。</p>
+<p>任由思緒在那漂流，你只需要觀看他們流動。</p>
+<h4 id="專注力錨點"><a href="#專注力錨點" class="headerlink" title="專注力錨點"></a>專注力錨點</h4><p>我忘記這集用的詞是什麼了，總之取一個我最有印象的詞。</p>
+<p>當你發現自己會不斷分心，讓思緒打亂你的冥想時，可以試著找到你的<strong>專注力錨點</strong>，錨點可以是任何東西，一個動作、一個外在事物、一個聲音都可以，但最常見的錨點是「<strong>呼吸</strong>」，當你發現思緒混亂、胡思亂想時，就把專注力放在吸氣、吐氣上面，把呼吸當作一個集中專注力的錨點，自然而然可以把專注力重新找回來。</p>
+<h2 id="本集感想"><a href="#本集感想" class="headerlink" title="本集感想"></a>本集感想</h2><p>美術很讚！因為我蠻容易看影集、動畫看到沒耐心的，但這集完全不會，畫面屬於會讓人想一直看下去的那種，另外講到車流的時候，改成用第一人稱的視角覺得很酷。</p>
+<p>另外，講到的概念我覺得都挺實用的，講到冥想的時候常常會覺得沒有概念、不知道如何實作，又或者是聽到的概念都蠻模糊的，但這個不會，有很多概念被提及後會覺得「哦！原來是這樣」，比如專注力錨點的概念在今天冥想就蠻有幫助的。</p>
+<h2 id="感受"><a href="#感受" class="headerlink" title="感受"></a>感受</h2><p>之前做冥想都蠻無感的，但今天這集的感受很不錯欸，也許是有經過前面的引導吧，覺得專注力錨點和車流的概念有幫助到我，當腦袋稍微亂的時候，就把所有注意力放在吸氣吐氣上面，就什麼都沒有想了。</p>
+<p>比較干擾的是有時候還要注意聽他在講什麼，比如感受身體、數呼吸次數之類的有點讓人分心。</p>
+<p>不過整體而言覺得挺讚的，心靈變得蠻平靜的，然後心情莫名的很好，當中有特別注意到的是，Andy 說要把「<strong>覺察感受</strong>」這件事情帶到日常中，這句話看了挺有感覺的，目前感覺是冥想這件事能夠把無論是心靈或肉體的感受變得更透徹，仔細一想日常生活中很多感受都被當成理所當然的資訊，比如喝水的感覺、衣物的摩擦、情緒的波動、接收到的聲音、與人擁抱的感覺，很容易就會被忽略掉，當自身刻意去感受日常的時候，會得到蠻多不一樣的感受，而我大部分得到的是一種生活的幸福感。</p>
+<p>話說「<strong>覺察感受</strong>」這件事情在看完《靈魂急轉彎》的時候我也有同樣的感覺欸，這部片很大一部分是在講當你用心體驗生活時，內心的 spark 自然會被點燃，spark 指的不是你人生的志向或絕對要做的事情，而是真心體驗、享受生活的那一刻。</p>
+<p>今天的冥想大概就是這樣。</p>
+]]></content>
+      <categories>
+        <category>雜記</category>
+      </categories>
+      <tags>
+        <tag>廢文日記</tag>
+        <tag>meditation</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>第一次貢獻開源就緊張到手抖</title>
     <url>/2020/12/06/first-contribution/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在此紀錄人生第一次貢獻開源專案的背景和 debug 過程，好啦我也不確定算不算開源，因為是「程式導師實驗計畫」裡面使用到的「學習系統」，使用者就是課程裡的老師、助教和學生，維護者主要是老師 Huli 和助教 minw。雖然這次的貢獻蠻微小的，但因為還是挺興奮的，不記錄一下說不過去吧！！</p>
@@ -1955,34 +2200,6 @@ houseC<span class="token punctuation">.</span><span class="token function">listP
         <tag>JavaScript</tag>
         <tag>Front-End</tag>
         <tag>Chrome</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>冥想正念指南 day01 - 如何開始</title>
-    <url>/2021/01/06/headspace-guide-to-meditation-day01/</url>
-    <content><![CDATA[<p>起源於看到 Netflix 上看到 <a href="https://www.netflix.com/browse?jbv=81280926">冥想正念指南</a> 這個系列，目前總共有八集，過去有陸陸續續嘗試冥想，但都不得其解，或是做做就忘了，最近打算來把這八集看完，寫下看完每集之後的感受，不一定是同一天看完，但總之會記錄一下內容，以及看完當天集數後冥想的感受。</p>
-<span id="more"></span>
-
-<h4 id="冥想的好處"><a href="#冥想的好處" class="headerlink" title="冥想的好處"></a>冥想的好處</h4><p>其實我沒有很在乎這部分，當作隨便聽聽，大意上是說 Andy（這系列的旁白、HeadSpace 創辦人）遭受情緒困擾後去了喜馬拉雅山當僧侶，從各個寺院的大師身上學習到了冥想的精髓，並打算將之推廣。</p>
-<p>有說到冥想在科學研究上證實有益於大腦發展，鍛煉大腦肌肉、增加大腦愉悅度等等。</p>
-<h4 id="車流"><a href="#車流" class="headerlink" title="車流"></a>車流</h4><p>Andy 提到大師認為看待冥想的思緒，可以把它當作你正坐在一個馬路邊，觀看車子的流動一般；思緒就像是車子，不要試圖去攔下車子，既危險又衝動，而是要不斷的提醒自己，你是一個觀看思緒流動的人。</p>
-<p>任由思緒在那漂流，你只需要觀看他們流動。</p>
-<h4 id="專注力錨點"><a href="#專注力錨點" class="headerlink" title="專注力錨點"></a>專注力錨點</h4><p>我忘記這集用的詞是什麼了，總之取一個我最有印象的詞。</p>
-<p>當你發現自己會不斷分心，讓思緒打亂你的冥想時，可以試著找到你的<strong>專注力錨點</strong>，錨點可以是任何東西，一個動作、一個外在事物、一個聲音都可以，但最常見的錨點是「<strong>呼吸</strong>」，當你發現思緒混亂、胡思亂想時，就把專注力放在吸氣、吐氣上面，把呼吸當作一個集中專注力的錨點，自然而然可以把專注力重新找回來。</p>
-<h2 id="本集感想"><a href="#本集感想" class="headerlink" title="本集感想"></a>本集感想</h2><p>美術很讚！因為我蠻容易看影集、動畫看到沒耐心的，但這集完全不會，畫面屬於會讓人想一直看下去的那種，另外講到車流的時候，改成用第一人稱的視角覺得很酷。</p>
-<p>另外，講到的概念我覺得都挺實用的，講到冥想的時候常常會覺得沒有概念、不知道如何實作，又或者是聽到的概念都蠻模糊的，但這個不會，有很多概念被提及後會覺得「哦！原來是這樣」，比如專注力錨點的概念在今天冥想就蠻有幫助的。</p>
-<h2 id="感受"><a href="#感受" class="headerlink" title="感受"></a>感受</h2><p>之前做冥想都蠻無感的，但今天這集的感受很不錯欸，也許是有經過前面的引導吧，覺得專注力錨點和車流的概念有幫助到我，當腦袋稍微亂的時候，就把所有注意力放在吸氣吐氣上面，就什麼都沒有想了。</p>
-<p>比較干擾的是有時候還要注意聽他在講什麼，比如感受身體、數呼吸次數之類的有點讓人分心。</p>
-<p>不過整體而言覺得挺讚的，心靈變得蠻平靜的，然後心情莫名的很好，當中有特別注意到的是，Andy 說要把「<strong>覺察感受</strong>」這件事情帶到日常中，這句話看了挺有感覺的，目前感覺是冥想這件事能夠把無論是心靈或肉體的感受變得更透徹，仔細一想日常生活中很多感受都被當成理所當然的資訊，比如喝水的感覺、衣物的摩擦、情緒的波動、接收到的聲音、與人擁抱的感覺，很容易就會被忽略掉，當自身刻意去感受日常的時候，會得到蠻多不一樣的感受，而我大部分得到的是一種生活的幸福感。</p>
-<p>話說「<strong>覺察感受</strong>」這件事情在看完《靈魂急轉彎》的時候我也有同樣的感覺欸，這部片很大一部分是在講當你用心體驗生活時，內心的 spark 自然會被點燃，spark 指的不是你人生的志向或絕對要做的事情，而是真心體驗、享受生活的那一刻。</p>
-<p>今天的冥想大概就是這樣。</p>
-]]></content>
-      <categories>
-        <category>雜記</category>
-      </categories>
-      <tags>
-        <tag>廢文日記</tag>
-        <tag>meditation</tag>
       </tags>
   </entry>
   <entry>
@@ -6371,223 +6588,6 @@ elevation<span class="token operator">:</span> <span class="token number">2</spa
       <tags>
         <tag>心得</tag>
         <tag>Lidemy</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Build Google Meets filter with p5.js and ml5.js</title>
-    <url>/2021/12/02/build-Google-Meets-filter-with-p5-and-ml5/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近偶然在 TheCodingTrain 上看到 ml5 和 p5 的教學影片，就看著教學用 ml5 + p5 玩出有趣的效果了！</p>
-<p>廢話不多說直接上圖：</p>
-<img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gv13m1tjc4g60zk0qmnph02.gif" alt="螢幕錄製 2021-10-02 下午5" style="zoom: 33%;" />
-
-<p>玩出上面圖片的效果以後，發現居然還可以搭配 OBS 放到 Google Meets 上面玩，讓會議上其他人看看這副模樣，所以現在就稍微來介紹一下這兩個小玩具。</p>
-<p>另外，這篇文的靈感來源、實作很大部份都是參考 <a href="https://www.youtube.com/channel/UCvjgXvBlbQiydffZU7m1_aw">The Coding Train</a> youtube 頻道裡的影片，大力推薦，這是個可以讓人找到寫程式快樂之處的頻道！</p>
-<span id="more"></span>
-
-<h2 id="實作流程"><a href="#實作流程" class="headerlink" title="實作流程"></a>實作流程</h2><p>首先看今天實作的流程：</p>
-<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gwqoexk239j30ul08dt94.jpg" alt="Screen Shot 2021-11-24 at 11.51.08 PM"></p>
-<p>流程很單純，單純是我硬要畫圖，我們會開啟鏡頭取得畫面，接著把畫面當作 input 丟給 ml5，讓 ml5 去 classify，接著 ml5 就會回傳它辨識後的 data，我們接著就可以用這些資料搭配 p5，在畫面上做一些有趣的特效！ </p>
-<h2 id="p5-js-介紹"><a href="#p5-js-介紹" class="headerlink" title="p5.js 介紹"></a>p5.js 介紹</h2><p><a href="https://processing.org/">Processing</a> 是一個廣受歡迎用來做 creative coding 的語言，後來有了各語言的版本，而 p5.js 就是 Processing 的 JavaScript 版本，標榜簡單易用，讓非工程師相關的職業如教育者、設計師、藝術家也能輕鬆上手打造自己想要的作品。</p>
-<p>要了解 p5 如何使用不難，我們可以從 p5 官方文件的 <a href="https://p5js.org/get-started/">Get Started</a> 開始著手，首先我們可以到 <a href="https://editor.p5js.org/">p5 web editor</a> 實際的操作，會先看到以下的 code：</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">createCanvas</span><span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token number">400</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token keyword">function</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">background</span><span class="token punctuation">(</span><span class="token number">220</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>p5.js 的專案由 setup() 與 draw() 這兩個主要的函式所組成，setup() 會負責程式的初始化，只會執行一次；draw 則是以每秒 60 次的方式做執行，會不斷地持續更新畫面。從 <code>createCanvas(400, 400)</code> 這個 function 不難看出用意是創建出一個 canvas 的畫布，這個畫布就是我們待會要揮灑創意的地方啦～</p>
-<p>接著我們把 code 改成：</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">createCanvas</span><span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token number">400</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token keyword">function</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">background</span><span class="token punctuation">(</span><span class="token number">220</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token function">ellipse</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">,</span><span class="token number">50</span><span class="token punctuation">,</span><span class="token number">80</span><span class="token punctuation">,</span><span class="token number">80</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>你看到的畫面應該會長得像這樣，恭喜成功畫出一個圈圈！</p>
-<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gwqorel98mj30mh0j7t9w.jpg" alt="first-sketch"></p>
-<p>試著把 <code>ellipse(50, 50, 80, 80)</code> 改成 <code>ellipse(150, 100, 80, 80)</code>，會發現圈圈往下移動了：</p>
-<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gwqoxj4kdqj31mi0u0414.jpg" alt="Screen Shot 2021-11-25 at 12.07.09 AM"></p>
-<p>聰明的你應該發現第一跟第二個參數分別代表了 ellipse 的方位，第二跟第三則是代表了 ellipse 的 width 和 height，在 p5 的世界中，X 軸就和我們認知的方向一樣，X 軸給了 50 就會往右 50px；Y 軸則是和我們一般數學上認知的相反，給 Y 軸 100 就會往下 100px。</p>
-<p>接下來我們來了解一些 p5 內建的全域變數以及圖層的概念，假設我們有今天這段 code：</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">createCanvas</span><span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token number">400</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token keyword">function</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">ellipse</span><span class="token punctuation">(</span>mouseX<span class="token punctuation">,</span> mouseY<span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0r1y58crg30go097ta9.gif" alt="p5 - example"></p>
-<p>會發現隨著滑鼠移動，圈圈跟著滑鼠的位置移動，而且圈圈竟然會一直疊加上去！有兩個值得注意的地方：</p>
-<ol>
-<li>每次 <code>draw</code> 執行的時候，可以想成是疊一層新的畫布上去，因此如果我們在 draw 最前面加上了 <code>background(255)</code>，那等同每次執行的時候都會疊上一層白色的背景，所以我們這時候移動滑鼠就只會有一個圈圈跟著滑鼠，但如果移掉 background 後，每次 draw 執行都不會疊上新的背景，也因此會看到圈圈不會消失，而是一直疊加上去。</li>
-<li>p5 提供了一些內建的全域變數以及 function 使用，以上面程式碼來說，<code>mouseX</code> 和 <code>mouseY</code> 是鼠標的 X 和 Y 軸的位置，透過這個全域變數就能夠讓 ellipse 跟著你跑啦！所以如果我們提供目前鏡頭某個部位的所在方位，那就可以讓 p5 畫出來的圖案跟著鏡頭上的部位移動了。</li>
-</ol>
-<p>p5 的介紹大概先這樣，這些基本的介紹就足夠待會要做的事情了。</p>
-<p> 想要更了解 p5.js 如何玩的話，有個很不錯的網站 <a href="https://openhome.cc/Gossip/P5JS/index.html">非關語言：玩轉 p5.js</a>，還有前言提到的 The Coding Train 也很頻繁的會釋出關於 p5.js 的 coding challenge；當然，還有<a href="https://openprocessing.org/user/139364/?view=sketches#sketches">吳哲宇的 Open Processing</a> 可以看到何謂厲害的 creative coding 創作。</p>
-<h2 id="ml5-js-介紹"><a href="#ml5-js-介紹" class="headerlink" title="ml5.js 介紹"></a>ml5.js 介紹</h2><p>ml5.js 是一個基於 tensorflow.js 之上開發的 library，在官網的介紹中：</p>
-<blockquote>
-<p>ml5.js is being developed to make machine learning more accessible to a wider audience.</p>
-</blockquote>
-<p>可以知道 ml5 跟 p5 一樣是以好上手為前提來開發的一個 library，不像使用 tensorflow.js 需要機器學習的前置知識，使用 ml5 只要看個文件，傳入想要使用的 pre-trained model，很快就能夠快樂的在瀏覽器使用 ml5。</p>
-<p>印象中 p5 有部分的開發者同時也是 ml5 的開發者，所以搜尋 ml5 相關應用的時候，很常會看到跟 p5 結合一起使用，而因為兩個 library 結合起來也真的蠻順手的，打造一些小玩具非常方便，所以能夠搜尋到不少有趣的作品。</p>
-<h3 id="PoseNet"><a href="#PoseNet" class="headerlink" title="PoseNet"></a>PoseNet</h3><p>此段落內容皆出自於 <a href="https://learn.ml5js.org/#/reference/posenet?id=posenet">PoseNet</a> 和 <a href="https://www.youtube.com/watch?v=OIo-DIOkNVg">ml5.js Pose Estimation with PoseNet</a>，如果喜歡看影片的人歡迎進去觀看，然後就可以跳過這一 part。</p>
-<p>我們待會只會用到 html + js，然後為了開發方便起見，建議安裝 VSCode 的 <a href="https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer">Live Server</a> extension，開發時就直接啟動 server 就好囉。</p>
-<p>首先是環境的設置，簡單起見我們就直接開一個 html 檔，然後引入 ml5 和 p5 的 CDN，以及引入我們待會要寫的 <code>pose-net.js</code> 檔：</p>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">DOCTYPE</span> <span class="token name">html</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span> <span class="token attr-name">lang</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>en<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>Getting Started with ml5.js<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
-    <span class="token comment">&lt;!-- p5 --></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.2.0/p5.min.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
-    <span class="token comment">&lt;!-- ml5 --></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://unpkg.com/ml5@latest/dist/ml5.min.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
-
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>./sketches/pose-net.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>接著就可以開始實作了，首先我們要讀取 PoseNet 這個 pre-train model：</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// 全域變數</span>
-<span class="token keyword">let</span> video
-<span class="token keyword">let</span> poseNet
-<span class="token keyword">let</span> pose
-
-<span class="token keyword">function</span> <span class="token function">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">createCanvas</span><span class="token punctuation">(</span><span class="token number">640</span><span class="token punctuation">,</span> <span class="token number">520</span><span class="token punctuation">)</span>
-  <span class="token comment">// Create the video</span>
-  video <span class="token operator">=</span> <span class="token function">createCapture</span><span class="token punctuation">(</span><span class="token constant">VIDEO</span><span class="token punctuation">)</span>
-  video<span class="token punctuation">.</span><span class="token function">hide</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-
-  poseNet <span class="token operator">=</span> ml5<span class="token punctuation">.</span><span class="token function">poseNet</span><span class="token punctuation">(</span>video<span class="token punctuation">,</span> modelLoaded<span class="token punctuation">)</span>
-  poseNet<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'pose'</span><span class="token punctuation">,</span> getPoses<span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token keyword">function</span> <span class="token function">modelLoaded</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'poseNet loaded'</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token keyword">function</span> <span class="token function">getPoses</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><code>createCapture</code> 是 p5 提供的 method，可以幫我們創造 <code>&lt;video&gt;</code> 的 element  並且會取得我們 webcam 的內容，然後 video element 預設會和 canvas 分開並被顯示，也就是說如果單純使用 <code>createCapture</code> 並且 render 出來的時候，你會發現會有個 video element 在 canvas 的外面，看起來就怪怪的，所以會搭配 <a href="https://p5js.org/reference/#/p5.Element/hide">hide()</a> 來去隱藏這個 canvas 之外的 element。</p>
-<p>這時候你可能會想，不對吧，那我怎麼看到自己目前的 webcam 畫面長怎樣，所以我們會在 <code>draw</code> 裡面顯示鏡頭的畫面：</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">background</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
-
-  <span class="token comment">// Draw the video</span>
-  <span class="token function">image</span><span class="token punctuation">(</span>video<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>這時候就可以正常的在瀏覽器看到鏡頭畫面了。</p>
-<p>回到剛剛的程式碼，執行 <code>ml5.poseNet(video, modelLoaded)</code> 代表我們要把目前捕捉到的畫面丟給 PoseNet 進行辨識，等 model 完成之後就會觸發 <code>modelLoaded</code> 這個 callback。</p>
-<p><code>poseNet.on(&#39;pose&#39;, getPoses)</code> 則是我們的重點，概念類似於 <code>addEventListener</code> 那樣，PoseNet 會監聽你目前畫面上的姿勢，當它發現你姿勢有變化的時候，就會觸發 <code>getPoses</code> 這個 callback，<code>getPoses</code> 預計會接收一個參數，這參數就是 PoseNet 辨識完之後回傳的 data。</p>
-<p>接著，我們就要來看看 <code>getPoses</code> 得到什麼資料，首先我們在 <code>getPoses</code> 印出它究竟收到什麼資料吧：</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">getPoses</span><span class="token punctuation">(</span><span class="token parameter">poses</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>poses<span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p>這時候你應該會發現，哇靠，怎麼 console 瘋狂跑出資料，這就代表 PoseNet 已經在進行辨識了！資料大概會長得像這樣：</p>
-<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0n0jvffcj30j90l0q8l.jpg" alt="Screen Shot 2021-12-03 at 2.38.37 PM"></p>
-<p>會是 array 的原因是因為 PoseNet 可以辨識畫面上的多個人，而目前只有我自己被辨識到，所以 array 裡就只會有一筆資料，而 pose 裡面的資料 key 就對應到各部位的名稱，value 則是對應到部位的位置，如 <code>leftEar: &#123; x: 443, y: 244, cofidence: 0.94 &#125;</code> 就是指左耳的位置，以及它的 confidence（不知道中文怎麼翻，信心程度之類的嗎？）</p>
-<p>有了 data 以後，我們要做的事情就很簡單了，只要取得部位的資料，把它畫出來就好了，舉個例子來說，假設我今天想在鼻子上畫個紅色的圈圈，首先我們要賦予 <code>pose</code> 值，這個值就是剛剛 callback 所接收到的 <code>poses</code> ：</p>
-<pre class="line-numbers language-diff" data-language="diff"><code class="language-diff">// 變數
-let video
-let poseNet
-let pose
-
-// 創造 video element、load PoseNet
-function setup() &#123;
-<span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line"> createCanvas(640, 520)
-</span><span class="token prefix unchanged"> </span><span class="token line"> video = createCapture(VIDEO)
-</span><span class="token prefix unchanged"> </span><span class="token line"> video.hide()
-</span></span>
-<span class="token unchanged"><span class="token prefix unchanged"> </span><span class="token line"> poseNet = ml5.poseNet(video, modelLoaded)
-</span><span class="token prefix unchanged"> </span><span class="token line"> poseNet.on('pose', getPoses)
-</span></span>&#125;
-
-function getPoses(poses) &#123;
-<span class="token deleted-sign deleted"><span class="token prefix deleted">-</span><span class="token line"> console.log(poses)
-</span></span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line"> if (poses.length) &#123;
-</span><span class="token prefix inserted">+</span><span class="token line">   pose = poses[0].pose
-</span><span class="token prefix inserted">+</span><span class="token line"> &#125;
-</span></span>&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>接著就可以用 <code>pose</code> 來畫出鼻子，概念很簡單，我們把 <code>pose.nose</code> 當中的方位傳給 <code>ellipse</code> 以後，圓圈就能夠跟著目前 PoseNet 辨識到的鼻子位置移動了！<code>fill</code> 則是用於填入 <code>ellipse</code> 色彩用的：</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-  <span class="token function">background</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span>
-
-  <span class="token comment">// Draw the video</span>
-  <span class="token function">image</span><span class="token punctuation">(</span>video<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
-	
-  <span class="token comment">// 畫出鼻子</span>
-  <span class="token keyword">if</span> <span class="token punctuation">(</span>pose<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">fill</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
-    <span class="token function">ellipse</span><span class="token punctuation">(</span>pose<span class="token punctuation">.</span>nose<span class="token punctuation">.</span>x<span class="token punctuation">,</span> pose<span class="token punctuation">.</span>nose<span class="token punctuation">.</span>y<span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">)</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>這時候打開 Live Server，應該就能看到紅鼻子出現在你臉上！</p>
-<img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0oqr4bkfg30zo0t4npf.gif" alt="螢幕錄製 2021-10-02 下午5" style="zoom: 33%;" />
-
-<p>是不是很簡單！我個人認為 p5 和 ml5 搭配起來很簡單的原因在於 ml5 的資料有時會吐一些方位的資訊（x, y），而 p5 很多繪製於畫面上的 API 都需要傳入方位，所以兩者搭配起來的時候只要簡單的把 ml5 的資料傳入 p5 API 就好，完全不費力氣。</p>
-<h2 id="搭配-OBS-在-Google-Meets-耍腦！"><a href="#搭配-OBS-在-Google-Meets-耍腦！" class="headerlink" title="搭配 OBS 在 Google Meets 耍腦！"></a>搭配 OBS 在 Google Meets 耍腦！</h2><p>知道怎麼在瀏覽器配合 ml5 + p5 在畫面上畫出自己想要的東西以後，就可以來試試看怎麼在 google mmets 輸出這個影像了！首先讓我們看看可愛的概念圖：</p>
-<img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0pd4j9hzj314l0u0gnj.jpg" alt="Screen Shot 2021-12-03 at 3.54.09 PM" style="zoom:50%;" />
-
-<p>我們剛剛做的事情都是在 Browser 上面執行的，但怎麼放到 Google Meets 上讓其他人看到呢？這時候就需要搭配 <a href="https://obsproject.com/">OBS</a> 這個 Open Source 的應用程式，它可以幫我們擷取想要影像輸出的地方，再搭配 Virtual Cam 就能夠順利輸出瀏覽器的畫面，接著在 Google Meets 的設定區選擇射影像的攝影機為 OBS Virtual Cam，就可以達到我們要的目的了。</p>
-<p>用說的似乎太抽象，直接來進行操作，首先打開 OBS，並且新增 Window Capture 的 Screen：</p>
-<img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0pi0awyfj31gu0u0gom.jpg" alt="Screen Shot 2021-12-03 at 4.05.42 PM" style="zoom:50%;" />
-
-<p>新增之後，在 Window 的部分選擇你要輸出的瀏覽器分頁，總之他會跑出你目前 Chrome 分頁的標題：</p>
-<img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0pny9xwzj31fw0u0770.jpg" alt="Screen Shot 2021-12-03 at 4.10.21 PM" style="zoom:50%;" />
-
-<blockquote>
-<p>By the way，我實作時一直找不到自己想要選擇的瀏覽器分頁，如果是這種狀況，那可能是因為 OBS 需要跟瀏覽器在同一個視窗裡，也就是說你要輸出的那個分頁不能是全螢幕，必須兩個都是小螢幕，然後放在同一個視窗（比如都放在桌面）</p>
-<p>我知道這很瞎，但我目前還找不到其他解法。</p>
-</blockquote>
-<p>選擇完之後，應該就會看到 OBS 目前預覽的畫面跑出你瀏覽器的畫面了，如果你這時有開啟剛剛開發的那個分頁，應該會看到你攝影機的畫面惹：</p>
-<img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0psg6ewvj31hj0u0tcd.jpg" alt="Screen Shot 2021-12-03 at 4.15.41 PM" style="zoom:50%;" />
-
-<p>如果擷取的畫面不滿意，可以用 option + shift 調整寬高，或是去 js 檔那裡調整 canvas、video 的大小。然後有注意到 OBS 右下角有個 Start Virtual Camera 嗎？大力按下去就對了，這時候就會啟動我們的 Virtual Cam。</p>
-<p>接著到 Google Meets，去設定那裡選擇 Virutal Cam：</p>
-<img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0puoz0srj31160u0jt2.jpg" alt="Screen Shot 2021-12-03 at 4.00.39 PM" style="zoom:50%;" />
-
-<p>這時候應該就可以順利輸出影像到 Google Meets 了，嗚呼！</p>
-<p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0r055o8ug30go093tvr.gif" alt="ezgif.com-gif-maker (2)"></p>
-<p>抱歉，沒朋友只能開一人會議，嗚嗚。</p>
-<p>所以如果再處理一下 p5 畫出來的圖，就能夠繪製出像文章開頭的畫面囉！</p>
-<img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gv13m1tjc4g60zk0qmnph02.gif" alt="螢幕錄製 2021-10-02 下午5" style="zoom: 33%;" />
-
-<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>這次亂玩的結果收穫比我想的還多，首先 p5、ml5 這些都是我先前未接觸過的東西，每次看到 Creative Coding、機器學習都想說應該跟我無關吧，那不是藝術家跟神人們在玩的東西嗎（？）但這次才發現世界上已經有人默默創造出簡單好用的 library 讓平民如我可以一探究竟了。</p>
-<p>當初為了理解圖像辨識的原理，還去看了 CNN 模型的運作方式，如果有興趣的話可以看 <a href="https://brohrer.github.io/how_convolutional_neural_networks_work.html">How do Convolutional Neural Networks work?</a>，講得非常淺顯易懂。所以本來還想說要不要在文章放入機器學習相關的內容，但機器學習不是我的專業，感覺會錯誤連篇漏洞百出，索性就移除了，改成只講一些沒營養但是好玩的事物。</p>
-<p>雖然目前工作上用不到這些東西，但我認為跨出自身工作的領域，去探索其他人的世界在玩些什麼也是很棒，不用把自己侷限於工作的領域。前陣子時常會覺得哎呀好像暫時沒有什麼覺得有趣的東西想學習時，偶然看到 p5 + ml5 的應用時，頓時又燃起了喜歡用 Coding 探索、創造有趣事物的熱忱 😎</p>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
-<li><a href="https://p5js.org/">p5.js</a></li>
-<li><a href="https://ml5js.org/">ml5.js</a></li>
-<li><a href="https://www.youtube.com/playlist?list=PLRqwX-V7Uu6YPSwT06y_AEYTqIwbeam3y">Beginners Guide to Machine Learning in JavaScript</a></li>
-<li><a href="https://www.youtube.com/watch?v=9z9mbiOZqSs&t=1140s">Coding Challenge #157: Zoom Annotations with Machine Learning + p5.js</a></li>
-<li><a href="https://blog.greenroots.info/princess-finder-using-react-ml5js-and-teachable-machine-learning">Princess Finder using React, ml5.js, and Teachable Machine Learning</a></li>
-<li><a href="https://www.youtube.com/watch?v=OIo-DIOkNVg">ml5.js Pose Estimation with PoseNet</a></li>
-<li><a href="https://www.youtube.com/watch?v=EA3-k9mnLHs">Hour of Code with p5.js and PoseNet</a></li>
-<li><a href="https://brohrer.github.io/how_convolutional_neural_networks_work.html">How do Convolutional Neural Networks work?</a></li>
-<li><a href="https://editor.p5js.org/brunoruchiga/sketches/ByrqL6UJE">Coding Train Clown Nose copy</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>技術</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-        <tag>p5.js</tag>
-        <tag>ml5.js</tag>
       </tags>
   </entry>
 </search>
