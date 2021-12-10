@@ -23,12 +23,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="前言最近偶然在 TheCodingTrain 上看到 ml5 和 p5 的教學影片，就看著教學用 ml5 + p5 玩出有趣的效果了！ 廢話不多說直接上圖：   玩出上面圖片的效果以後，發現居然還可以搭配 OBS 放到 Google Meets 上面玩，讓會議上其他人看看這副模樣，所以現在就稍微來介紹一下這兩個小玩具。 另外，這篇文的靈感來源、實作很大部份都是參考 The Coding Train">
+<meta name="description" content="前言最近偶然在 TheCodingTrain 上看到 ml5 和 p5 的教學影片，就看著教學用 ml5 + p5 玩出有趣的效果了！ 廢話不多說直接上圖：   玩出上面圖片的效果以後，發現居然還可以搭配 OBS 放到 Google Meet 上面玩，讓會議上其他人看看這副模樣，所以現在就稍微來介紹一下這兩個小玩具。 另外，這篇文的靈感來源、實作很大部份都是參考 The Coding Train">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用 p5.js and ml5.js 打造 Google Meets 的濾鏡">
-<meta property="og:url" content="https://chihyang41.github.io/2021/12/02/build-Google-Meets-filter-with-p5-and-ml5/index.html">
+<meta property="og:title" content="使用 p5.js and ml5.js 打造 Google Meet 的濾鏡">
+<meta property="og:url" content="https://chihyang41.github.io/2021/12/02/build-Google-Meet-filter-with-p5-and-ml5/index.html">
 <meta property="og:site_name" content="前端癢癢 der">
-<meta property="og:description" content="前言最近偶然在 TheCodingTrain 上看到 ml5 和 p5 的教學影片，就看著教學用 ml5 + p5 玩出有趣的效果了！ 廢話不多說直接上圖：   玩出上面圖片的效果以後，發現居然還可以搭配 OBS 放到 Google Meets 上面玩，讓會議上其他人看看這副模樣，所以現在就稍微來介紹一下這兩個小玩具。 另外，這篇文的靈感來源、實作很大部份都是參考 The Coding Train">
+<meta property="og:description" content="前言最近偶然在 TheCodingTrain 上看到 ml5 和 p5 的教學影片，就看著教學用 ml5 + p5 玩出有趣的效果了！ 廢話不多說直接上圖：   玩出上面圖片的效果以後，發現居然還可以搭配 OBS 放到 Google Meet 上面玩，讓會議上其他人看看這副模樣，所以現在就稍微來介紹一下這兩個小玩具。 另外，這篇文的靈感來源、實作很大部份都是參考 The Coding Train">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gv13m1tjc4g60zk0qmnph02.gif">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gwqoexk239j30ul08dt94.jpg">
@@ -54,7 +54,7 @@
 <meta name="twitter:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gv13m1tjc4g60zk0qmnph02.gif">
 
 
-<link rel="canonical" href="https://chihyang41.github.io/2021/12/02/build-Google-Meets-filter-with-p5-and-ml5/">
+<link rel="canonical" href="https://chihyang41.github.io/2021/12/02/build-Google-Meet-filter-with-p5-and-ml5/">
 
 
 <script class="page-configurations">
@@ -66,7 +66,7 @@
     lang   : 'zh-TW'
   };
 </script>
-<title>使用 p5.js and ml5.js 打造 Google Meets 的濾鏡 | 前端癢癢 der</title>
+<title>使用 p5.js and ml5.js 打造 Google Meet 的濾鏡 | 前端癢癢 der</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146838618-1"></script>
     <script>
@@ -213,7 +213,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%A6%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">實作流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#p5-js-%E4%BB%8B%E7%B4%B9"><span class="nav-number">3.</span> <span class="nav-text">p5.js 介紹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ml5-js-%E4%BB%8B%E7%B4%B9"><span class="nav-number">4.</span> <span class="nav-text">ml5.js 介紹</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PoseNet"><span class="nav-number">4.1.</span> <span class="nav-text">PoseNet</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%AD%E9%85%8D-OBS-%E5%9C%A8-Google-Meets-%E8%80%8D%E8%85%A6%EF%BC%81"><span class="nav-number">5.</span> <span class="nav-text">搭配 OBS 在 Google Meets 耍腦！</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AA%9E"><span class="nav-number">6.</span> <span class="nav-text">結語</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">7.</span> <span class="nav-text">References</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%A6%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">實作流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#p5-js-%E4%BB%8B%E7%B4%B9"><span class="nav-number">3.</span> <span class="nav-text">p5.js 介紹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ml5-js-%E4%BB%8B%E7%B4%B9"><span class="nav-number">4.</span> <span class="nav-text">ml5.js 介紹</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PoseNet"><span class="nav-number">4.1.</span> <span class="nav-text">PoseNet</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%AD%E9%85%8D-OBS-%E5%9C%A8-Google-Meet-%E8%80%8D%E8%85%A6%EF%BC%81"><span class="nav-number">5.</span> <span class="nav-text">搭配 OBS 在 Google Meet 耍腦！</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AA%9E"><span class="nav-number">6.</span> <span class="nav-text">結語</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">7.</span> <span class="nav-text">References</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -288,7 +288,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://chihyang41.github.io/2021/12/02/build-Google-Meets-filter-with-p5-and-ml5/">
+    <link itemprop="mainEntityOfPage" href="https://chihyang41.github.io/2021/12/02/build-Google-Meet-filter-with-p5-and-ml5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -301,7 +301,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          使用 p5.js and ml5.js 打造 Google Meets 的濾鏡
+          使用 p5.js and ml5.js 打造 Google Meet 的濾鏡
         </h1>
 
         <div class="post-meta-container">
@@ -338,7 +338,7 @@
 <p>廢話不多說直接上圖：</p>
 <img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gv13m1tjc4g60zk0qmnph02.gif" alt="螢幕錄製 2021-10-02 下午5" style="zoom: 33%;" />
 
-<p>玩出上面圖片的效果以後，發現居然還可以搭配 OBS 放到 Google Meets 上面玩，讓會議上其他人看看這副模樣，所以現在就稍微來介紹一下這兩個小玩具。</p>
+<p>玩出上面圖片的效果以後，發現居然還可以搭配 OBS 放到 Google Meet 上面玩，讓會議上其他人看看這副模樣，所以現在就稍微來介紹一下這兩個小玩具。</p>
 <p>另外，這篇文的靈感來源、實作很大部份都是參考 <a target="_blank" rel="noopener" href="https://www.youtube.com/channel/UCvjgXvBlbQiydffZU7m1_aw">The Coding Train</a> youtube 頻道裡的影片，大力推薦，這是個可以讓人找到寫程式快樂之處的頻道！</p>
 <span id="more"></span>
 
@@ -497,10 +497,10 @@ function getPoses(poses) &#123;
 <img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0oqr4bkfg30zo0t4npf.gif" alt="螢幕錄製 2021-10-02 下午5" style="zoom: 33%;" />
 
 <p>是不是很簡單！我個人認為 p5 和 ml5 搭配起來很簡單的原因在於 ml5 的資料有時會吐一些方位的資訊（x, y），而 p5 很多繪製於畫面上的 API 都需要傳入方位，所以兩者搭配起來的時候只要簡單的把 ml5 的資料傳入 p5 API 就好，完全不費力氣。</p>
-<h2 id="搭配-OBS-在-Google-Meets-耍腦！"><a href="#搭配-OBS-在-Google-Meets-耍腦！" class="headerlink" title="搭配 OBS 在 Google Meets 耍腦！"></a>搭配 OBS 在 Google Meets 耍腦！</h2><p>知道怎麼在瀏覽器配合 ml5 + p5 在畫面上畫出自己想要的東西以後，就可以來試試看怎麼在 google mmets 輸出這個影像了！首先讓我們看看可愛的概念圖：</p>
+<h2 id="搭配-OBS-在-Google-Meet-耍腦！"><a href="#搭配-OBS-在-Google-Meet-耍腦！" class="headerlink" title="搭配 OBS 在 Google Meet 耍腦！"></a>搭配 OBS 在 Google Meet 耍腦！</h2><p>知道怎麼在瀏覽器配合 ml5 + p5 在畫面上畫出自己想要的東西以後，就可以來試試看怎麼在 google mmets 輸出這個影像了！首先讓我們看看可愛的概念圖：</p>
 <img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0pd4j9hzj314l0u0gnj.jpg" alt="Screen Shot 2021-12-03 at 3.54.09 PM" style="zoom:50%;" />
 
-<p>我們剛剛做的事情都是在 Browser 上面執行的，但怎麼放到 Google Meets 上讓其他人看到呢？這時候就需要搭配 <a target="_blank" rel="noopener" href="https://obsproject.com/">OBS</a> 這個 Open Source 的應用程式，它可以幫我們擷取想要影像輸出的地方，再搭配 Virtual Cam 就能夠順利輸出瀏覽器的畫面，接著在 Google Meets 的設定區選擇射影像的攝影機為 OBS Virtual Cam，就可以達到我們要的目的了。</p>
+<p>我們剛剛做的事情都是在 Browser 上面執行的，但怎麼放到 Google Meet 上讓其他人看到呢？這時候就需要搭配 <a target="_blank" rel="noopener" href="https://obsproject.com/">OBS</a> 這個 Open Source 的應用程式，它可以幫我們擷取想要影像輸出的地方，再搭配 Virtual Cam 就能夠順利輸出瀏覽器的畫面，接著在 Google Meet 的設定區選擇射影像的攝影機為 OBS Virtual Cam，就可以達到我們要的目的了。</p>
 <p>用說的似乎太抽象，直接來進行操作，首先打開 OBS，並且新增 Window Capture 的 Screen：</p>
 <img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0pi0awyfj31gu0u0gom.jpg" alt="Screen Shot 2021-12-03 at 4.05.42 PM" style="zoom:50%;" />
 
@@ -515,10 +515,10 @@ function getPoses(poses) &#123;
 <img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0psg6ewvj31hj0u0tcd.jpg" alt="Screen Shot 2021-12-03 at 4.15.41 PM" style="zoom:50%;" />
 
 <p>如果擷取的畫面不滿意，可以用 option + shift 調整寬高，或是去 js 檔那裡調整 canvas、video 的大小。然後有注意到 OBS 右下角有個 Start Virtual Camera 嗎？大力按下去就對了，這時候就會啟動我們的 Virtual Cam。</p>
-<p>接著到 Google Meets，去設定那裡選擇 Virutal Cam：</p>
+<p>接著到 Google Meet，去設定那裡選擇 Virutal Cam：</p>
 <img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0puoz0srj31160u0jt2.jpg" alt="Screen Shot 2021-12-03 at 4.00.39 PM" style="zoom:50%;" />
 
-<p>這時候應該就可以順利輸出影像到 Google Meets 了，嗚呼！</p>
+<p>這時候應該就可以順利輸出影像到 Google Meet 了，嗚呼！</p>
 <p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0r055o8ug30go093tvr.gif" alt="ezgif.com-gif-maker (2)"></p>
 <p>抱歉，沒朋友只能開一人會議，嗚嗚。</p>
 <p>所以如果再處理一下 p5 畫出來的圖，就能夠繪製出像文章開頭的畫面囉！</p>
