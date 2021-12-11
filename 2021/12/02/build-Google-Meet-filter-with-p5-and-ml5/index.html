@@ -23,12 +23,12 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"chihyang41.github.io","root":"/","images":"/images","scheme":"Muse","version":"8.2.2","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="前言最近偶然在 TheCodingTrain 上看到 ml5 和 p5 的教學影片，就看著教學用 ml5 + p5 玩出有趣的效果了！ 廢話不多說直接上圖：   玩出上面圖片的效果以後，發現居然還可以搭配 OBS 放到 Google Meet 上面玩，讓會議上其他人看看這副模樣，所以現在就稍微來介紹一下這兩個小玩具。 另外，這篇文的靈感來源、實作很大部份都是參考 The Coding Train">
+<meta name="description" content="前言最近偶然在 The Coding Train 上看到 ml5 和 p5 的教學影片，就看著教學用 ml5 + p5 玩出有趣的效果了！ 廢話不多說直接上圖：   玩出上面圖片的效果以後，發現居然還可以搭配 OBS 放到 Google Meet 上面玩，讓會議上其他人看看這副模樣，所以現在就稍微來介紹一下這兩個小玩具。 另外，這篇文的靈感來源、實作很大部份都是參考 The Coding Trai">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用 p5.js and ml5.js 打造 Google Meet 的濾鏡">
 <meta property="og:url" content="https://chihyang41.github.io/2021/12/02/build-Google-Meet-filter-with-p5-and-ml5/index.html">
 <meta property="og:site_name" content="前端癢癢 der">
-<meta property="og:description" content="前言最近偶然在 TheCodingTrain 上看到 ml5 和 p5 的教學影片，就看著教學用 ml5 + p5 玩出有趣的效果了！ 廢話不多說直接上圖：   玩出上面圖片的效果以後，發現居然還可以搭配 OBS 放到 Google Meet 上面玩，讓會議上其他人看看這副模樣，所以現在就稍微來介紹一下這兩個小玩具。 另外，這篇文的靈感來源、實作很大部份都是參考 The Coding Train">
+<meta property="og:description" content="前言最近偶然在 The Coding Train 上看到 ml5 和 p5 的教學影片，就看著教學用 ml5 + p5 玩出有趣的效果了！ 廢話不多說直接上圖：   玩出上面圖片的效果以後，發現居然還可以搭配 OBS 放到 Google Meet 上面玩，讓會議上其他人看看這副模樣，所以現在就稍微來介紹一下這兩個小玩具。 另外，這篇文的靈感來源、實作很大部份都是參考 The Coding Trai">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gv13m1tjc4g60zk0qmnph02.gif">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/008i3skNgy1gwqoexk239j30ul08dt94.jpg">
@@ -334,7 +334,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近偶然在 TheCodingTrain 上看到 ml5 和 p5 的教學影片，就看著教學用 ml5 + p5 玩出有趣的效果了！</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近偶然在 <a target="_blank" rel="noopener" href="https://www.youtube.com/channel/UCvjgXvBlbQiydffZU7m1_aw">The Coding Train</a> 上看到 ml5 和 p5 的教學影片，就看著教學用 ml5 + p5 玩出有趣的效果了！</p>
 <p>廢話不多說直接上圖：</p>
 <img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gv13m1tjc4g60zk0qmnph02.gif" alt="螢幕錄製 2021-10-02 下午5" style="zoom: 33%;" />
 
@@ -344,7 +344,7 @@
 
 <h2 id="實作流程"><a href="#實作流程" class="headerlink" title="實作流程"></a>實作流程</h2><p>首先看今天實作的流程：</p>
 <p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gwqoexk239j30ul08dt94.jpg" alt="Screen Shot 2021-11-24 at 11.51.08 PM"></p>
-<p>流程很單純，單純是我硬要畫圖，我們會開啟鏡頭取得畫面，接著把畫面當作 input 丟給 ml5，讓 ml5 去 classify，接著 ml5 就會回傳它辨識後的 data，我們接著就可以用這些資料搭配 p5，在畫面上做一些有趣的特效！ </p>
+<p>流程很單純，我們會開啟鏡頭取得畫面，接著把畫面當作 input 丟給 ml5，讓 ml5 去 classify，接著 ml5 就會回傳它辨識後的 data，我們接著就可以用這些資料搭配 p5，在畫面上做一些有趣的特效！ </p>
 <h2 id="p5-js-介紹"><a href="#p5-js-介紹" class="headerlink" title="p5.js 介紹"></a>p5.js 介紹</h2><p><a target="_blank" rel="noopener" href="https://processing.org/">Processing</a> 是一個廣受歡迎用來做 creative coding 的語言，後來有了各語言的版本，而 p5.js 就是 Processing 的 JavaScript 版本，標榜簡單易用，讓非工程師相關的職業如教育者、設計師、藝術家也能輕鬆上手打造自己想要的作品。</p>
 <p>要了解 p5 如何使用不難，我們可以從 p5 官方文件的 <a target="_blank" rel="noopener" href="https://p5js.org/get-started/">Get Started</a> 開始著手，首先我們可以到 <a target="_blank" rel="noopener" href="https://editor.p5js.org/">p5 web editor</a> 實際的操作，會先看到以下的 code：</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -370,7 +370,7 @@
 <p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gwqorel98mj30mh0j7t9w.jpg" alt="first-sketch"></p>
 <p>試著把 <code>ellipse(50, 50, 80, 80)</code> 改成 <code>ellipse(150, 100, 80, 80)</code>，會發現圈圈往下移動了：</p>
 <p><img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gwqoxj4kdqj31mi0u0414.jpg" alt="Screen Shot 2021-11-25 at 12.07.09 AM"></p>
-<p>聰明的你應該發現第一跟第二個參數分別代表了 ellipse 的方位，第二跟第三則是代表了 ellipse 的 width 和 height，在 p5 的世界中，X 軸就和我們認知的方向一樣，X 軸給了 50 就會往右 50px；Y 軸則是和我們一般數學上認知的相反，給 Y 軸 100 就會往下 100px。</p>
+<p>聰明的你應該發現第一跟第二個參數分別代表了 ellipse 的方位，第二跟第三則是代表了 ellipse 的 width 和 height，在 p5 的世界中，X 軸就和我們認知的方向一樣，X 軸給了 150 就會往右 150px；Y 軸則是和我們一般數學上認知的方向相反，給 Y 軸 100 就會往下 100px。</p>
 <p>接下來我們來了解一些 p5 內建的全域變數以及圖層的概念，假設我們有今天這段 code：</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
   <span class="token function">createCanvas</span><span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token number">400</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -496,8 +496,8 @@ function getPoses(poses) &#123;
 <p>這時候打開 Live Server，應該就能看到紅鼻子出現在你臉上！</p>
 <img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0oqr4bkfg30zo0t4npf.gif" alt="螢幕錄製 2021-10-02 下午5" style="zoom: 33%;" />
 
-<p>是不是很簡單！我個人認為 p5 和 ml5 搭配起來很簡單的原因在於 ml5 的資料有時會吐一些方位的資訊（x, y），而 p5 很多繪製於畫面上的 API 都需要傳入方位，所以兩者搭配起來的時候只要簡單的把 ml5 的資料傳入 p5 API 就好，完全不費力氣。</p>
-<h2 id="搭配-OBS-在-Google-Meet-耍腦！"><a href="#搭配-OBS-在-Google-Meet-耍腦！" class="headerlink" title="搭配 OBS 在 Google Meet 耍腦！"></a>搭配 OBS 在 Google Meet 耍腦！</h2><p>知道怎麼在瀏覽器配合 ml5 + p5 在畫面上畫出自己想要的東西以後，就可以來試試看怎麼在 google mmets 輸出這個影像了！首先讓我們看看可愛的概念圖：</p>
+<p>是不是很簡單！我個人認為 p5 和 ml5 搭配起來很簡單的原因在於 ml5 的資料會回傳方位的資訊（x, y），而 p5 很多繪製於畫面上的 API 都需要傳入方位，所以兩者搭配起來的時候只要簡單的把 ml5 的資料傳入 p5 API 就好，完全不費力氣。</p>
+<h2 id="搭配-OBS-在-Google-Meet-耍腦！"><a href="#搭配-OBS-在-Google-Meet-耍腦！" class="headerlink" title="搭配 OBS 在 Google Meet 耍腦！"></a>搭配 OBS 在 Google Meet 耍腦！</h2><p>知道怎麼在瀏覽器配合 ml5 + p5 在畫面上畫出自己想要的東西以後，就可以來試試看怎麼在 Google Meet 輸出這個影像了！首先讓我們看看可愛的概念圖：</p>
 <img data-src="https://tva1.sinaimg.cn/large/008i3skNgy1gx0pd4j9hzj314l0u0gnj.jpg" alt="Screen Shot 2021-12-03 at 3.54.09 PM" style="zoom:50%;" />
 
 <p>我們剛剛做的事情都是在 Browser 上面執行的，但怎麼放到 Google Meet 上讓其他人看到呢？這時候就需要搭配 <a target="_blank" rel="noopener" href="https://obsproject.com/">OBS</a> 這個 Open Source 的應用程式，它可以幫我們擷取想要影像輸出的地方，再搭配 Virtual Cam 就能夠順利輸出瀏覽器的畫面，接著在 Google Meet 的設定區選擇射影像的攝影機為 OBS Virtual Cam，就可以達到我們要的目的了。</p>
